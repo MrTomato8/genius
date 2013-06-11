@@ -1,6 +1,6 @@
 from django.db import models
 
-Product = models.get_model('catalogue', 'product')
+Product = models.get_model('catalogue', 'Product')
 
 # Create your models here.
 
@@ -20,6 +20,10 @@ PRINTING_CHOICES = (('n/a', 'Not Applicable'),
 PRICING_CHOICES = (('unit', 'Per-unit'),
                    ('discrete', 'Discrete'),
                    ('linear', 'Linear'))
+
+STATE_CHOICES = (('active', 'Up to date'),
+                 ('updating', 'Update in progress'),
+                 ('inactive', 'Not in pricelist'))
 
 
 class BaseOption(models.Model):
@@ -81,6 +85,11 @@ class Corners(BaseOption):
 
 
 class Price(models.Model):
+    '''
+    This model represents pricelist entry for specific set of options for
+    given product
+    '''
+
     product = models.ForeignKey(Product)
 
     pricing = models.CharField(max_length=10, choices=PRICING_CHOICES)
@@ -88,7 +97,6 @@ class Price(models.Model):
     rpl_price = models.DecimalField(max_digits=10, decimal_places=3)
     quantity = models.DecimalField(max_digits=10, decimal_places=0)
     pages = models.DecimalField(max_digits=10, decimal_places=0)
-#    orientation = models.ForeignKey(Orientation)
     size = models.ForeignKey(Size)
     weight = models.ForeignKey(Weight)
     coating = models.ForeignKey(Coating)
@@ -97,4 +105,4 @@ class Price(models.Model):
     media = models.ForeignKey(Media)
     printing = models.ForeignKey(Printing)
     corners = models.ForeignKey(Corners)
-
+    state = models.CharField(max_length=10, choices=STATE_CHOICES)
