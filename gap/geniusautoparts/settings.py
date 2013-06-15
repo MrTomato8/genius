@@ -219,4 +219,16 @@ PAYPAL_API_PASSWORD = '1369339401'
 PAYPAL_API_SIGNATURE = 'AX8GCu0CvjNpRud8qe-xAmm7JGjlA-jk1t4X3azsbXycax.HvbLdO-mu'
 PAYPAL_CALLBACK_TIMEOUT = 30
 
+OSCAR_DASHBOARD_NAVIGATION += [
+    {
+        'label': 'Pricelist',
+        'icon': 'icon-list',
+        'children': [
+            {
+                'label': 'Import',
+                'url_name': 'apps.pricelist.views.import_pricelist',
+            },
+         ]
+    },
+]
 from local_settings import *

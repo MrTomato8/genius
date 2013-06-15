@@ -27,6 +27,7 @@ urlpatterns = patterns('',
         name="account-balance"),
     url(r'^product-options/(?P<product_id>\d+)/$', product_options, name='product_options'),
     url(r'^get-quote/(?P<id>\d+)/$', get_quote, name='get_quote'),
+    (r'^pricelist/', include('apps.pricelist.urls')),
 
     (r'', include(application.urls))
 )
