@@ -1,5 +1,6 @@
 .idea/
 *.iml
 *.pyc
+.ropeproject
 local_settings.py
 
