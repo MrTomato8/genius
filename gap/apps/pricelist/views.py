@@ -1,5 +1,22 @@
-from django.http import HttpResponse
-
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from apps.pricelist.forms import PricelistUploadForm
+from django.core.urlresolvers import reverse
+from apps.pricelist.models import Price
 
 def import_pricelist(request):
-    return HttpResponse('upload form')
+    if request.method == 'POST':
+        form = PricelistUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            Price.importcsv(request.FILES['csvfile'])
+            return HttpResponseRedirect(reverse('apps.pricelist.views.statistics'))
+    else:
+        form = PricelistUploadForm()
+
+    return render(request, 'pricelist/import.html', {
+        'form': form,
+        'title': 'Pricelist Import from CSV',
+    })
+
+def statistics(request):
+    pass

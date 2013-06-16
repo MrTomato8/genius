@@ -1,4 +1,5 @@
 from django.db import models
+import csv
 
 Product = models.get_model('catalogue', 'Product')
 
@@ -106,3 +107,8 @@ class Price(models.Model):
     printing = models.ForeignKey(Printing)
     corners = models.ForeignKey(Corners)
     state = models.CharField(max_length=10, choices=STATE_CHOICES)
+
+    @staticmethod
+    def importcsv(csvfile):
+        for row in csv.reader(csvfile):
+            raise Exception(row)
