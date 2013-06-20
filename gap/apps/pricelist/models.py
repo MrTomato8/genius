@@ -123,10 +123,15 @@ class Pages(BaseOption):
     def get_or_create_multiple(counts):
         result = []
         for count in counts:
-            obj, n = Pages.objects.get_or_create(count=count)
-            result.append(obj)
+            # Page count of 0 means no option
+            if count > 0:
+                obj, n = Pages.objects.get_or_create(count=count)
+                result.append(obj)
 
-        return result
+        if result == []:
+            return None
+        else:
+            return result
 
 
 class Weight(BaseOption):
