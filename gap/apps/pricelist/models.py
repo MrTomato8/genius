@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+import hashlib
+from gap.views import product_options
 
 Product = models.get_model('catalogue', 'Product')
 
@@ -107,7 +109,11 @@ class Corners(GenericOption):
 
 class Pages(BaseOption):
     '''Page count for multi-page products, like booklets'''
-    count = models.DecimalField(max_digits=5, decimal_places=0)
+    count = models.DecimalField(max_digits=5, decimal_places=0, unique=True)
+
+    @property
+    def tag(self):
+        return ''.join([str(self.count), 'pages'])
 
     def save(self, *args, **kwargs):
 
@@ -115,9 +121,6 @@ class Pages(BaseOption):
             self.caption = str(self.count)
 
         super(Pages, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return ' '.join([str(self.count), 'pages'])
 
     @staticmethod
     def get_or_create_multiple(counts):
@@ -139,6 +142,10 @@ class Weight(BaseOption):
     value = models.DecimalField('Paper Weight', max_digits=3, decimal_places=0,
                                 unique=True)
 
+    @property
+    def tag(self):
+        return ''.join([str(self.value), 'gsm'])
+
     def save(self, *args, **kwargs):
 
         if len(self.caption) == 0:
@@ -151,6 +158,10 @@ class Size(BaseOption):
     '''Media size'''
     width = models.DecimalField('Width', max_digits=10, decimal_places=0)
     height = models.DecimalField('Height', max_digits=10, decimal_places=0)
+
+    @property
+    def tag(self):
+        return 'x'.join([str(self.width), str(self.height)])
 
     def save(self, *args, **kwargs):
 
@@ -225,6 +236,30 @@ class Price(models.Model):
     weight = models.ForeignKey(Weight, null=True, blank=True)
     size = models.ForeignKey(Size, null=True, blank=True)
     stock = models.ForeignKey(Stock, null=True, blank=True)
+    hashcol = models.SlugField(unique=True, editable=False)
+
+    def save(self, *args, **kwargs):
+
+        # unique_together doesn't work with MySQL in this case
+        # (MySQL has 16 columns per index limit)
+        # so we use hashcol method here
+
+        # Without unique index add_price may produce
+        # dupes (objects get_or_create is not atomic)
+
+        s = '-'.join([self.product.slug,
+                      self.pricing,
+                      str(self.quantity)])
+
+        for opt in ['lamination', 'orientation', 'printed', 'fold', 'finish',
+                    'cover', 'binding', 'options', 'location', 'frame',
+                    'corners', 'pages', 'weight', 'size', 'stock']:
+
+            if getattr(self, opt, None) is not None:
+                s = '-'.join([s, getattr(self, opt).tag])
+
+        self.hashcol = hashlib.sha1(s).hexdigest()
+        super(Price, self).save(*args, **kwargs)
 
     def __unicode__(self):
         caption = '{0}({1}) for {2} units of {3} ({4})'

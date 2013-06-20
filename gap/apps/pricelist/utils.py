@@ -1,6 +1,7 @@
 from apps.pricelist.models import *
 import csv
 from decimal import Decimal, DecimalException
+from django.db import IntegrityError
 
 Product = models.get_model('catalogue', 'Product')
 
@@ -25,14 +26,24 @@ def add_price(*args, **kwargs):
             break
 
     else:
-        # FIXME: INSERT_OR_UPDATE here
-        # uniqueness, no dupes
-        p = Price(**kwargs)
-        p.save()
 
+        defaults = {}
+        for i in ['state', 'pricing', 'tpl_price', 'rpl_price']:
+            if i in kwargs:
+                defaults[i] = kwargs.pop(i)
 
+        try:
+            p, new = Price.objects.get_or_create(defaults=defaults, **kwargs)
+        except IntegrityError:
+            # log here
+            pass
+        else:
+            if not new:
+                for i in defaults:
+                    setattr(p, i, defaults[i])
+                p.state = 'active'
 
-
+                p.save()
 
 
 class Pricelist:
@@ -40,6 +51,10 @@ class Pricelist:
 
     @staticmethod
     def importcsv(csvfile):
+
+        # FIXME: here we need to reset all products state to updating
+        # objects.filter(...).update(...)
+
         data = {}
 
         for row in csv.DictReader(csvfile):
@@ -120,6 +135,8 @@ class Pricelist:
                 data['weight'].append(None)
 
             add_price(**data)
+
+    # here we need to reset all updating state to inactive
 
 
     def price():
