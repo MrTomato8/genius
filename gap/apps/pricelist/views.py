@@ -21,10 +21,10 @@ def import_pricelist(request):
         'title': 'Pricelist Import from CSV',
     })
 
-
+# TODO: this one needs pagination
 def list(request):
     prices = Price.objects.filter(~Q(state='inactive'))
     return render(request, 'pricelist/list.html', {
         'prices': prices,
-        'title': 'List',
+        'title': 'Active Prices',
     })
