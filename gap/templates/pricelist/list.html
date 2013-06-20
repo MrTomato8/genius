@@ -1,0 +1,75 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+
+{% block body_class %}create-page pricelist{% endblock %}
+
+{% block title %}
+{% trans "Pricelist" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url dashboard:index %}">{% trans "Dashboard" %}</a>
+        <span class="divider">/</span>
+    </li>
+    <li class="active">{% trans "Pricelist" %}</li>
+</ul>
+{% endblock %}
+
+{% block header %}
+<div class="page-header action">
+    <h1>{% trans "Pricelist" %}</h1>
+</div>
+{% endblock header %}
+
+{% block dashboard_content %}
+<table class="table table-striped table-bordered">    <tr>
+    <th>Product</th>
+    <th>Pricing</th>
+    <th>TPL Price</th>
+    <th>RPL Price</th>
+    <th>Quantity</th>
+    <th>Lamination</th>
+    <th>Orientation</th>
+    <th>Printed</th>
+    <th>Fold</th>
+    <th>Finish</th>
+    <th>Cover</th>
+    <th>Binding</th>
+    <th>Options</th>
+    <th>Location</th>
+    <th>Frame</th>
+    <th>Corners</th>
+    <th>Pages</th>
+    <th>Weight</th>
+    <th>Size</th>
+    <th>Stock</th>
+</tr>
+{% for item in prices %}
+<tr> 
+    <td>{{ item.product }}</td>
+    <td>{{ item.pricing }}</td>
+    <td>{{ item.tpl_price }}</td>
+    <td>{{ item.rpl_price }}</td>
+    <td>{{ item.quantity }}</td>
+    <td>{{ item.lamination }}</td> 
+    <td>{{ item.orientation }}</td>
+    <td>{{ item.printed }}</td>
+    <td>{{ item.fold }}</td>
+    <td>{{ item.finish }}</td>
+    <td>{{ item.cover }}</td>
+    <td>{{ item.binding }}</td>
+    <td>{{ item.options }}</td>
+    <td>{{ item.location }}</td>
+    <td>{{ item.frame }}</td>
+    <td>{{ item.corners }}</td>
+    <td>{{ item.pages }}</td>
+    <td>{{ item.weight }}</td>
+    <td>{{ item.size }}</td>
+    <td>{{ item.stock }}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock dashboard_content %}
