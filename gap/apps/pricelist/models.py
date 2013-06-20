@@ -155,6 +155,20 @@ class Weight(BaseOption):
 
         super(Weight, self).save(*args, **kwargs)
 
+    @classmethod
+    def get_or_create_multiple(cls, values):
+        result = []
+        for value in values:
+            # Weight of 0 means no option
+            if value > 0:
+                obj, n = cls.objects.get_or_create(value=value)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
+
 
 class Size(BaseOption):
     '''Media size'''

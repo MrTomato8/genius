@@ -113,21 +113,13 @@ def import_csv(csvfile):
         data['size'], new = Size.objects.get_or_create(width=width,
                                                   height=height)
 
-        #FIXME: move following functonality to Weight object, like in pages
-        data['weight'] = []
-        for weight in row['weight'].split(','):
-            try:
-                value = int(weight)
-            except ValueError:
-                value = 0
-                # log here ?
-                continue
-            if value > 0:
-                obj, new = Weight.objects.get_or_create(value=value)
-                data['weight'].append(obj)
+        try:
+            weight = map(int, row['weight'].split(','))
+        except ValueError:
+            # log here
+            continue
 
-        if len(data['weight']) == 0:
-            data['weight'].append(None)
+        data['weight'] = Weight.get_or_create_multiple(weight)
 
         add_price(**data)
 
