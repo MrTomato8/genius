@@ -53,6 +53,20 @@ class GenericOption(BaseOption):
 
         super(GenericOption, self).save(*args, **kwargs)
 
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
+
 
 class Lamination(GenericOption):
     '''Lamination'''

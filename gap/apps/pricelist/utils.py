@@ -48,16 +48,30 @@ def add_price(*args, **kwargs):
 def pick_price():
     pass
 
-
+# TODO: Implement UNDO (or save/load) functionality
 def import_csv(csvfile):
+    '''
+    Imports whole pricelist from CSV file.
+
+    Missing option objects are created automatically (staff can edit
+    caption and thumbnail later).
+
+    On any error currently processed price record is skipped.
+
+    Integer fields that have 0 value are excluded from price record.
+    Empty string fields are also excluded from price record.
+
+    Most fields support multiple values(separated by comma without surrounding
+    spaces, for example orienataion column may be set to 'portrait,landscape'.
+    In this case import will create two price records with different orientations
+    and identical other options.
+    '''
 
     Price.objects.filter(state='active').update(state='updating')
 
     data = {}
 
     for row in csv.DictReader(csvfile):
-
-        # On any error current price record is skipped
 
         try:
             product = Product.objects.get(title=row['product'])
@@ -86,6 +100,31 @@ def import_csv(csvfile):
         except ValueError:
             # log
             continue
+
+        data['lamination'] = Lamination.get_or_create_multiple(
+            row.get('lamination', '').split(','))
+        data['orientation'] = Orientation.get_or_create_multiple(
+            row.get('orientation', '').split(','))
+        data['printed'] = Printed.get_or_create_multiple(
+            row.get('printed', '').split(','))
+        data['fold'] = Fold.get_or_create_multiple(
+            row.get('fold', '').split(','))
+        data['finish'] = Finish.get_or_create_multiple(
+            row.get('finish', '').split(','))
+        data['cover'] = Cover.get_or_create_multiple(
+            row.get('cover', '').split(','))
+        data['binding'] = Binding.get_or_create_multiple(
+            row.get('binding', '').split(','))
+        data['options'] = Options.get_or_create_multiple(
+            row.get('options', '').split(','))
+        data['location'] = Location.get_or_create_multiple(
+            row.get('location', '').split(','))
+        data['frame'] = Frame.get_or_create_multiple(
+            row.get('frame', '').split(','))
+        data['corners'] = Corners.get_or_create_multiple(
+            row.get('corners', '').split(','))
+        data['stock'] = Stock.get_or_create_multiple(
+            row.get('stock', '').split(','))
 
         try:
             pages = map(int, row['pages'].split(','))
