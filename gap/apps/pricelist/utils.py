@@ -13,9 +13,7 @@ def add_price(*args, **kwargs):
     price matrix. Recursion rocks :)
     '''
 
-    for opt in ['lamination', 'orientation', 'printed', 'fold', 'finish',
-                'cover', 'binding', 'options', 'location', 'frame', 'corners',
-                'pages', 'weight', 'size', 'stock']:
+    for opt in ALL_PRODUCT_OPTIONS:
 
         if isinstance(kwargs.get(opt, None), list):
 
@@ -28,9 +26,11 @@ def add_price(*args, **kwargs):
     else:
 
         defaults = {}
-        for i in ['state', 'pricing', 'tpl_price', 'rpl_price']:
+        for i in ['pricing', 'tpl_price', 'rpl_price']:
             if i in kwargs:
                 defaults[i] = kwargs.pop(i)
+        # Set updated flag for touched entries
+        defaults['state'] = 'active'
 
         try:
             p, new = Price.objects.get_or_create(defaults=defaults, **kwargs)
@@ -41,7 +41,6 @@ def add_price(*args, **kwargs):
             if not new:
                 for i in defaults:
                     setattr(p, i, defaults[i])
-                p.state = 'active'
 
                 p.save()
 

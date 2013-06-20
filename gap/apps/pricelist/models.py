@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 import hashlib
-from gap.views import product_options
 
 Product = models.get_model('catalogue', 'Product')
 
@@ -14,6 +13,10 @@ PRICING_CHOICES = (('unit', 'Per-unit'),
 STATE_CHOICES = (('active', 'Up to date'),
                  ('updating', 'Update in progress'),
                  ('inactive', 'Not in pricelist'))
+
+ALL_PRODUCT_OPTIONS = ['lamination', 'orientation', 'printed', 'fold', 'finish',
+                      'cover', 'binding', 'options', 'location', 'frame',
+                      'corners', 'pages', 'weight', 'size', 'stock']
 
 
 class BaseOption(models.Model):
@@ -238,6 +241,16 @@ class Price(models.Model):
     stock = models.ForeignKey(Stock, null=True, blank=True)
     hashcol = models.SlugField(unique=True, editable=False)
 
+    @property
+    def enabled_options(self):
+
+        '''
+        Returns a list of option objects which have been set for this Price
+        '''
+
+        attr = lambda x: getattr(self, x, None)
+        return filter(None, map(attr, ALL_PRODUCT_OPTIONS))
+
     def save(self, *args, **kwargs):
 
         # unique_together doesn't work with MySQL in this case
@@ -251,12 +264,8 @@ class Price(models.Model):
                       self.pricing,
                       str(self.quantity)])
 
-        for opt in ['lamination', 'orientation', 'printed', 'fold', 'finish',
-                    'cover', 'binding', 'options', 'location', 'frame',
-                    'corners', 'pages', 'weight', 'size', 'stock']:
-
-            if getattr(self, opt, None) is not None:
-                s = '-'.join([s, getattr(self, opt).tag])
+        for opt in self.enabled_options:
+            s = '-'.join([s, opt.tag])
 
         self.hashcol = hashlib.sha1(s).hexdigest()
         super(Price, self).save(*args, **kwargs)
@@ -269,19 +278,11 @@ class Price(models.Model):
         elif self.pricing == 'linear':
             units = 'metres'
 
-        opts = filter(None, [self.lamination, self.orientation, self.printed,
-                             self.fold, self.finish, self.cover, self.binding,
-                             self.options, self.location, self.frame,
-                             self.corners, self.pages, self.weight, self.size,
-                             self.stock])
-
-        caption = '{0}({1}) for {2} {3} of {4} ({5})'.format(self.rpl_price,
-                                                             self.tpl_price,
-                                                             self.quantity,
-                                                             units,
-                                                             self.product,
-                                                             ','.join(map(str, opts)))
+        caption = '{0}({1}) for {2} {3} of {4} ({5})'.format(
+            self.rpl_price,
+            self.tpl_price,
+            self.quantity,
+            units,
+            self.product,
+            ','.join(map(str, self.enabled_options)))
         return caption
-
-
-
