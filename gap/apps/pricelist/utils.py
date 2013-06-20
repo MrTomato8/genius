@@ -44,6 +44,7 @@ def add_price(*args, **kwargs):
 
                 p.save()
 
+
 def pick_price():
     pass
 
@@ -111,7 +112,7 @@ def import_csv(csvfile):
             width, height = height, width
 
         data['size'], new = Size.objects.get_or_create(width=width,
-                                                  height=height)
+                                                       height=height)
 
         try:
             weight = map(int, row['weight'].split(','))
