@@ -15,8 +15,8 @@ STATE_CHOICES = (('active', 'Up to date'),
                  ('inactive', 'Not in pricelist'))
 
 ALL_PRODUCT_OPTIONS = ['lamination', 'orientation', 'printed', 'fold', 'finish',
-                      'cover', 'binding', 'options', 'location', 'frame',
-                      'corners', 'pages', 'weight', 'size', 'stock']
+                       'cover', 'binding', 'options', 'location', 'frame',
+                       'corners', 'pages', 'weight', 'size', 'stock']
 
 
 class BaseOption(models.Model):
@@ -42,7 +42,6 @@ class GenericOption(BaseOption):
     tag - short handle for option, like "landscape" for orientation or
           "outdoor" for location
     '''
-
     tag = models.CharField(max_length=30, unique=True)
 
     def save(self, *args, **kwargs):
@@ -186,24 +185,31 @@ class Size(BaseOption):
 
 class Stock(GenericOption):
     '''Stock type'''
-    no_weight = models.ManyToManyField(Weight, null=True, blank=True,
-                                       help_text='conflicting weight options',
-                                       verbose_name=u'weight constraints')
-    no_lamination = models.ManyToManyField(Lamination, null=True, blank=True,
-                                           help_text='conflicting lamination options',
-                                           verbose_name=u'lamination constraints')
-    no_finish = models.ManyToManyField(Finish, null=True, blank=True,
-                                       help_text='conflicting weight options',
-                                       verbose_name=u'finishing contraints')
-    no_location = models.ManyToManyField(Location, null=True, blank=True,
-                                         help_text='conflicting location options',
-                                         verbose_name=u'location constraints')
-    no_fold = models.ManyToManyField(Fold, null=True, blank=True,
-                                     help_text='conflicting fold options',
-                                     verbose_name=u'fold constraints')
-    no_printed = models.ManyToManyField(Printed, null=True, blank=True,
-                                        help_text='conflicting print options',
-                                        verbose_name=u'print constraints')
+    no_weight = models.ManyToManyField(
+        Weight, null=True, blank=True, help_text='conflicting weight options',
+        verbose_name=u'weight constraints')
+
+    no_lamination = models.ManyToManyField(
+        Lamination, null=True, blank=True,
+        help_text='conflicting lamination options',
+        verbose_name=u'lamination constraints')
+
+    no_finish = models.ManyToManyField(
+        Finish, null=True, blank=True, help_text='conflicting weight options',
+        verbose_name=u'finishing contraints')
+
+    no_location = models.ManyToManyField(
+        Location, null=True, blank=True,
+        help_text='conflicting location options',
+        verbose_name=u'location constraints')
+
+    no_fold = models.ManyToManyField(
+        Fold, null=True, blank=True, help_text='conflicting fold options',
+        verbose_name=u'fold constraints')
+
+    no_printed = models.ManyToManyField(
+        Printed, null=True, blank=True, help_text='conflicting print options',
+        verbose_name=u'print constraints')
 
 
 class Price(models.Model):
@@ -214,13 +220,18 @@ class Price(models.Model):
 
     product = models.ForeignKey(Product)
 
-    state = models.CharField(max_length=10, choices=STATE_CHOICES)
+    state = models.CharField(max_length=10, choices=STATE_CHOICES,
+                             default='active')
+
     pricing = models.CharField(max_length=10, choices=PRICING_CHOICES,
                                default='unit')
+
     tpl_price = models.DecimalField(max_digits=10, decimal_places=3,
                                     validators=[MinValueValidator(0)])
+
     rpl_price = models.DecimalField(max_digits=10, decimal_places=3,
                                     validators=[MinValueValidator(0)])
+
     quantity = models.DecimalField(max_digits=10, decimal_places=0,
                                    validators=[MinValueValidator(0)])
 
