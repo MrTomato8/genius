@@ -1,45 +1,19 @@
 from django.contrib import admin
 from apps.pricelist.models import *
 
-
-class OrientationAdmin(admin.ModelAdmin):
-    pass
-
-class SizeAdmin(admin.ModelAdmin):
-    pass
-
-class WeightAdmin(admin.ModelAdmin):
-    pass
-
-class CoatingAdmin(admin.ModelAdmin):
-    pass
-
-class FoldAdmin(admin.ModelAdmin):
-    pass
-
-class SidesAdmin(admin.ModelAdmin):
-    pass
-
-class MediaAdmin(admin.ModelAdmin):
-    pass
-
-class PrintingAdmin(admin.ModelAdmin):
-    pass
-
-class CornersAdmin(admin.ModelAdmin):
-    pass
-
-class PriceAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(Orientation, OrientationAdmin)
-admin.site.register(Size, SizeAdmin)
-admin.site.register(Weight, WeightAdmin)
-admin.site.register(Coating, CoatingAdmin)
-admin.site.register(Fold, FoldAdmin)
-admin.site.register(Sides, SidesAdmin)
-admin.site.register(Media, MediaAdmin)
-admin.site.register(Printing, PrintingAdmin)
-admin.site.register(Corners, CornersAdmin)
-admin.site.register(Price, PriceAdmin)
+admin.site.register(Lamination)
+admin.site.register(Orientation)
+admin.site.register(Printed)
+admin.site.register(Fold)
+admin.site.register(Finish)
+admin.site.register(Cover)
+admin.site.register(Binding)
+admin.site.register(Options)
+admin.site.register(Location)
+admin.site.register(Frame)
+admin.site.register(Corners)
+admin.site.register(Pages)
+admin.site.register(Weight)
+admin.site.register(Size)
+admin.site.register(Stock)
+admin.site.register(Price)
