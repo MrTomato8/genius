@@ -44,99 +44,91 @@ def add_price(*args, **kwargs):
 
                 p.save()
 
+def pick_price():
+    pass
 
-class Pricelist:
 
+def import_csv(csvfile):
 
-    @staticmethod
-    def importcsv(csvfile):
+    Price.objects.filter(state='active').update(state='updating')
 
-        # FIXME: here we need to reset all products state to updating
-        # objects.filter(...).update(...)
+    data = {}
 
-        data = {}
+    for row in csv.DictReader(csvfile):
 
-        for row in csv.DictReader(csvfile):
+        # On any error current price record is skipped
 
-# TODO: Importing history table with to check in dashboard import results
+        try:
+            product = Product.objects.get(title=row['product'])
+        except Product.DoesNotExist:
+            # log here
+            continue
 
-            # On any error current price record is skipped
+        data['product'] = product
 
+        data['pricing'] = row['pricing']
+
+        try:
+            data['tpl_price'] = Decimal(row['tpl_price'])
+        except DecimalException:
+            # log something like "skipped entry $row"
+            continue
+
+        try:
+            data['rpl_price'] = Decimal(row['rpl_price'])
+        except DecimalException:
+            # log
+            continue
+
+        try:
+            data['quantity'] = int(row['quantity'])
+        except ValueError:
+            # log
+            continue
+
+        try:
+            pages = map(int, row['pages'].split(','))
+        except ValueError:
+            # log here
+            continue
+
+        data['pages'] = Pages.get_or_create_multiple(pages)
+
+        try:
+            width = int(row['width'])
+        except ValueError:
+            # log
+            continue
+
+        try:
+            height = int(row['height'])
+        except ValueError:
+            # log
+            continue
+
+        # All sizes in DB are landscape-oriented
+        if width > height:
+            width, height = height, width
+
+        data['size'], new = Size.objects.get_or_create(width=width,
+                                                  height=height)
+
+        #FIXME: move following functonality to Weight object, like in pages
+        data['weight'] = []
+        for weight in row['weight'].split(','):
             try:
-                product = Product.objects.get(title=row['product'])
-            except Product.DoesNotExist:
-                # log here
-                continue
-
-            data['product'] = product
-
-            data['pricing'] = row['pricing']
-
-            try:
-                data['tpl_price'] = Decimal(row['tpl_price'])
-            except DecimalException:
-                # log
-                continue
-
-            try:
-                data['rpl_price'] = Decimal(row['rpl_price'])
-            except DecimalException:
-                # log
-                continue
-
-            try:
-                data['quantity'] = int(row['quantity'])
+                value = int(weight)
             except ValueError:
-                # log
+                value = 0
+                # log here ?
                 continue
+            if value > 0:
+                obj, new = Weight.objects.get_or_create(value=value)
+                data['weight'].append(obj)
 
-            try:
-                pages = map(int, row['pages'].split(','))
-            except ValueError:
-                # log here
-                continue
+        if len(data['weight']) == 0:
+            data['weight'].append(None)
 
-            data['pages'] = Pages.get_or_create_multiple(pages)
+        add_price(**data)
 
-            try:
-                width = int(row['width'])
-            except ValueError:
-                # log
-                continue
-
-            try:
-                height = int(row['height'])
-            except ValueError:
-                # log
-                continue
-
-            # All sizes in DB are landscape-oriented
-            if width > height:
-                width, height = height, width
-
-            data['size'], new = Size.objects.get_or_create(width=width,
-                                                      height=height)
-
-            #FIXME: move following functonality to Weight object, like in pages
-            data['weight'] = []
-            for weight in row['weight'].split(','):
-                try:
-                    value = int(weight)
-                except ValueError:
-                    value = 0
-                    # log here ?
-                    continue
-                if value > 0:
-                    obj, new = Weight.objects.get_or_create(value=value)
-                    data['weight'].append(obj)
-
-            if len(data['weight']) == 0:
-                data['weight'].append(None)
-
-            add_price(**data)
-
-    # here we need to reset all updating state to inactive
-
-
-    def price():
-        pass
+    Price.objects.filter(state='updating').update(state='inactive')
