@@ -16,24 +16,19 @@ def add_price(*args, **kwargs):
                 'cover', 'binding', 'options', 'location', 'frame', 'corners',
                 'pages', 'weight', 'size', 'stock']:
 
-        # FIXME: Broken:
-        kwargs[opt] = kwargs.pop(opt, None)
-
-        if isinstance(kwargs[opt], list):
-            if len(kwargs[opt]) == 0:
-                kwargs[opt] = None
-
-        if isinstance(kwargs[opt], list):
+        if isinstance(kwargs.get(opt, None), list):
 
             for i in kwargs[opt]:
                 kwargs[opt] = i
                 add_price(*args, **kwargs)
 
+            break
 
-    # FIXME: INSERT_OR_UPDATE here
-    # uniqueness, no dupes
-    p = Price(**kwargs)
-    p.save()
+    else:
+        # FIXME: INSERT_OR_UPDATE here
+        # uniqueness, no dupes
+        p = Price(**kwargs)
+        p.save()
 
 
 
@@ -108,6 +103,7 @@ class Pricelist:
             data['size'], new = Size.objects.get_or_create(width=width,
                                                       height=height)
 
+            #FIXME: move following functonality to Weight object, like in pages
             data['weight'] = []
             for weight in row['weight'].split(','):
                 try:
