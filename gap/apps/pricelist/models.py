@@ -211,7 +211,7 @@ class Size(BaseOption):
         unique_together = ('width', 'height')
 
 
-class Stock(GenericOption):
+class Stock(BaseOption):
     '''Stock type'''
     no_weight = models.ManyToManyField(
         Weight, null=True, blank=True, help_text='conflicting weight options',
@@ -238,6 +238,31 @@ class Stock(GenericOption):
     no_printed = models.ManyToManyField(
         Printed, null=True, blank=True, help_text='conflicting print options',
         verbose_name=u'print constraints')
+
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Stock, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
 class Price(models.Model):
