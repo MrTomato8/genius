@@ -111,8 +111,10 @@ def import_csv(csvfile):
             row.get('fold', '').split(','))
         data['finish'] = Finish.get_or_create_multiple(
             row.get('finish', '').split(','))
-        data['cover'] = Cover.get_or_create_multiple(
-            row.get('cover', '').split(','))
+        data['front_cover'] = Cover.get_or_create_multiple(
+            row.get('front_cover', '').split(','))
+        data['back_cover'] = Cover.get_or_create_multiple(
+            row.get('back_cover', '').split(','))
         data['binding'] = Binding.get_or_create_multiple(
             row.get('binding', '').split(','))
         data['options'] = Options.get_or_create_multiple(
@@ -125,6 +127,8 @@ def import_csv(csvfile):
             row.get('corners', '').split(','))
         data['stock'] = Stock.get_or_create_multiple(
             row.get('stock', '').split(','))
+        data['print_stock'] = Stock.get_or_create_multiple(
+            row.get('print_stock', '').split(','))
 
         try:
             pages = map(int, row['pages'].split(','))

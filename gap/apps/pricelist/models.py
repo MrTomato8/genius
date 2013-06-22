@@ -15,8 +15,9 @@ STATE_CHOICES = (('active', 'Up to date'),
                  ('inactive', 'Not in pricelist'))
 
 ALL_PRODUCT_OPTIONS = ['lamination', 'orientation', 'printed', 'fold', 'finish',
-                       'cover', 'binding', 'options', 'location', 'frame',
-                       'corners', 'pages', 'weight', 'size', 'stock']
+                       'front_cover', 'back_cover', 'binding', 'options',
+                       'location', 'frame', 'corners', 'pages', 'weight',
+                       'size', 'stock', 'print_stock']
 
 
 class BaseOption(models.Model):
@@ -34,14 +35,13 @@ class BaseOption(models.Model):
         return self.caption
 
 
-class GenericOption(BaseOption):
-    '''
-    Base class for generic options
-
-    fields:
-    tag - short handle for option, like "landscape" for orientation or
-          "outdoor" for location
-    '''
+# I've failed to find the simple way to avoid copy-pasting here
+# If I create parent class for following objects - setting 'tag' to unique
+# Will fail if different option classes have same tag value(For example 'none'
+# for lamination and front_cover). It is the way how Django ORM works to blame,
+# not me :)
+class Lamination(BaseOption):
+    '''Lamination'''
     tag = models.CharField(max_length=30, unique=True)
 
     def save(self, *args, **kwargs):
@@ -51,7 +51,7 @@ class GenericOption(BaseOption):
         if len(self.caption) == 0:
             self.caption = self.tag
 
-        super(GenericOption, self).save(*args, **kwargs)
+        super(Lamination, self).save(*args, **kwargs)
 
     @classmethod
     def get_or_create_multiple(cls, tags):
@@ -68,59 +68,284 @@ class GenericOption(BaseOption):
             return result
 
 
-class Lamination(GenericOption):
-    '''Lamination'''
-    pass
-
-
-class Orientation(GenericOption):
+class Orientation(BaseOption):
     '''Media orientation'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Orientation, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
-class Printed(GenericOption):
+class Printed(BaseOption):
     '''Print sides/colours'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Printed, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
-class Fold(GenericOption):
+class Fold(BaseOption):
     '''Fold type'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Fold, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
-class Finish(GenericOption):
+class Finish(BaseOption):
     '''Finish'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Finish, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
-class Cover(GenericOption):
+class Cover(BaseOption):
     '''Cover type'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Cover, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
-class Binding(GenericOption):
+class Binding(BaseOption):
     '''Binding edge'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Binding, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
-class Options(GenericOption):
+class Options(BaseOption):
     '''Various uncategorized options, like "printed&untrimmed"'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Options, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
-class Location(GenericOption):
+class Location(BaseOption):
     '''Location, like "indoor", "outdoor"'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Location, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
-class Frame(GenericOption):
+class Frame(BaseOption):
     '''Frame type'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Frame, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
-class Corners(GenericOption):
+class Corners(BaseOption):
     '''Corners to round, like "all" or "top-left"'''
-    pass
+    tag = models.CharField(max_length=30, unique=True)
+
+    def save(self, *args, **kwargs):
+
+        # When creating object programmatically copy tag to caption
+        # so it is more convenient for the user to edit caption later
+        if len(self.caption) == 0:
+            self.caption = self.tag
+
+        super(Corners, self).save(*args, **kwargs)
+
+    @classmethod
+    def get_or_create_multiple(cls, tags):
+        result = []
+        for tag in tags:
+            # skip empty values
+            if len(tag) > 0:
+                obj, n = cls.objects.get_or_create(tag=tag)
+                result.append(obj)
+
+        if result == []:
+            return None
+        else:
+            return result
 
 
 class Pages(BaseOption):
@@ -293,7 +518,10 @@ class Price(models.Model):
     printed = models.ForeignKey(Printed, null=True, blank=True)
     fold = models.ForeignKey(Fold, null=True, blank=True)
     finish = models.ForeignKey(Finish, null=True, blank=True)
-    cover = models.ForeignKey(Cover, null=True, blank=True)
+    front_cover = models.ForeignKey(Cover, related_name='price_front_cover',
+                                    null=True, blank=True)
+    back_cover = models.ForeignKey(Cover, related_name='rpice_back_cover',
+                                   null=True, blank=True)
     binding = models.ForeignKey(Binding, null=True, blank=True)
     options = models.ForeignKey(Options, null=True, blank=True)
     location = models.ForeignKey(Location, null=True, blank=True)
@@ -302,7 +530,10 @@ class Price(models.Model):
     pages = models.ForeignKey(Pages, null=True, blank=True)
     weight = models.ForeignKey(Weight, null=True, blank=True)
     size = models.ForeignKey(Size, null=True, blank=True)
-    stock = models.ForeignKey(Stock, null=True, blank=True)
+    stock = models.ForeignKey(Stock, related_name='price_stock', null=True,
+                              blank=True)
+    print_stock = models.ForeignKey(Stock, related_name='price_print_stock',
+                                    null=True, blank=True)
     hashcol = models.SlugField(unique=True, editable=False)
 
     @property

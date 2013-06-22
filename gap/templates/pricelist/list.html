@@ -38,7 +38,8 @@
     <th>Printed</th>
     <th>Fold</th>
     <th>Finish</th>
-    <th>Cover</th>
+    <th>Front Cover</th>
+    <th>Back Cover</th>    
     <th>Binding</th>
     <th>Options</th>
     <th>Location</th>
@@ -48,6 +49,7 @@
     <th>Weight</th>
     <th>Size</th>
     <th>Stock</th>
+    <th>Print Stock</th>    
 </tr>
 {% for item in prices %}
 <tr> 
@@ -61,7 +63,8 @@
     <td>{{ item.printed }}</td>
     <td>{{ item.fold }}</td>
     <td>{{ item.finish }}</td>
-    <td>{{ item.cover }}</td>
+    <td>{{ item.front_cover }}</td>
+    <td>{{ item.back_cover }}</td>    
     <td>{{ item.binding }}</td>
     <td>{{ item.options }}</td>
     <td>{{ item.location }}</td>
@@ -71,6 +74,7 @@
     <td>{{ item.weight }}</td>
     <td>{{ item.size }}</td>
     <td>{{ item.stock }}</td>
+    <td>{{ item.print_stock }}</td>    
 </tr>
 {% endfor %}
 </table>
