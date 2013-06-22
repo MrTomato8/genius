@@ -138,13 +138,13 @@ class Pages(BaseOption):
 
         super(Pages, self).save(*args, **kwargs)
 
-    @staticmethod
-    def get_or_create_multiple(counts):
+    @classmethod
+    def get_or_create_multiple(cls, counts):
         result = []
         for count in counts:
             # Page count of 0 means no option
             if count > 0:
-                obj, n = Pages.objects.get_or_create(count=count)
+                obj, n = cls.objects.get_or_create(count=count)
                 result.append(obj)
 
         if result == []:
