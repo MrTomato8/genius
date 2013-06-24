@@ -1,55 +1,49 @@
-from apps.pricelist.models import *
+from apps.pricelist.models import Price, OptionChoice
+from django.db import models
 import csv
 from decimal import Decimal, DecimalException
 from django.db import IntegrityError
+from django.template.defaultfilters import slugify
+
 
 Product = models.get_model('catalogue', 'Product')
+Option = models.get_model('catalogue', 'Option')
 
 
-def add_price(*args, **kwargs):
+class ImportReport:
+    def __init__(self):
+        self._skipped = []
+        self._imported_total = 0
 
-    '''
-    This function expands all options passed as list into multi-dimensional
-    price matrix. Recursion rocks :)
-    '''
+    def skip(self, column, reason, data):
+        self._skipped.append((column, reason, data))
 
-    for opt in ALL_PRODUCT_OPTIONS:
+    def success(self):
+        self._imported_total += 1
 
-        if isinstance(kwargs.get(opt, None), list):
+    @property
+    def skipped(self):
+        for column, reason, data in self._skipped:
+            yield column, reason, str(data)
 
-            for i in kwargs[opt]:
-                kwargs[opt] = i
-                add_price(*args, **kwargs)
+    @property
+    def skipped_total(self):
+        return len(self._skipped)
 
-            break
+    @property
+    def imported_total(self):
+        return self._imported_total
 
-    else:
 
-        defaults = {}
-        for i in ['pricing', 'tpl_price', 'rpl_price']:
-            if i in kwargs:
-                defaults[i] = kwargs.pop(i)
-        # Set updated flag for touched entries
-        defaults['state'] = 'active'
-
-        try:
-            p, new = Price.objects.get_or_create(defaults=defaults, **kwargs)
-        except IntegrityError:
-            # log here
-            pass
-        else:
-            if not new:
-                for i in defaults:
-                    setattr(p, i, defaults[i])
-
-                p.save()
+class OptionError(Exception):
+    pass
 
 
 def pick_price():
     pass
 
-# TODO: Implement UNDO (or save/load) functionality
-def import_csv(csvfile):
+
+def import_csv(csvfile, create_options=True, create_choices=True):
     '''
     Imports whole pricelist from CSV file.
 
@@ -67,104 +61,95 @@ def import_csv(csvfile):
     and identical other options.
     '''
 
-    Price.objects.filter(state='active').update(state='updating')
+    report = ImportReport()
+
+    Price.objects.filter(state=Price.CURRENT).update(state=Price.OLD)
 
     data = {}
 
     for row in csv.DictReader(csvfile):
 
+        original_row = row.copy()
+
         try:
-            product = Product.objects.get(title=row['product'])
+            product = Product.objects.get(title=row.pop('product', None))
         except Product.DoesNotExist:
-            # log here
+            report.skip('product', 'not found', original_row)
             continue
 
         data['product'] = product
 
-        data['pricing'] = row['pricing']
-
         try:
-            data['tpl_price'] = Decimal(row['tpl_price'])
+            data['tpl_price'] = Decimal(row.pop('tpl_price', None))
         except DecimalException:
-            # log something like "skipped entry $row"
+            report.skip('tpl_price', 'bad value', original_row)
             continue
 
         try:
-            data['rpl_price'] = Decimal(row['rpl_price'])
+            data['rpl_price'] = Decimal(row.pop('rpl_price', None))
         except DecimalException:
-            # log
+            report.skip('rpl_price', 'bad value', original_row)
             continue
 
         try:
-            data['quantity'] = int(row['quantity'])
-        except ValueError:
-            # log
+            data['quantity'] = Decimal(row.pop('quantity', None))
+        except DecimalException:
+            report.skip('quantity', 'bad value', original_row)
             continue
 
-        data['lamination'] = Lamination.get_or_create_multiple(
-            row.get('lamination', '').split(','))
-        data['orientation'] = Orientation.get_or_create_multiple(
-            row.get('orientation', '').split(','))
-        data['printed'] = Printed.get_or_create_multiple(
-            row.get('printed', '').split(','))
-        data['fold'] = Fold.get_or_create_multiple(
-            row.get('fold', '').split(','))
-        data['finish'] = Finish.get_or_create_multiple(
-            row.get('finish', '').split(','))
-        data['front_cover'] = Cover.get_or_create_multiple(
-            row.get('front_cover', '').split(','))
-        data['back_cover'] = Cover.get_or_create_multiple(
-            row.get('back_cover', '').split(','))
-        data['binding'] = Binding.get_or_create_multiple(
-            row.get('binding', '').split(','))
-        data['options'] = Options.get_or_create_multiple(
-            row.get('options', '').split(','))
-        data['location'] = Location.get_or_create_multiple(
-            row.get('location', '').split(','))
-        data['frame'] = Frame.get_or_create_multiple(
-            row.get('frame', '').split(','))
-        data['corners'] = Corners.get_or_create_multiple(
-            row.get('corners', '').split(','))
-        data['stock'] = Stock.get_or_create_multiple(
-            row.get('stock', '').split(','))
-        data['print_stock'] = Stock.get_or_create_multiple(
-            row.get('print_stock', '').split(','))
+        choices = []
 
         try:
-            pages = map(int, row['pages'].split(','))
-        except ValueError:
-            # log here
+            for col, vals in row.items():
+                for val in filter(len, vals.split(',')):
+                    if create_options:
+                        try:
+                            o, new = Option.objects.get_or_create(
+                                code=slugify(col), type=Option.OPTIONAL)
+                        except IntegrityError:
+                            report.skip(col, 'integrity error', original_row)
+                            raise OptionError
+                        if len(o.name) == 0:
+                            o.name = o.code
+                            o.save()
+                    else:
+                        try:
+                            o = Option.objects.get(code=slugify(col))
+                        except Option.DoesNotExist:
+                            report.skip(
+                                col, 'option missing'.format([val]),
+                                original_row)
+                            raise OptionError
+
+                    if create_choices:
+                        try:
+                            c, new = OptionChoice.objects.get_or_create(
+                                option=o, code=slugify(val))
+                        except IntegrityError:
+                            report.skip(col, 'integrity error', original_row)
+                            raise OptionError
+                    else:
+                        try:
+                            c = OptionChoice.objects.get(option=o,
+                                                         code=slugify(val))
+                        except OptionChoice.DoesNotExist:
+                            report.skip(
+                                col, '{0} choice missing'.format([val]),
+                                original_row)
+                            raise OptionError
+
+                    choices.append(c)
+        except OptionError:
             continue
 
-        data['pages'] = Pages.get_or_create_multiple(pages)
+        p = Price(**data)
+        p.save()
+        for choice in choices:
+            p.option_choices.add(choice)
+        p.save()
 
-        try:
-            width = int(row['width'])
-        except ValueError:
-            # log
-            continue
+        report.success()
 
-        try:
-            height = int(row['height'])
-        except ValueError:
-            # log
-            continue
+    Price.objects.filter(state=Price.OLD).delete()
 
-        # All sizes in DB are landscape-oriented
-        if width > height:
-            width, height = height, width
-
-        data['size'], new = Size.objects.get_or_create(width=width,
-                                                       height=height)
-
-        try:
-            weight = map(int, row['weight'].split(','))
-        except ValueError:
-            # log here
-            continue
-
-        data['weight'] = Weight.get_or_create_multiple(weight)
-
-        add_price(**data)
-
-    Price.objects.filter(state='updating').update(state='inactive')
+    return report

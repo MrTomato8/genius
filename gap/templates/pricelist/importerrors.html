@@ -4,7 +4,7 @@
 {% block body_class %}create-page pricelist{% endblock %}
 
 {% block title %}
-{% trans "Pricelist" %} | {{ block.super }}
+{% trans "Pricelist Import from CSV" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -13,35 +13,36 @@
         <a href="{% url dashboard:index %}">{% trans "Dashboard" %}</a>
         <span class="divider">/</span>
     </li>
-    <li class="active">{% trans "Pricelist" %}</li>
+    <li class="active">{% trans "Pricelist Import from CSV" %}</li>
 </ul>
 {% endblock %}
 
 {% block header %}
 <div class="page-header action">
-    <h1>{% trans "Pricelist" %}</h1>
+    <h1>{% trans "Pricelist Import from CSV" %}</h1>
 </div>
 {% endblock header %}
 
 {% block dashboard_content %}
+<p>
+    <h2>{{ report.imported_total }} Prices imported successfully</h2>
+</p>
 <div class="table-header">
-    <h2><i class="icon-sitemap icon-large"></i>{{ title }}</h2>
+    <h2>{{ report.skipped_total }} Skipped Entries</h2>
 </div>
 <table class="table table-striped table-bordered">
 <tr>
-{% for header in headers %}
-    <th>{{ header }}</th>
-{% endfor %}
+    <th>Column</th>
+    <th>Reason</th>
+    <th>Data</th>
 </tr>
-{% for row in table %}
+{% for column, reason, data in report.skipped %}
 <tr> 
-{% for column in row %}
     <td>{{ column }}</td>
-{% endfor %}
+    <td>{{ reason }}</td>
+    <td>{{ data }}</td>
 </tr>
 {% endfor %}
 </table>
-
-{% include "partials/pagination.html" %}
 
 {% endblock dashboard_content %}

@@ -6,14 +6,27 @@ from apps.pricelist.utils import import_csv
 from apps.pricelist.models import Price
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import models
+
+Option = models.get_model('catalogue', 'Option')
+
 
 # TODO:allow staff only
 def import_pricelist(request):
     if request.method == 'POST':
         form = PricelistUploadForm(request.POST, request.FILES)
+
         if form.is_valid():
-            import_csv(request.FILES['csvfile'])
-            return HttpResponseRedirect(reverse('apps.pricelist.views.list'))
+            report = import_csv(
+                request.FILES['csvfile'],
+                form.cleaned_data['create_options'],
+                form.cleaned_data['create_choices'])
+
+            if report.skipped_total == 0:
+                return HttpResponseRedirect(reverse('apps.pricelist.views.list'))
+            else:
+                return render(request, 'pricelist/importerrors.html',
+                              {'report': report})
     else:
         form = PricelistUploadForm()
 
@@ -21,6 +34,7 @@ def import_pricelist(request):
         'form': form,
         'title': 'Pricelist Import from CSV',
     })
+
 
 # TODO: this one needs pagination
 def list(request):
@@ -36,9 +50,30 @@ def list(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         prices = paginator.page(paginator.num_pages)
+
+    headers = ['Product', 'TPL Price', 'RPL Price', 'Quantity']
+    for option in Option.objects.all():
+        headers.append(option.name)
+
+    table = []
+    for price in prices:
+        row = []
+        row.append(price.product)
+        row.append(price.tpl_price)
+        row.append(price.rpl_price)
+        row.append(price.quantity)
+        for option in Option.objects.all():
+            choices = []
+            for choice in price.option_choices.filter(option=option):
+                choices.append(choice.caption)
+            row.append(','.join(choices))
+        table.append(row)
+
     return render(request, 'pricelist/list.html', {
         'prices': prices,
         'paginator': paginator,
         'page_obj': prices,
+        'headers': headers,
+        'table': table,
         'title': 'Active Prices',
     })

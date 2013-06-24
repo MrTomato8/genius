@@ -228,6 +228,11 @@ OSCAR_DASHBOARD_NAVIGATION += [
                 'label': 'Import',
                 'url_name': 'apps.pricelist.views.import_pricelist',
             },
+            {
+                'label': 'List',
+                'url_name': 'apps.pricelist.views.list',
+            },
+
          ]
     },
 ]
