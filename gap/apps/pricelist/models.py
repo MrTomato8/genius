@@ -16,12 +16,12 @@ class OptionChoice(models.Model):
     thumbnail = models.ImageField('Thumbnail', upload_to='options', blank=True)
 
     def __unicode__(self):
-        return self.caption
+        return ''.join([str(self.option), ': ', self.code])
 
     def save(self, *args, **kwargs):
 
         if len(self.caption) == 0:
-            self.caption = ''.join([str(self.option), ': ', self.code])
+            self.caption = self.code
 
         super(OptionChoice, self).save(*args, **kwargs)
 
