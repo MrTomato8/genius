@@ -7,11 +7,12 @@ from apps.pricelist.models import Price
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
+from oscar.views.decorators import staff_member_required
 
 Option = models.get_model('catalogue', 'Option')
 
 
-# TODO:allow staff only
+@staff_member_required
 def import_pricelist(request):
     if request.method == 'POST':
         form = PricelistUploadForm(request.POST, request.FILES)
@@ -36,7 +37,7 @@ def import_pricelist(request):
     })
 
 
-# TODO: this one needs pagination
+@staff_member_required
 def list(request):
     prices_all = Price.objects.filter(~Q(state='inactive'))
     paginator = Paginator(prices_all, 20)
