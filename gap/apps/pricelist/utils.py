@@ -39,8 +39,33 @@ class OptionError(Exception):
     pass
 
 
-def pick_price():
+class MatchingPriceNotFound(Exception):
     pass
+
+
+class DuplicateQuantities(Exception):
+    pass
+
+
+def pick_price(product, quantity, choices):
+
+    prices = Price.objects.filter(product=product)
+
+    for choice in choices:
+        prices = prices.filter(option_choices=choice)
+
+    if prices.values('quantity').count() > prices.values('quantity').distinct().count():
+        raise DuplicateQuantities
+
+    if prices.count() == 1:
+        return prices.get()
+    elif prices.count > 1:
+        try:
+            return prices.get(quantity=quantity)
+        except Price.DoesNotExist:
+            raise MatchingPriceNotFound
+    else:
+        raise MatchingPriceNotFound
 
 
 def import_csv(csvfile, create_options=True, create_choices=True):
