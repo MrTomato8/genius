@@ -125,7 +125,7 @@ def import_csv(csvfile, create_options=True, create_choices=True):
 
         try:
             for col, vals in row.items():
-                for val in filter(len, vals.split(',')):
+                for val in filter(len, vals.replace(' ', '').split(',')):
                     if create_options:
                         try:
                             o, new = Option.objects.get_or_create(
