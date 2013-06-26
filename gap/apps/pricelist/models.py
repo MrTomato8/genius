@@ -10,7 +10,12 @@ class OptionChoice(models.Model):
 
     option = models.ForeignKey(Option, related_name='choices')
     conflicts_with = models.ManyToManyField(
-        'self', blank=True, verbose_name=u'Conflicting Choices')
+        'self', blank=True, verbose_name=u'Conflicting Choices',
+        help_text='Here you can define choice compatibility rules. '
+                  'Select option choices which conflict with current choice'
+                  '(example: recycled paper cannot have gloss finish, '
+                  'so in recycled paper option choice select gloss finish '
+                  'as conflicting choice.). Multiple selections are supported')
 
     caption = models.CharField('Caption', max_length=30, blank=True)
     thumbnail = models.ImageField('Thumbnail', upload_to='options', blank=True)
@@ -45,17 +50,18 @@ class Price(models.Model):
                              default=CURRENT, editable=False, db_index=True)
 
     tpl_price = models.DecimalField(
-        max_digits=10, decimal_places=3, validators=[MinValueValidator(0)],
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
         verbose_name='TPL Price')
 
     rpl_price = models.DecimalField(
-        max_digits=10, decimal_places=3, validators=[MinValueValidator(0)],
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
         verbose_name='RPL Price')
 
-    quantity = models.DecimalField(max_digits=10, decimal_places=3,
+    quantity = models.DecimalField(max_digits=10, decimal_places=2,
                                    validators=[MinValueValidator(0)])
     option_choices = models.ManyToManyField(
-        OptionChoice, blank=True, verbose_name=u'Option Choices')
+        OptionChoice, related_name='prices', blank=True,
+        verbose_name=u'Option Choices')
 
     def __unicode__(self):
         s = '{0}({1}) for {2} units of {3} ({4})'
