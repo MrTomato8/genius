@@ -77,8 +77,7 @@ def import_csv(csvfile, create_options=True, create_choices=True):
 
     On any error currently processed price record is skipped.
 
-    Integer fields that have 0 value are excluded from price record.
-    Empty string fields are also excluded from price record.
+    Empty string fields are excluded from price record.
 
     Most fields support multiple values(separated by comma without surrounding
     spaces, for example orienataion column may be set to 'portrait,landscape'.
