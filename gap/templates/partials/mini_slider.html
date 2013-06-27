@@ -1,0 +1,33 @@
+
+<!-- Slideshow -->
+
+<div class="flexlider responsive-slider" id="slideshow0" style="min-height: inherit; max-width: 960px">
+
+    <ul class="slides">
+
+        <li style="display: none;">
+            <a href="#">
+                <img src="{{ STATIC_URL }}local/img/Zrzut ekranu 2013-01-22 o 19.58.41-1120x442.png" alt="111">
+            </a>
+        </li>
+
+        <li style="display: none;">
+            <img src="{{ STATIC_URL }}local/img/131231-1120x442.jpg" alt="222">
+        </li>
+
+        <li style="display: list-item;">
+            <img src="{{ STATIC_URL }}local/img/1212-1120x442.jpg" alt="333">
+        </li>
+
+    </ul>
+
+
+    <script type="text/javascript">
+        $(window).load(function() {
+            $('#slideshow0').flexslider({slideshowSpeed: 10000});
+        });
+    </script>
+
+    <ol class="flex-control-nav"><li><a class="">1</a></li><li><a class="">2</a></li><li><a class="active">3</a></li></ol><ul class="flex-direction-nav"><li><a class="prev" href="#">Previous</a></li><li><a class="next" href="#">Next</a></li></ul></div>
+
+<!-- End slideshow -->

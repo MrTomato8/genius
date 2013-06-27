@@ -1,0 +1,17 @@
+{% load currency_filters %}
+{% load i18n %}
+{% if user.is_authenticated %}
+<div id="cart_block">
+<ul>
+    <li>
+        <div class="cart-heading">
+            <a class="btn" href="{% url basket:summary %}"></a>
+            <div class="content">
+            <div class="content-arrow"></div>
+                {% include "basket/partials/basket_quick.html" %}
+            </div>
+        </div>
+    </li>
+</ul><!-- /cart -->
+</div>
+{% endif %}

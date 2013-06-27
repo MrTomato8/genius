@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+{% load url from future %}
+{% load currency_filters %}
+{% load history_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load product_tags %}
+{% load i18n %}
+
+{% block title %}
+    {{ product.title }} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="set-size-grid">
+    <a href="/">{% trans 'Home' %}</a>
+    <span class="divider">/</span>
+    <a href="#">{{ product.title }}</a>
+    <h2>{{ product.title }}</h2> 
+<div>
+{% endblock %}
+
+{% block content %}
+<div class="grid-12 float-left" style="padding-top:20px !important">
+
+  <div class="product-info custom-block">
+
+    <div class="left">
+      <div class="image">
+        <a href="http://themes.jelliz.com/opencart/dilecta/image/cache/data/2-800x800.jpg" title="" class="jqzoom" rel="gal1" style="outline-style: none; text-decoration: none;">
+          <div class="zoomPad">
+            {% with image=product.primary_image %}
+              <img src="/media/{{ image.original }}" title="{{ product.title }}" alt="{{ product.title }}" style="opacity: 1;">
+            {% endwith %}
+            </div>
+          </a>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="description">
+        <span>Product Code:</span> {{ product.upc }}<br>
+        <span>Rating:</span> {{ product.rating }}<br>
+        <span>Availability:</span> {% if product.is_available_to_buy %}{% trans "In Stock" %}{% else %}{% trans "Out of Stock" %}{% endif %}
+      </div>
+      <div class="pattern"></div>
+
+      <div class="price">
+        <p><span class="price-new">{{ product.stockrecord.price_incl_tax|currency }}</span> <span class="price-old"></span></p>
+        <span class="price-tax">Ex Tax: {{ product.stockrecord.price_excl_tax|currency }}</span><br>
+        <span class="reward"><small></small></span><br>
+        <br>
+        <div class="discount"><br />
+        </div>
+      </div>
+
+      <div class="add-to-carts">
+        <a href="{% url 'product_options' product.id %}" class="button button-green">Get instant price</a><br><br>
+        {% comment %}
+		{% block product_basket_form %}
+          {% include "catalogue/partials/add_to_basket_form.html" %}
+        {% endblock %}
+		{% endcomment %}
+      </div>
+
+    </div>
+
+    <div class="custom-block-product"><h3>{{ product.title }}</h3>
+        <p><strong>Description</strong><br>{{ product.description }}</p>
+    <p class="clears"></p>
+
+</div>
+{% endblock %}

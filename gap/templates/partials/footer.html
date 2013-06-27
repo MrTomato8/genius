@@ -1,0 +1,197 @@
+{% load i18n %}
+<!-- Footer -->
+
+
+
+<footer>
+
+
+<div id="footer-banner" class="set-size clearfix centered">
+		<div class="grid-5 float-left"><img src="/static/local/img/icons.png"></div>
+		<div id="footer-banner-text" class="grid-7 float-right"><a href="/contact/">Sign up</a> for a trade account today or speak to one of our agents about setting up an account and start to enjoy our wide range of benefits. It only takes a couple of minutes</br><a href="/contact/">Email us</a> or call 0044 1273 782120</div>
+	</div>
+<!--
+<div id="footer-banner" class="grid-12 float-left clearfix centered">
+    <div class="grid-4 float-left"></div>
+    <div class="grid-8 float-right"><a>Sign</a> up for a trade account today or speak to one of our agents about setting up an account and start to enjoy our wide range of benefits. It only takes a couple of minutes | Email us or call 0044 1273 782120</div>
+</div>
+-->
+<!-- Custom Footer -->
+
+<div id="custom-footer">
+
+	
+
+    <div class="set-size clearfix">
+
+        <!-- About us -->
+
+        <div class="grid-3 float-left"><div>
+
+            <h3 class="about-us">About Us</h3>
+
+            <p>
+
+                Dilecta is clean and modern OpenCart <br />
+                theme. Unlimited colors and font. Seo <br />
+                ready. Resposive design and more...<br />
+                <br />
+                Log to demo admin panel and check all <br />
+                settings and functions. With custom footert<br />
+                you can add some nice info in footer like<br />
+                contact or twitter & facebook. <br />
+                <br />
+                Take a look in documentation.
+            </p>
+
+        </div></div>
+
+        <!-- End About us -->
+        <!-- Contact -->
+
+        <div class="grid-3 float-left"><div>
+
+            <h3 class="contact">Contact</h3>
+
+            <ul class="list-contact">
+
+                <li class="phone">
+
+                    <ul>
+
+                        <li>500-500-500</li>
+                        <li>34 321 4567</li>
+
+                    </ul>
+
+                </li>
+                <li class="email">
+
+                    <ul>
+
+                        <li>contact@example.com</li>
+                        <li>tiquet.info@gmail.com</li>
+
+                    </ul>
+
+                </li>
+                <li class="skype">
+
+                    <ul>
+
+                        <li>support_example</li>
+                        <li>contact_example</li>
+
+                    </ul>
+
+                </li>
+
+            </ul>
+
+        </div></div>
+
+        <!-- End Contact -->
+        <!-- Twitter -->
+
+        <div class="grid-3 float-left"><div>
+
+            
+            <h3 class="twitter">Twitter</h3>
+
+            <div id="twitter-updates"><div class="tweet"></div></div>
+
+        </div></div>
+
+        <!-- End Twitter -->
+        <!-- Facebook -->
+        <div class="grid-3 float-left"><div>
+
+            <h3 class="facebook">Facebook</h3>
+
+            <div id="facebook" style="margin-top:0px">
+
+                <div style="margin:-7px 0px -5px -7px">
+                    
+                </div>
+
+            </div>
+
+        </div></div>
+        <!-- End Facebook -->
+
+    </div>
+
+</div>
+
+<!-- End Custom Footer -->
+
+
+<div class="set-size clearfix">
+    <div class="footer-navigation clearfix">
+        <div class="grid-3 float-left"><div class="footer-panels">
+            <div class="footer-title"><h3>Information</h3></div>
+                <ul class="no-active">
+                    <li><a href="/about/">{% trans "About" %}</a></li>
+                    <li><a href="/delivery/">&#8250; Delivery</a></li>
+                    <li><a href="/privacy-policy/">&#8250; Privacy Policy</a></li>
+                    <li><a href="/terms-and-conditions/">&#8250; Terms &amp; Conditions</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="grid-3 float-left"><div class="footer-panels">
+            <div class="footer-title"><h3>Customer Service</h3></div>
+                <ul class="no-active">
+                    <li><a href="/returns/">&#8250; Returns Policy</a></li>
+                    <li><a href="/help/">&#8250; Help</a></li>
+                    <li><a href="/social-media-links/">&#8250; Social Media Links</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="grid-3 float-left"><div class="footer-panels">
+            <div class="footer-title"><h3>Support</h3></div>
+            <ul class="no-active">
+                <li><a href="/support/">&#8250; Support</a></li>
+                <li><a href="/account-support/">&#8250; My Account support</a></li>
+                <li><a href="/how-it-works/">&#8250; How it works</a></li>
+                <li><a href="/contact/">&#8250; Contact us</a></li>
+            </ul>
+        </div></div>
+        {% if user.authenticated %}
+        <div class="grid-3 float-left"><div class="footer-panels">
+            <div class="footer-title"><h3>My Account</h3></div>
+                <ul class="no-active">
+                    <li><a href="/account/">&#8250; My Account</a></li>
+                    <li><a href="http://themes.jelliz.com/opencart/dilecta/index.php?route=account/order">&#8250; Order History</a></li>
+                    <li><a href="http://themes.jelliz.com/opencart/dilecta/index.php?route=account/wishlist">&#8250; Wish List</a></li>
+                    <li><a href="http://themes.jelliz.com/opencart/dilecta/index.php?route=account/newsletter">&#8250; Newsletter</a></li>
+                </ul>
+            </div>
+        </div>
+        {% endif  %}
+
+    </div>
+
+    <!-- Copyright -->
+
+    <div class="copyright clearfix">
+
+{% comment %}        <ul>
+
+            <li><img src="catalog/view/theme/dilecta/img/mastercard.png" alt="Mastercard" /></li>
+            <li><img src="catalog/view/theme/dilecta/img/visa.png" alt="Visa" /></li>
+            <li><img src="catalog/view/theme/dilecta/img/moneybookers.png" alt="MoneyBookers" /></li>
+            <li><img src="catalog/view/theme/dilecta/img/paypal.png" alt="PayPal" /></li>
+
+        </ul>{% endcomment %}
+
+    </div>
+
+    <!-- End copyright -->
+
+</div>
+
+</footer>
+
+<!-- End Footer -->
+
+<div id="toTop"></div>

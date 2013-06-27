@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% load i18n %}
+
+{% block title %}
+{{ flatpage.title}} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="set-size-grid">
+    <a href="{% url promotions:home %}">{% trans 'Home' %}</a>
+    <span class="divider">/</span>
+    <a href="#">{{ flatpage.title}}</a>
+    <h2>{{ flatpage.title}}</h2>
+<div>
+{% endblock %}
+
+{% block content %}
+<article>{{ flatpage.content|linebreaks }}</article>
+{% endblock %}

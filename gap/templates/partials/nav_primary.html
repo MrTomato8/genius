@@ -1,0 +1,57 @@
+{% load currency_filters %}
+{% load category_tags %}
+{% load i18n %}
+<div class="navigation_container" style="-webkit-box-shadow:0px 1px 1px rgba(0, 0, 0, 0.15);-moz-box-shadow:0px 1px 1px rgba(0, 0, 0, 0.15)
+;box-shadow:0px 1px 1px rgba(0, 0, 0, 0.15)">
+    <div class="set-size clearfix">
+        <nav>
+            <ul>
+                <li><a href="{% url promotions:home %}" class="home"></a></li>
+                <li><a href="{% url catalogue:index %}" class="effect-hover">{% trans "Products" %}</a>
+                    {% if categories %}
+                        <div class="sub-menu column-1">
+                            <div class="arrow-categories"></div>
+                                <ul>
+                                    {% for category in categories %}
+                                        <li><a href="{{ category.0.get_absolute_url }}">{{ category.0.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                              </div>
+                    {% endif%}
+                </li>
+                <li><a href="/about/" class="effect-hover">About Us</a></li>
+                <li><a href="/services/" class="effect-hover">Services</a></li>
+                <li><a href="/corporate-policies/" class="effect-hover">Corporate Policies</a></li>
+                <li><a href="/contact/" class="effect-hover">Contact us</a></li>
+            </ul>
+        </nav>
+		<div class="mobile-navigation">
+				
+					<div class="click-menu">MENU</div>
+					
+					<div class="categories-mobile-links">
+					
+						<ul>
+							
+							<li class="mobile"><a href="{% url promotions:home %}" class="home"></a></li>		
+							<li class="mobile"><div class="plus"></div><a href="{% url catalogue:index %}" class="effect-hover">{% trans "Products" %}</a>
+							
+								<ul>
+									
+									{% for category in categories %}
+                                        <li class="mobile"><a href="{{ category.0.get_absolute_url }}">{{ category.0.name }}</a></li>
+                                    {% endfor %}
+																	
+								</ul>
+							<li class="mobile"><a href="/about/" class="effect-hover">About Us</a></li>
+							<li class="mobile"><a href="/services/" class="effect-hover">Services</a></li>
+							<li class="mobile"><a href="/corporate-policies/" class="effect-hover">Corporate Policies</a></li>
+							<li class="mobile"><a href="/contact/" class="effect-hover">Contact us</a></li>									
+
+						</ul>
+					
+					</div>
+				
+				</div>
+    </div>
+</div>

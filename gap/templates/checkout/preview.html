@@ -1,0 +1,20 @@
+{% extends "checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Order preview" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout-nav %}
+	{% include 'checkout/nav.html' with step=4 %}
+{% endblock %}
+
+{% block place_order %}
+<form method="post" action="{% url checkout:preview %}" id="place-order-form">
+	<input type="hidden" name="action" value="place_order" />
+	{% csrf_token %}
+    <div class="form-actions">
+		<button id='place-order' type="submit" class="pull-right btn btn-primary btn-large js-disable-on-click" data-loading-text="{% trans 'Submitting...' %}">{% trans "Place order" %}</button>
+    </div>
+</form>
+{% endblock place_order %}

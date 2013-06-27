@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load compress %}
+{% load category_tags %}
+
+{% block layout %}
+    
+    <header>
+        <div class="top set-size clearfix">
+                {% include "partials/brand.html" %}
+                    {# Mini-basket wrapped in a block so some templates can now display it #}
+                <div class="top-right">
+                    {# Top-horizontal bar with account, notifictions, dashboard links #}
+                    {% include "partials/nav_accounts.html" %}
+                    {# Site logo/title, mini-basket, browse dropdown and searchbox #}
+					<div id="service-add-to-cart" class="clearfix">
+						<div id="cart-add" class="float-right"><i class="float-left icon-shopping-cart icon-3x"></i><div class="float-left padded2"><span class="rnd-btn">$ 0.00 <strong>0 ITEMS</strong></span></div></div>
+						<div id="cust-service" class="float-right"><i class=" float-left icon-mobile-phone icon-3x"></i><div class="float-left padded">Customer Service</br><strong>1-800-424-1324</strong></div></div>
+					</div>
+					{% comment %}
+                    {% block mini_basket %}{% include "partials/mini_basket.html" %}{% endblock %}
+					{% endcomment %}
+                </div>
+        </div>
+        {% category_tree depth=2 as categories %}
+        {% block navigation %}
+            {% include "partials/nav_primary.html" %}
+        {% endblock %}
+    </header>
+
+    {# Main content of page - other layout templates may override this block #}
+    
+        {% block content_wrapper %}
+    	<div class="container-fluid page">
+            <div class="page_inner">
+                <section id="page-title">
+                    {% block breadcrumbs %}{% endblock %}
+                    {% block header %}
+                    <h1>{% block headertext %}{% endblock %}</h1>
+                {% endblock %}
+                </section>
+                {% include "partials/alert_messages.html" %}
+                {% block subnavigation %}{% endblock %}
+                <section id="content" class="set-size clearfix">
+                    {% block subheader %}{% endblock subheader %}
+                    {# Div exists for AJAX updates to entire content section #}
+                    {% block content %}{% endblock %}
+                </section>
+            </div>
+        </div>
+        {% endblock %}
+
+
+    {% include "partials/footer.html" %}
+{% endblock %}
+
+{% block extrascripts %}
+    {% include "partials/extrascripts.html" %}
+    {{ block.super }}
+{% endblock %}

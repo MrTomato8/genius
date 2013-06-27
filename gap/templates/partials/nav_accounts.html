@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<ul class="menu" style="margin-right: 15px">
+    {% if user.is_authenticated %}
+        <li>
+            <a href="{% url customer:summary %}">{% trans "Account" %}</a>
+        </li>
+        <li>
+            <a href="{% url customer:notifications-inbox %}">
+                {% trans "Notifications" %}
+                {% if num_unread_notifications > 0 %}
+                    <span >{{ num_unread_notifications }}</span>
+                {% endif %}</a>
+        </li>
+        {% if user.is_staff %}
+            <li><a href="{% url dashboard:index %}">{% trans "Dashboard" %}</a></li>
+        {% endif %}
+        <li><a href="{% url customer:logout %}">{% trans "Logout" %}</a></li>
+    {% else %}
+        <li><a href="{% url customer:login %}">{% trans "Login or register" %}</a></li>
+    {% endif %}
+</ul>
+            

@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block title %}
+{{ title }} | {{ block.super }}
+{% endblock %}
+
+{% block body_class %}account-pages{% endblock %}
+
+{% block breadcrumbs %}
+<div class="set-size-grid">
+    <a href="{% url promotions:home %}">{% trans 'Home' %}</a>
+    <span class="divider">/</span>
+    <a href="/accounts/">{% trans 'Account' %}</a>
+    <span class="divider">/</span>
+    <a href="{% url customer:address-list %}">{% trans 'Address book' %}</a>
+    <span class="divider">/</span>
+    <a href="#">{{ title }}</a>
+    <h2>{{ title }}</h2>
+<div>
+{% endblock %}
+
+{% block content %}
+{% include "partials/nav_profile.html" with address_book="active" %}
+<div class="grid-9 float-left" style="padding-top:39px !important; padding-left:10px;">
+    <form action="." method="post" class="form-horizontal" data-behaviours="lock">
+        {% csrf_token %}
+        {% include "partials/form_fields.html" with form=form %}
+        <div class="form-actions">
+            <button type="submit" value="Save" class="button">{% trans 'Save' %}</button>
+            {% trans 'or' %}
+            <a href="{% url customer:address-list %}">{% trans 'cancel' %}</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}

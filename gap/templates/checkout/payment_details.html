@@ -1,0 +1,30 @@
+{% extends 'oscar/checkout/payment_details.html' %}
+{% load i18n %}
+
+{% block payment_details %}
+    <div class="page-header">
+        <h1>Enter payment details</h1>
+    </div>
+
+    {% block payment_details_content %}
+    <h3>Pay via Paypal</h3>
+    <div class="form-actions">
+      <a href="{% url paypal-redirect %}"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;"></a>
+    </div>
+
+    <!--
+    <h3>Pay with a bankcard</h3>
+    <form action="{% url checkout:preview %}" class="form-horizontal" method="post">
+        <div class="well well-info">
+            {% csrf_token %}
+            {% include 'partials/form_fields.html' with form=bankcard_form %}
+            <div class="alert alert-warning">
+                <h4>{% trans "Demo site help" %}</h4>
+                <p>{% trans "You can use a magic card number of 1000010000000007 together with an CVV number." %}</p>
+            </div>
+        </div>
+        <button type="submit" class="pull-right btn btn-large btn-primary">{% trans "Continue" %}</button>
+    </form>
+    -->
+    {% endblock %}
+{% endblock payment_details %}

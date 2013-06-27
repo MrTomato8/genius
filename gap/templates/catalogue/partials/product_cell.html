@@ -1,0 +1,34 @@
+{% load currency_filters %}
+{% load reviews_tags %}
+{% load thumbnail %}
+{% load i18n %}
+
+<!-- Product -->
+<div>
+        <div class="left">
+            <!-- Image -->
+            <div class="image">
+                {% block product_image %}
+                    {% with image=product.primary_image %}
+                        {% if not image.is_missing %}
+                            <a href="{{ product.get_absolute_url }}"><img src="/media/{{ image.original }}" alt="">{{ product.get_title|truncatewords:4 }}</a>
+                        {% endif %}   
+                    {% endwith %}
+                {% endblock %}
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="off-hover" style="display: block;">
+                <div class="name"><a href="{{ product.get_absolute_url }}">{{ product.get_title|truncatewords:4 }}</a></div>
+                <div class="price">
+                    <span class="price-new">{% include "catalogue/partials/stock_record.html" %}</span> <span class="price-old"></span>
+                </div>
+            </div>
+            <div class="on-hover" style="display: none;">
+                <!-- Add to cart -->
+                <a href="{{ product.get_absolute_url }}" class="add-to-cart"></a>
+            </div>
+        </div>
+</div>
+<!-- End Product -->

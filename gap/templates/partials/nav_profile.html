@@ -1,0 +1,20 @@
+{% load i18n %}
+
+<div class="grid-3 float-left">
+    <div id="column-left">
+        <div class="box">
+            <div class="box-content" style="margin-top: 39px">
+                <div class="box-heading" style="padding-top: 0">Account</div>
+                    <ul>
+                        <li><a href="{% url customer:summary %}#profile">{% trans 'Profile' %}</a></li>
+                        <li><a href="{% url customer:summary %}#orders">{% trans 'Order History' %}</a></li>
+                        <li><a href="{% url customer:summary %}#addresses">{% trans 'Address Book' %}</a></li>
+                        <li><a href="{% url customer:summary %}#emails">{% trans 'Email History' %}</a></li>
+                        <li><a href="{% url customer:summary %}#alerts">{% trans "Alerts" %}</a></li>
+                        {% block extra_tabs_nav %}
+                        {% endblock %}
+                    </ul>
+            </div>
+        </div>
+    </div>
+</div>

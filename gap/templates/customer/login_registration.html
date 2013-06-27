@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block title %}
+{% trans 'Login or register' %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="set-size-grid">
+    <a href="{% url promotions:home %}">{% trans 'Home' %}</a>
+    <span class="divider">/</span>
+    <a href="#">{% trans 'Login or register' %}</a>
+    <h2>{% trans 'Login or register' %}</h2>
+<div>
+{% endblock %}
+
+{% block content %}
+
+<div class="grid-9 float-left" id="content_content" style="padding-top:30px !important">
+
+        <div class="login-content">
+            <div class="left">
+                <h2>{% trans 'Register' %}</h2>
+                <div class="content">
+                    <form id="register_form" action="{{ request.get_full_path }}" method="post" class="form-stacked">
+                        {% csrf_token %}
+                        {% include "partials/form_fields.html" with form=registration_form %}
+                        <!--<input type="submit" value="{% trans 'Register' %}" class="button" />-->
+                        <button name="registration_submit" type="submit" value="{% trans 'Register' %}" class="button" data-loading-text="Registering...">{% trans 'Register' %}</button>
+                    </form>
+                </div>
+            </div>
+            <div class="right">
+                <h2>{% trans 'Log In' %}</h2>
+                <form action="{{ request.get_full_path }}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="content">
+                        <p style="padding-bottom:10px">I am a returning customer</p>
+                        {% include "partials/form_fields.html" with form=login_form %}
+                        <p><a href="{% url password-reset %}">{% trans "I've forgotten my password" %}</a></p>
+                        <input type="hidden" name="next" value="/">
+                        <!--<input type="submit" value="Login" class="button">-->
+                        <button name="login_submit" type="submit" value="{% trans 'Log In' %}" class="button">{% trans 'Log In' %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script type="text/javascript"><!--
+        $('#id_login-username').keydown(function(e) {
+            if (e.keyCode == 13) {
+                $('#login').submit();
+            }
+        });
+        //--></script>
+
+
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,132 @@
+{% extends 'layout.html' %}
+{% load url from future %}
+
+{% block content %}
+<div class="grid-12 float-left" style="padding-top:0px !important">
+
+    <div class="center-block">
+        <div class="button {% if step == 1 %}button-two{% else %}button-gray{% endif %}">1. Product options</div>
+        <div class="button {% if step == 2 %}button-two{% else %}button-gray{% endif %}">2. Pick your paper</div>
+        <div class="button {% if step == 3 %}button-two{% else %}button-gray{% endif %}">3. Check selections</div>
+        <div class="button {% if step == 4 %}button-two{% else %}button-gray{% endif %}">4. Get a quote</div>
+        <div class="button {% if step == 5 %}button-two{% else %}button-gray{% endif %}">5. Upload files</div>
+    </div>
+
+    <div class="product-list">
+        <div>
+
+            <form action="#" method="post">
+                {% csrf_token %}
+                <div class="left">
+
+                    <h3>Custom size</h3><br>
+                    <label>Please enter the size you require</label>
+                    <label style="margin-left: 20px">Width <input type="text" name="width" value="0">mm</label>
+                    <label style="margin-left: 20px">Height <input type="text" name="height" value="0">mm</label>
+
+                    <h3>How many do you need?</h3><br>
+                    <label>Quantity <input type="text" name="quantity" value="1"></label>
+                    <a class="button calculate">Calculate</a><br><br>
+
+                    <p>Unit cost: £<span id="instance_price_unit">0.00</span></p>
+                    <input type="hidden" name="instance_price_unit" value="0">
+
+                    <p class="price-new main-price">Cost: £<span id="instance_price">0.00</span></p>
+                    <input type="hidden" name="instance_price" value="0">
+
+                    <h3>Enter your job reference here</h3>
+                    <input type="text" name="job_name" value="">
+
+                </div>
+
+                <div class="right" style="text-align: center">
+
+                {% if prices %}
+                    <p>Select a quantity</p>
+                    <table>
+
+                        <tr>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+
+                        {% for price in prices %}
+                        <tr>
+                            <td style="text-align: left" class="count">{{ price.count }}</td>
+                            <td style="text-align: right">£{{ price.price }} <input type="radio" name="selected_quantity"></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+                    {% comment %}<a href="{% url 'basket' %}" class="button" style="margin-top: 20px">Order Now</a>{% endcomment %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+
+
+
+                {% endif %}
+
+                    <button type="submit" class="button" style="margin-top: 20px">Order Now</button>
+                </div>
+
+                <p class="clears"></p>
+            </form>
+
+        </div>
+    </div>
+
+    {% comment %}<loldiv id="myvar" data="{{ prices }}"/>
+{% endcomment %}
+</div>
+
+    
+<script type="text/javascript">
+
+    var prices = {{prices|safe}};
+
+    function calculate()
+    {
+        var count = $('input[name=quantity]').val();
+
+        var current_price_section = prices[0].fields;
+
+        for(var i in prices)
+        {
+            if(count >= prices[i].fields.count)
+            {
+                current_price_section = prices[i].fields;
+            }
+        }
+
+        console.log(current_price_section);
+
+        var price_unit = Math.ceil(current_price_section.price / count * 100) / 100;
+
+        var instance_price = current_price_section.price;
+        $('#instance_price').text(instance_price);
+        $('input[name=instance_price]').val(instance_price);
+
+        var instance_price_unit = price_unit.toFixed(2);
+        $('#instance_price_unit').text(instance_price_unit);
+        $('input[name=instance_price_unit]').val(instance_price_unit);
+    }
+
+    $(function()
+    {
+
+        $('.calculate').click(function()
+        {
+            calculate();
+        });
+
+        $('input[name=selected_quantity]').click(function()
+        {
+            var count = $(this).parent().parent().find('.count').text();
+            $('input[name=quantity]').val(count);
+            calculate();
+        });
+
+    });
+
+</script>
+
+{% endblock %}
