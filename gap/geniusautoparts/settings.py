@@ -153,6 +153,7 @@ INSTALLED_APPS = [
     'apps.checkout',
     'paypal',
     'apps.pricelist',
+    'apps.options'
 ]
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps()
 

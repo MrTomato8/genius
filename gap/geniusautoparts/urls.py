@@ -11,7 +11,7 @@ from apps.app import application
 #from oscar.app import application
 
 from django.conf.urls.static import static
-
+from apps.options.app import application as options_app
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^product-options/(?P<product_id>\d+)/$', product_options, name='product_options'),
     url(r'^get-quote/(?P<id>\d+)/$', get_quote, name='get_quote'),
     (r'^pricelist/', include('apps.pricelist.urls')),
+    (r'^options/', include(options_app.urls)),
 
     (r'', include(application.urls))
 )
