@@ -10,6 +10,8 @@ from gap.views import product_options, get_quote
 from apps.app import application
 #from oscar.app import application
 
+from apps.dashboard.projects.app import application as projects_app
+
 from django.conf.urls.static import static
 
 admin.autodiscover()
@@ -28,6 +30,8 @@ urlpatterns = patterns('',
     url(r'^product-options/(?P<product_id>\d+)/$', product_options, name='product_options'),
     url(r'^get-quote/(?P<id>\d+)/$', get_quote, name='get_quote'),
     (r'^pricelist/', include('apps.pricelist.urls')),
+    
+    url(r'^dashboard/projects/', include(projects_app.urls)),
 
     (r'', include(application.urls))
 )
