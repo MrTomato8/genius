@@ -151,10 +151,11 @@ INSTALLED_APPS = [
     'compressor',
     'apps.catalogue',
     'apps.checkout',
+    'apps.dashboard.projects',
     'paypal',
     'apps.pricelist',
 ]
-INSTALLED_APPS = INSTALLED_APPS + get_core_apps()
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps(['apps.order'])
 
 ACCOUNTS_SOURCE_NAME = 'Main Account'
 ACCOUNTS_REDEMPTIONS_NAME = 'Sales Account'
@@ -234,6 +235,16 @@ OSCAR_DASHBOARD_NAVIGATION += [
             },
 
          ]
+    },
+    {
+         'label': 'Jobs management',
+        'children': [
+            {
+                'label': 'Projects',
+                'url_name': 'project-list',
+            },
+         ]
+
     },
 ]
 from local_settings import *
