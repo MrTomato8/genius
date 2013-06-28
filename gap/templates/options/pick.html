@@ -1,5 +1,23 @@
 <html>
 <body>
-    {{ msg }}
+<h1>{{  product }}</h1>
+<ul>
+{% for option in opts %}
+
+{% if option.choices %}
+<li>
+<h2>{{ option.option }}</h2>
+<ul>
+    {% for c in option.choices %}
+<li>
+    {{ c.caption }}
+</li>
+    {% endfor %}
+</ul>
+
+</li>
+{% endif %}
+{% endfor %}
+</ul>
 </body>
 </html>
