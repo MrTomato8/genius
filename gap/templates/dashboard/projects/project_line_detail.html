@@ -11,7 +11,6 @@
     {% trans "Jobs management" %} | {{ block.super }}
 {% endblock %}
 
-
 {% block breadcrumbs %}
     <ul class="breadcrumb">
         <li>
@@ -30,30 +29,12 @@
 
 {% block dashboard_content %}
     <div class="row-fluid">
-        <div class="span4 well">
-            <h2>Small</h2>
-            <ul>
-            {% for line in small %}
-                <li><a href="{% url 'project-line-detail' order.id line.id %}">{{ line }}</a></li>
-            {% endfor %}
-            </ul>
+        <div class="span6 well">
+            <h2>Form to change the status</h2>
         </div>
-        <div class="span4 well">
-            <h2>Large</h2>
+        <div class="span6 well">
+            <h2>Form to follow changes</h2>
             <ul>
-            {% for line in large %}
-                <li><a href="{% url 'project-line-detail' order.id line.id %}">{{ line }}</a></li>
-            {% endfor %}
-            </ul>
-        </div>
-        <div class="span4 well">
-            <h2>Exhibition</h2>
-            <ul>
-            {% for line in exhibition %}
-                <li><a href="{% url 'project-line-detail' order.id line.id %}">{{ line }}</a></li>
-            {% endfor %}
-            </ul>
         </div>
     </div>
-
 {% endblock dashboard_content %}        

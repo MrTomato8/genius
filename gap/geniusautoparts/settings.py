@@ -237,10 +237,10 @@ OSCAR_DASHBOARD_NAVIGATION += [
          ]
     },
     {
-         'label': 'Jobs management',
+        'label': 'Jobs management',
         'children': [
             {
-                'label': 'Projects',
+                'label': 'Jobs',
                 'url_name': 'project-list',
             },
          ]
