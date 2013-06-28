@@ -30,9 +30,20 @@
 {% block dashboard_content %}
     <div class="row-fluid">
         <div class="span6 well">
-            <h2>Form to change the status</h2>
+            <div class="row-fluid">
+            <form action="." method="post">{% csrf_token %}
+                {% for status in statuses %}
+                <div class="span2">
+                    <input type="radio" name="status" {% if status == line.status %}checked{% endif %} value="{{ status }}" /> {{ status }} 
+                </div>
+                {% endfor %}
+                <button type="submit">Click Me!</button> 
+            </form> 
+            </div>
+            <h2>{{ line.product }}</h2>
+
         </div>
-        <div class="span6 well">
+        <div class="span3 well">
             <h2>Form to follow changes</h2>
             <ul>
         </div>

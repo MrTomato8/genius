@@ -1,11 +1,23 @@
-from django.views.generic import ListView, DetailView, UpdateView, FormView
 from django.db.models.loading import get_model
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.views.generic import ListView, DetailView, UpdateView, FormView
+
 
 Order = get_model('order', 'Order')
 
 GROUP_SMALL = 'small'
 GROUP_LARGE = 'large'
 GROUP_EXHIBITION = 'exhibition'
+
+STATUSES = (
+    'Opened',
+    'In Process',
+    'Completed',
+    'Shipped',
+    'Cancelled',
+    )
 
 class ProjectListView(ListView):
     model = Order
@@ -50,6 +62,7 @@ class ProjectDetailView(DetailView):
         ctx['exhibition'] = self.object.get_exhibition_lines()
         ctx['small'] = self.object.get_small_lines()
         ctx['large'] = self.object.get_large_lines()
+        
         return ctx
 
 
@@ -58,8 +71,22 @@ class ProjectLineItemDetailView(DetailView):
     model = Order
     context_object_name = 'order'
     template_name = 'dashboard/projects/project_line_detail.html'
+    success_message = "Item status is successfully updated"
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectLineItemDetailView, self).get_context_data(**kwargs)
-        ctx['order'] = self.object.lines.filter(id=self.kwargs['line_id'])
+        ctx['line'] = self.object.lines.get(id=self.kwargs['line_id'])
+        ctx['statuses'] = STATUSES
         return ctx
+
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        line = self.object.lines.get(id=self.kwargs['line_id'])
+        line.status = self.request.POST.get('status')
+        line.save()
+        messages.success(request, self.success_message)
+        return HttpResponseRedirect(reverse('project-line-detail', kwargs={'pk': self.object.pk, 'line_id': line.id}))
+
+
+
