@@ -91,7 +91,7 @@ def import_csv(csvfile, create_options=True, create_choices=True):
 
     data = {}
 
-    for row in csv.DictReader(csvfile):
+    for row in csv.DictReader(csvfile.read().splitlines()):
 
         original_row = row.copy()
 
