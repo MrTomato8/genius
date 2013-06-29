@@ -59,12 +59,34 @@ class ProjectDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectDetailView, self).get_context_data(**kwargs)
-        ctx['exhibition'] = self.object.get_exhibition_lines()
-        ctx['small'] = self.object.get_small_lines()
-        ctx['large'] = self.object.get_large_lines()
-        
+        user = self.request.user
+        groups = user.groups.values_list('name', flat=True)
+        ctx['staff_breadcrumb'] = self.get_breadcrumb(user, groups)
+
+        if user.is_superuser:
+            ctx['exhibition'] = self.object.get_exhibition_lines()
+            ctx['small'] = self.object.get_small_lines()
+            ctx['large'] = self.object.get_large_lines()
+        elif GROUP_LARGE in groups:
+            ctx['large'] = self.object.get_large_lines()
+        elif GROUP_SMALL in groups:
+            ctx['small'] = self.object.get_small_lines()
+        elif GROUP_EXHIBITION in groups:
+            ctx['exhibition'] = self.object.get_exhibition_lines()
+
         return ctx
 
+    def get_breadcrumb(self, user, groups):
+        if user.is_superuser:
+            return "All Teams"
+
+        if GROUP_LARGE in groups:
+            return 'Large Format Digital Team'
+        elif GROUP_SMALL in groups:
+            return ' Small Format Digital Team'
+        elif GROUP_EXHIBITION in groups:
+            return 'Exhibition Format Digital Team'
+        return ''
 
 
 class ProjectLineItemDetailView(DetailView):
@@ -72,13 +94,30 @@ class ProjectLineItemDetailView(DetailView):
     context_object_name = 'order'
     template_name = 'dashboard/projects/project_line_detail.html'
     success_message = "Item status is successfully updated"
+    
 
     def get_context_data(self, **kwargs):
         ctx = super(ProjectLineItemDetailView, self).get_context_data(**kwargs)
-        ctx['line'] = self.object.lines.get(id=self.kwargs['line_id'])
+        line =  self.object.lines.get(id=self.kwargs['line_id'])
+        ctx['line'] = line
+        ctx['followers'] = line.followers.all()
         ctx['statuses'] = STATUSES
+        user = self.request.user
+        groups = user.groups.values_list('name', flat=True)
+        ctx['staff_breadcrumb'] = self.get_breadcrumb(user, groups)
         return ctx
 
+    def get_breadcrumb(self, user, groups):
+        if user.is_superuser:
+            return "All Teams"
+
+        if GROUP_LARGE in groups:
+            return 'Large Format Digital Team'
+        elif GROUP_SMALL in groups:
+            return ' Small Format Digital Team'
+        elif GROUP_EXHIBITION in groups:
+            return 'Exhibition Format Digital Team'
+        return ''
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -89,4 +128,27 @@ class ProjectLineItemDetailView(DetailView):
         return HttpResponseRedirect(reverse('project-line-detail', kwargs={'pk': self.object.pk, 'line_id': line.id}))
 
 
+class FollowLineView(DetailView):
+    model = Order
+    success_message = "You are following this line"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        line = self.object.lines.get(id=self.kwargs['line_id'])
+        line.followers.add(request.user)
+        messages.success(request, self.success_message)
+        return HttpResponseRedirect(reverse('project-line-detail', kwargs={'pk': self.object.pk, 'line_id': line.id}))
+
+
+
+class UnfollowLineView(DetailView):
+    model = Order
+    success_message = " Unfollowed this line successfully"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        line = self.object.lines.get(id=self.kwargs['line_id'])
+        line.followers.remove(request.user)
+        messages.success(request, self.success_message)
+        return HttpResponseRedirect(reverse('project-line-detail', kwargs={'pk': self.object.pk, 'line_id': line.id}))
 

@@ -1,7 +1,9 @@
 from django.db import models
+from django.db.models.loading import get_model
+from django.contrib.auth.models import User
 
 from oscar.apps.order.abstract_models import AbstractOrder, AbstractLine
-from django.db.models.loading import get_model
+
 
 SMALL_ORDER = "Small format digital"
 LARGE_ORDER = "Large format digital"
@@ -67,5 +69,8 @@ class Order(AbstractOrder):
         exhibition_categories = [exhibition_category] + list(exhibition_category.get_children())
         return self.lines.filter(product__categories__in=exhibition_categories)
 
+
+class Line(AbstractLine):
+    followers = models.ManyToManyField(User)
 
 from oscar.apps.order.models import *
