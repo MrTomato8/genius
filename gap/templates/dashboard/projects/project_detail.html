@@ -11,6 +11,16 @@
     {% trans "Jobs management" %} | {{ block.super }}
 {% endblock %}
 
+{% block extrastyles %}
+{{ block.super }}
+<style type="text/css">
+div.box {
+    background: #fff;
+    border: 1px solid #eee;
+}
+</style>
+{% endblock extrastyles %}
+
 
 {% block breadcrumbs %}
     <ul class="breadcrumb">
@@ -18,36 +28,40 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
             <span class="divider">/</span>
         </li>
-        <li class="active">{% trans "Jobs management" %}</li>
+        <li>
+            <a href="{% url 'project-list' %}">{% trans "Jobs" %}</a>
+            <span class="divider">/</span>
+        </li>
+        <li class="active">{{ staff_breadcrumb }}</li>
     </ul>
 {% endblock %}
 
 {% block header %}
     <div class="page-header">
-        <h1>{% trans "Jobs management" %}</h1>
+        <h1></h1>
     </div>
 {% endblock header %}
 
 {% block dashboard_content %}
     <div class="row-fluid">
-        <div class="span4 well">
-            <h2>Small</h2>
+        <div class="span4 box well">
+            <h2>Small Format Digital Team</h2>
             <ul>
             {% for line in small %}
                 <li><a href="{% url 'project-line-detail' order.id line.id %}">{{ line }}</a></li>
             {% endfor %}
             </ul>
         </div>
-        <div class="span4 well">
-            <h2>Large</h2>
+        <div class="span4 box well">
+            <h2>Large Format Digital Team</h2>
             <ul>
             {% for line in large %}
                 <li><a href="{% url 'project-line-detail' order.id line.id %}">{{ line }}</a></li>
             {% endfor %}
             </ul>
         </div>
-        <div class="span4 well">
-            <h2>Exhibition</h2>
+        <div class="span4 box well">
+            <h2>Exhibition Format Digital Team</h2>
             <ul>
             {% for line in exhibition %}
                 <li><a href="{% url 'project-line-detail' order.id line.id %}">{{ line }}</a></li>

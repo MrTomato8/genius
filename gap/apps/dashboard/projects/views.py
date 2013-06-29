@@ -83,7 +83,7 @@ class ProjectDetailView(DetailView):
         if GROUP_LARGE in groups:
             return 'Large Format Digital Team'
         elif GROUP_SMALL in groups:
-            return ' Small Format Digital Team'
+            return 'Small Format Digital Team'
         elif GROUP_EXHIBITION in groups:
             return 'Exhibition Format Digital Team'
         return ''

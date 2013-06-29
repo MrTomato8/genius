@@ -11,6 +11,16 @@
     {% trans "Jobs management" %} | {{ block.super }}
 {% endblock %}
 
+{% block extrastyles %}
+{{ block.super }}
+<style type="text/css">
+div.box {
+    background: #fff;
+    border: 1px solid #eee;
+}
+</style>
+{% endblock extrastyles %}
+
 
 {% block breadcrumbs %}
     <ul class="breadcrumb">
@@ -18,20 +28,23 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
             <span class="divider">/</span>
         </li>
-        <li class="active">{% trans "Jobs" %}<span class="divider">/</span></li>
+        <li>
+            <a href="{% url 'project-list' %}">{% trans "Jobs" %}</a>
+            <span class="divider">/</span>
+        </li>
         <li class="active">{{ staff_breadcrumb }}</li>
     </ul>
 {% endblock %}
 
 {% block header %}
     <div class="page-header">
-        <h1>{% trans "Jobs management" %}</h1>
+        <h1></h1>
     </div>
 {% endblock header %}
 
 {% block dashboard_content %}
     <div class="row-fluid">
-        <div class="span8 well">
+        <div class="span9 box well">
             <div class="row-fluid">
             <form action="." method="post">{% csrf_token %}
                 <div class="span9">
@@ -41,25 +54,26 @@
                 {% endfor %}
                 </div>
                 <div class="span2">
-                    <button class="btn btn-small" type="submit">Update Status</button> 
+                    <button class="btn btn-primary" type="submit">Update Status</button> 
                 </div>
             </form> 
             </div>
             <h2>{{ line.product }}</h2>
 
         </div>
-        <div class="span3 well">
+        <div class="span3 box well">
             <h2>Form to follow changes</h2>
             {% if user in followers %}
                 <p>You are following this line</p>
                 <form action="{% url 'unfollow-project-line' order.id line.id %}" method="post">{% csrf_token %}
-                    <button type="submit" class="btn">Unfollow</button>
+                    <button type="submit" class="btn btn-primary">Unfollow</button>
                 </form>
             {% else %}
             <form action="{% url 'follow-project-line' order.id line.id %}" method="post">{% csrf_token %}
-                <button type="submit" class="btn">Follow</button>
+                <button type="submit" class="btn btn-primary">Follow</button>
             </form>
             {% endif %}
+            <h2>Followers</h2>
             <ul>
                 {% for follower in followers %}
                     <li>{{ follower }}</li>
