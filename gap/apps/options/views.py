@@ -13,6 +13,8 @@ class PickOptionsView(TemplateView):
     def get_context_data(self, **kwargs):
 
         context = super(PickOptionsView, self).get_context_data(**kwargs)
+
+        # TODO: fat models
         context['product'] = Product.objects.get(pk=context['params']['pk'])
         context['opts'] = []
 
