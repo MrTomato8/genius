@@ -52,6 +52,22 @@ class JobListView(ListView):
     model = Job
     template_name = 'dashboard/jobs/job_list.html'
 
+
+class JobTaskListView(DetailView):
+    model = Job
+    template_name = 'dashboard/jobs/job_task_list.html'
+
+    def get_context_data(self, **kwargs):
+        groups = []
+        ctx = super(JobTaskListView, self).get_context_data(**kwargs)
+        stages = self.object.stage_set.all()
+        ctx['stages'] = stages
+        for stage in stages:
+            groups.append(self.object.task_set.filter(stage=stage))
+
+        ctx['groups'] = groups
+        return ctx
+
 class JobCreateView(CreateView):
     model = Job
     form_class = JobForm
@@ -60,10 +76,20 @@ class JobCreateView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.order = Order.objects.get(pk=self.kwargs['order_id'])
+        if 'order_id' in self.kwargs:
+            self.object.order = Order.objects.get(pk=self.kwargs['order_id'])
+
         self.object.creator = self.request.user
         self.object.save()
         return super(JobCreateView, self).form_valid(form)
+
+    def get_initial(self):
+        if 'order_id' not in self.kwargs:
+            return {}
+
+        return {
+            "order": Order.objects.get(pk=self.kwargs['order_id'])
+        }
 
 class TaskCreateView(CreateView):
     model = Task
@@ -80,6 +106,9 @@ class TaskCreateView(CreateView):
         return super(TaskCreateView, self).form_valid(form)
 
     def get_initial(self):
+        if 'job_id' not in self.kwargs:
+            return {}
+
         return {
             "job": Job.objects.get(pk=self.kwargs['job_id'])
         }
@@ -88,11 +117,33 @@ class TaskListView(ListView):
     model = Task
     template_name = 'dashboard/jobs/task_list.html'
 
+
 class StageCreateView(CreateView):
     model = Stage
     form_class = StageForm
     template_name = 'dashboard/jobs/stage_form.html'
-    success_url = '/dashboard/jobs/stages/'
+    
+    def get_success_url(self):
+        if 'job_id' in self.kwargs:
+            return reverse('job-task-list', args=self.kwargs['job_id'])
+
+        return '/dashboard/jobs/stages/'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.save()
+        if 'job_id' in self.kwargs:
+            self.object.jobs.add(Job.objects.get(pk=self.kwargs['job_id']))
+      
+        return super(StageCreateView, self).form_valid(form)
+
+    def get_initial(self):
+        if 'job_id' not in self.kwargs:
+            return {}
+
+        return {
+            "job": Job.objects.get(pk=self.kwargs['job_id'])
+        }
 
 class StageListView(ListView):
     model = Stage

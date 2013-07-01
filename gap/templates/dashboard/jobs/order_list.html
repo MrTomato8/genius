@@ -60,7 +60,7 @@ div.job:hover {
 <div class="row-fluid">
     {% for order in orders %}
         <div class="job span2 well">
-            <a href="{% url 'job-create' order.id %}"> {{ order.number }}</a>
+            <a href="{% url 'order-job-create' order.id %}"> {{ order.number }}</a>
             <p class="text-overflow">{{ order.lines.count }} items 
             <br />
             {% if order.has_multiple_zones %}

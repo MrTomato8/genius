@@ -10,13 +10,36 @@ class JobForm(forms.ModelForm):
 
     class Meta:
         model = Job
-        fields = ('name', 'stages')
+        fields = ('order', 'name', 'stages')
+
+    def __init__(self, *args, **kwargs):
+        if 'instance' in kwargs and kwargs['instance']:                
+            initial = kwargs.setdefault('initial', {})
+            initial['stages'] = [t.pk for t in kwargs['instance'].stage_set.all()]
+
+        forms.ModelForm.__init__(self, *args, **kwargs)
+
+    def save(self, commit=True):
+        instance = forms.ModelForm.save(self, False)
+        old_save_m2m = self.save_m2m
+        def save_m2m():
+           old_save_m2m()
+           instance.stage_set.clear()
+           for stage in self.cleaned_data['stages']:
+               instance.stage_set.add(stage)
+        self.save_m2m = save_m2m
+
+        if commit:
+            instance.save()
+            self.save_m2m()
+
+        return instance
 
 class TaskForm(forms.ModelForm):
    
     class Meta:
         model = Task
-        fields = ('job', 'name', 'assigned_to', 'description', 'priority', 'start_date', 'end_date')
+        fields = ('job', 'name', 'stage', 'assigned_to', 'description', 'priority', 'start_date', 'end_date')
 
 class StageForm(forms.ModelForm):
    

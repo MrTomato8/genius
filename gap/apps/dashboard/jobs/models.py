@@ -16,6 +16,7 @@ class Job(models.Model):
 class Task(models.Model):
     job = models.ForeignKey(Job)
     creator = models.ForeignKey(User, null=True, blank=True, related_name="task_creator")
+    stage = models.ForeignKey('Stage', null=True, blank=True)
     assigned_to = models.ForeignKey(User, null=True, blank=True, related_name="assignet_to")
     description = models.TextField('Description', null=True, blank=True)
     name = models.CharField('Name', max_length=250, null=True, blank=True)

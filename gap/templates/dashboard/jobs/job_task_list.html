@@ -1,0 +1,33 @@
+{% extends 'dashboard/jobs/job_base.html' %}
+
+{% load url from future %}
+
+{% load currency_filters %}
+{% load sorting_tags %}
+{% load i18n %}
+
+
+{% block dashboard_content %}
+<div class="row-fluid">
+    <a href="{% url 'job-task-create' job.id %}" class="btn">Create new task</a>
+    <a href="{% url 'job-stage-create' job.id %}" class="btn">Create new stage</a>
+</div>
+<table class="table" style="min-height:100%;">
+    <thead>
+        <tr>
+    {% for stage in job.stage_set.all %}
+            <th style="border:none; border-right: 1px solid #ddd">{{ stage.name }}</th>
+    {% endfor %}
+        </tr>
+    </thead>
+    <tr>
+        {% for group in groups %}
+        <td style="border:none; border-right: 1px solid #ddd;min-height:100%;">
+            {% for task in group %}
+                <div>{{ task }}</div>
+            {% endfor %}
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+{% endblock dashboard_content %}
