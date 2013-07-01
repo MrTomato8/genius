@@ -10,7 +10,8 @@ from gap.views import product_options, get_quote
 from apps.app import application
 #from oscar.app import application
 
-from apps.dashboard.projects.app import application as projects_app
+#from apps.dashboard.projects.app import application as projects_app
+from apps.dashboard.jobs.app import application as jobs_app
 
 from django.conf.urls.static import static
 
@@ -31,7 +32,8 @@ urlpatterns = patterns('',
     url(r'^get-quote/(?P<id>\d+)/$', get_quote, name='get_quote'),
     (r'^pricelist/', include('apps.pricelist.urls')),
     
-    url(r'^dashboard/projects/', include(projects_app.urls)),
+    # url(r'^dashboard/projects/', include(projects_app.urls)),
+    url(r'^dashboard/jobs/', include(jobs_app.urls)),
 
     (r'', include(application.urls))
 )

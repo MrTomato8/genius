@@ -43,7 +43,7 @@ div.job:hover {
             <span class="divider">/</span>
         </li>
         <li>
-            <a href="{% url 'project-list' %}">{% trans "Jobs" %}</a>
+            <a href="{% url 'order-list' %}">{% trans "Jobs" %}</a>
             <span class="divider">/</span>
         </li>
         <li class="active">{{ staff_breadcrumb }}</li>
@@ -60,7 +60,7 @@ div.job:hover {
 <div class="row-fluid">
     {% for order in orders %}
         <div class="job span2 well">
-            <a href="{% url 'project-detail' order.id %}"> {{ order.number }}</a>
+            <a href="{% url 'job-create' order.id %}"> {{ order.number }}</a>
             <p class="text-overflow">{{ order.lines.count }} items 
             <br />
             {% if order.has_multiple_zones %}

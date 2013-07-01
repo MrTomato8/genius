@@ -151,7 +151,7 @@ INSTALLED_APPS = [
     'compressor',
     'apps.catalogue',
     'apps.checkout',
-    'apps.dashboard.projects',
+    'apps.dashboard.jobs',
     'paypal',
     'apps.pricelist',
 ]
@@ -165,6 +165,10 @@ AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.Emailbackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = '/tmp/app-messages' # change this to a proper location
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -241,7 +245,7 @@ OSCAR_DASHBOARD_NAVIGATION += [
         'children': [
             {
                 'label': 'Jobs',
-                'url_name': 'project-list',
+                'url_name': 'job-list',
             },
          ]
 

@@ -1,0 +1,30 @@
+{% extends 'dashboard/jobs/job_base.html' %}
+
+{% load url from future %}
+
+{% load currency_filters %}
+{% load sorting_tags %}
+{% load i18n %}
+
+
+{% block dashboard_content %}
+<div class="row-fluid">
+    <div class="span6 offset3">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Stage</th>
+            <th>Default</th>
+        </tr>
+        </thead>
+    {% for stage in stage_list%}
+        <tr>
+            <td>{{ stage.name }}</td>
+            <td>{{ stage.is_default }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <a href='/dashboard/jobs/stages/create/'>Create a new Stage</a>
+    </div>
+</div>
+{% endblock dashboard_content %}
