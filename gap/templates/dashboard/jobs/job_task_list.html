@@ -9,8 +9,13 @@
 
 {% block dashboard_content %}
 <div class="row-fluid">
-    <a href="{% url 'job-task-create' job.id %}" class="btn">Create new task</a>
-    <a href="{% url 'job-stage-create' job.id %}" class="btn">Create new stage</a>
+    <div class="span4">
+        <a href="{% url 'job-task-create' job.id %}" class="btn">Create new task</a>
+        <a href="{% url 'job-stage-create' job.id %}" class="btn">Create new stage</a>
+    </div>
+    <div class="span3 pull-right">
+        <a href="{% url 'job-task-create' job.id %}" class="btn">Create new task</a>
+    </div>
 </div>
 <table class="table" style="min-height:100%;">
     <thead>
