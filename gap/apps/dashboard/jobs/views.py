@@ -2,7 +2,7 @@ from django.db.models.loading import get_model
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, DetailView, UpdateView, CreateView, FormView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, FormView, RedirectView
 
 from .models import Job, Task, Stage
 from .forms import JobForm, StageForm, TaskForm
@@ -117,6 +117,15 @@ class TaskListView(ListView):
     model = Task
     template_name = 'dashboard/jobs/task_list.html'
 
+class TaskDetailView(DetailView):
+    model = Task
+    template_name = 'dashboard/jobs/task_detail.html'
+
+class TaskDetailRedirect(RedirectView):
+    def get_redirect_url(self, **kwargs):
+        job = Job.objects.get(pk=self.kwargs['job_id'])
+        task = Task.objects.filter(job=job)[0]
+        return reverse('task-detail', args=(job.id,task.id))
 
 class StageCreateView(CreateView):
     model = Stage

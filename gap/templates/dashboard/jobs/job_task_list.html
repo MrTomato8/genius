@@ -14,7 +14,8 @@
         <a href="{% url 'job-stage-create' job.id %}" class="btn">Create new stage</a>
     </div>
     <div class="span3 pull-right">
-        <a href="{% url 'job-task-create' job.id %}" class="btn">Create new task</a>
+        <a disabled="true" href="#" class="btn">Kanban View</a>
+        <a href="{% url 'task-detail-first' job.id %}" class="btn">Form View</a>
     </div>
 </div>
 <table class="table" style="min-height:100%;">
