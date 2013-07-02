@@ -30,7 +30,9 @@
         {% for group in groups %}
         <td style="border:none; border-right: 1px solid #ddd;min-height:100%;">
             {% for task in group %}
-                <div>{{ task }}</div>
+            <div>
+                <a href="{% url 'task-detail' job.id task.id %}">{{ task }}</a>
+            </div>
             {% endfor %}
         </td>
         {% endfor %}

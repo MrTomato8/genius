@@ -25,7 +25,11 @@
     
 </div>
 <div class="row-fluid">
+
     <div class="span6 job well offset3">
+         <div class="span3 pull-right">
+            <a class="btn" href="{% url 'job-task-edit' job.id task.id %}">Edit Task</a>
+        </div>
         <p>{{ task.name }}</p>
         <p>{{ task.creator }}</p>
         <p>{{ task.assigned_to }}</p>

@@ -113,6 +113,33 @@ class TaskCreateView(CreateView):
             "job": Job.objects.get(pk=self.kwargs['job_id'])
         }
 
+class TaskUpdateView(UpdateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'dashboard/jobs/task_form.html'
+
+    def get_success_url(self):
+        if 'job_id' in self.kwargs:
+            return reverse('task-detail', args=[self.kwargs['job_id'], self.object.id])
+
+        return '/dashboard/jobs/tasks/'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        if 'job_id' in self.kwargs:
+            self.object.job = Job.objects.get(pk=self.kwargs['job_id'])
+        self.object.creator = self.request.user
+        self.object.save()
+        return super(TaskUpdateView, self).form_valid(form)
+
+    def get_initial(self):
+        if 'job_id' not in self.kwargs:
+            return {}
+
+        return {
+            "job": Job.objects.get(pk=self.kwargs['job_id'])
+        }
+
 class TaskListView(ListView):
     model = Task
     template_name = 'dashboard/jobs/task_list.html'
