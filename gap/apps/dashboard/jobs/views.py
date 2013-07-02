@@ -121,7 +121,38 @@ class TaskDetailView(DetailView):
     model = Task
     template_name = 'dashboard/jobs/task_detail.html'
 
+    def get_context_data(self, **kwargs):
+        ctx = super(TaskDetailView, self).get_context_data(**kwargs)
+        job = self.object.job
+        job_tasks = list(job.task_set.all())
+        task_index = job_tasks.index(self.object)
+        ctx['job'] = job
+        
+        # using try here will not work, list supports negative index
+        if task_index > 0:
+            ctx['prev'] = job_tasks[task_index-1] 
+
+        try:
+            ctx['next'] = job_tasks[task_index+1]
+        except:
+            pass
+        
+        return ctx
+
+
 class TaskDetailRedirect(RedirectView):
+    def get_redirect_url(self, **kwargs):
+        job = Job.objects.get(pk=self.kwargs['job_id'])
+        task = Task.objects.filter(job=job)[0]
+        return reverse('task-detail', args=(job.id,task.id))
+
+class NextRedirect(RedirectView):
+    def get_redirect_url(self, **kwargs):
+        job = Job.objects.get(pk=self.kwargs['job_id'])
+        task = Task.objects.get(pk=self.kwargs['task_id'])
+        return reverse('task-detail', args=(job.id,task.id))
+
+class PreviousRedirect(RedirectView):
     def get_redirect_url(self, **kwargs):
         job = Job.objects.get(pk=self.kwargs['job_id'])
         task = Task.objects.filter(job=job)[0]

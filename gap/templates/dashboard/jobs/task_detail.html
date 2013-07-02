@@ -19,8 +19,8 @@
     </div>
 
     <div class="span2 pull-right">
-        <button class="btn">Prev</button>
-        <button class="btn">Next</button>
+        <a {% if prev %} href="{% url 'task-detail' job.id prev.id %}"{% else %} disabled="true"{% endif %} class="btn">Prev</a>
+        <a {% if next %} href="{% url 'task-detail' job.id next.id %}"{% else %} disabled="true"{% endif %} class="btn">Next</a>
     </div>
     
 </div>
