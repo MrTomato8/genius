@@ -17,6 +17,7 @@ class JobDashboardApplication(Application):
     task_detail_redirect = views.TaskDetailRedirect
     stage_create = views.StageCreateView
     stage_list = views.StageListView
+    
     # project_detail = views.ProjectDetailView
     # line_detail = views.ProjectLineItemDetailView
     # line_follow = views.FollowLineView
@@ -32,6 +33,7 @@ class JobDashboardApplication(Application):
             
             
             url(r'^(?P<pk>\d+)/tasks/$', self.job_task_list.as_view(), name='job-task-list'),
+            url(r'^(?P<pk>\d+)/$', self.job_task_list.as_view(), name='job-detail'),
             url(r'^tasks/$', self.task_list.as_view(), name='task-list'),
             url(r'^tasks/create/$', self.task_create.as_view(), name='task-create'),
             url(r'^(?P<job_id>\d+)/tasks/(?P<pk>\d+)/$', self.task_detail.as_view(), name='task-detail'),

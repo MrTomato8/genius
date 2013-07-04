@@ -14,7 +14,7 @@ def make_custom_datefield(f):
 class JobForm(forms.ModelForm):
 
     stages = forms.ModelMultipleChoiceField(queryset=Stage.objects.filter(is_default=True),
-        help_text="<a href='/dashboard/jobs/stages/create/'>Create a new Stage</a>")
+        help_text="<a class='btn btn-primary' href='/dashboard/jobs/stages/create/'>Create a new Stage</a>")
  
 
     class Meta:
@@ -22,8 +22,8 @@ class JobForm(forms.ModelForm):
         fields = ('order', 'name', 'stages')
 
     def __init__(self, *args, **kwargs):
-        if 'instance' in kwargs and kwargs['instance']:                
-            initial = kwargs.setdefault('initial', {})
+        initial = kwargs.setdefault('initial', {})
+        if 'instance' in kwargs and kwargs['instance']:                            
             initial['stages'] = [t.pk for t in kwargs['instance'].stage_set.all()]
         else:
             initial['stages'] = Stage.objects.filter(is_default=True)
