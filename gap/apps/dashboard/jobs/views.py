@@ -97,6 +97,12 @@ class TaskCreateView(CreateView):
     template_name = 'dashboard/jobs/task_form.html'
     success_url = '/dashboard/jobs/tasks/'
 
+    def get_success_url(self):
+        if 'job_id' in self.kwargs:
+            return reverse('job-task-list', args=[self.kwargs['job_id']])
+
+        return '/dashboard/jobs/tasks/'
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         if 'job_id' in self.kwargs:

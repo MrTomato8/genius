@@ -24,6 +24,7 @@ class JobForm(forms.ModelForm):
     def save(self, commit=True):
         instance = forms.ModelForm.save(self, False)
         old_save_m2m = self.save_m2m
+        
         def save_m2m():
            old_save_m2m()
            instance.stage_set.clear()
