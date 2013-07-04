@@ -9,6 +9,8 @@ class Job(models.Model):
     name = models.CharField('Job Name', max_length=250)
     creator = models.ForeignKey(User, related_name="job_creator")
 
+    # def create_default_sategs(self):
+    #     self.stage_set.add(*Stage.objects.filter(is_default=True))
 
     def __unicode__(self):
         return self.name

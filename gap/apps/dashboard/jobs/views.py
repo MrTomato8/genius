@@ -107,7 +107,9 @@ class TaskCreateView(CreateView):
         self.object = form.save(commit=False)
         if 'job_id' in self.kwargs:
             self.object.job = Job.objects.get(pk=self.kwargs['job_id'])
+
         self.object.creator = self.request.user
+        # self.objects.create_default_sategs()
         self.object.save()
         return super(TaskCreateView, self).form_valid(form)
 
@@ -126,14 +128,13 @@ class TaskUpdateView(UpdateView):
 
     def get_success_url(self):
         if 'job_id' in self.kwargs:
-            return reverse('task-detail', args=[self.kwargs['job_id'], self.object.id])
+            return reverse('task-detail', args=[self.object.job.id, self.object.id])
 
         return '/dashboard/jobs/tasks/'
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        if 'job_id' in self.kwargs:
-            self.object.job = Job.objects.get(pk=self.kwargs['job_id'])
+
         self.object.creator = self.request.user
         self.object.save()
         return super(TaskUpdateView, self).form_valid(form)
