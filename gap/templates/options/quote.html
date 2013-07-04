@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% load url from future %}
+
+{% block breadcrumbs %}
+<div class="set-size-grid clearfix">
+  <div class="wizard-progress">
+    <ul>
+      <li><a href="{%url 'options:pick' pk=params.pk product_slug=params.product_slug %}">Select Options</a></li>
+      <li><strong>Get Quote</strong></li>
+      <li>Upload Files</li>
+    </ul>
+  </div>
+  <h2>Get Quote</h2>
+</div>
+{% endblock %}
+{% block content %}
+<!-- TODO: move to separate css file -->
+<style type="text/css">
+.wizard-progress ul li { display:  inline; font-size: 12px; vertical-align: baseline;}
+.wizard-progress ul li:after { content: ' > ';}
+.wizard-progress ul li:last-child:after { content: '';}
+.wizard-progress strong { font-weight: bold;}
+
+</style>
+<div id="title-target" class="center-block clearfix"></div>
+<div class="clearfix stepy-centering">
+<form id="getquote" method="POST">{% csrf_token %}
+  {{ request.session.items|pprint }}
+</form>
+</div>
+<script type="text/javascript">
+{% endblock %}

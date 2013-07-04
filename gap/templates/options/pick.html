@@ -1,23 +1,85 @@
-<html>
-<body>
-<h1>{{  product }}</h1>
-<ul>
-{% for option in opts %}
+{% extends 'layout.html' %}
 
-{% if option.choices %}
-<li>
-<h2>{{ option.option }}</h2>
-<ul>
-    {% for c in option.choices %}
-<li>
-    {{ c.caption }}
-</li>
+{% block breadcrumbs %}
+<div class="set-size-grid clearfix">
+  <div class="wizard-progress">
+    <ul>
+      <li><strong>Select Options</strong></li>
+      <li>Get Quote</li>
+      <li>Upload Files</li>
+    </ul>
+  </div>
+  <h2>Select Options</h2>
+</div>
+{% endblock %}
+{% block content %}
+<!-- TODO: move to separate css file -->
+<style type="text/css">
+.option-choice ul li { display: inline-block; text-align: center; margin: 8px;}
+.option-choice select {margin: 8px;}
+.wizard-progress ul li { display:  inline; font-size: 12px; vertical-align: baseline;}
+.wizard-progress ul li:after { content: ' > ';}
+.wizard-progress ul li:last-child:after { content: '';}
+.wizard-progress strong { font-weight: bold;}
+
+</style>
+<div id="title-target" class="center-block clearfix"></div>
+<div class="clearfix stepy-centering">
+<form id="pickoptions" method="POST">{% csrf_token %}
+
+    {% for group in groups %}
+
+    <fieldset title="{{ group.group.name }}">
+      <div class="grid-8 float-left">
+        <ul>
+            {% for picker in group.pickers %}
+            <li>
+                <h3>{{ picker.picker.option }}</h3>
+
+                {% for field in picker.form.visible_fields %}
+                {% if picker.picker.widget == picker.picker.THUMBNAIL %}
+                <div class="option-choice">
+                  <ul>
+
+                    {% for choice in field.field.queryset %}
+                    <li>
+                        {{ choice.caption }}<br />
+                        <img width="128" height="128" src="" alt="{{ choice.caption }}"/><br />
+                        <input type="radio" name="{{ field.name }}" value="{{ choice.pk }}"
+                          {% ifequal field.data choice.pk|slugify %}
+                             checked="checked"
+                          {% endifequal %} />
+                    </li>
+                    {% endfor %}
+
+                  </ul>
+                </div>
+                {% endif %}
+
+                {% if picker.picker.widget == picker.picker.DROPDOWN %}
+                <div class="option-choice">
+                  {{ field }}
+                </div>
+                {% endif %}
+
+                {% endfor %}
+            </li>
+            {% endfor %}
+        </ul>
+      </div>
+    </fieldset>
     {% endfor %}
-</ul>
-
-</li>
-{% endif %}
-{% endfor %}
-</ul>
-</body>
-</html>
+    <input value="Get Quote" type="submit" class="finish button"/>
+</form>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#pickoptions').stepy({
+    legend:false,
+    titleTarget: '#title-target',
+    description: false,
+    validate: false
+  });
+});
+</script>
+{% endblock %}

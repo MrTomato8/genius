@@ -1,5 +1,11 @@
-from django.views.generic.base import TemplateView
+from django.shortcuts import render
+from django.views.generic import View, TemplateView
 from django.db import models
+from django.core.urlresolvers import reverse
+from apps.options.models import OptionPickerGroup
+from apps.options.utils import available_pickers, available_choices
+from apps.options.forms import picker_form_factory
+from django.http import HttpResponseRedirect
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
@@ -7,25 +13,63 @@ OptionChoice = models.get_model('pricelist', 'OptionChoice')
 Price = models.get_model('pricelist', 'Price')
 
 
-class PickOptionsView(TemplateView):
+class PickOptionsView(View):
     template_name = 'options/pick.html'
 
-    def get_context_data(self, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
 
-        context = super(PickOptionsView, self).get_context_data(**kwargs)
+        if request.method == 'POST':
+            session = request.session['options_choices'] = {}
+            allvalid = True
+        else:
+            session = request.session['options_choices']
+            allvalid = False
 
-        # TODO: fat models
-        context['product'] = Product.objects.get(pk=context['params']['pk'])
-        context['opts'] = []
+        product = Product.objects.get(pk=kwargs['pk'])
 
-        # TODO: check if product has ptions assigned, or productclass has
-        # options assigned
+        groups = []
 
-        for o in Option.objects.all():
-            c = OptionChoice.objects.filter(
-                option=o, prices__in=Price.objects.filter(
-                    product=context['product'])).distinct()
+        for group in OptionPickerGroup.objects.all():
 
-            context['opts'].append({'option': o, 'choices': c})
+            pickers = []
 
-        return context
+            for picker in available_pickers(product, group):
+
+                choices = available_choices(product, picker)
+                if choices:
+                    OptionPickerForm = picker_form_factory(product,
+                                                           picker,
+                                                           choices)
+                    code = picker.option.code
+
+                    if request.method == 'POST':
+                        opform = OptionPickerForm(request.POST)
+                        allvalid = allvalid and opform.is_valid()
+                        if opform.is_valid():
+                            session[code] = opform.cleaned_data[code].pk
+                    elif request.method == 'GET':
+
+                        if session.get(code, None) is not None:
+                            opform = OptionPickerForm(
+                                data={code: str(session[code])})
+                        else:
+                            opform = OptionPickerForm()
+
+                    pickers.append(
+                        {'picker': picker,
+                         'form': opform})
+
+            if pickers:
+                groups.append({'group': group, 'pickers': pickers})
+
+        if allvalid:
+            return HttpResponseRedirect(reverse('options:quote', kwargs=kwargs))
+
+        return render(request, self.template_name, {
+            'product': product,
+            'groups': groups,
+        })
+
+
+class QuoteView(TemplateView):
+    template_name = 'options/quote.html'
