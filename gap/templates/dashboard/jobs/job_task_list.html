@@ -31,9 +31,12 @@
         {% for group in groups %}
         <td class="task-list-column">
             {% for task in group %}
-                <div class="job well" style="max-width:150px;">
+                <div class="well job" style="max-width:150px;">
                     <a href="{% url 'task-detail' job.id task.id %}"> {{ task.name }}</a>
                     <br />
+                    <div class="task-actions pull-right">
+                        <a href="{% url 'job-task-edit' job.id task.id %}">Edit</a>
+                    </div>  
                 </div>
             {% endfor %}
             

@@ -59,7 +59,7 @@ div.job:hover {
 {% block dashboard_content %}
 <div class="row-fluid">
     {% for job in job_list %}
-        <div class="job span2 well">
+        <div class="span2 well job">
             <a href="{% url 'job-task-list' job.id %}"> {{ job.name }}</a>
             <br />
             {{ job.task_set.count }} Tasks

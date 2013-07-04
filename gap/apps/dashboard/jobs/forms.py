@@ -1,6 +1,15 @@
 from django import forms
+from django.db import models
 
 from .models import Job, Stage, Task
+
+def make_custom_datefield(f):
+    formfield = f.formfield()
+    if isinstance(f, models.DateField):
+        formfield.widget.format = '%m/%d/%Y'
+        formfield.widget.attrs.update({'class':'datePicker', 'readonly':'true'})
+    return formfield
+
 
 class JobForm(forms.ModelForm):
 
@@ -39,7 +48,8 @@ class JobForm(forms.ModelForm):
         return instance
 
 class TaskForm(forms.ModelForm):
-   
+    formfield_callback = make_custom_datefield
+
     def __init__(self, *args, **kwargs):
         forms.ModelForm.__init__(self, *args, **kwargs)
         initial = kwargs.setdefault('initial', {})

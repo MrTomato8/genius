@@ -9,7 +9,7 @@
 
 {% block dashboard_content %}
 <div class="row-fluid">
-    <div class="span6 job well  offset3">
+    <div class="span6 well job offset3">
     <form action="." method="post">{% csrf_token%}
         <legend>Stage</legend>
     {{ form.as_p }}
