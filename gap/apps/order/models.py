@@ -69,8 +69,4 @@ class Order(AbstractOrder):
         exhibition_categories = [exhibition_category] + list(exhibition_category.get_children())
         return self.lines.filter(product__categories__in=exhibition_categories)
 
-
-class Line(AbstractLine):
-    followers = models.ManyToManyField(User)
-
 from oscar.apps.order.models import *
