@@ -90,6 +90,29 @@ class JobCreateView(CreateView):
         return {
             "order": Order.objects.get(pk=self.kwargs['order_id'])
         }
+        
+class JobUpdateView(UpdateView):
+    model = Job
+    form_class = JobForm
+    template_name = 'dashboard/jobs/job_form.html'
+    success_url = '/dashboard/jobs/'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        if 'order_id' in self.kwargs:
+            self.object.order = Order.objects.get(pk=self.kwargs['order_id'])
+
+        self.object.creator = self.request.user
+        self.object.save()
+        return super(JobUpdateView, self).form_valid(form)
+
+    # def get_initial(self):
+    #     if 'order_id' not in self.kwargs:
+    #         return {}
+
+    #     return {
+    #         "order": Order.objects.get(pk=self.kwargs['order_id'])
+    #     }
 
 class TaskCreateView(CreateView):
     model = Task
