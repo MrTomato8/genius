@@ -17,6 +17,8 @@
 <style type="text/css">
 .option-choice ul li { display: inline-block; text-align: center; margin: 8px;}
 .option-choice select {margin: 8px;}
+.option-choice-errors { color: red;}
+.option-choice-errors strong { font-size: 12px;}
 .wizard-progress ul li { display:  inline; font-size: 12px; vertical-align: baseline;}
 .wizard-progress ul li:after { content: ' > ';}
 .wizard-progress ul li:last-child:after { content: '';}
@@ -24,17 +26,39 @@
 
 </style>
 <div id="title-target" class="center-block clearfix"></div>
+
 <div class="clearfix stepy-centering">
+<div id="form-errors" class="grid-8 float-left option-choice-errors">
+{% if errors %}
+<ul>
+{% for error in errors %}
+<li><strong>{{ error }}</strong></li>
+{% endfor %}
+</ul>
+{% endif %}
+</div>
+
 <form id="pickoptions" method="POST">{% csrf_token %}
 
     {% for group in groups %}
 
     <fieldset title="{{ group.group.name }}">
+      <br />
       <div class="grid-8 float-left">
         <ul>
             {% for picker in group.pickers %}
             <li>
                 <h3>{{ picker.picker.option }}</h3>
+
+                <div id="choice-{{ picker.picker.option.code }}-errors" class="option-choice-errors">
+                  {% if picker.form.choice_errors %}
+                  <ul>
+                    {% for error in picker.form.choice_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </div>
 
                 {% for field in picker.form.visible_fields %}
                 {% if picker.picker.widget == picker.picker.THUMBNAIL %}
