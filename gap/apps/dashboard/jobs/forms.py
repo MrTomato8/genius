@@ -16,6 +16,8 @@ class JobForm(forms.ModelForm):
         if 'instance' in kwargs and kwargs['instance']:                
             initial = kwargs.setdefault('initial', {})
             initial['stages'] = [t.pk for t in kwargs['instance'].stage_set.all()]
+        else:
+            initial['stages'] = Stage.objects.filter(is_default=True)
 
         forms.ModelForm.__init__(self, *args, **kwargs)
 
@@ -37,13 +39,22 @@ class JobForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
    
+    def __init__(self, *args, **kwargs):
+        forms.ModelForm.__init__(self, *args, **kwargs)
+        initial = kwargs.setdefault('initial', {})
+        self.fields['stage'].queryset = Stage.objects.filter(is_default=True)
+
+        if 'job' in initial.keys():    
+            self.fields['stage'].queryset = initial['job'].stage_set.all() or\
+                                            self.fields['stage'].queryset
+        
+
     class Meta:
         model = Task
         fields = ('job', 'name', 'stage', 'assigned_to', 'description', 'priority', 'start_date', 'end_date')
 
 class StageForm(forms.ModelForm):
    
-
     class Meta:
         model = Stage
         fields = ('name', 'related_status', 'is_default')
