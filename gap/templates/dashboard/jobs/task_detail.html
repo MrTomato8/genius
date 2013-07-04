@@ -8,22 +8,17 @@
 
 
 {% block dashboard_content %}
-<div class="row-fluid">
-    <div class="span4">
-        
+<div class="row-fluid actions">
+    <div class="span2 offset7">
+        <a {% if prev %} href="{% url 'task-detail' job.id prev.id %}"{% else %} disabled="true"{% endif %} class="btn">Prev</a>
+        <a {% if next %} href="{% url 'task-detail' job.id next.id %}"{% else %} disabled="true"{% endif %} class="btn">Next</a>
     </div>
-    
     <div class="span2 pull-right">
         <a href="{% url 'job-task-list' task.job.id %}" class="btn">Kanban View</a>
         <a disabled="true" href="#" class="btn">Form View</a>
     </div>
-
-    <div class="span2 pull-right">
-        <a {% if prev %} href="{% url 'task-detail' job.id prev.id %}"{% else %} disabled="true"{% endif %} class="btn">Prev</a>
-        <a {% if next %} href="{% url 'task-detail' job.id next.id %}"{% else %} disabled="true"{% endif %} class="btn">Next</a>
-    </div>
-    
 </div>
+
 <div class="row-fluid">
 
     <div class="span6 job well offset3">
