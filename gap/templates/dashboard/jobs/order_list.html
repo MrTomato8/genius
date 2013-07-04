@@ -1,4 +1,4 @@
-{% extends 'dashboard/layout.html' %}
+{% extends 'dashboard/jobs/job_base.html' %}
 
 {% load url from future %}
 
@@ -11,30 +11,6 @@
     {% trans "Jobs management" %} | {{ block.super }}
 {% endblock %}
 
-{% block extrastyles %}
-{{ block.super }}
-<style type="text/css">
-.jobs{
-    height: 100%;
-}
-div.job {
-    background: #fff;
-    border: 1px solid #eee;
-}
-html, body, .page-content, .content, .dashboard {height: 100%;}
-div.job:hover {
-    border: 1px solid #d0d0d0;
-}
-.multi-zone-warning{
-    font-size: 10px;
-}
-.sidebar {
-    /*min-height: 100%;
-    background: none repeat scroll 0% 0% rgb(240, 238, 238);
-    border-right: 1px solid rgb(175, 175, 182);*/
-}
-</style>
-{% endblock extrastyles %}
 
 {% block breadcrumbs %}
     <ul class="breadcrumb">
@@ -52,14 +28,14 @@ div.job:hover {
 
 {% block header %}
     <div class="page-header">
-        <h1></h1>
+        <h1>Orders</h1>
     </div>
 {% endblock header %}
 
 {% block dashboard_content %}
-<div class="row-fluid">
+<div class="row-fluid orders">
     {% for order in orders %}
-        <div class="job span2 well">
+        <div class="span2 order well">
             <a href="{% url 'order-job-create' order.id %}"> {{ order.number }}</a>
             <p class="text-overflow">{{ order.lines.count }} items 
             <br />
@@ -72,8 +48,3 @@ div.job:hover {
 </div>
 
 {% endblock dashboard_content %}
-
-{% block onbodyload %}
-    oscar.dashboard.orders.initTable();
-    oscar.dashboard.search.init();
-{% endblock onbodyload %}

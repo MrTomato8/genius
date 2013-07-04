@@ -242,6 +242,7 @@ OSCAR_DASHBOARD_NAVIGATION += [
     },
     {
         'label': 'Jobs management',
+        'icon': 'icon-tasks',
         'children': [
             {
                 'label': 'Jobs',

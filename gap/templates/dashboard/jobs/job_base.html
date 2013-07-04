@@ -14,17 +14,17 @@
 {% block extrastyles %}
 {{ block.super }}
 <style type="text/css">
-html, .jobs{
+html, body, .page-content, .content, .dashboard{
     height: 100%;
 }
-div.job {
+div.job, div.order {
     background: #fff;
     border: 1px solid #eee;
     padding: 10px;
     margin-bottom: 5px;
+    min-height: 100px !important;
 }
-html, body, .page-content, .content, .dashboard {height: 100%;}
-div.job:hover {
+div.job:hover, div.order:hover {
     border: 1px solid #d0d0d0;
 }
 .multi-zone-warning{
@@ -57,6 +57,9 @@ td.task-list-column, th.task-list-column{
 }
 .task-actions a:hover{
     color: #7D7D7D;
+}
+.orders .order:nth-child(6n + 7){
+    margin-left : 0px;
 }
 </style>
 {% endblock extrastyles %}
