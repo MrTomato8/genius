@@ -1,37 +1,9 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from apps.options.models import OptionChoice
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
-
-
-class OptionChoice(models.Model):
-    code = models.SlugField('Code', max_length=30)
-
-    option = models.ForeignKey(Option, related_name='choices')
-    conflicts_with = models.ManyToManyField(
-        'self', blank=True, verbose_name=u'Conflicting Choices',
-        help_text='Here you can define choice compatibility rules. '
-                  'Select option choices which conflict with current choice'
-                  '(example: recycled paper cannot have gloss finish, '
-                  'so in recycled paper option choice select gloss finish '
-                  'as conflicting choice.). Multiple selections are supported')
-
-    caption = models.CharField('Caption', max_length=30, blank=True)
-    thumbnail = models.ImageField('Thumbnail', upload_to='options', blank=True)
-
-    def __unicode__(self):
-        return ''.join([str(self.option), ': ', self.code])
-
-    def save(self, *args, **kwargs):
-
-        if len(self.caption) == 0:
-            self.caption = self.code
-
-        super(OptionChoice, self).save(*args, **kwargs)
-
-    class Meta:
-        unique_together = ('option', 'code')
 
 
 class Price(models.Model):

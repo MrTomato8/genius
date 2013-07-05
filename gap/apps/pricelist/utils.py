@@ -1,4 +1,5 @@
-from apps.pricelist.models import Price, OptionChoice
+from apps.pricelist.models import Price
+from apps.options.models import OptionChoice
 from django.db import models
 import csv
 from decimal import Decimal, DecimalException
