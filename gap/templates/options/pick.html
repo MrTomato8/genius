@@ -65,7 +65,7 @@
                         {{ choice.caption }}<br />
                         <img width="128" height="128" src="" alt="{{ choice.caption }}"/><br />
                         <input type="radio" name="{{ field.name }}" value="{{ choice.pk }}"
-                          {% ifequal field.data choice.pk|slugify %}
+                          {% ifequal field.data|slugify choice.pk|slugify %}
                              checked="checked"
                           {% endifequal %} />
                     </li>
