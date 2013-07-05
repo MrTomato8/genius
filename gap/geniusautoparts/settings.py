@@ -237,4 +237,7 @@ OSCAR_DASHBOARD_NAVIGATION += [
          ]
     },
 ]
+
+MISSING_OPTIONCHOICE_THUMB_URL = 'options/img/missing-choice-thumbnail.png'
+
 from local_settings import *

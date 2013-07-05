@@ -63,7 +63,7 @@
                     {% for choice in field.field.queryset %}
                     <li>
                         {{ choice.caption }}<br />
-                        <img width="128" height="128" src="" alt="{{ choice.caption }}"/><br />
+                        <img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.caption }}"/><br />
                         <input type="radio" name="{{ field.name }}" value="{{ choice.pk }}"
                           {% ifequal field.data|slugify choice.pk|slugify %}
                              checked="checked"

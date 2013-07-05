@@ -1,6 +1,13 @@
 from django.db import models
+from django.conf import settings
 
 Option = models.get_model('catalogue', 'Option')
+
+
+class MissingOptionChoiceThumbnail(object):
+
+    def __init__(self, name=None):
+        self.name = name if name else settings.MISSING_OPTIONCHOICE_THUMB_URL
 
 
 class OptionChoice(models.Model):
@@ -17,6 +24,12 @@ class OptionChoice(models.Model):
 
     caption = models.CharField('Caption', max_length=30, blank=True)
     thumbnail = models.ImageField('Thumbnail', upload_to='options', blank=True)
+
+    def get_thumbnail(self):
+        if self.thumbnail.name:
+            return self.thumbnail
+        else:
+            return MissingOptionChoiceThumbnail()
 
     def __unicode__(self):
         return ''.join([str(self.option), ': ', self.code])
