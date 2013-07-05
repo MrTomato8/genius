@@ -51,7 +51,7 @@ class PickOptionsView(View):
                     elif request.method == 'GET':
                         if session.get(code, None) is not None:
                             opform = OptionPickerForm(
-                                data={code: str(session[code])})
+                                data={code: session[code]})
                         else:
                             opform = OptionPickerForm()
 
