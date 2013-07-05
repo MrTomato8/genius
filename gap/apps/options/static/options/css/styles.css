@@ -1,0 +1,10 @@
+.option-choice ul li { display: inline-block; text-align: center; margin: 8px;}
+.option-choice select {margin: 8px;}
+
+.option-choice-errors { color: red;}
+.option-choice-errors strong { font-size: 12px;}
+
+.wizard-progress ul li { display:  inline; font-size: 12px; vertical-align: baseline;}
+.wizard-progress ul li:after { content: ' > ';}
+.wizard-progress ul li:last-child:after { content: '';}
+.wizard-progress strong { font-weight: bold;}

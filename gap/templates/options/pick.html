@@ -1,4 +1,10 @@
 {% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block extrastyles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "options/css/styles.css" %}" />
+{% endblock %}
 
 {% block breadcrumbs %}
 <div class="set-size-grid clearfix">
@@ -13,21 +19,11 @@
 </div>
 {% endblock %}
 {% block content %}
-<!-- TODO: move to separate css file -->
-<style type="text/css">
-.option-choice ul li { display: inline-block; text-align: center; margin: 8px;}
-.option-choice select {margin: 8px;}
-.option-choice-errors { color: red;}
-.option-choice-errors strong { font-size: 12px;}
-.wizard-progress ul li { display:  inline; font-size: 12px; vertical-align: baseline;}
-.wizard-progress ul li:after { content: ' > ';}
-.wizard-progress ul li:last-child:after { content: '';}
-.wizard-progress strong { font-weight: bold;}
 
-</style>
 <div id="title-target" class="center-block clearfix"></div>
 
 <div class="clearfix stepy-centering">
+
 <div id="form-errors" class="grid-8 float-left option-choice-errors">
 {% if errors %}
 <ul>
@@ -64,7 +60,6 @@
                 {% if picker.picker.widget == picker.picker.THUMBNAIL %}
                 <div class="option-choice">
                   <ul>
-
                     {% for choice in field.field.queryset %}
                     <li>
                         {{ choice.caption }}<br />
@@ -75,7 +70,6 @@
                           {% endifequal %} />
                     </li>
                     {% endfor %}
-
                   </ul>
                 </div>
                 {% endif %}
