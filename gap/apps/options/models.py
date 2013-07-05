@@ -30,6 +30,7 @@ class OptionChoice(models.Model):
 
     class Meta:
         unique_together = ('option', 'code')
+        ordering = ['option']
 
 
 class OptionPickerGroup(models.Model):
