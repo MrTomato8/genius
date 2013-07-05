@@ -16,18 +16,40 @@ Price = models.get_model('pricelist', 'Price')
 class PickOptionsView(View):
     template_name = 'options/pick.html'
 
+    def session_clean(self, request, product):
+        s = request.session['options_pick'] = {}
+        s['product'] = product.pk
+        s['choices'] = {}
+
+        return s
+
+    def session_valid(self, request, product):
+        try:
+            return request.session['options_pick']['product'] == product.pk
+        except KeyError:
+            return False
+
+    def session_get(self, request, product):
+        if not self.session_valid(request, product):
+            return self.session_clean(request, product)
+
+        try:
+            return request.session['options_pick']
+        except KeyError:
+            return self.session_clean(request, product)
+
     def dispatch(self, request, *args, **kwargs):
 
         errors = []
 
+        product = Product.objects.get(pk=kwargs['pk'])
+
         if request.method == 'POST':
-            session = request.session['options_choices'] = {}
+            session = self.session_clean(request, product)
             allvalid = True
         else:
-            session = request.session['options_choices']
+            session = self.session_get(request, product)
             allvalid = False
-
-        product = Product.objects.get(pk=kwargs['pk'])
 
         groups = []
         for group in OptionPickerGroup.objects.all():
@@ -46,12 +68,12 @@ class PickOptionsView(View):
                         opform = OptionPickerForm(request.POST)
                         allvalid = allvalid and opform.is_valid()
                         if opform.is_valid():
-                            session[code] = opform.cleaned_data[code].pk
+                            session['choices'][code] = opform.cleaned_data[code].pk
 
                     elif request.method == 'GET':
-                        if session.get(code, None) is not None:
+                        if session['choices'].get(code, None) is not None:
                             opform = OptionPickerForm(
-                                data={code: session[code]})
+                                data={code: session['choices'][code]})
                         else:
                             opform = OptionPickerForm()
 
