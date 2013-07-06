@@ -55,7 +55,7 @@
       </div>
 
       <div class="add-to-carts">
-        <a href="{% url 'product_options' product.id %}" class="button button-green">Get instant price</a><br><br>
+        <a href="{% url 'options:pick' pk=product.pk product_slug=product.slug %}" class="button button-green">Get instant price</a><br><br>
         {% comment %}
 		{% block product_basket_form %}
           {% include "catalogue/partials/add_to_basket_form.html" %}
