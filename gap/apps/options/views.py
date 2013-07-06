@@ -5,11 +5,13 @@ from django.core.urlresolvers import reverse
 from apps.options.models import OptionPickerGroup
 from apps.options.utils import available_pickers, available_choices
 from apps.options.forms import picker_form_factory
+from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm
 from django.http import HttpResponseRedirect
+from apps.options.models import OptionChoice
+from apps.pricelist.utils import pick_price, MatchingPriceNotFound
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
-OptionChoice = models.get_model('pricelist', 'OptionChoice')
 Price = models.get_model('pricelist', 'Price')
 
 
@@ -130,5 +132,74 @@ class PickOptionsView(View):
         })
 
 
-class QuoteView(TemplateView):
+class QuoteView(View):
     template_name = 'options/quote.html'
+
+    def session_choices(self, request, product):
+        choices = []
+        session = request.session.get('options_pick', {'product': product,
+                                                       'choices': {}})
+
+        for k, pk in session['choices'].items():
+            choices.append(OptionChoice.objects.get(pk=pk))
+
+        return choices
+
+    def dispatch(self, request, *args, **kwargs):
+        errors = []
+
+        product = Product.objects.get(pk=kwargs['pk'])
+        calculated_price = 0
+
+        #TODO: If product is different in session - redirect to pick page
+
+
+        choices = self.session_choices(request, product)
+
+        #TODO: refactor into pricelist utils
+        prices = Price.objects.filter(product=product)
+        for choice in choices:
+            prices = prices.filter(option_choices=choice)
+
+        quantities = prices.values(
+            'quantity', 'rpl_price', 'tpl_price').distinct()
+
+        try:
+            custom_size_choice = OptionChoice.objects.get(
+                option__code='size', code='custom')
+        except OptionChoice.DoesNotExist:
+            custom_size_choice = None
+
+        custom_size = custom_size_choice in choices
+
+
+        #TODO: Detect customer type and present RPL or TPL price
+        #TODO: Take discounts, offers, coupons into account, etc
+        #      move price calculation outta here
+
+        if request.method == 'POST':
+            calc_form = QuoteCalcForm(request.POST)
+            if calc_form.is_valid():
+                try:
+                    calculated_price = calc_form.cleaned_data['quantity'] * pick_price(
+                        product, calc_form.cleaned_data['quantity'], choices).rpl_price
+                except MatchingPriceNotFound:
+                    errors.append('Matching price not found!')
+            custom_size_form = QuoteCustomSizeForm(request.POST)
+
+        elif request.method == 'GET':
+            calc_form = QuoteCalcForm()
+            custom_size_form = QuoteCustomSizeForm()
+
+        return render(request, self.template_name, {
+            'product': product,
+            'choices': choices,
+            'params': kwargs,
+            'calc_form': calc_form,
+            'custom_size_form': custom_size_form,
+            'custom_size': custom_size,
+            'quantities': quantities,
+            'calculated_price': calculated_price,
+            'errors': errors,
+
+        })

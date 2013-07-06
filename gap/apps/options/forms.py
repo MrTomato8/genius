@@ -24,3 +24,12 @@ def picker_form_factory(product, picker, choices):
         str(''.join([picker.option.code, 'Form'])),
         (forms.Form,),
         properties)
+
+
+class QuoteCalcForm(forms.Form):
+    quantity = forms.IntegerField()
+
+
+class QuoteCustomSizeForm(forms.Form):
+    width = forms.IntegerField()
+    height = forms.IntegerField()

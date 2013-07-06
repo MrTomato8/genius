@@ -19,12 +19,69 @@
   <h2>Get Quote</h2>
 </div>
 {% endblock %}
+
 {% block content %}
 <div id="title-target" class="center-block clearfix"></div>
 <div class="clearfix stepy-centering">
-<form id="getquote" method="POST">{% csrf_token %}
-  {{ request.session.items|pprint }}
-</form>
+
+  <form id="getquote" method="POST">{% csrf_token %}
+
+  <div class="grid-4 float-left choice-list">
+  <h3>{{ product }}</h3>
+  <ul>
+  {% for choice in choices %}
+  <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.option }}"/></li>
+  {% endfor %}
+  </ul>
+  </div>
+
+  <div class="grid-7 float-left price-calculator">
+
+    <table>
+      <tr>
+        <th style="width: 160px;">Quantity</th><th>Price</th>
+      </tr>
+      {% if quantities.count > 1 %}
+      {% for quantity in quantities %}
+      <tr>
+        <td><input type="radio" id="quantity_{{ quantity.quantity }}" name="quantity" value="{{ quantity.quantity }}" 
+        {% ifequal calc_form.quantity.data|slugify quantity.quantity|slugify %}
+        checked="checked"
+        {% endifequal %} />
+        <label for="quantity_{{ quantity.quantity }}">{{ quantity.quantity|floatformat }}</label></td>
+        <td>{{quantity.rpl_price}}</td>
+      </tr>
+      {% endfor %}
+      {% else %}
+      <tr><td>{{ calc_form.quantity }}</td><td>{{ calculated_price }}</td></tr>
+      {% endif %}
+    </table>
+
+    {% if custom_size %}
+    <div class="custom_size">
+      <h3>Custom Size:</h3>
+        {{ custom_size_form.as_p }}
+    </div>
+    {% endif %}
+
+
+    <div id="form-errors" class="quote-errors">
+      {% if errors %}
+      <ul>
+      {% for error in errors %}
+      <li><strong>{{ error }}</strong></li>
+      {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+
+  <input value="Calculate" type="submit" class="button"/>
+  </div>
+
+
+
+
+  </form>
 </div>
 <script type="text/javascript">
 {% endblock %}
