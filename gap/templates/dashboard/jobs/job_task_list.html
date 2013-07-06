@@ -23,7 +23,7 @@
     <thead>
         <tr>
     {% for stage in job.stage_set.all %}
-            <th class="task-list-column">{{ stage.name }}</th>
+            <th class="task-list-column"><a href="" title="{{ stage.description }}">{{ stage.name }}</a></th>
     {% endfor %}
         </tr>
     </thead>
