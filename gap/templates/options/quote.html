@@ -41,7 +41,7 @@
       <tr>
         <th style="width: 160px;">Quantity</th><th>Price</th>
       </tr>
-      {% if quantities.count > 1 %}
+      {% if discrete_pricing %}
       {% for quantity in quantities %}
       <tr>
         <td><input type="radio" id="quantity_{{ quantity.quantity }}" name="quantity" value="{{ quantity.quantity }}" 

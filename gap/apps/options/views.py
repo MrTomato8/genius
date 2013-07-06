@@ -158,6 +158,12 @@ class QuoteView(View):
 
         #TODO: refactor into pricelist utils
         prices = Price.objects.filter(product=product)
+
+        if prices.values('quantity').distinct().count() > 1:
+            discrete_pricing = True
+        else:
+            discrete_pricing = False
+
         for choice in choices:
             prices = prices.filter(option_choices=choice)
 
@@ -205,5 +211,6 @@ class QuoteView(View):
             'quantities': quantities,
             'calculated_price': calculated_price,
             'errors': errors,
+            'discrete_pricing': discrete_pricing,
 
         })
