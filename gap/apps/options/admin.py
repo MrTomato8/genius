@@ -11,8 +11,12 @@ class OptionPickerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(OptionPickerForm, self).__init__(*args, **kwargs)
 
-        opts = map(lambda x: x.option.pk,
-                   OptionPicker.objects.exclude(option=self.instance.option))
+        if self.instance.pk:
+            pickers = OptionPicker.objects.exclude(option=self.instance.option)
+        else:
+            pickers = OptionPicker.objects.all()
+
+        opts = map(lambda x: x.option.pk, pickers)
 
         self.fields['option'].queryset = Option.objects.exclude(pk__in=opts)
 
