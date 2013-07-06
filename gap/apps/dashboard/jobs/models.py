@@ -42,11 +42,8 @@ class Stage(models.Model):
     def __unicode__(self):
         return self.name
 
-order_placed = get_class('order.signals', 'order_placed')
-
 
 def receive_order_placed(sender, order, user, **kwargs):
-    print('Order is placed')
     stages=Stage.objects.filter(is_default=True)
     job = Job.objects.create(
             order=order,
@@ -56,4 +53,5 @@ def receive_order_placed(sender, order, user, **kwargs):
     job.stage_set.add(*stages)
 
 
+order_placed = get_class('order.signals', 'order_placed')
 order_placed.connect(receive_order_placed)
