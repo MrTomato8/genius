@@ -121,8 +121,8 @@
 
             if (next.length) {
               next.click();
-            } else if (self.finish) {
-              self.finish.click();
+            } else if (self.stepyfinishbtn) {
+              self.stepyfinishbtn.click();
             }
           }
         }
@@ -132,9 +132,9 @@
           that   = $(this),
           finish = that.children('input[type="submit"]');
 
-      self.finish = (finish.length === 1) ? finish : that.children('.stepy-finish');
+      self.stepyfinishbtn = (finish.length === 1) ? finish : that.children('.stepy-finish');
 
-      if (self.finish.length) {
+      if (self.stepyfinishbtn.length) {
         var isForm   = that.is('form'),
             onSubmit = undefined;
 
@@ -144,7 +144,7 @@
           that.attr('onsubmit', 'return false;');
         }
 
-        self.finish.on('click.stepy', function(evt) {
+        self.stepyfinishbtn.on('click.stepy', function(evt) {
           if (self.opt.finish && !methods._execute.call(that, self.opt.finish, self.steps.length - 1)) {
            evt.preventDefault();
           } else if (isForm) {
@@ -154,7 +154,7 @@
               that.removeAttr('onsubmit');
             }
 
-            var isSubmit = self.finish.attr('type') === 'submit';
+            var isSubmit = self.stepyfinishbtn.attr('type') === 'submit';
 
             if (!isSubmit && (!self.opt.validate || methods.validate.call(that, self.steps.length - 1))) {
               that.submit();
@@ -162,7 +162,7 @@
           }
         });
 
-        self.steps.last().children('.stepy-navigator').append(self.finish);
+        self.steps.last().children('.stepy-navigator').append(self.stepyfinishbtn);
       } else {
         $.error('Submit button or element with class "stepy-finish" missing!');
       }
@@ -261,7 +261,7 @@
           var steps = that.data('stepy', false).children('fieldset').css('display', '');
 
           that.children('.stepy-errors').remove();
-          this.finish.appendTo(steps.last());
+          this.stepyfinishbtn.appendTo(steps.last());
           steps.find('p.stepy-navigator').remove();
         }
       });
