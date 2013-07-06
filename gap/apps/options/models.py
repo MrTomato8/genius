@@ -52,10 +52,10 @@ class OptionPickerGroup(models.Model):
         'Position', default=0, db_index=True)
 
     def __unicode__(self):
-        return self.name
+        return '{0}. {1}'.format(str(self.position), self.name)
 
     class Meta:
-        ordering = ['position']
+        ordering = ['position', 'name']
 
 
 class OptionPicker(models.Model):
@@ -73,8 +73,8 @@ class OptionPicker(models.Model):
                               default=THUMBNAIL)
 
     def __unicode__(self):
-        return 'Present {0} as {1} at {2} in {3}'.format(
-            str(self.option), self.widget, str(self.position), str(self.group))
+        return '{0}. {1} as {2} in {3}'.format(
+            str(self.position), str(self.option), self.widget, self.group.name)
 
     class Meta:
         ordering = ['group', 'position']
