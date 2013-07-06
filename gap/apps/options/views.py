@@ -181,8 +181,12 @@ class QuoteView(View):
             calc_form = QuoteCalcForm(request.POST)
             if calc_form.is_valid():
                 try:
-                    calculated_price = calc_form.cleaned_data['quantity'] * pick_price(
-                        product, calc_form.cleaned_data['quantity'], choices).rpl_price
+                    pickedprice = pick_price(
+                        product, calc_form.cleaned_data['quantity'], choices)
+
+                    #TODO: calc_form.cleaned_data['quantity'] has to be > min-order
+
+                    calculated_price = (calc_form.cleaned_data['quantity'] / pickedprice.quantity) * pickedprice.rpl_price
                 except MatchingPriceNotFound:
                     errors.append('Matching price not found!')
             custom_size_form = QuoteCustomSizeForm(request.POST)
