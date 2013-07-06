@@ -1,0 +1,20 @@
+{% extends 'dashboard/jobs/job_base.html' %}
+
+{% load url from future %}
+
+{% load currency_filters %}
+{% load sorting_tags %}
+{% load i18n %}
+
+
+{% block dashboard_content %}
+<div class="row-fluid">
+    <div class="span6 offset3">
+    <form action="." method="post">{% csrf_token%}
+    {{ form.as_p }}
+    
+    <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    </div>
+</div>
+{% endblock dashboard_content %}

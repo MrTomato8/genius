@@ -1,0 +1,32 @@
+{% extends 'dashboard/jobs/job_base.html' %}
+
+{% load url from future %}
+
+{% load currency_filters %}
+{% load sorting_tags %}
+{% load i18n %}
+
+
+{% block dashboard_content %}
+<div class="row-fluid">
+    <div class="span6 offset3">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Task</th>
+            <th>Creator</th>
+            <th>Owner</th>
+        </tr>
+        </thead>
+    {% for task in task_list %}
+        <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.creator }}</td>
+            <td>{{ task.assigned_to }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <a class="btn btn-primary" href='/dashboard/jobs/tasks/create/'>Create a new Task</a>
+    </div>
+</div>
+{% endblock dashboard_content %}

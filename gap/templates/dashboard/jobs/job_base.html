@@ -1,0 +1,100 @@
+{% extends 'dashboard/layout.html' %}
+
+{% load url from future %}
+
+{% load currency_filters %}
+{% load sorting_tags %}
+{% load i18n %}
+
+{% block body_class %}jobs{% endblock %}
+{% block title %}
+    {% trans "Jobs management" %} | {{ block.super }}
+{% endblock %}
+
+{% block extrastyles %}
+{{ block.super }}
+<style type="text/css">
+html, body, .page-content, .content, .dashboard{
+    height: 100%;
+}
+div.job, div.order {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 5px;
+    min-height: 100px !important;
+}
+div.job:hover, div.order:hover {
+    border: 1px solid #d0d0d0;
+}
+.multi-zone-warning{
+    font-size: 10px;
+}
+.actions{
+    padding: 5px;
+}
+td.task-list-column, th.task-list-column{
+    border:none; 
+    border-right: 1px solid #ddd;
+    min-height:100%;
+    width: 170px;
+}
+.task-detail p{
+    margin-left: 10px;
+}
+.task-desciption{
+    min-height: 300px;
+}
+.task-detail span{
+    margin-left: 10px;
+}
+.task-actions{
+    padding-top: 10px;
+    font-size: 10px;
+}
+.task-actions a{
+    color: #CFCFCF;
+}
+.task-actions a:hover{
+    color: #7D7D7D;
+}
+.orders .order:nth-child(6n + 7){
+    margin-left : 0px;
+}
+</style>
+{% endblock extrastyles %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+            <span class="divider">/</span>
+        </li>
+        <li>
+            <a href="{% url 'order-list' %}">{% trans "Jobs" %}</a>
+            <span class="divider">/</span>
+        </li>
+        <li class="active">{{ staff_breadcrumb }}</li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+        <h1></h1>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+<div class="row-fluid">
+    {% for job in job_list %}
+        <div class="job span2 well">
+            <a href="{% url 'task-create' job.id %}"> {{ job.id }}</a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock dashboard_content %}
+
+{% block onbodyload %}
+    oscar.dashboard.orders.initTable();
+    oscar.dashboard.search.init();
+{% endblock onbodyload %}

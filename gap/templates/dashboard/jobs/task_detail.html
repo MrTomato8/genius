@@ -1,0 +1,54 @@
+{% extends 'dashboard/jobs/job_base.html' %}
+
+{% load url from future %}
+
+{% load currency_filters %}
+{% load sorting_tags %}
+{% load i18n %}
+
+
+{% block dashboard_content %}
+<div class="row-fluid actions">
+    <div class="span2 offset7">
+        <a {% if prev %} href="{% url 'task-detail' job.id prev.id %}"{% else %} disabled="true"{% endif %} class="btn btn-info">Prev</a>
+        <a {% if next %} href="{% url 'task-detail' job.id next.id %}"{% else %} disabled="true"{% endif %} class="btn btn-info">Next</a>
+    </div>
+    <div class="span2 pull-right">
+        <a href="{% url 'job-task-list' task.job.id %}" class="btn btn-info">Kanban View</a>
+        <button href="" disabled class="btn btn-info">Form View</button>
+    </div>
+</div>
+
+<div class="row-fluid">
+
+    <div class="span6 well job offset3">
+        <div class="row-fluid">
+            <div class="span2 pull-right">
+                <a class="btn btn-info" href="{% url 'job-task-edit' job.id task.id %}">Edit Task</a>
+            </div>
+            <div class="span3 task-detail">
+                <b>Task Name:</b>
+                <span>{{ task.name }}</span>
+            </div>
+            <div class="span3 task-detail">
+                <b>Created By:</b>
+                <span>{{ task.creator }}</span>
+                <b>Assigned To:</b>
+                <span>{{ task.assigned_to }}</span>
+            </div>
+            <div class="span3 task-detail">            
+                <b>Start Date:</b>
+                <span>{{ task.start_date }}</span>
+                <b>End Date:</b>
+                <span>{{ task.end_date }}</span>            
+            </div>
+        </div>
+        <hr />
+        <div class="row-fluid task-desciption">
+            <b>Description:</b>
+            <div class="span12">{{ task.description }}</div>
+        </div>
+    
+    </div>
+</div>
+{% endblock dashboard_content %}

@@ -151,11 +151,12 @@ INSTALLED_APPS = [
     'compressor',
     'apps.catalogue',
     'apps.checkout',
+    'apps.dashboard.jobs',
     'paypal',
     'apps.pricelist',
     'apps.options'
 ]
-INSTALLED_APPS = INSTALLED_APPS + get_core_apps()
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps(['apps.order'])
 
 ACCOUNTS_SOURCE_NAME = 'Main Account'
 ACCOUNTS_REDEMPTIONS_NAME = 'Sales Account'
@@ -165,6 +166,10 @@ AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.Emailbackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = '/tmp/app-messages' # change this to a proper location
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -235,6 +240,17 @@ OSCAR_DASHBOARD_NAVIGATION += [
             },
 
          ]
+    },
+    {
+        'label': 'Jobs management',
+        'icon': 'icon-tasks',
+        'children': [
+            {
+                'label': 'Jobs',
+                'url_name': 'job-list',
+            },
+         ]
+
     },
 ]
 

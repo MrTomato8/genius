@@ -1,0 +1,47 @@
+{% extends 'dashboard/jobs/job_base.html' %}
+
+{% load url from future %}
+
+{% load currency_filters %}
+{% load sorting_tags %}
+{% load i18n %}
+
+
+{% block dashboard_content %}
+<div class="row-fluid actions">
+    <div class="span4">
+        <a href="{% url 'job-task-create' job.id %}" class="btn btn-info">Create new task</a>
+        <a href="{% url 'job-stage-create' job.id %}" class="btn btn-info">Create new stage</a>
+    </div>
+
+    <div class="span2 pull-right">
+        <button href="" disabled class="btn btn-info">Kanban View</button>
+        <a href="{% url 'task-detail-first' job.id %}" class="btn btn-info">Form View</a>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+    {% for stage in job.stage_set.all %}
+            <th class="task-list-column">{{ stage.name }}</th>
+    {% endfor %}
+        </tr>
+    </thead>
+    <tr>
+        {% for group in groups %}
+        <td class="task-list-column">
+            {% for task in group %}
+                <div class="well job" style="max-width:150px;">
+                    <a href="{% url 'task-detail' job.id task.id %}"> {{ task.name }}</a>
+                    <br />
+                    <div class="task-actions pull-right">
+                        <a href="{% url 'job-task-edit' job.id task.id %}">Edit</a>
+                    </div>  
+                </div>
+            {% endfor %}
+            
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+{% endblock dashboard_content %}
