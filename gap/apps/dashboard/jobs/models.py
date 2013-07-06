@@ -33,6 +33,7 @@ class Task(models.Model):
 class Stage(models.Model):
     jobs = models.ManyToManyField(Job, null=True, blank=True)
     name = models.CharField('Stage Name', max_length=250)
+    description = models.TextField('Description', null=True, blank=True)
     related_status = models.CharField('Related status', max_length=250)
     is_default = models.BooleanField(default=False)
 

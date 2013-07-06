@@ -68,4 +68,4 @@ class StageForm(forms.ModelForm):
    
     class Meta:
         model = Stage
-        fields = ('name', 'related_status', 'is_default')
+        fields = ('name', 'related_status', 'description', 'is_default')
