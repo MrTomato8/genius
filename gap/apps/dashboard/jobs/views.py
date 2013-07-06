@@ -52,6 +52,26 @@ class JobListView(ListView):
     model = Job
     template_name = 'dashboard/jobs/job_list.html'
 
+    def get_context_data(self, **kwargs):
+        ctx = super(JobListView, self).get_context_data(**kwargs)
+        user = self.request.user
+        groups = user.groups.values_list('name', flat=True)
+
+        ctx['staff_breadcrumb'] = self.get_breadcrumb(user, groups)
+        return ctx
+
+    def get_breadcrumb(self, user, groups):
+        if user.is_superuser:
+            return "All Teams"
+
+        if GROUP_LARGE in groups:
+            return 'Large Format Digital Team'
+        elif GROUP_SMALL in groups:
+            return ' Small Format Digital Team'
+        elif GROUP_EXHIBITION in groups:
+            return 'Exhibition Format Digital Team'
+        return ''
+
 
 class JobTaskListView(DetailView):
     model = Job
