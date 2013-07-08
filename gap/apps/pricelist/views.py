@@ -67,7 +67,7 @@ def list(request):
             choices = []
             for choice in price.option_choices.filter(option=option):
                 choices.append(choice.caption)
-            row.append(', '.join(choices))
+            row.append(' / '.join(choices))
         table.append(row)
 
     return render(request, 'pricelist/list.html', {
