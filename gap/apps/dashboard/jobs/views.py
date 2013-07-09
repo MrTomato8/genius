@@ -204,6 +204,7 @@ class TaskDetailView(DetailView):
         job_tasks = list(job.task_set.all())
         task_index = job_tasks.index(self.object)
         ctx['job'] = job
+        ctx['followers'] = self.object.followers.all()
         
         # using try here will not work, list supports negative index
         if task_index > 0:
@@ -265,3 +266,29 @@ class StageCreateView(CreateView):
 class StageListView(ListView):
     model = Stage
     template_name = 'dashboard/jobs/stage_list.html'
+
+
+class FollowTaskView(DetailView):
+    model = Job
+    success_message = "You are following this task"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        task = self.object.task_set.get(id=self.kwargs['task_id'])
+        task.followers.add(request.user)
+        messages.success(request, self.success_message)
+        return HttpResponseRedirect(reverse('task-detail', kwargs={'pk': task.id, 'job_id': self.object.id}))
+
+
+
+class UnfollowTaskView(DetailView):
+    model = Job
+    success_message = " Unfollowed this task successfully"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        task = self.object.task_set.get(id=self.kwargs['task_id'])
+        task.followers.remove(request.user)
+        messages.success(request, self.success_message)
+        return HttpResponseRedirect(reverse('task-detail', kwargs={'pk': task.id, 'job_id': self.object.id}))
+

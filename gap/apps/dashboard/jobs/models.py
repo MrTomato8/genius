@@ -18,6 +18,7 @@ class Job(models.Model):
         return self.name
 
 class Task(models.Model):
+    followers = models.ManyToManyField(User)
     job = models.ForeignKey(Job)
     creator = models.ForeignKey(User, null=True, blank=True, related_name="task_creator")
     stage = models.ForeignKey('Stage', null=True, blank=True)

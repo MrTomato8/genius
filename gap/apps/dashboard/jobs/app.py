@@ -19,6 +19,8 @@ class JobDashboardApplication(Application):
     stage_create = views.StageCreateView
     stage_list = views.StageListView
 
+    task_follow = views.FollowTaskView
+    task_unfollow = views.UnfollowTaskView
     # project_detail = views.ProjectDetailView
     # line_detail = views.ProjectLineItemDetailView
     # line_follow = views.FollowLineView
@@ -42,7 +44,9 @@ class JobDashboardApplication(Application):
             url(r'^(?P<job_id>\d+)/tasks/(?P<pk>\d+)/$', self.task_detail.as_view(), name='task-detail'),
             url(r'^(?P<job_id>\d+)/tasks/detail/$', self.task_detail_redirect.as_view(), name='task-detail-first'),
             url(r'^(?P<job_id>\d+)/tasks/(?P<pk>\d+)/edit/$', self.task_edit.as_view(), name='job-task-edit'),
-            
+
+            url(r'^(?P<pk>\d+)/tasks/(?P<task_id>\d+)/follow/$', self.task_follow.as_view(), name='follow-task'),
+            url(r'^(?P<pk>\d+)/tasks/(?P<task_id>\d+)/unfollow/$', self.task_unfollow.as_view(), name='unfollow-task'),
             
             url(r'^(?P<job_id>\d+)/tasks/create/$', self.task_create.as_view(), name='job-task-create'),
             url(r'^(?P<job_id>\d+)/stages/create/$', self.stage_create.as_view(), name='job-stage-create'),
