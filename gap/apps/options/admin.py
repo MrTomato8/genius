@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.options.models import OptionPicker, OptionPickerGroup
+from apps.options.models import OptionPicker, OptionPickerGroup, OptionChoice
 from django.db import models
 from django import forms
 
@@ -27,3 +27,4 @@ class OptionPickerAdmin(admin.ModelAdmin):
 
 admin.site.register(OptionPicker, OptionPickerAdmin)
 admin.site.register(OptionPickerGroup)
+admin.site.register(OptionChoice)
