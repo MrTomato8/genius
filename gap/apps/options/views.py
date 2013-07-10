@@ -145,13 +145,21 @@ class QuoteView(View):
 
         return choices
 
+    def session_valid_product(self, request, product):
+        session = request.session.get('options_pick', {})
+        try:
+            return session['product'] == product.pk
+        except KeyError:
+            return False
+
     def dispatch(self, request, *args, **kwargs):
         errors = []
 
         product = Product.objects.get(pk=kwargs['pk'])
         calculated_price = 0
 
-        #TODO: If product is different in session - redirect to pick page
+        if not self.session_valid_product(request, product):
+            return HttpResponseRedirect(reverse('options:pick', kwargs=kwargs))
 
 
         choices = self.session_choices(request, product)
