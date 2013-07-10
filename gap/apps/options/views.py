@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import View, TemplateView
+from django.views.generic import View
 from django.db import models
 from django.core.urlresolvers import reverse
 from apps.options.models import OptionPickerGroup
