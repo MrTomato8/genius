@@ -123,7 +123,7 @@ class PickOptionsView(View):
                 errors.append('There are some conflicting choices. '
                               'Please review your selections.')
 
-        else:
+        elif request.method == 'POST':
             errors.append('Please review your selections.')
 
 
