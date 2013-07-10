@@ -5,6 +5,7 @@ import csv
 from decimal import Decimal, DecimalException
 from django.db import IntegrityError
 from django.template.defaultfilters import slugify
+from django.db.models import Max
 
 
 Product = models.get_model('catalogue', 'Product')
@@ -50,14 +51,33 @@ class DuplicateQuantities(Exception):
 
 def pick_price(product, quantity, choices):
 
-    prices = Price.objects.filter(product=product)
+    # Keep prices for requested product where quantity satisfies min_order
+    prices = Price.objects.filter(product=product, min_order__lte=quantity)
 
+    # Keep prices for selected options only
     for choice in choices:
         prices = prices.filter(option_choices=choice)
 
+    # There may be several different prices for the same quantity
+    # with different suitable min_order value. For example:
+    # unit price $10 for min_order of 5 units
+    # unit price $9 for min order of 20 units
+    # unit price $8 for min order of 30 units
+    #
+    # so for the requested quantity=50 closest
+    # will be MAX(min_order) = 30
+    if prices.count() > 1:
+        min_order = prices.aggregate(Max('min_order'))['min_order__max']
+        prices = prices.filter(min_order=min_order)
+
+    # I am not sure if this is right place to do sanity checking on pricelist
+    # TODO: Rethink this part
     if prices.values('quantity').count() > prices.values('quantity').distinct().count():
         raise DuplicateQuantities
 
+    # At this point only prices with distinct quantities are left in queryset
+    # If there is only 1 distinct quantity - then pricing is per-unit
+    # Else - pricing is discrete
     if prices.count() == 1:
         return prices.get()
     elif prices.count > 1:
@@ -120,6 +140,12 @@ def import_csv(csvfile, create_options=True, create_choices=True):
             data['quantity'] = Decimal(row.pop('quantity', None))
         except DecimalException:
             report.skip('quantity', 'bad value', original_row)
+            continue
+
+        try:
+            data['min_order'] = Decimal(row.pop('min_order', None))
+        except DecimalException:
+            report.skip('min_order', 'bad value', original_row)
             continue
 
         choices = []

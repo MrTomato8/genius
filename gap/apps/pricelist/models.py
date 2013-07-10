@@ -31,12 +31,17 @@ class Price(models.Model):
 
     quantity = models.DecimalField(max_digits=10, decimal_places=2,
                                    validators=[MinValueValidator(0)])
+
+    min_order = models.DecimalField(max_digits=10, decimal_places=2,
+                                    validators=[MinValueValidator(0)])
+
     option_choices = models.ManyToManyField(
         OptionChoice, related_name='prices', blank=True,
         verbose_name=u'Option Choices')
 
     def __unicode__(self):
-        s = '{0}({1}) for {2} units of {3} ({4})'
+        s = '{0}({1}) for {2} units of {3} ({4}). '\
+            'Minimum order of {5} units required.'
 
         choices = []
         for choice in self.option_choices.all():
@@ -47,7 +52,8 @@ class Price(models.Model):
             str(self.tpl_price),
             str(self.quantity),
             str(self.product),
-            ','.join(choices))
+            ','.join(choices),
+            str(self.min_order))
 
     @property
     def options(self):
