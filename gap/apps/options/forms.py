@@ -14,6 +14,7 @@ def picker_form_factory(product, picker, choices):
         widget = forms.widgets.Select
 
     properties = {
+        'choice_errors': [],
         picker.option.code: OptionChoiceField(
             widget=widget,
             empty_label=None,

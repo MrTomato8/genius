@@ -71,7 +71,10 @@ class PickOptionsView(View):
                         allvalid = allvalid and opform.is_valid()
                         if opform.is_valid():
                             session['choices'][code] = opform.cleaned_data[code].pk
-
+                        else:
+                            if opform.data.get(code, None) is None:
+                                opform.choice_errors.append(
+                                    'Please select item')
                     elif request.method == 'GET':
                         if session['choices'].get(code, None) is not None:
                             opform = OptionPickerForm(
@@ -104,8 +107,6 @@ class PickOptionsView(View):
                     code = picker['picker'].option.code
                     choice = picker['form'].cleaned_data[code]
 
-                    picker['form'].choice_errors = []
-
                     # Filter by intersection
                     conflicts = allchoices & set(choice.conflicts_with.all())
 
@@ -120,7 +121,11 @@ class PickOptionsView(View):
             # If validity was reset there must be conflicting choices
             if not allvalid:
                 errors.append('There are some conflicting choices. '
-                              'Please review your selections')
+                              'Please review your selections.')
+
+        else:
+            errors.append('Please review your selections.')
+
 
         if allvalid:
             return HttpResponseRedirect(reverse('options:quote', kwargs=kwargs))
@@ -137,7 +142,7 @@ class QuoteView(View):
 
     def session_choices(self, request, product):
         choices = []
-        session = request.session.get('options_pick', {'product': product,
+        session = request.session.get('options_pick', {'product': product.pk,
                                                        'choices': {}})
 
         for k, pk in session['choices'].items():
