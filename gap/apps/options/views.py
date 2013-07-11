@@ -15,43 +15,60 @@ Option = models.get_model('catalogue', 'Option')
 Price = models.get_model('pricelist', 'Price')
 
 
-class PickOptionsView(View):
-    template_name = 'options/pick.html'
+class OptionsSession(object):
+    SESSION_KEY = 'options_sessiondata'
 
-    def session_clean(self, request, product):
-        s = request.session['options_pick'] = {}
-        s['product'] = product.pk
-        s['choices'] = {}
+    def __init__(self, request):
+        self.request = request
+        if self.SESSION_KEY not in request.session:
+            request.session[self.SESSION_KEY] = {}
+        self.session = request.session[self.SESSION_KEY]
 
-        return s
+    def get(self, key, default=None):
+        if key in self.request.session[self.SESSION_KEY]:
+            return self.request.session[self.SESSION_KEY][key]
 
-    def session_valid(self, request, product):
-        try:
-            return request.session['options_pick']['product'] == product.pk
-        except KeyError:
-            return False
+        return default
 
-    def session_get(self, request, product):
-        if not self.session_valid(request, product):
-            return self.session_clean(request, product)
+    def set(self, key, value):
+        self.request.session[self.SESSION_KEY][key] = value
+        self.request.session.modified = True
 
-        try:
-            return request.session['options_pick']
-        except KeyError:
-            return self.session_clean(request, product)
+    def valid(self, product):
+        return self.get('product') == product.pk
+
+    def reset_choices(self, product):
+        self.set('product', product.pk)
+        self.set('choices', {})
+
+    def get_choices(self):
+        choices = []
+
+        for k, pk in self.get('choices', {}).items():
+            choices.append(OptionChoice.objects.get(pk=pk))
+
+        return choices
+
+
+class OptionsSessionMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
 
+        self.session = OptionsSession(request)
+        return super(OptionsSessionMixin, self).dispatch(
+            request, *args, **kwargs)
+
+
+class PickOptionsView(OptionsSessionMixin, View):
+    template_name = 'options/pick.html'
+
+    def get(self, request, *args, **kwargs):
         errors = []
 
         product = Product.objects.get(pk=kwargs['pk'])
 
-        if request.method == 'POST':
-            session = self.session_clean(request, product)
-            allvalid = True
-        else:
-            session = self.session_get(request, product)
-            allvalid = False
+        if not self.session.valid(product):
+            self.session.reset_choices(product)
 
         groups = []
         for group in OptionPickerGroup.objects.all():
@@ -59,28 +76,64 @@ class PickOptionsView(View):
             pickers = []
             for picker in available_pickers(product, group):
 
-                choices = available_choices(product, picker)
-                if choices:
+                a_choices = available_choices(product, picker)
+                if a_choices:
                     OptionPickerForm = picker_form_factory(product,
                                                            picker,
-                                                           choices)
+                                                           a_choices)
                     code = picker.option.code
+                    s_choices = self.session.get('choices', {})
 
-                    if request.method == 'POST':
-                        opform = OptionPickerForm(request.POST)
-                        allvalid = allvalid and opform.is_valid()
-                        if opform.is_valid():
-                            session['choices'][code] = opform.cleaned_data[code].pk
-                        else:
-                            if opform.data.get(code, None) is None:
-                                opform.choice_errors.append(
-                                    'Please select item')
-                    elif request.method == 'GET':
-                        if session['choices'].get(code, None) is not None:
-                            opform = OptionPickerForm(
-                                data={code: session['choices'][code]})
-                        else:
-                            opform = OptionPickerForm()
+                    if s_choices.get(code, None) is not None:
+                        opform = OptionPickerForm(
+                            data={code: s_choices[code]})
+                    else:
+                        opform = OptionPickerForm()
+
+                    pickers.append(
+                        {'picker': picker,
+                         'form': opform})
+
+            if pickers:
+                groups.append({'group': group, 'pickers': pickers})
+
+        return render(request, self.template_name, {
+            'product': product,
+            'groups': groups,
+            'errors': errors,
+        })
+
+    def post(self, request, *args, **kwargs):
+        errors = []
+
+        product = Product.objects.get(pk=kwargs['pk'])
+
+        self.session.reset_choices(product)
+        allvalid = True
+
+        groups = []
+        for group in OptionPickerGroup.objects.all():
+
+            pickers = []
+            for picker in available_pickers(product, group):
+
+                a_choices = available_choices(product, picker)
+                if a_choices:
+                    OptionPickerForm = picker_form_factory(product,
+                                                           picker,
+                                                           a_choices)
+                    code = picker.option.code
+                    s_choices = self.session.get('choices', {})
+
+                    opform = OptionPickerForm(request.POST)
+                    allvalid = allvalid and opform.is_valid()
+                    if opform.is_valid():
+                        s_choices[code] = opform.cleaned_data[code].pk
+                        self.session.set('choices', s_choices)
+                    else:
+                        if opform.data.get(code, None) is None:
+                            opform.choice_errors.append(
+                                'Please select item')
 
                     pickers.append(
                         {'picker': picker,
@@ -123,9 +176,8 @@ class PickOptionsView(View):
                 errors.append('There are some conflicting choices. '
                               'Please review your selections.')
 
-        elif request.method == 'POST':
+        else:
             errors.append('Please review your selections.')
-
 
         if allvalid:
             return HttpResponseRedirect(reverse('options:quote', kwargs=kwargs))
@@ -137,37 +189,65 @@ class PickOptionsView(View):
         })
 
 
-class QuoteView(View):
+class QuoteView(OptionsSessionMixin, View):
     template_name = 'options/quote.html'
 
-    def session_choices(self, request, product):
-        choices = []
-        session = request.session.get('options_pick', {'product': product.pk,
-                                                       'choices': {}})
+    def get(self, request, *args, **kwargs):
 
-        for k, pk in session['choices'].items():
-            choices.append(OptionChoice.objects.get(pk=pk))
+        product = Product.objects.get(pk=kwargs['pk'])
 
-        return choices
+        if not self.session.valid(product):
+            return HttpResponseRedirect(reverse('options:pick', kwargs=kwargs))
 
-    def session_valid_product(self, request, product):
-        session = request.session.get('options_pick', {})
+        choices = self.session.get_choices()
+
+        #TODO: refactor into pricelist utils
+        prices = Price.objects.filter(product=product)
+
+        if prices.values('quantity').distinct().count() > 1:
+            discrete_pricing = True
+        else:
+            discrete_pricing = False
+
+        for choice in choices:
+            prices = prices.filter(option_choices=choice)
+
+        quantities = prices.values(
+            'quantity', 'rpl_price', 'tpl_price').distinct()
+
         try:
-            return session['product'] == product.pk
-        except KeyError:
-            return False
+            custom_size_choice = OptionChoice.objects.get(
+                option__code='size', code='custom')
+        except OptionChoice.DoesNotExist:
+            custom_size_choice = None
 
-    def dispatch(self, request, *args, **kwargs):
+        custom_size = custom_size_choice in choices
+
+        calc_form = QuoteCalcForm()
+        custom_size_form = QuoteCustomSizeForm()
+
+        return render(request, self.template_name, {
+            'product': product,
+            'choices': choices,
+            'params': kwargs,
+            'calc_form': calc_form,
+            'custom_size_form': custom_size_form,
+            'custom_size': custom_size,
+            'quantities': quantities,
+            'discrete_pricing': discrete_pricing,
+
+        })
+
+    def post(self, request, *args, **kwargs):
         errors = []
 
         product = Product.objects.get(pk=kwargs['pk'])
         calculated_price = 0
 
-        if not self.session_valid_product(request, product):
+        if not self.session.valid(product):
             return HttpResponseRedirect(reverse('options:pick', kwargs=kwargs))
 
-
-        choices = self.session_choices(request, product)
+        choices = self.session.get_choices()
 
         #TODO: refactor into pricelist utils
         prices = Price.objects.filter(product=product)
@@ -196,23 +276,18 @@ class QuoteView(View):
         #TODO: Take discounts, offers, coupons into account, etc
         #      move price calculation outta here
 
-        if request.method == 'POST':
-            calc_form = QuoteCalcForm(request.POST)
-            if calc_form.is_valid():
-                try:
-                    pickedprice = pick_price(
-                        product, calc_form.cleaned_data['quantity'], choices)
+        calc_form = QuoteCalcForm(request.POST)
+        if calc_form.is_valid():
+            try:
+                pickedprice = pick_price(
+                    product, calc_form.cleaned_data['quantity'], choices)
 
-                    #TODO: calc_form.cleaned_data['quantity'] has to be > min-order
+                #TODO: calc_form.cleaned_data['quantity'] has to be > min-order
 
-                    calculated_price = (calc_form.cleaned_data['quantity'] / pickedprice.quantity) * pickedprice.rpl_price
-                except MatchingPriceNotFound:
-                    errors.append('Matching price not found!')
-            custom_size_form = QuoteCustomSizeForm(request.POST)
-
-        elif request.method == 'GET':
-            calc_form = QuoteCalcForm()
-            custom_size_form = QuoteCustomSizeForm()
+                calculated_price = (calc_form.cleaned_data['quantity'] / pickedprice.quantity) * pickedprice.rpl_price
+            except MatchingPriceNotFound:
+                errors.append('Matching price not found!')
+        custom_size_form = QuoteCustomSizeForm(request.POST)
 
         return render(request, self.template_name, {
             'product': product,
