@@ -7,7 +7,7 @@ from oscar.core.loading import get_class
 Order = get_model('order', 'Order')
 
 class Job(models.Model):
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey(Order, null=True, blank=True)
     name = models.CharField('Job Name', max_length=250)
     creator = models.ForeignKey(User, related_name="job_creator", null=True, blank=True)
 

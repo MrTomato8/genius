@@ -225,6 +225,30 @@ PAYPAL_API_PASSWORD = '1369339401'
 PAYPAL_API_SIGNATURE = 'AX8GCu0CvjNpRud8qe-xAmm7JGjlA-jk1t4X3azsbXycax.HvbLdO-mu'
 PAYPAL_CALLBACK_TIMEOUT = 30
 
+OSCAR_DASHBOARD_NAVIGATION[2] = {
+        'label': 'Fulfilment',
+        'icon': 'icon-shopping-cart',
+        'children': [
+            {
+                'label': 'Order management',
+                'url_name': 'dashboard:order-list',
+            },
+            {
+                'label': 'Jobs management',
+                'url_name': 'job-list',
+            },
+            {
+                'label': 'Statistics',
+                'url_name': 'dashboard:order-stats',
+            },
+            {
+                'label': 'Partners',
+                'url_name': 'dashboard:partner-list',
+            },
+        ]
+    }
+
+
 OSCAR_DASHBOARD_NAVIGATION += [
     {
         'label': 'Pricelist',
@@ -240,17 +264,6 @@ OSCAR_DASHBOARD_NAVIGATION += [
             },
 
          ]
-    },
-    {
-        'label': 'Jobs management',
-        'icon': 'icon-tasks',
-        'children': [
-            {
-                'label': 'Jobs',
-                'url_name': 'job-list',
-            },
-         ]
-
     },
 ]
 
