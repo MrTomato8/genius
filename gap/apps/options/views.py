@@ -4,12 +4,19 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from apps.options.models import OptionPickerGroup
 from apps.options.utils import available_pickers, available_choices
+from apps.options.utils import custom_size_chosen, discrete_pricing
+from apps.options.utils import available_quantities, trade_user
 from apps.options.forms import picker_form_factory
 from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm
 from django.http import HttpResponseRedirect
 from apps.options.models import OptionChoice
 from apps.pricelist.utils import pick_price, MatchingPriceNotFound
 from apps.options.session import OptionsSessionMixin
+from django.conf import settings
+from collections import OrderedDict
+
+
+from apps.options.calc import OptionsCalculator, OptionsCalculatorError
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
@@ -158,27 +165,7 @@ class QuoteView(OptionsSessionMixin, View):
 
         choices = self.session.get_choices()
 
-        #TODO: refactor into pricelist utils
-        prices = Price.objects.filter(product=product)
-
-        if prices.values('quantity').distinct().count() > 1:
-            discrete_pricing = True
-        else:
-            discrete_pricing = False
-
-        for choice in choices:
-            prices = prices.filter(option_choices=choice)
-
-        quantities = prices.values(
-            'quantity', 'rpl_price', 'tpl_price').distinct()
-
-        try:
-            custom_size_choice = OptionChoice.objects.get(
-                option__code='size', code='custom')
-        except OptionChoice.DoesNotExist:
-            custom_size_choice = None
-
-        custom_size = custom_size_choice in choices
+        prices = available_quantities(product, choices)
 
         calc_form = QuoteCalcForm()
         custom_size_form = QuoteCustomSizeForm()
@@ -189,9 +176,9 @@ class QuoteView(OptionsSessionMixin, View):
             'params': kwargs,
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
-            'custom_size': custom_size,
-            'quantities': quantities,
-            'discrete_pricing': discrete_pricing,
+            'custom_size': custom_size_chosen(choices),
+            'prices': OrderedDict(sorted(prices.items(), key=lambda t: t[0])),
+            'discrete_pricing': discrete_pricing(product),
 
         })
 
@@ -206,45 +193,39 @@ class QuoteView(OptionsSessionMixin, View):
 
         choices = self.session.get_choices()
 
-        #TODO: refactor into pricelist utils
-        prices = Price.objects.filter(product=product)
+        calc = OptionsCalculator(product)
 
-        if prices.values('quantity').distinct().count() > 1:
-            discrete_pricing = True
-        else:
-            discrete_pricing = False
-
-        for choice in choices:
-            prices = prices.filter(option_choices=choice)
-
-        quantities = prices.values(
-            'quantity', 'rpl_price', 'tpl_price').distinct()
-
-        try:
-            custom_size_choice = OptionChoice.objects.get(
-                option__code='size', code='custom')
-        except OptionChoice.DoesNotExist:
-            custom_size_choice = None
-
-        custom_size = custom_size_choice in choices
-
-
-        #TODO: Detect customer type and present RPL or TPL price
-        #TODO: Take discounts, offers, coupons into account, etc
-        #      move price calculation outta here
-
-        calc_form = QuoteCalcForm(request.POST)
-        if calc_form.is_valid():
-            try:
-                pickedprice = pick_price(
-                    product, calc_form.cleaned_data['quantity'], choices)
-
-                #TODO: calc_form.cleaned_data['quantity'] has to be > min-order
-
-                calculated_price = (calc_form.cleaned_data['quantity'] / pickedprice.quantity) * pickedprice.rpl_price
-            except MatchingPriceNotFound:
-                errors.append('Matching price not found!')
         custom_size_form = QuoteCustomSizeForm(request.POST)
+        if custom_size_form.is_valid():
+            width = custom_size_form.cleaned_data['width']
+            height = custom_size_form.cleaned_data['height']
+        else:
+            width = 0
+            height = 0
+
+        self.session.set('custom_size', {'width': width, 'height': height})
+
+        dp = discrete_pricing(product)
+        calc_form = QuoteCalcForm(request.POST)
+
+        if calc_form.is_valid():
+            self.session.set('quantity', calc_form.cleaned_data['quantity'])
+            if dp:
+                quantity = None
+            else:
+                quantity = calc_form.cleaned_data['quantity']
+            prices = calc.calculate_cost(
+                choices,
+                quantity,
+                width=width,
+                height=height)
+
+        else:
+            prices = available_quantities(product, choices)
+            self.session.set('quantity', 0)
+
+        if len(prices) == 0:
+            errors.append('No prices found')
 
         return render(request, self.template_name, {
             'product': product,
@@ -252,10 +233,11 @@ class QuoteView(OptionsSessionMixin, View):
             'params': kwargs,
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
-            'custom_size': custom_size,
-            'quantities': quantities,
+            'custom_size': custom_size_chosen(choices),
+            'prices': OrderedDict(sorted(prices.items(), key=lambda t: t[0])),
             'calculated_price': calculated_price,
             'errors': errors,
-            'discrete_pricing': discrete_pricing,
+            'discrete_pricing': dp,
+            'trade_user': trade_user(request.user),
 
         })

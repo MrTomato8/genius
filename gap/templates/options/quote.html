@@ -39,21 +39,45 @@
 
     <table>
       <tr>
-        <th style="width: 160px;">Quantity</th><th>Price</th>
+        <th style="width: 160px;">Quantity</th>
+        <th>
+          {% if trade_user %}
+          Trade Price
+          {% else %}
+          Price
+          {% endif %}
+        </th>
       </tr>
       {% if discrete_pricing %}
-      {% for quantity in quantities %}
+      {% for qty, price in prices.items %}
       <tr>
-        <td><input type="radio" id="quantity_{{ quantity.quantity }}" name="quantity" value="{{ quantity.quantity }}" 
-        {% ifequal calc_form.quantity.data|slugify quantity.quantity|slugify %}
+        <td><input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" 
+        {% ifequal calc_form.quantity.data|slugify qty|slugify %}
         checked="checked"
         {% endifequal %} />
-        <label for="quantity_{{ quantity.quantity }}">{{ quantity.quantity|floatformat }}</label></td>
-        <td>{{quantity.rpl_price}}</td>
+        <label for="quantity_{{ qty }}">{{ qty|floatformat }}</label></td>
+        <td>
+          {% if trade_user %}
+          {{ price.tpl_price_incl_tax|floatformat }}
+          {% else %}
+          {{ price.rpl_price_incl_tax|floatformat }}
+          {% endif %}
+        </td>
       </tr>
       {% endfor %}
       {% else %}
-      <tr><td>{{ calc_form.quantity }}</td><td>{{ calculated_price }}</td></tr>
+      {% with prices.values|first as price %}
+      <tr>
+        <td>{{ calc_form.quantity }}</td>
+        <td>
+          {% if trade_user %}
+          {{ price.tpl_price_incl_tax|floatformat }}
+          {% else %}
+          {{ price.rpl_price_incl_tax|floatformat }}
+          {% endif %}
+        </td>
+      </tr>
+      {% endwith %}
       {% endif %}
     </table>
 
@@ -76,11 +100,8 @@
     </div>
 
   <input value="Calculate" type="submit" class="button"/>
+  <a class="button" href="{%url 'options:upload' pk=params.pk product_slug=params.product_slug %}">Next</a>
   </div>
-
-
-
-
   </form>
 </div>
 <script type="text/javascript">

@@ -58,3 +58,6 @@ class Price(models.Model):
     @property
     def options(self):
         return self.option_choices.all()
+
+    class Meta:
+        ordering = ['product', 'quantity']

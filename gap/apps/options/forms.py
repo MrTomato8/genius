@@ -28,9 +28,9 @@ def picker_form_factory(product, picker, choices):
 
 
 class QuoteCalcForm(forms.Form):
-    quantity = forms.IntegerField()
+    quantity = forms.DecimalField()
 
 
 class QuoteCustomSizeForm(forms.Form):
-    width = forms.IntegerField()
-    height = forms.IntegerField()
+    width = forms.DecimalField()
+    height = forms.DecimalField()
