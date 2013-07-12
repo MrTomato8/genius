@@ -3,20 +3,13 @@ from django.views.generic import View, TemplateView
 from django.db import models
 from django.core.urlresolvers import reverse
 from apps.options.models import OptionPickerGroup
-from apps.options.utils import available_pickers, available_choices
-from apps.options.utils import custom_size_chosen, discrete_pricing
-from apps.options.utils import available_quantities, trade_user
+from apps.options import utils
 from apps.options.forms import picker_form_factory
 from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm
 from django.http import HttpResponseRedirect
-from apps.options.models import OptionChoice
-from apps.pricelist.utils import pick_price, MatchingPriceNotFound
 from apps.options.session import OptionsSessionMixin
-from django.conf import settings
 from collections import OrderedDict
-
-
-from apps.options.calc import OptionsCalculator, OptionsCalculatorError
+from apps.options.calc import OptionsCalculator
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
@@ -38,9 +31,9 @@ class PickOptionsView(OptionsSessionMixin, View):
         for group in OptionPickerGroup.objects.all():
 
             pickers = []
-            for picker in available_pickers(product, group):
+            for picker in utils.available_pickers(product, group):
 
-                a_choices = available_choices(product, picker)
+                a_choices = utils.available_choices(product, picker)
                 if a_choices:
                     OptionPickerForm = picker_form_factory(product,
                                                            picker,
@@ -79,9 +72,9 @@ class PickOptionsView(OptionsSessionMixin, View):
         for group in OptionPickerGroup.objects.all():
 
             pickers = []
-            for picker in available_pickers(product, group):
+            for picker in utils.available_pickers(product, group):
 
-                a_choices = available_choices(product, picker)
+                a_choices = utils.available_choices(product, picker)
                 if a_choices:
                     OptionPickerForm = picker_form_factory(product,
                                                            picker,
@@ -165,7 +158,7 @@ class QuoteView(OptionsSessionMixin, View):
 
         choices = self.session.get_choices()
 
-        prices = available_quantities(product, choices)
+        prices = utils.available_quantities(product, choices)
 
         calc_form = QuoteCalcForm()
         custom_size_form = QuoteCustomSizeForm()
@@ -176,9 +169,9 @@ class QuoteView(OptionsSessionMixin, View):
             'params': kwargs,
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
-            'custom_size': custom_size_chosen(choices),
+            'custom_size': utils.custom_size_chosen(choices),
             'prices': OrderedDict(sorted(prices.items(), key=lambda t: t[0])),
-            'discrete_pricing': discrete_pricing(product),
+            'discrete_pricing': utils.discrete_pricing(product),
 
         })
 
@@ -205,7 +198,7 @@ class QuoteView(OptionsSessionMixin, View):
 
         self.session.set('custom_size', {'width': width, 'height': height})
 
-        dp = discrete_pricing(product)
+        dp = utils.discrete_pricing(product)
         calc_form = QuoteCalcForm(request.POST)
 
         if calc_form.is_valid():
@@ -221,7 +214,7 @@ class QuoteView(OptionsSessionMixin, View):
                 height=height)
 
         else:
-            prices = available_quantities(product, choices)
+            prices = utils.available_quantities(product, choices)
             self.session.set('quantity', 0)
 
         if len(prices) == 0:
@@ -233,12 +226,12 @@ class QuoteView(OptionsSessionMixin, View):
             'params': kwargs,
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
-            'custom_size': custom_size_chosen(choices),
+            'custom_size': utils.custom_size_chosen(choices),
             'prices': OrderedDict(sorted(prices.items(), key=lambda t: t[0])),
             'calculated_price': calculated_price,
             'errors': errors,
             'discrete_pricing': dp,
-            'trade_user': trade_user(request.user),
+            'trade_user': utils.trade_user(request.user),
 
         })
 

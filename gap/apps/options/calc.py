@@ -1,7 +1,6 @@
 from apps.pricelist.models import Price
 from django.db.models import Max
 from apps.options.utils import custom_size_chosen
-from collections import OrderedDict
 
 
 class OptionsCalculatorError(Exception):
