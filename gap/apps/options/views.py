@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.db import models
 from django.core.urlresolvers import reverse
 from apps.options.models import OptionPickerGroup
@@ -241,3 +241,7 @@ class QuoteView(OptionsSessionMixin, View):
             'trade_user': trade_user(request.user),
 
         })
+
+
+class UploadView(OptionsSessionMixin, TemplateView):
+    template_name = 'options/upload.html'

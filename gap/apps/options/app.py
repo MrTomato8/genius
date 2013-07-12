@@ -8,6 +8,7 @@ class BaseOptionsApplication(Application):
     name = 'options'
     pick_view = views.PickOptionsView
     quote_view = views.QuoteView
+    upload_view = views.UploadView
 
     def get_urls(self):
         urlpatterns = super(BaseOptionsApplication, self).get_urls()
@@ -15,7 +16,9 @@ class BaseOptionsApplication(Application):
             '', url(r'^pick/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
             self.pick_view.as_view(), name='pick'),
             url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
-            self.quote_view.as_view(), name='quote'))
+            self.quote_view.as_view(), name='quote'),
+            url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
+            self.upload_view.as_view(), name='upload'))
 
 
         return self.post_process_urls(urlpatterns)
