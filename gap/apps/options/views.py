@@ -25,7 +25,10 @@ class PickOptionsView(OptionsSessionMixin, View):
         product = Product.objects.get(pk=kwargs['pk'])
 
         if not self.session.valid(product):
-            self.session.reset_choices(product)
+            self.session.reset_product(product)
+            self.session.reset_choices()
+            self.session.reset_quantity()
+            self.session.reset_custom_size()
 
         groups = []
         for group in OptionPickerGroup.objects.all():
@@ -65,10 +68,17 @@ class PickOptionsView(OptionsSessionMixin, View):
 
         product = Product.objects.get(pk=kwargs['pk'])
 
-        self.session.reset_choices(product)
+        self.session.reset_product(product)
+        self.session.reset_choices()
+        self.session.reset_quantity()
+        self.session.reset_custom_size()
+
         allvalid = True
 
         groups = []
+        # Cache collected OptionChoice objects for quantity field pre-fill
+        choices = []
+
         for group in OptionPickerGroup.objects.all():
 
             pickers = []
@@ -86,6 +96,7 @@ class PickOptionsView(OptionsSessionMixin, View):
                     allvalid = allvalid and opform.is_valid()
                     if opform.is_valid():
                         s_choices[code] = opform.cleaned_data[code].pk
+                        choices.append(opform.cleaned_data[code])
                         self.session.set('choices', s_choices)
                     else:
                         if opform.data.get(code, None) is None:
@@ -137,6 +148,7 @@ class PickOptionsView(OptionsSessionMixin, View):
             errors.append('Please review your selections.')
 
         if allvalid:
+            self.session.reset_quantity(utils.min_order(product, choices))
             return HttpResponseRedirect(reverse('options:quote', kwargs=kwargs))
 
         return render(request, self.template_name, {
@@ -158,10 +170,26 @@ class QuoteView(OptionsSessionMixin, View):
 
         choices = self.session.get_choices()
 
-        prices = utils.available_quantities(product, choices)
+        calc = OptionsCalculator(product)
 
-        calc_form = QuoteCalcForm()
-        custom_size_form = QuoteCustomSizeForm()
+        dp = utils.discrete_pricing(product)
+
+        custom_size = self.session.get('custom_size', {'width': 0, 'height': 0})
+
+        if dp:
+            quantity = None
+        else:
+            quantity = self.session.get_quantity()
+
+        prices = calc.calculate_cost(
+            choices,
+            quantity,
+            width=custom_size['width'],
+            height=custom_size['height'])
+
+        calc_form = QuoteCalcForm(initial={'quantity': quantity})
+        custom_size_form = QuoteCustomSizeForm(
+            initial=self.session.get('custom_size', {}))
 
         return render(request, self.template_name, {
             'product': product,
@@ -170,8 +198,9 @@ class QuoteView(OptionsSessionMixin, View):
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
             'custom_size': utils.custom_size_chosen(choices),
-            'prices': OrderedDict(sorted(prices.items(), key=lambda t: t[0])),
+            'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
             'discrete_pricing': utils.discrete_pricing(product),
+            'trade_user': utils.trade_user(request.user),
 
         })
 
@@ -186,6 +215,8 @@ class QuoteView(OptionsSessionMixin, View):
 
         choices = self.session.get_choices()
 
+        min_order = utils.min_order(product, choices)
+
         calc = OptionsCalculator(product)
 
         custom_size_form = QuoteCustomSizeForm(request.POST)
@@ -193,6 +224,7 @@ class QuoteView(OptionsSessionMixin, View):
             width = custom_size_form.cleaned_data['width']
             height = custom_size_form.cleaned_data['height']
         else:
+            self.session.reset_custom_size()
             width = 0
             height = 0
 
@@ -202,11 +234,16 @@ class QuoteView(OptionsSessionMixin, View):
         calc_form = QuoteCalcForm(request.POST)
 
         if calc_form.is_valid():
+
             self.session.set('quantity', calc_form.cleaned_data['quantity'])
+
             if dp:
                 quantity = None
             else:
                 quantity = calc_form.cleaned_data['quantity']
+                if quantity < min_order:
+                    errors.append('Minimum order quantity for this '
+                                  'option set is {0}'.format(min_order))
             prices = calc.calculate_cost(
                 choices,
                 quantity,
@@ -215,7 +252,7 @@ class QuoteView(OptionsSessionMixin, View):
 
         else:
             prices = utils.available_quantities(product, choices)
-            self.session.set('quantity', 0)
+            self.session.reset_quantity()
 
         if len(prices) == 0:
             errors.append('No prices found')
@@ -227,7 +264,7 @@ class QuoteView(OptionsSessionMixin, View):
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
             'custom_size': utils.custom_size_chosen(choices),
-            'prices': OrderedDict(sorted(prices.items(), key=lambda t: t[0])),
+            'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
             'calculated_price': calculated_price,
             'errors': errors,
             'discrete_pricing': dp,
