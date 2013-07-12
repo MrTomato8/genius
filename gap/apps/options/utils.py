@@ -3,6 +3,7 @@ from apps.options.models import OptionPicker
 from django.conf import settings
 from django.contrib.auth.models import Group
 
+
 def available_choices(product, picker):
     return OptionChoice.objects.filter(
         option=picker.option,
