@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
 Option = models.get_model('catalogue', 'Option')
 
@@ -80,6 +81,18 @@ class OptionPicker(models.Model):
         ordering = ['group', 'position']
 
 
+class ArtworkItem(models.Model):
+    user = models.ForeignKey(User)
+    image = models.FileField(upload_to='artwork/%Y/%m/%d')
+    uploaded_on = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def available(self):
+        # TODO:Walk through Basket and Order lines here looking for an
+        # Option containing this image
+        return True
+
+    def __unicode__(self):
+        return '{0} uploaded on {1}'.format(str(self.user), str(self.uploaded_on))
 
 # quotes here?
