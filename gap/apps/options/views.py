@@ -108,6 +108,7 @@ class PickOptionsView(OptionsSessionMixin, View):
                         {'picker': picker,
                          'form': opform})
 
+
             if pickers:
                 groups.append({'group': group, 'pickers': pickers})
 
@@ -288,8 +289,6 @@ class ArtworkDeleteView(View):
 
 class UploadView(OptionsSessionMixin, View):
     template_name = 'options/upload.html'
-
-    # TODO: Require authenticated user for all methods
 
     def get_items(self, user):
         items = []

@@ -2,6 +2,7 @@ from django.conf.urls import patterns, url, include
 
 from oscar.core.application import Application
 from apps.options import views
+from django.contrib.auth.decorators import login_required
 
 
 class BaseOptionsApplication(Application):
@@ -21,10 +22,15 @@ class BaseOptionsApplication(Application):
             url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
             self.upload_view.as_view(), name='upload'),
             url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/delete/(?P<file_id>\d+)$',
-            self.artwork_delete_view.as_view(), name='artwork-delete')
+            self.artwork_delete_view.as_view(), name='upload-artwork-delete')
         )
 
         return self.post_process_urls(urlpatterns)
+
+    def get_url_decorator(self, pattern):
+        if pattern.name.startswith('upload'):
+            return login_required
+        return None
 
 
 class OptionsApplication(BaseOptionsApplication):

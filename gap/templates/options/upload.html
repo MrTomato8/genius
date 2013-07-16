@@ -29,7 +29,7 @@
     <ul>
       {% for item in items %}
       <li>
-        <form id="del-{{ item.file.pk }}" method="POST" action="{%url 'options:artwork-delete' pk=params.pk product_slug=params.product_slug file_id=item.file.pk %}">{% csrf_token %}
+        <form id="del-{{ item.file.pk }}" method="POST" action="{%url 'options:upload-artwork-delete' pk=params.pk product_slug=params.product_slug file_id=item.file.pk %}">{% csrf_token %}
           <input value="delete" type="submit" class="button"/> {{ item.file.filename }}
         </form>
       </li>
