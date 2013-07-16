@@ -1,5 +1,6 @@
 from django.contrib import admin
 from apps.options.models import OptionPicker, OptionPickerGroup, OptionChoice
+from apps.options.models import ArtworkItem
 from django.db import models
 from django import forms
 
@@ -25,6 +26,13 @@ class OptionPickerAdmin(admin.ModelAdmin):
     form = OptionPickerForm
 
 
+class OptionChoiceAdmin(admin.ModelAdmin):
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # editing an existing object
+            return self.readonly_fields + ('code',)
+        return self.readonly_fields
+
 admin.site.register(OptionPicker, OptionPickerAdmin)
 admin.site.register(OptionPickerGroup)
-admin.site.register(OptionChoice)
+admin.site.register(OptionChoice, OptionChoiceAdmin)
+admin.site.register(ArtworkItem)

@@ -16,3 +16,13 @@
 .price-calculator table tr th { text-align: left; font-size: 12px; padding-bottom: 8px;}
 .quote-errors { color: red;}
 .quote-errors strong { font-size: 12px;}
+
+.options-next { padding-top: 24px;}
+.options-calculate { padding-top: 24px;}
+
+.custom-size-columns div { display: inline-block;}
+
+.upload-items { padding-top: 8px;}
+.upload-items ul li { font-size: 16px;}
+
+.upload-form { padding-top: 24px;}

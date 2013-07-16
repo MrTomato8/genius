@@ -23,17 +23,37 @@ class OptionsSession(object):
     def valid(self, product):
         return self.get('product') == product.pk
 
-    def reset_choices(self, product):
+    def reset_product(self, product):
         self.set('product', product.pk)
-        self.set('choices', {})
+
+    def reset_choices(self, choices=None):
+        if choices is None:
+            choices = {}  # workaround for common python gotcha
+        self.set('choices', choices)
+
+    def reset_quantity(self, quantity=0):
+        self.set('quantity', quantity)
+
+    def reset_custom_size(self, width=0, height=0):
+        self.set('custom_size', {'width': width, 'height': height})
 
     def get_choices(self):
         choices = []
 
-        for k, pk in self.get('choices', {}).items():
-            choices.append(OptionChoice.objects.get(pk=pk))
+        s_choices = self.get('choices', {})
+
+        for key in sorted(s_choices.iterkeys()):
+            choices.append(OptionChoice.objects.get(pk=s_choices[key]))
 
         return choices
+
+    def get_quantity(self):
+        try:
+            return int(self.get('quantity', 0))
+        except ValueError:
+            return 0
+        except TypeError:
+            return 0
 
 
 class OptionsSessionMixin(object):

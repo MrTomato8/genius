@@ -9,6 +9,7 @@ class BaseOptionsApplication(Application):
     pick_view = views.PickOptionsView
     quote_view = views.QuoteView
     upload_view = views.UploadView
+    artwork_delete_view = views.ArtworkDeleteView
 
     def get_urls(self):
         urlpatterns = super(BaseOptionsApplication, self).get_urls()
@@ -18,8 +19,10 @@ class BaseOptionsApplication(Application):
             url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
             self.quote_view.as_view(), name='quote'),
             url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
-            self.upload_view.as_view(), name='upload'))
-
+            self.upload_view.as_view(), name='upload'),
+            url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/delete/(?P<file_id>\d+)$',
+            self.artwork_delete_view.as_view(), name='artwork-delete')
+        )
 
         return self.post_process_urls(urlpatterns)
 

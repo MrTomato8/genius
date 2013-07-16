@@ -1,22 +1,16 @@
 from django.shortcuts import render
-from django.views.generic import View, TemplateView
+from django.views.generic import View
 from django.db import models
 from django.core.urlresolvers import reverse
-from apps.options.models import OptionPickerGroup
-from apps.options.utils import available_pickers, available_choices
-from apps.options.utils import custom_size_chosen, discrete_pricing
-from apps.options.utils import available_quantities, trade_user
+from apps.options.models import OptionPickerGroup, ArtworkItem
+from apps.options import utils
 from apps.options.forms import picker_form_factory
 from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm
 from django.http import HttpResponseRedirect
-from apps.options.models import OptionChoice
-from apps.pricelist.utils import pick_price, MatchingPriceNotFound
 from apps.options.session import OptionsSessionMixin
-from django.conf import settings
 from collections import OrderedDict
-
-
-from apps.options.calc import OptionsCalculator, OptionsCalculatorError
+from apps.options.calc import OptionsCalculator
+from apps.options.forms import ArtworkDeleteForm, ArtworkUploadForm
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
@@ -32,15 +26,18 @@ class PickOptionsView(OptionsSessionMixin, View):
         product = Product.objects.get(pk=kwargs['pk'])
 
         if not self.session.valid(product):
-            self.session.reset_choices(product)
+            self.session.reset_product(product)
+            self.session.reset_choices()
+            self.session.reset_quantity()
+            self.session.reset_custom_size()
 
         groups = []
         for group in OptionPickerGroup.objects.all():
 
             pickers = []
-            for picker in available_pickers(product, group):
+            for picker in utils.available_pickers(product, group):
 
-                a_choices = available_choices(product, picker)
+                a_choices = utils.available_choices(product, picker)
                 if a_choices:
                     OptionPickerForm = picker_form_factory(product,
                                                            picker,
@@ -72,16 +69,23 @@ class PickOptionsView(OptionsSessionMixin, View):
 
         product = Product.objects.get(pk=kwargs['pk'])
 
-        self.session.reset_choices(product)
+        self.session.reset_product(product)
+        self.session.reset_choices()
+        self.session.reset_quantity()
+        self.session.reset_custom_size()
+
         allvalid = True
 
         groups = []
+        # Cache collected OptionChoice objects for quantity field pre-fill
+        choices = []
+
         for group in OptionPickerGroup.objects.all():
 
             pickers = []
-            for picker in available_pickers(product, group):
+            for picker in utils.available_pickers(product, group):
 
-                a_choices = available_choices(product, picker)
+                a_choices = utils.available_choices(product, picker)
                 if a_choices:
                     OptionPickerForm = picker_form_factory(product,
                                                            picker,
@@ -93,6 +97,7 @@ class PickOptionsView(OptionsSessionMixin, View):
                     allvalid = allvalid and opform.is_valid()
                     if opform.is_valid():
                         s_choices[code] = opform.cleaned_data[code].pk
+                        choices.append(opform.cleaned_data[code])
                         self.session.set('choices', s_choices)
                     else:
                         if opform.data.get(code, None) is None:
@@ -144,6 +149,7 @@ class PickOptionsView(OptionsSessionMixin, View):
             errors.append('Please review your selections.')
 
         if allvalid:
+            self.session.reset_quantity(utils.min_order(product, choices))
             return HttpResponseRedirect(reverse('options:quote', kwargs=kwargs))
 
         return render(request, self.template_name, {
@@ -165,10 +171,26 @@ class QuoteView(OptionsSessionMixin, View):
 
         choices = self.session.get_choices()
 
-        prices = available_quantities(product, choices)
+        calc = OptionsCalculator(product)
 
-        calc_form = QuoteCalcForm()
-        custom_size_form = QuoteCustomSizeForm()
+        dp = utils.discrete_pricing(product)
+
+        custom_size = self.session.get('custom_size', {'width': 0, 'height': 0})
+
+        if dp:
+            quantity = None
+        else:
+            quantity = self.session.get_quantity()
+
+        prices = calc.calculate_cost(
+            choices,
+            quantity,
+            width=custom_size['width'],
+            height=custom_size['height'])
+
+        calc_form = QuoteCalcForm(initial={'quantity': quantity})
+        custom_size_form = QuoteCustomSizeForm(
+            initial=self.session.get('custom_size', {}))
 
         return render(request, self.template_name, {
             'product': product,
@@ -176,9 +198,10 @@ class QuoteView(OptionsSessionMixin, View):
             'params': kwargs,
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
-            'custom_size': custom_size_chosen(choices),
-            'prices': OrderedDict(sorted(prices.items(), key=lambda t: t[0])),
-            'discrete_pricing': discrete_pricing(product),
+            'custom_size': utils.custom_size_chosen(choices),
+            'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
+            'discrete_pricing': utils.discrete_pricing(product),
+            'trade_user': utils.trade_user(request.user),
 
         })
 
@@ -193,6 +216,8 @@ class QuoteView(OptionsSessionMixin, View):
 
         choices = self.session.get_choices()
 
+        min_order = utils.min_order(product, choices)
+
         calc = OptionsCalculator(product)
 
         custom_size_form = QuoteCustomSizeForm(request.POST)
@@ -200,20 +225,26 @@ class QuoteView(OptionsSessionMixin, View):
             width = custom_size_form.cleaned_data['width']
             height = custom_size_form.cleaned_data['height']
         else:
+            self.session.reset_custom_size()
             width = 0
             height = 0
 
         self.session.set('custom_size', {'width': width, 'height': height})
 
-        dp = discrete_pricing(product)
+        dp = utils.discrete_pricing(product)
         calc_form = QuoteCalcForm(request.POST)
 
         if calc_form.is_valid():
+
             self.session.set('quantity', calc_form.cleaned_data['quantity'])
+
             if dp:
                 quantity = None
             else:
                 quantity = calc_form.cleaned_data['quantity']
+                if quantity < min_order:
+                    errors.append('Minimum order quantity for this '
+                                  'option set is {0}'.format(min_order))
             prices = calc.calculate_cost(
                 choices,
                 quantity,
@@ -221,8 +252,8 @@ class QuoteView(OptionsSessionMixin, View):
                 height=height)
 
         else:
-            prices = available_quantities(product, choices)
-            self.session.set('quantity', 0)
+            prices = utils.available_quantities(product, choices)
+            self.session.reset_quantity()
 
         if len(prices) == 0:
             errors.append('No prices found')
@@ -233,15 +264,67 @@ class QuoteView(OptionsSessionMixin, View):
             'params': kwargs,
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
-            'custom_size': custom_size_chosen(choices),
-            'prices': OrderedDict(sorted(prices.items(), key=lambda t: t[0])),
+            'custom_size': utils.custom_size_chosen(choices),
+            'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
             'calculated_price': calculated_price,
             'errors': errors,
             'discrete_pricing': dp,
-            'trade_user': trade_user(request.user),
+            'trade_user': utils.trade_user(request.user),
 
         })
 
 
-class UploadView(OptionsSessionMixin, TemplateView):
+class ArtworkDeleteView(View):
+    def post(self, request, *args, **kwargs):
+        form = ArtworkDeleteForm(request.POST)
+        if form.is_valid():
+            ArtworkItem.objects.filter(
+                user=request.user, pk=kwargs['file_id']).delete()
+        return HttpResponseRedirect(
+            reverse('options:upload',
+                    kwargs={'product_slug': kwargs['product_slug'],
+                            'pk': kwargs['pk']}))
+
+
+class UploadView(OptionsSessionMixin, View):
     template_name = 'options/upload.html'
+
+    # TODO: Require authenticated user for all methods
+
+    def get_items(self, user):
+        items = []
+        files = ArtworkItem.objects.filter(user=user)
+        for file in files:
+            if file.available:
+                items.append({'file': file,
+                              'form': ArtworkDeleteForm()})
+        return items
+
+    def get(self, request, *args, **kwargs):
+        items = self.get_items(request.user)
+        uploadform = ArtworkUploadForm()
+        return render(request, self.template_name, {
+            'params': kwargs,
+            'items': items,
+            'uploadform': uploadform,
+        })
+
+    def post(self, request, *args, **kwargs):
+        items = self.get_items(request.user)
+        item = ArtworkItem()
+        item.user = request.user
+        uploadform = ArtworkUploadForm(
+            request.POST, request.FILES, instance=item)
+
+        if uploadform.is_valid():
+            uploadform.save()
+            return HttpResponseRedirect(
+                reverse('options:upload',
+                        kwargs={'product_slug': kwargs['product_slug'],
+                                'pk': kwargs['pk']}))
+
+        return render(request, self.template_name, {
+            'params': kwargs,
+            'items': items,
+            'uploadform': uploadform,
+        })

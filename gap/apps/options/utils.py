@@ -2,6 +2,8 @@ from apps.pricelist.models import Price, OptionChoice
 from apps.options.models import OptionPicker
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.db.models import Min
+
 
 def available_choices(product, picker):
     return OptionChoice.objects.filter(
@@ -56,3 +58,13 @@ def trade_user(user):
         return False
 
     return group in user.groups.all()
+
+
+def min_order(product, choices):
+
+    prices = Price.objects.filter(product=product)
+
+    for choice in choices:
+        prices = prices.filter(option_choices=choice)
+
+    return prices.aggregate(Min('min_order'))['min_order__min']

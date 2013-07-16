@@ -1,4 +1,4 @@
-from apps.options.models import OptionPicker
+from apps.options.models import OptionPicker, ArtworkItem
 from django import forms
 
 
@@ -28,9 +28,19 @@ def picker_form_factory(product, picker, choices):
 
 
 class QuoteCalcForm(forms.Form):
-    quantity = forms.DecimalField()
+    quantity = forms.IntegerField()
 
 
 class QuoteCustomSizeForm(forms.Form):
     width = forms.DecimalField()
     height = forms.DecimalField()
+
+
+class ArtworkDeleteForm(forms.Form):
+    pass
+
+
+class ArtworkUploadForm(forms.ModelForm):
+    class Meta:
+        model = ArtworkItem
+        fields = ['image']

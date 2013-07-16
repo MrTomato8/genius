@@ -1,5 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
+import os
+from django.dispatch import receiver
 
 Option = models.get_model('catalogue', 'Option')
 
@@ -80,6 +83,52 @@ class OptionPicker(models.Model):
         ordering = ['group', 'position']
 
 
+class ArtworkItem(models.Model):
+    user = models.ForeignKey(User)
+    image = models.FileField(upload_to='artwork/%Y/%m/%d')
+    uploaded_on = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def available(self):
+        # TODO:Walk through Basket and Order lines here looking for an
+        # Option containing this image
+        return True
+
+    @property
+    def filename(self):
+        return os.path.basename(self.image.name)
+
+    def __unicode__(self):
+        return '{0} uploaded on {1}'.format(str(self.user), str(self.uploaded_on))
+
+
+# These two auto-delete files from filesystem when they are unneeded:
+@receiver(models.signals.post_delete, sender=ArtworkItem)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """Deletes file from filesystem
+    when corresponding `ArtworkItem` object is deleted.
+    """
+    if instance.image:
+        if os.path.isfile(instance.image.path):
+            os.remove(instance.image.path)
+
+
+@receiver(models.signals.pre_save, sender=ArtworkItem)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    """Deletes file from filesystem
+    when corresponding `ArtworkItem` object is changed.
+    """
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = ArtworkItem.objects.get(pk=instance.pk).image
+    except ArtworkItem.DoesNotExist:
+        return False
+
+    new_file = instance.image
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
 
 # quotes here?
