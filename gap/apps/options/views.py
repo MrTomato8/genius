@@ -317,10 +317,7 @@ class UploadView(OptionsSessionMixin, View):
 
         if uploadform.is_valid():
             uploadform.save()
-            return HttpResponseRedirect(
-                reverse('options:upload',
-                        kwargs={'product_slug': kwargs['product_slug'],
-                                'pk': kwargs['pk']}))
+            return HttpResponseRedirect(reverse('options:upload', kwargs=kwargs))
 
         return render(request, self.template_name, {
             'params': kwargs,
