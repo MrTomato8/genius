@@ -41,10 +41,10 @@
     <fieldset title="{{ group.group.name }}">
       <br />
       <div class="grid-8 float-left">
-        <ul>
+        <ul class="options-group">
             {% for picker in group.pickers %}
             <li>
-                <h3>{{ picker.picker.option }}</h3>
+                <h3 class="option-title">&nbsp;&nbsp;{{ picker.picker.option }}</h3>
 
                 <div id="choice-{{ picker.picker.option.code }}-errors" class="option-choice-errors">
                   {% if picker.form.choice_errors %}
@@ -97,6 +97,19 @@ $(document).ready(function(){
     titleTarget: '#title-target',
     description: false,
     validate: false
+  });
+
+  $('.options-group .option-choice').hide();
+  $('.options-group > li:first-child').find('.option-choice').show();
+  $('.options-group .option-title').addClass('icon-arrow-up');
+  $('.options-group > li:first-child').find('.option-title').removeClass('icon-arrow-up').addClass('icon-arrow-down');
+
+  $('.option-title').click(function(){
+    $(this).parent().parent().find('.option-choice').hide('slow');
+    $(this).parent().find('.option-choice').show('slow');
+
+    $(this).parent().parent().find('.option-title').removeClass('icon-arrow-down').addClass('icon-arrow-up');
+    $(this).parent().find('.option-title').removeClass('icon-arrow-up').addClass('icon-arrow-down');
   });
 });
 </script>

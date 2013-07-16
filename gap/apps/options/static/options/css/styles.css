@@ -26,3 +26,5 @@
 .upload-items ul li { font-size: 16px;}
 
 .upload-form { padding-top: 24px;}
+.option-title {cursor: pointer; }
+.option-title:hover {color: #ec1978; }
