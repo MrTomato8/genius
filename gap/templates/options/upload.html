@@ -21,8 +21,29 @@
 {% endblock %}
 
 {% block content %}
-<div id="title-target" class="center-block clearfix"></div>
-<div class="clearfix stepy-centering">
-File Upload
+<div class="clearfix center-block">
+{% if items %}
+<h2>Uploaded:</h2>
+<div class="upload-items">
+  <ul>
+    {% for item in items %}
+    <li>
+      <form id="del-{{ item.file.pk }}" method="POST" action="{%url 'options:artwork-delete' pk=params.pk product_slug=params.product_slug file_id=item.file.pk %}">{% csrf_token %}
+        <input value="delete" type="submit" class="button"/> {{ item.file.filename }}
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
 </div>
+{% else %}
+<h2>No files uploaded yet</h2>
+{% endif %}
+
+<div class="upload-form">
+  <form id="artworkuploadform" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    {{ uploadform.image }}
+  <input value="Upload" type="submit" class="button"/>
+  </form>
+</div>
+
 {% endblock %}

@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import View, TemplateView
+from django.views.generic import View
 from django.db import models
 from django.core.urlresolvers import reverse
-from apps.options.models import OptionPickerGroup
+from apps.options.models import OptionPickerGroup, ArtworkItem
 from apps.options import utils
 from apps.options.forms import picker_form_factory
 from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm
@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from apps.options.session import OptionsSessionMixin
 from collections import OrderedDict
 from apps.options.calc import OptionsCalculator
+from apps.options.forms import ArtworkDeleteForm, ArtworkUploadForm
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
@@ -273,5 +274,57 @@ class QuoteView(OptionsSessionMixin, View):
         })
 
 
-class UploadView(OptionsSessionMixin, TemplateView):
+class ArtworkDeleteView(View):
+    def post(self, request, *args, **kwargs):
+        form = ArtworkDeleteForm(request.POST)
+        if form.is_valid():
+            ArtworkItem.objects.filter(
+                user=request.user, pk=kwargs['file_id']).delete()
+        return HttpResponseRedirect(
+            reverse('options:upload',
+                    kwargs={'product_slug': kwargs['product_slug'],
+                            'pk': kwargs['pk']}))
+
+
+class UploadView(OptionsSessionMixin, View):
     template_name = 'options/upload.html'
+
+    # TODO: Require authenticated user for all methods
+
+    def get_items(self, user):
+        items = []
+        files = ArtworkItem.objects.filter(user=user)
+        for file in files:
+            if file.available:
+                items.append({'file': file,
+                              'form': ArtworkDeleteForm()})
+        return items
+
+    def get(self, request, *args, **kwargs):
+        items = self.get_items(request.user)
+        uploadform = ArtworkUploadForm()
+        return render(request, self.template_name, {
+            'params': kwargs,
+            'items': items,
+            'uploadform': uploadform,
+        })
+
+    def post(self, request, *args, **kwargs):
+        items = self.get_items(request.user)
+        item = ArtworkItem()
+        item.user = request.user
+        uploadform = ArtworkUploadForm(
+            request.POST, request.FILES, instance=item)
+
+        if uploadform.is_valid():
+            uploadform.save()
+            return HttpResponseRedirect(
+                reverse('options:upload',
+                        kwargs={'product_slug': kwargs['product_slug'],
+                                'pk': kwargs['pk']}))
+
+        return render(request, self.template_name, {
+            'params': kwargs,
+            'items': items,
+            'uploadform': uploadform,
+        })

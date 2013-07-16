@@ -1,4 +1,4 @@
-from apps.options.models import OptionPicker
+from apps.options.models import OptionPicker, ArtworkItem
 from django import forms
 
 
@@ -34,3 +34,13 @@ class QuoteCalcForm(forms.Form):
 class QuoteCustomSizeForm(forms.Form):
     width = forms.DecimalField()
     height = forms.DecimalField()
+
+
+class ArtworkDeleteForm(forms.Form):
+    pass
+
+
+class ArtworkUploadForm(forms.ModelForm):
+    class Meta:
+        model = ArtworkItem
+        fields = ['image']
