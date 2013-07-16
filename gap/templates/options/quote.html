@@ -23,8 +23,6 @@
 {% block content %}
 <div class="clearfix center-block">
 
-  <form id="getquote" method="POST">{% csrf_token %}
-
   <div class="grid-4 float-left choice-list">
   <h3>{{ product }}</h3>
   <ul>
@@ -33,74 +31,92 @@
   {% endfor %}
   </ul>
   </div>
+  <form id="getquote" method="POST">{% csrf_token %}
+    <div class="grid-4 float-left price-calculator">
+      <table>
+        <tr>
+          <th style="width: 160px;">Quantity</th>
+          <th>
+            {% if trade_user %}
+            Trade Price
+            {% else %}
+            Price
+            {% endif %}
+          </th>
+        </tr>
+        {% if discrete_pricing %}
+        {% for qty, price in prices.items %}
+        <tr>
+          <td><input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" 
+          {% ifequal calc_form.quantity.data|slugify qty|slugify %}
+          checked="checked"
+          {% endifequal %} />
+          <label for="quantity_{{ qty }}">{{ qty|floatformat }}</label></td>
+          <td>
+            {% if trade_user %}
+            {{ price.tpl_price_incl_tax|floatformat }}
+            {% else %}
+            {{ price.rpl_price_incl_tax|floatformat }}
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        {% with prices.values|first as price %}
+        <tr>
+          <td>{{ calc_form.quantity }}</td>
+          <td>
+            {% if trade_user %}
+            {{ price.tpl_price_incl_tax|floatformat }}
+            {% else %}
+            {{ price.rpl_price_incl_tax|floatformat }}
+            {% endif %}
+          </td>
+        </tr>
+        {% endwith %}
+        {% endif %}
+      </table>
 
-  <div class="grid-7 float-left price-calculator">
-
-    <table>
-      <tr>
-        <th style="width: 160px;">Quantity</th>
-        <th>
-          {% if trade_user %}
-          Trade Price
-          {% else %}
-          Price
-          {% endif %}
-        </th>
-      </tr>
-      {% if discrete_pricing %}
-      {% for qty, price in prices.items %}
-      <tr>
-        <td><input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" 
-        {% ifequal calc_form.quantity.data|slugify qty|slugify %}
-        checked="checked"
-        {% endifequal %} />
-        <label for="quantity_{{ qty }}">{{ qty|floatformat }}</label></td>
-        <td>
-          {% if trade_user %}
-          {{ price.tpl_price_incl_tax|floatformat }}
-          {% else %}
-          {{ price.rpl_price_incl_tax|floatformat }}
-          {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-      {% else %}
-      {% with prices.values|first as price %}
-      <tr>
-        <td>{{ calc_form.quantity }}</td>
-        <td>
-          {% if trade_user %}
-          {{ price.tpl_price_incl_tax|floatformat }}
-          {% else %}
-          {{ price.rpl_price_incl_tax|floatformat }}
-          {% endif %}
-        </td>
-      </tr>
-      {% endwith %}
+      {% if custom_size %}
+      <div class="custom_size">
+        <h3>Custom Size:</h3>
+        <div class="custom-size-columns">
+          <div>
+            {{ custom_size_form.width.errors }}
+            <label for="width">Width:</label><br />
+            {{ custom_size_form.width }}
+          </div>
+          <div>
+            {{ custom_size_form.height.errors }}
+            <label for="height">Height:</label><br />
+            {{ custom_size_form.height }}
+          </div>
+        </div>
+      </div>
       {% endif %}
-    </table>
 
-    {% if custom_size %}
-    <div class="custom_size">
-      <h3>Custom Size:</h3>
-        {{ custom_size_form }}
-    </div>
-    {% endif %}
+      <div id="form-errors" class="quote-errors">
+        {% if errors %}
+        <ul>
+        {% for error in errors %}
+        <li><strong>{{ error }}</strong></li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
 
+      </div>
 
-    <div id="form-errors" class="quote-errors">
-      {% if errors %}
-      <ul>
-      {% for error in errors %}
-      <li><strong>{{ error }}</strong></li>
-      {% endfor %}
-      </ul>
-      {% endif %}
+    <div class="grid-2 float-left options-next">
+      <a class="finish button" href="{%url 'options:upload' pk=params.pk product_slug=params.product_slug %}">Next &gt;</a>
     </div>
 
-  <input value="Calculate" type="submit" class="button"/>
-  <a class="button" href="{%url 'options:upload' pk=params.pk product_slug=params.product_slug %}">Next</a>
-  </div>
+      <div class="grid-7 float-left options-calculate">
+        <input value="Calculate" type="submit" class="button"/>
+      </div>
+    
   </form>
+
+
 </div>
 {% endblock %}
