@@ -6,6 +6,19 @@
 {% load sorting_tags %}
 {% load i18n %}
 
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+            <span class="divider">/</span>
+        </li>
+        <li>
+            <a href="{% url 'job-list' %}">{% trans "Jobs" %}</a>
+            <span class="divider">/</span>
+        </li>
+        <li class="active">Job</li>
+    </ul>
+{% endblock %}
 
 {% block dashboard_content %}
 <div class="row-fluid">

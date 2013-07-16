@@ -6,6 +6,19 @@
 {% load sorting_tags %}
 {% load i18n %}
 
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+            <span class="divider">/</span>
+        </li>
+        <li>
+            <a href="{% url 'job-list' %}">{% trans "Jobs" %}</a>
+            <span class="divider">/</span>
+        </li>
+        <li class="active">{{ task.name }}</li>
+    </ul>
+{% endblock %}
 
 {% block dashboard_content %}
 <div class="row-fluid actions">
@@ -48,7 +61,26 @@
             <b>Description:</b>
             <div class="span12">{{ task.description }}</div>
         </div>
-    
+    </div>
+
+    <div class="span3 follow well">
+        <h2>Form to follow changes</h2>
+        {% if user in followers %}
+            <p>You are following this task</p>
+            <form action="{% url 'unfollow-task' task.job.id task.id %}" method="post">{% csrf_token %}
+                <button type="submit" class="btn btn-primary">Unfollow</button>
+            </form>
+        {% else %}
+        <form action="{% url 'follow-task' task.job.id task.id %}" method="post">{% csrf_token %}
+            <button type="submit" class="btn btn-primary">Follow</button>
+        </form>
+        {% endif %}
+        <h2>Followers</h2>
+        <ul>
+            {% for follower in followers %}
+                <li>{{ follower }}</li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 {% endblock dashboard_content %}

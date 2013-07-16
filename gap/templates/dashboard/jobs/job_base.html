@@ -17,7 +17,7 @@
 html, body, .page-content, .content, .dashboard{
     height: 100%;
 }
-div.job, div.order {
+div.job, div.order, div.follow {
     background: #fff;
     border: 1px solid #eee;
     padding: 10px;
@@ -42,11 +42,11 @@ td.task-list-column, th.task-list-column{
 .task-detail p{
     margin-left: 10px;
 }
-.task-desciption{
-    min-height: 300px;
-}
 .task-detail span{
     margin-left: 10px;
+}
+.task-desciption{
+    min-height: 300px;
 }
 .task-actions{
     padding-top: 10px;
@@ -71,7 +71,7 @@ td.task-list-column, th.task-list-column{
             <span class="divider">/</span>
         </li>
         <li>
-            <a href="{% url 'order-list' %}">{% trans "Jobs" %}</a>
+            <a href="{% url 'job-list' %}">{% trans "Jobs" %}</a>
             <span class="divider">/</span>
         </li>
         <li class="active">{{ staff_breadcrumb }}</li>

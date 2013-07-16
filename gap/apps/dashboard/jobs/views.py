@@ -52,6 +52,26 @@ class JobListView(ListView):
     model = Job
     template_name = 'dashboard/jobs/job_list.html'
 
+    def get_context_data(self, **kwargs):
+        ctx = super(JobListView, self).get_context_data(**kwargs)
+        user = self.request.user
+        groups = user.groups.values_list('name', flat=True)
+
+        ctx['staff_breadcrumb'] = self.get_breadcrumb(user, groups)
+        return ctx
+
+    def get_breadcrumb(self, user, groups):
+        if user.is_superuser:
+            return "All Teams"
+
+        if GROUP_LARGE in groups:
+            return 'Large Format Digital Team'
+        elif GROUP_SMALL in groups:
+            return ' Small Format Digital Team'
+        elif GROUP_EXHIBITION in groups:
+            return 'Exhibition Format Digital Team'
+        return ''
+
 
 class JobTaskListView(DetailView):
     model = Job
@@ -184,6 +204,7 @@ class TaskDetailView(DetailView):
         job_tasks = list(job.task_set.all())
         task_index = job_tasks.index(self.object)
         ctx['job'] = job
+        ctx['followers'] = self.object.followers.all()
         
         # using try here will not work, list supports negative index
         if task_index > 0:
@@ -245,3 +266,29 @@ class StageCreateView(CreateView):
 class StageListView(ListView):
     model = Stage
     template_name = 'dashboard/jobs/stage_list.html'
+
+
+class FollowTaskView(DetailView):
+    model = Job
+    success_message = "You are following this task"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        task = self.object.task_set.get(id=self.kwargs['task_id'])
+        task.followers.add(request.user)
+        messages.success(request, self.success_message)
+        return HttpResponseRedirect(reverse('task-detail', kwargs={'pk': task.id, 'job_id': self.object.id}))
+
+
+
+class UnfollowTaskView(DetailView):
+    model = Job
+    success_message = " Unfollowed this task successfully"
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        task = self.object.task_set.get(id=self.kwargs['task_id'])
+        task.followers.remove(request.user)
+        messages.success(request, self.success_message)
+        return HttpResponseRedirect(reverse('task-detail', kwargs={'pk': task.id, 'job_id': self.object.id}))
+
