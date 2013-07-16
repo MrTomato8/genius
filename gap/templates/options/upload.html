@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block extrastyles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "options/css/styles.css" %}" />
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="set-size-grid clearfix">
+  <div class="wizard-progress">
+    <ul>
+      <li><a href="{%url 'options:pick' pk=params.pk product_slug=params.product_slug %}">Select Options</a></li>
+      <li><a href="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">Get Quote</a></li>
+      <li><strong>Upload Files</strong></li>
+    </ul>
+  </div>
+  <h2>Upload Files</h2>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="title-target" class="center-block clearfix"></div>
+<div class="clearfix stepy-centering">
+File Upload
+</div>
+{% endblock %}

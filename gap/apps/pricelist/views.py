@@ -52,7 +52,8 @@ def list(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         prices = paginator.page(paginator.num_pages)
 
-    headers = ['Product', 'TPL Price', 'RPL Price', 'Quantity']
+    headers = ['Product', 'TPL Price', 'RPL Price', 'Quantity',
+               'Minimum Order']
     for option in Option.objects.all():
         headers.append(option.name)
 
@@ -63,11 +64,12 @@ def list(request):
         row.append(price.tpl_price)
         row.append(price.rpl_price)
         row.append(price.quantity)
+        row.append(price.min_order)
         for option in Option.objects.all():
             choices = []
             for choice in price.option_choices.filter(option=option):
                 choices.append(choice.caption)
-            row.append(', '.join(choices))
+            row.append(' / '.join(choices))
         table.append(row)
 
     return render(request, 'pricelist/list.html', {

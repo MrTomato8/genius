@@ -268,5 +268,7 @@ OSCAR_DASHBOARD_NAVIGATION += [
 ]
 
 MISSING_OPTIONCHOICE_THUMB_URL = 'options/img/missing-choice-thumbnail.png'
+OPTIONCHOICE_CUSTOMSIZE = ('size', 'custom')
+TRADE_GROUP_NAME = 'Trade'
 
 from local_settings import *

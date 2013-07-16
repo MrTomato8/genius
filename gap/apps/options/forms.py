@@ -14,6 +14,7 @@ def picker_form_factory(product, picker, choices):
         widget = forms.widgets.Select
 
     properties = {
+        'choice_errors': [],
         picker.option.code: OptionChoiceField(
             widget=widget,
             empty_label=None,
@@ -27,9 +28,9 @@ def picker_form_factory(product, picker, choices):
 
 
 class QuoteCalcForm(forms.Form):
-    quantity = forms.IntegerField()
+    quantity = forms.DecimalField()
 
 
 class QuoteCustomSizeForm(forms.Form):
-    width = forms.IntegerField()
-    height = forms.IntegerField()
+    width = forms.DecimalField()
+    height = forms.DecimalField()

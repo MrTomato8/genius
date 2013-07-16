@@ -1,5 +1,4 @@
 from django.contrib import admin
-from apps.pricelist.models import *
+from apps.pricelist.models import Price
 
-admin.site.register(OptionChoice)
 admin.site.register(Price)
