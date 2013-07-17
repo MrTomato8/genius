@@ -31,8 +31,9 @@
   {% endfor %}
   </ul>
   </div>
-  <form id="getquote" method="POST">{% csrf_token %}
-    <div class="grid-4 float-left price-calculator">
+  
+  <div class="grid-4 float-left price-calculator">
+    <form id="getquote" method="POST">{% csrf_token %}
       <table>
         <tr>
           <th style="width: 160px;">Quantity</th>
@@ -105,18 +106,40 @@
         {% endif %}
       </div>
 
+      <div class="options-calculate">
+        <input value="Get Quote" type="submit" class="button"/>
       </div>
 
-    <div class="grid-2 float-left options-next">
-      <a class="finish button" href="{%url 'options:upload' pk=params.pk product_slug=params.product_slug %}">Next &gt;</a>
-    </div>
+    </form>
+  </div>
 
-      <div class="grid-7 float-left options-calculate">
-        <input value="Calculate" type="submit" class="button"/>
-      </div>
-    
-  </form>
 
+  {% if quote.valid %}
+  <div class="grid-7 float-left options-quote">
+    <h2>
+      {% if trade_user %}
+      &pound;{{ quote.price.tpl_price_incl_tax|floatformat }}
+      {% else %}
+      &pound;{{ quote.price.rpl_price_incl_tax|floatformat }}
+      {% endif %}
+      for
+      {{ quote.quantity }} unit(s) of {{ product }} with following options:</h2>
+    <ul>
+    {% for choice in choices %}
+      <li>{{ choice.option }} {{ choice.caption }}</li>
+    {% endfor %}
+    </ul>
+    {% if custom_size %}
+    Custom size is {{ width }}(mm) x {{ height }}(mm)
+    {% endif %}
+  </div>
+
+  <div class="grid-2 float-left options-next">
+    <form id="next" method="GET" action="{%url 'options:upload' pk=params.pk product_slug=params.product_slug %}">
+      <input value="Proceed" type="submit" class="finish button"/>
+    </form>
+  </div>
+  {% endif %}    
 
 </div>
 {% endblock %}

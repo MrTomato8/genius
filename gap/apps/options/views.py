@@ -108,6 +108,7 @@ class PickOptionsView(OptionsSessionMixin, View):
                         {'picker': picker,
                          'form': opform})
 
+
             if pickers:
                 groups.append({'group': group, 'pickers': pickers})
 
@@ -251,6 +252,18 @@ class QuoteView(OptionsSessionMixin, View):
                 width=width,
                 height=height)
 
+            try:
+                price = prices[calc_form.cleaned_data['quantity']]
+            except KeyError:
+                quote = {'valid': False}
+            else:
+                quote = {'valid': True}
+                quote['price'] = price
+                quote['quantity'] = calc_form.cleaned_data['quantity']
+                quote['width'] = width
+                quote['height'] = height
+
+
         else:
             prices = utils.available_quantities(product, choices)
             self.session.reset_quantity()
@@ -270,6 +283,7 @@ class QuoteView(OptionsSessionMixin, View):
             'errors': errors,
             'discrete_pricing': dp,
             'trade_user': utils.trade_user(request.user),
+            'quote': quote,
 
         })
 
@@ -288,8 +302,6 @@ class ArtworkDeleteView(View):
 
 class UploadView(OptionsSessionMixin, View):
     template_name = 'options/upload.html'
-
-    # TODO: Require authenticated user for all methods
 
     def get_items(self, user):
         items = []
@@ -318,10 +330,7 @@ class UploadView(OptionsSessionMixin, View):
 
         if uploadform.is_valid():
             uploadform.save()
-            return HttpResponseRedirect(
-                reverse('options:upload',
-                        kwargs={'product_slug': kwargs['product_slug'],
-                                'pk': kwargs['pk']}))
+            return HttpResponseRedirect(reverse('options:upload', kwargs=kwargs))
 
         return render(request, self.template_name, {
             'params': kwargs,

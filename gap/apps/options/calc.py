@@ -71,7 +71,7 @@ class BaseOptionsCalculator:
         prices = self.pick_prices(choices, quantity)
 
         for price in prices:
-            result[price.quantity] = {}
+
             rpl_price = price.rpl_price
             tpl_price = price.tpl_price
 
@@ -91,15 +91,17 @@ class BaseOptionsCalculator:
             # For price calculation we need unit price.
 
             if quantity is not None:
+                result[quantity] = {}
 
                 rpl_unit_price = rpl_price / price.quantity
                 tpl_unit_price = tpl_price / price.quantity
 
-                result[price.quantity]['rpl_price_incl_tax'] = (
+                result[quantity]['rpl_price_incl_tax'] = (
                     rpl_unit_price * quantity)
-                result[price.quantity]['tpl_price_incl_tax'] = (
+                result[quantity]['tpl_price_incl_tax'] = (
                     tpl_unit_price * quantity)
             else:
+                result[price.quantity] = {}
                 result[price.quantity]['rpl_price_incl_tax'] = (rpl_price)
                 result[price.quantity]['tpl_price_incl_tax'] = (tpl_price)
 
