@@ -41,14 +41,16 @@
   {% endif %}
   </div>
 
-  <div class="grid-2 float-left options-next">
-    <a class="finish button" href="">Add to basket &gt;</a>
-  </div>
-
   <div class="grid-11 upload-form float-left">
     <form id="artworkuploadform" method="POST" enctype="multipart/form-data">{% csrf_token %}
       {{ uploadform.image }}
     <input value="Upload" type="submit" class="button"/>
+    </form>
+  </div>
+
+  <div class="grid-2 float-left options-next">
+    <form id="next" method="GET" action="">
+      <input value="Add to basket" type="submit" class="finish button"/>
     </form>
   </div>
 

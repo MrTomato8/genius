@@ -252,6 +252,18 @@ class QuoteView(OptionsSessionMixin, View):
                 width=width,
                 height=height)
 
+            try:
+                price = prices[calc_form.cleaned_data['quantity']]
+            except KeyError:
+                quote = {'valid': False}
+            else:
+                quote = {'valid': True}
+                quote['price'] = price
+                quote['quantity'] = calc_form.cleaned_data['quantity']
+                quote['width'] = width
+                quote['height'] = height
+
+
         else:
             prices = utils.available_quantities(product, choices)
             self.session.reset_quantity()
@@ -271,6 +283,7 @@ class QuoteView(OptionsSessionMixin, View):
             'errors': errors,
             'discrete_pricing': dp,
             'trade_user': utils.trade_user(request.user),
+            'quote': quote,
 
         })
 

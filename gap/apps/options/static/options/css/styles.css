@@ -17,6 +17,8 @@
 .quote-errors { color: red;}
 .quote-errors strong { font-size: 12px;}
 
+.options-quote { padding-top: 24px;}
+.options-quote ul { padding-left: 8px;}
 .options-next { padding-top: 24px;}
 .options-calculate { padding-top: 24px;}
 
