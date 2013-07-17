@@ -862,7 +862,7 @@ label.grid-1 {
 	box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.25);
 }
 
-.stepy-navigator { width:90%; margin-left:10px;}
+.stepy-navigator { width:90%; margin-left:10px; margin-top: 10px;}
 
 .centered{ margin:0 auto; text-align:center;}
 

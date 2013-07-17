@@ -28,3 +28,5 @@
 .upload-form { padding-top: 24px;}
 .option-title {cursor: pointer; }
 .option-title:hover {color: #ec1978; }
+.options-group > li{ padding-top: 30px;}
+.options-group > li:first-child{padding-top: 10px;}

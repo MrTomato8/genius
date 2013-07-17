@@ -58,8 +58,8 @@
 
                 {% for field in picker.form.visible_fields %}
                 {% if picker.picker.widget == picker.picker.THUMBNAIL %}
-                <div class="option-choice">
-                  <ul>
+                <div class="option-choice" style="width:350px;">
+                  <ul id="carousel-{{ picker.picker.id }}" class="jcarousel-skin-tango">
                     {% for choice in field.field.queryset %}
                     <li>
                         {{ choice.caption }}<br />
@@ -72,6 +72,9 @@
                     {% endfor %}
                   </ul>
                 </div>
+                <script type="text/javascript">
+                  $('#carousel-{{ picker.picker.id }}').jcarousel();
+                </script>
                 {% endif %}
 
                 {% if picker.picker.widget == picker.picker.DROPDOWN %}
