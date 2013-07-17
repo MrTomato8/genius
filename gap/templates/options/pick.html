@@ -75,6 +75,7 @@
                 <script type="text/javascript">
                 $( document ).ready(function(){
                   $('#carousel-{{ picker.picker.id }}').jcarousel({
+                    vertical: false, 
                     wrap: 'last',
                   });
                 });
@@ -116,8 +117,6 @@ $(document).ready(function(){
 
   $('.option-choice .radio-choice').click(function(){
     $(this).closest('.option-choice').hide('slow');
-    console.log($(this).closest('.option-choice').parent());
-    console.log($(this).closest('.option-choice').parent().next());
     $(this).closest('.option-choice').parent().next().find('.option-choice').show('slow');
   });
 });
