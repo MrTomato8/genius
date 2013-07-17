@@ -28,7 +28,20 @@
 .upload-items ul li { font-size: 16px;}
 
 .upload-form { padding-top: 24px;}
-.option-title {cursor: pointer; }
+.option-title {
+    cursor: pointer; 
+margin-bottom: 10px;
+padding: 7px;
+border: 1px solid #ddd;
+background: #F5F5F5;
+background: -moz-linear-gradient(top, #FAFAFA 0%, #F5F5F5 100%);
+background: -webkit-linear-gradient(top, #FAFAFA 0%, #F5F5F5 100%);
+background: -o-linear-gradient(top, #FAFAFA 0%, #F5F5F5 100%);
+background: linear-gradient(to bottom, #FAFAFA 0%, #F5F5F5 100%);
+border-radius: 5px;
+box-shadow: 0 1px 0 #fff inset;
+text-shadow: 0 1px 0 #fff;
+}
 .option-title:hover {color: #ec1978; }
-.options-group > li{ padding-top: 30px;}
+.options-group > li{ padding-top: 5px;}
 .options-group > li:first-child{padding-top: 10px;}
