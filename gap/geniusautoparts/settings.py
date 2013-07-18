@@ -156,7 +156,7 @@ INSTALLED_APPS = [
     'apps.pricelist',
     'apps.options'
 ]
-INSTALLED_APPS = INSTALLED_APPS + get_core_apps(['apps.order'])
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps(['apps.order', 'apps.basket'])
 
 ACCOUNTS_SOURCE_NAME = 'Main Account'
 ACCOUNTS_REDEMPTIONS_NAME = 'Sales Account'
