@@ -90,21 +90,28 @@ class BaseOptionsCalculator:
             # units (price.quantity).
             # For price calculation we need unit price.
 
+            rpl_unit_price = rpl_price / price.quantity
+            tpl_unit_price = tpl_price / price.quantity
+
             if quantity is not None:
                 result[quantity] = {}
-
-                rpl_unit_price = rpl_price / price.quantity
-                tpl_unit_price = tpl_price / price.quantity
 
                 result[quantity]['rpl_price_incl_tax'] = (
                     rpl_unit_price * quantity)
                 result[quantity]['tpl_price_incl_tax'] = (
                     tpl_unit_price * quantity)
+
+                result[quantity]['rpl_unit_price_incl_tax'] = rpl_unit_price
+                result[quantity]['tpl_unit_price_incl_tax'] = tpl_unit_price
             else:
                 result[price.quantity] = {}
+
                 result[price.quantity]['rpl_price_incl_tax'] = (rpl_price)
                 result[price.quantity]['tpl_price_incl_tax'] = (tpl_price)
-
+                result[price.quantity]['rpl_unit_price_incl_tax'] = (
+                    rpl_unit_price)
+                result[price.quantity]['tpl_unit_price_incl_tax'] = (
+                    tpl_unit_price)
 
         return result
 
