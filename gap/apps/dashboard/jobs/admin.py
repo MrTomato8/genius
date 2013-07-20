@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db.models import get_model
 
 
-from .models import Job, Task, Stage
+from .models import Job, Task, Stage, CommonTaskDescription
 
 
 class JobAdmin(admin.ModelAdmin):
@@ -17,3 +17,5 @@ class StageAdmin(admin.ModelAdmin):
 admin.site.register(Job, JobAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Stage, StageAdmin)
+
+admin.site.register(CommonTaskDescription)

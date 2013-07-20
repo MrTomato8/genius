@@ -23,7 +23,16 @@
 
 {% block dashboard_content %}
 <div class="row-fluid">
-    <div class="span6 well job offset3">
+    <div class="span3">
+        <h3>Common Descriptions</h3>
+        {% for desc in common_descriptions %}
+        <p>
+            <input type="radio" class="radio-select">&nbsp;&nbsp;&nbsp;<span class="desc">{{ desc }}</span>
+            <a href="{% url 'delete-common-desc' form.initial.job.id desc.id %}" class="delete-desc" style="color:red; float:right;">x</a>
+        </p>
+        {% endfor %}
+    </div>
+    <div class="span6 well job">
     <form action="." method="post">{% csrf_token%}
         <legend>Task</legend>
     {{ form.as_p }}
@@ -39,5 +48,24 @@
     {{ block.super }}
     $(function() {
         $(".datePicker").datepicker();
+        $('.radio-select').click(function(){
+            $('#id_description').val($(this).parent().find('.desc').html());
+        });
+        $('.delete-desc').click(function(e){
+            e.preventDefault();
+            var that = $(this);
+            var url = that[0].href ;
+            console.log(url);
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function(){
+                    that.parent().hide('slow');
+                },
+            });
+        });
     });
 {% endblock onbodyload %}
