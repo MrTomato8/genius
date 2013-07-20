@@ -312,6 +312,8 @@ class UploadView(OptionsSessionMixin, View):
                               'form': ArtworkDeleteForm()})
         return items
 
+# TODO: get from session and display product, choices, price, ... etc
+
     def get(self, request, *args, **kwargs):
         items = self.get_items(request.user)
         uploadform = ArtworkUploadForm()
