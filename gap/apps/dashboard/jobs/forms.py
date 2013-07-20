@@ -50,6 +50,8 @@ class JobForm(forms.ModelForm):
 class TaskForm(forms.ModelForm):
     formfield_callback = make_custom_datefield
 
+    common_description = forms.BooleanField('Common Description')
+
     def __init__(self, *args, **kwargs):
         forms.ModelForm.__init__(self, *args, **kwargs)
         initial = kwargs.setdefault('initial', {})
@@ -59,10 +61,9 @@ class TaskForm(forms.ModelForm):
             self.fields['stage'].queryset = initial['job'].stage_set.all() or\
                                             self.fields['stage'].queryset
         
-
     class Meta:
         model = Task
-        fields = ('job', 'name', 'stage', 'assigned_to', 'description', 'priority', 'start_date', 'end_date')
+        fields = ('job', 'name', 'stage', 'assigned_to', 'description', 'common_description', 'priority', 'start_date', 'end_date')
 
 class StageForm(forms.ModelForm):
    

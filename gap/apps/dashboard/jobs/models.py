@@ -44,6 +44,13 @@ class Stage(models.Model):
         return self.name
 
 
+class CommonTaskDescription(models.Model):
+    description = models.TextField('Description', null=True, blank=True)
+    user = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return self.description[:30]
+
 def receive_order_placed(sender, order, user, **kwargs):
     stages=Stage.objects.filter(is_default=True)
     job = Job.objects.create(
