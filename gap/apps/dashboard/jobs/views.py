@@ -221,8 +221,13 @@ class TaskDetailView(DetailView):
 class TaskDetailRedirect(RedirectView):
     def get_redirect_url(self, **kwargs):
         job = Job.objects.get(pk=self.kwargs['job_id'])
-        task = Task.objects.filter(job=job)[0]
-        return reverse('task-detail', args=(job.id,task.id))
+        try:
+            task = Task.objects.filter(job=job)[0]
+        except Exception, e:
+            messages.error(self.request, 'You have to create a task first!')
+            return reverse('job-task-list', args=(job.id,))
+        
+        return reverse('task-detail', args=(job.id, task.id))
 
 class NextRedirect(RedirectView):
     def get_redirect_url(self, **kwargs):
