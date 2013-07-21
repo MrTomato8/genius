@@ -21,6 +21,8 @@ class JobDashboardApplication(Application):
 
     task_follow = views.FollowTaskView
     task_unfollow = views.UnfollowTaskView
+
+    delete_common_desc = views.DeleteCommonDesc
     # project_detail = views.ProjectDetailView
     # line_detail = views.ProjectLineItemDetailView
     # line_follow = views.FollowLineView
@@ -52,7 +54,9 @@ class JobDashboardApplication(Application):
             url(r'^(?P<job_id>\d+)/stages/create/$', self.stage_create.as_view(), name='job-stage-create'),
 
             url(r'^stages/create/$', self.stage_create.as_view(), name='stage-create'),
-    		url(r'^stages/$', self.stage_list.as_view(), name='stage-list'),
+            url(r'^stages/$', self.stage_list.as_view(), name='stage-list'),
+
+    		url(r'^(?P<job_id>\d+)/common-desc/(?P<pk>\d+)/delete/$', self.delete_common_desc.as_view(), name='delete-common-desc'),
             
     	)
     	return self.post_process_urls(urlpatterns)

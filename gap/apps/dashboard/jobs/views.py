@@ -2,9 +2,9 @@ from django.db.models.loading import get_model
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, DetailView, UpdateView, CreateView, FormView, RedirectView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, FormView, RedirectView, DeleteView
 
-from .models import Job, Task, Stage
+from .models import Job, Task, Stage, CommonTaskDescription
 from .forms import JobForm, StageForm, TaskForm
 
 
@@ -146,6 +146,12 @@ class TaskCreateView(CreateView):
 
         return '/dashboard/jobs/tasks/'
 
+    def get_context_data(self, **kwargs):
+        ctx = super(TaskCreateView, self).get_context_data(**kwargs)
+        ctx['common_descriptions'] = CommonTaskDescription.objects.filter(user=self.request.user)
+
+        return ctx
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         if 'job_id' in self.kwargs:
@@ -154,6 +160,9 @@ class TaskCreateView(CreateView):
         self.object.creator = self.request.user
         # self.objects.create_default_sategs()
         self.object.save()
+        if form.cleaned_data['common_description']:
+            CommonTaskDescription.objects.create(description=self.object.description, user=self.request.user)
+
         return super(TaskCreateView, self).form_valid(form)
 
     def get_initial(self):
@@ -175,11 +184,20 @@ class TaskUpdateView(UpdateView):
 
         return '/dashboard/jobs/tasks/'
 
+    def get_context_data(self, **kwargs):
+        ctx = super(TaskUpdateView, self).get_context_data(**kwargs)
+        ctx['common_descriptions'] = CommonTaskDescription.objects.filter(user=self.request.user)
+
+        return ctx
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
 
         self.object.creator = self.request.user
         self.object.save()
+        if form.cleaned_data['common_description']:
+            CommonTaskDescription.objects.create(description=self.object.description, user=self.request.user)
+
         return super(TaskUpdateView, self).form_valid(form)
 
     def get_initial(self):
@@ -221,8 +239,13 @@ class TaskDetailView(DetailView):
 class TaskDetailRedirect(RedirectView):
     def get_redirect_url(self, **kwargs):
         job = Job.objects.get(pk=self.kwargs['job_id'])
-        task = Task.objects.filter(job=job)[0]
-        return reverse('task-detail', args=(job.id,task.id))
+        try:
+            task = Task.objects.filter(job=job)[0]
+        except Exception, e:
+            messages.error(self.request, 'You have to create a task first!')
+            return reverse('job-task-list', args=(job.id,))
+        
+        return reverse('task-detail', args=(job.id, task.id))
 
 class NextRedirect(RedirectView):
     def get_redirect_url(self, **kwargs):
@@ -292,3 +315,13 @@ class UnfollowTaskView(DetailView):
         messages.success(request, self.success_message)
         return HttpResponseRedirect(reverse('task-detail', kwargs={'pk': task.id, 'job_id': self.object.id}))
 
+
+
+class DeleteCommonDesc(DeleteView):
+    model = CommonTaskDescription
+
+    def get_success_url(self):
+        if 'job_id' in self.kwargs:
+            return reverse('job-task-create', args=[self.kwargs['job_id']])
+
+        return '/dashboard/jobs/tasks/'

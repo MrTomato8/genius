@@ -6,6 +6,13 @@
 {% load sorting_tags %}
 {% load i18n %}
 
+{% block header %}
+    <div class="page-header">
+        <h1>Create Job</h1>
+        <small> Here you can only create a job or a stage. You can't create both at the same time</small>
+    </div>
+{% endblock header %}
+
 {% block breadcrumbs %}
     <ul class="breadcrumb">
         <li>

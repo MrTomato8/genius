@@ -4,6 +4,11 @@
 {% block extrastyles %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "options/css/styles.css" %}" />
+<style type="text/css">
+.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
+background-color: #f9f9f9;
+}
+</style>
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -24,7 +29,7 @@
 
 <div class="clearfix stepy-centering">
 
-<div id="form-errors" class="grid-8 float-left option-choice-errors">
+<div id="form-errors" class="grid-7 float-left option-choice-errors">
 {% if errors %}
 <ul>
 {% for error in errors %}
@@ -34,13 +39,23 @@
 {% endif %}
 </div>
 
-<form id="pickoptions" method="POST">{% csrf_token %}
+  <table id="selected-choices" class="grid-3 float-right table-striped">
+    <thead>
+      <tr>
+        <th>Selected Choices</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+<form id="pickoptions" method="POST" class="grid-7 float-left">{% csrf_token %}
 
     {% for group in groups %}
 
     <fieldset title="{{ group.group.name }}">
       <br />
-      <div class="grid-8 float-left">
+      <div class="grid-7 float-left">
         <ul class="options-group">
             {% for picker in group.pickers %}
             <li>
@@ -58,8 +73,8 @@
 
                 {% for field in picker.form.visible_fields %}
                 {% if picker.picker.widget == picker.picker.THUMBNAIL %}
-                <div class="option-choice">
-                  <ul id="carousel-{{ picker.picker.id }}" class="jcarousel-skin-tango">
+                <div class="option-choice grid-7">
+                  <ul id="carousel-{{ picker.picker.id }}" class="jcarousel-skin-tango grid-7">
                     {% for choice in field.field.queryset %}
                     <li>
                         {{ choice.caption }}<br />
@@ -77,6 +92,7 @@
                   $('#carousel-{{ picker.picker.id }}').jcarousel({
                     vertical: false, 
                     wrap: 'last',
+                    itemFallbackDimension: 376,
                   });
                 });
                 </script>
@@ -95,6 +111,7 @@
       </div>
     </fieldset>
     {% endfor %}
+
     <input value="Get Quote" type="submit" class="finish button"/>
 </form>
 </div>
@@ -118,6 +135,18 @@ $(document).ready(function(){
   $('.option-choice .radio-choice').click(function(){
     $(this).closest('.option-choice').hide('slow');
     $(this).closest('.option-choice').parent().next().find('.option-choice').show('slow');
+    $('#selected-choices tbody').html('');
+    $('.option-choice .radio-choice:checked').each(function(a,b){
+      $('#selected-choices tbody').append('<tr><td>' + $(b).closest('li').html()  + '</td></tr>')  
+    });
+  });
+
+  $('.jcarousel-skin-tango').hover(function(){
+    $(this).find('.jcarousel-prev-horizontal').css({'background-position': '0 -50px'});
+    $(this).find('.jcarousel-next-horizontal').css({'background-position': '0 0px'});
+  }, function(){
+    $(this).find('.jcarousel-prev-horizontal').css({'background-position': '0 50px'});
+    $(this).find('.jcarousel-next-horizontal').css({'background-position': '0 50px'});
   });
 });
 </script>
