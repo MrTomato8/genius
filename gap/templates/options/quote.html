@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load url from future %}
 {% load staticfiles %}
+{% load currency_filters %}
 
 {% block extrastyles %}
 {{ block.super }}
@@ -118,9 +119,9 @@
   <div class="grid-7 float-left options-quote">
     <h2>
       {% if trade_user %}
-      &pound;{{ quote.price.tpl_price_incl_tax|floatformat }}
+      {{ quote.price.tpl_price_incl_tax|currency }}
       {% else %}
-      &pound;{{ quote.price.rpl_price_incl_tax|floatformat }}
+      {{ quote.price.rpl_price_incl_tax|currency }}
       {% endif %}
       for
       {{ quote.quantity }} unit(s) of {{ product }} with following options:</h2>

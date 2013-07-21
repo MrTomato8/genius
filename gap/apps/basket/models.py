@@ -6,6 +6,13 @@ from oscar.apps.basket.abstract_models import (
 from apps.options.models import OptionChoice, ArtworkItem
 from apps.options.calc import OptionsCalculator
 import json
+from decimal import Decimal
+from oscar.templatetags.currency_filters import currency
+from django.utils.translation import ugettext as _
+
+
+class PriceNotAvailable(Exception):
+    pass
 
 
 class Line(AbstractLine):
@@ -37,7 +44,8 @@ class Line(AbstractLine):
         for attr in self.attributes.all():
             # May be a lot of excetpions here, but it will mean problems in
             # another parts of the code or hacking attempt.
-            choices.append(OptionChoice.objects.get(code=attr.value_code))
+            choices.append(OptionChoice.objects.get(option=attr.option,
+                                                    code=attr.value_code))
             try:
                 data = json.loads(attr.data)
             except ValueError:
@@ -45,21 +53,63 @@ class Line(AbstractLine):
             extra_data.update(data)
         return choices, extra_data
 
-    def _get_stockrecord_property(self, property):
-        if self.stockrecord_source == PRODUCT_STOCKRECORD:
-            return super(Line, self)._get_stockrecord_property(property)
-        if self.stockrecord_source == OPTIONS_CALCULATOR:
-            choices, extra_data = self.get_option_choices()
-            calc = OptionsCalculator(self.product)
-            prices = calc.calculate_cost(choices, self.quantity, **extra_data)
+    def _get_price_from_pricelist(self):
+        choices, extra_data = self.get_option_choices()
+        calc = OptionsCalculator(self.product)
+        prices = calc.calculate_cost(choices, self.quantity, **extra_data)
+        try:
+            return prices[self.quantity]
+        except KeyError:
+            raise PriceNotAvailable
+
+    def get_warning(self):
+        if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
+            super(Line, self).get_warning()
+        if self.stockrecord_source == self.OPTIONS_CALCULATOR:
+            if not self.price_incl_tax:
+                return
             try:
-                price = prices[self.quantity]
-            except KeyError:
+                price = self._get_price_from_pricelist()
+            except PriceNotAvailable:
+                msg = u"'%(product)s' is no longer available"
+                return _(msg) % {'product': self.product.get_title()}
+            else:
+                if self.pricing_group == self.RETAIL:
+                    prefix = 'rpl_'
+                if self.pricing_group == self.TRADE:
+                    prefix = 'tpl_'
+
+                current_price_incl_tax = price[prefix + 'unit_price_incl_tax']
+
+                if current_price_incl_tax > self.price_incl_tax:
+                    msg = ("The price of '%(product)s' has increased from "
+                           "%(old_price)s to %(new_price)s since you added it "
+                           "to your basket")
+                    return _(msg) % {
+                        'product': self.product.get_title(),
+                        'old_price': currency(self.price_incl_tax),
+                        'new_price': currency(current_price_incl_tax)}
+                if current_price_incl_tax < self.price_incl_tax:
+                    msg = ("The price of '%(product)s' has decreased from "
+                           "%(old_price)s to %(new_price)s since you added it "
+                           "to your basket")
+                    return _(msg) % {
+                        'product': self.product.get_title(),
+                        'old_price': currency(self.price_incl_tax),
+                        'new_price': currency(current_price_incl_tax)}
+
+    def _get_stockrecord_property(self, property):
+        if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
+            return super(Line, self)._get_stockrecord_property(property)
+        if self.stockrecord_source == self.OPTIONS_CALCULATOR:
+            try:
+                price = self._get_price_from_pricelist()
+            except PriceNotAvailable:
                 return Decimal('0.00')
             else:
-                if self.pricing_group == RETAIL:
+                if self.pricing_group == self.RETAIL:
                     prefix = 'rpl_'
-                if self.pricing_group == TRADE:
+                if self.pricing_group == self.TRADE:
                     prefix = 'tpl_'
 
                 if property == 'price_incl_tax':
@@ -91,8 +141,8 @@ class Basket(AbstractBasket):
                             attachments=None, extra_data=None,
                             pricing_group=Line.RETAIL):
 
-        if options is None:
-            options = []
+        if choices is None:
+            choices = []
         if not self.id:
             self.save()
 
@@ -101,12 +151,21 @@ class Basket(AbstractBasket):
         for choice in choices:
             try:
                 # extra_data example: {'size':{'width':1, 'height':1}}
-                data = extra_data[choice.code]
+                data = extra_data[choice.option.code]
             except KeyError:
                 data = {}
+
+            value_data = ','.join(
+                '{0}: {1}'.format(k, v) for k, v in data.iteritems())
+
+            if value_data:
+                value = '{0} ({1})'.format(choice.caption, value_data)
+            else:
+                value = choice.caption
+
             all_extra_data.update(data)
             options.append({'option': choice.option,
-                            'value': choice.caption,
+                            'value': value,
                             'value_code': choice.code,
                             'data': data})
 

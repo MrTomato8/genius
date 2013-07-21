@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 import os
 from django.dispatch import receiver
+from django.core.exceptions import ObjectDoesNotExist
 
 Option = models.get_model('catalogue', 'Option')
 LineAttachment = models.get_model('basket', 'LineAttachment')
@@ -90,8 +91,13 @@ class ArtworkItem(models.Model):
 
     @property
     def available(self):
-        if self.lines.count() > 0:
-            return False
+        try:
+            self.lines
+        except ObjectDoesNotExist:
+            return True
+        else:
+            if self.lines.count() > 0:
+                return False
         return True
 
     @property
