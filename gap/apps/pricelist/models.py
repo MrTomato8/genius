@@ -16,7 +16,7 @@ class Price(models.Model):
     STATE_CHOICES = ((CURRENT, 'Current'),
                      (OLD, 'Old'))
 
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, related_name='prices')
 
     state = models.CharField(max_length=10, choices=STATE_CHOICES,
                              default=CURRENT, editable=False, db_index=True)
