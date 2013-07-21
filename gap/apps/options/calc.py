@@ -1,6 +1,7 @@
 from apps.pricelist.models import Price
 from django.db.models import Max
 from apps.options.utils import custom_size_chosen
+from decimal import Decimal
 
 
 class OptionsCalculatorError(Exception):
@@ -68,6 +69,8 @@ class BaseOptionsCalculator:
         '''
         result = {}
 
+        TWOPLACES = Decimal(10) ** -2
+
         prices = self.pick_prices(choices, quantity)
 
         for price in prices:
@@ -78,7 +81,7 @@ class BaseOptionsCalculator:
             if custom_size_chosen(choices):
                 if 'width' in kwargs and 'height' in kwargs:
                     # calculate area in square metres
-                    area = (kwargs['width'] * kwargs['height']) / 1000000
+                    area = Decimal(kwargs['width'] * kwargs['height']) / Decimal(1000000)
 
                     rpl_price = rpl_price * area
                     tpl_price = tpl_price * area
@@ -97,21 +100,25 @@ class BaseOptionsCalculator:
                 result[quantity] = {}
 
                 result[quantity]['rpl_price_incl_tax'] = (
-                    rpl_unit_price * quantity)
+                    rpl_unit_price * quantity).quantize(TWOPLACES)
                 result[quantity]['tpl_price_incl_tax'] = (
-                    tpl_unit_price * quantity)
+                    tpl_unit_price * quantity).quantize(TWOPLACES)
 
-                result[quantity]['rpl_unit_price_incl_tax'] = rpl_unit_price
-                result[quantity]['tpl_unit_price_incl_tax'] = tpl_unit_price
+                result[quantity]['rpl_unit_price_incl_tax'] = (
+                    rpl_unit_price).quantize(TWOPLACES)
+                result[quantity]['tpl_unit_price_incl_tax'] = (
+                    tpl_unit_price).quantize(TWOPLACES)
             else:
                 result[price.quantity] = {}
 
-                result[price.quantity]['rpl_price_incl_tax'] = (rpl_price)
-                result[price.quantity]['tpl_price_incl_tax'] = (tpl_price)
+                result[price.quantity]['rpl_price_incl_tax'] = (
+                    rpl_price).quantize(TWOPLACES)
+                result[price.quantity]['tpl_price_incl_tax'] = (
+                    tpl_price).quantize(TWOPLACES)
                 result[price.quantity]['rpl_unit_price_incl_tax'] = (
-                    rpl_unit_price)
+                    rpl_unit_price).quantize(TWOPLACES)
                 result[price.quantity]['tpl_unit_price_incl_tax'] = (
-                    tpl_unit_price)
+                    tpl_unit_price).quantize(TWOPLACES)
 
         return result
 
