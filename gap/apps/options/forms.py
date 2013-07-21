@@ -32,8 +32,8 @@ class QuoteCalcForm(forms.Form):
 
 
 class QuoteCustomSizeForm(forms.Form):
-    width = forms.DecimalField()
-    height = forms.DecimalField()
+    width = forms.IntegerField()
+    height = forms.IntegerField()
 
 
 class ArtworkDeleteForm(forms.Form):
