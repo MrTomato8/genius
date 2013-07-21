@@ -11,10 +11,13 @@ from apps.options.session import OptionsSessionMixin
 from collections import OrderedDict
 from apps.options.calc import OptionsCalculator
 from apps.options.forms import ArtworkDeleteForm, ArtworkUploadForm
+from django.conf import settings
+from django.contrib import messages
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
 Price = models.get_model('pricelist', 'Price')
+Line = models.get_model('basket', 'Line')
 
 
 class PickOptionsView(OptionsSessionMixin, View):
@@ -62,6 +65,7 @@ class PickOptionsView(OptionsSessionMixin, View):
             'product': product,
             'groups': groups,
             'errors': errors,
+            'basket': request.basket,
         })
 
     def post(self, request, *args, **kwargs):
@@ -157,6 +161,7 @@ class PickOptionsView(OptionsSessionMixin, View):
             'product': product,
             'groups': groups,
             'errors': errors,
+            'basket': request.basket,
         })
 
 
@@ -203,6 +208,7 @@ class QuoteView(OptionsSessionMixin, View):
             'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
             'discrete_pricing': utils.discrete_pricing(product),
             'trade_user': utils.trade_user(request.user),
+            'basket': request.basket,
 
         })
 
@@ -284,6 +290,7 @@ class QuoteView(OptionsSessionMixin, View):
             'discrete_pricing': dp,
             'trade_user': utils.trade_user(request.user),
             'quote': quote,
+            'basket': request.basket,
 
         })
 
@@ -298,6 +305,35 @@ class ArtworkDeleteView(View):
             reverse('options:upload',
                     kwargs={'product_slug': kwargs['product_slug'],
                             'pk': kwargs['pk']}))
+
+
+class AddToBasketView(OptionsSessionMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        basket = request.basket
+        user = request.user
+        product = Product.objects.get(pk=kwargs['pk'])
+        choices = self.session.get_choices()
+        quantity = self.session.get_quantity()
+        if utils.trade_user(request.user):
+            pricing_group = Line.TRADE
+        else:
+            pricing_group = Line.RETAIL
+        custom_size = self.session.get('custom_size', {'width': 0, 'height': 0})
+        cs_option, cs_value = settings.OPTIONCHOICE_CUSTOMSIZE
+        extra_data = {}
+        extra_data[cs_option] = custom_size
+        attachments = []
+        for file in ArtworkItem.objects.filter(user=user):
+            if file.available:
+                attachments.append(file)
+
+        basket.add_dynamic_product(product, quantity, choices, attachments,
+                                   extra_data, pricing_group)
+        msg = '{0} added successfully'.format(product.get_title())
+        messages.add_message(request, messages.SUCCESS, msg)
+        return HttpResponseRedirect(reverse('basket:summary'))
+
 
 
 class UploadView(OptionsSessionMixin, View):
@@ -321,6 +357,7 @@ class UploadView(OptionsSessionMixin, View):
             'params': kwargs,
             'items': items,
             'uploadform': uploadform,
+            'basket': request.basket,
         })
 
     def post(self, request, *args, **kwargs):
@@ -338,4 +375,5 @@ class UploadView(OptionsSessionMixin, View):
             'params': kwargs,
             'items': items,
             'uploadform': uploadform,
+            'basket': request.basket,
         })

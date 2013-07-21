@@ -11,6 +11,7 @@ class BaseOptionsApplication(Application):
     quote_view = views.QuoteView
     upload_view = views.UploadView
     artwork_delete_view = views.ArtworkDeleteView
+    add_to_basket_view = views.AddToBasketView
 
     def get_urls(self):
         urlpatterns = super(BaseOptionsApplication, self).get_urls()
@@ -22,7 +23,9 @@ class BaseOptionsApplication(Application):
             url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
             self.upload_view.as_view(), name='upload'),
             url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/delete/(?P<file_id>\d+)$',
-            self.artwork_delete_view.as_view(), name='upload-artwork-delete')
+            self.artwork_delete_view.as_view(), name='upload-artwork-delete'),
+            url(r'^add/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
+            self.add_to_basket_view.as_view(), name='add-to-basket')
         )
 
         return self.post_process_urls(urlpatterns)
