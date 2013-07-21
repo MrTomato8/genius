@@ -79,7 +79,7 @@ class LineAttribute(AbstractLineAttribute):
 class LineAttachment(models.Model):
     line = models.ForeignKey('basket.Line', related_name='attachments',
                              verbose_name=u'Line')
-    artwork_item = models.ForeignKey(ArtworkItem,
+    artwork_item = models.ForeignKey(ArtworkItem, related_name='lines',
                                      verbose_name=u'Artwork item')
 
     class Meta:

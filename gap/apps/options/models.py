@@ -5,7 +5,7 @@ import os
 from django.dispatch import receiver
 
 Option = models.get_model('catalogue', 'Option')
-
+LineAttachment = models.get_model('basket', 'LineAttachment')
 
 class MissingOptionChoiceThumbnail(object):
 
@@ -90,8 +90,8 @@ class ArtworkItem(models.Model):
 
     @property
     def available(self):
-        # TODO:Walk through Basket and Order lines here looking for an
-        # Option containing this image
+        if self.lines.count() > 0:
+            return False
         return True
 
     @property
