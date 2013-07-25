@@ -61,7 +61,9 @@ class BaseOptionsCalculator:
         each containing dictionaries with following keys:
 
         'rpl_price_incl_tax': Retail price with tax included
+        'rpl_unit_price_incl_tax': Retail unit price with tax included        
         'tpl_price_incl_tax': Trade price with tax included
+        'tpl_unit_price_incl_tax': Trade unit price with tax included
 
         If custom size option is chosen - then take width and
         height arguments into account. Width and height units are millimeters
