@@ -20,6 +20,9 @@ Option = models.get_model('catalogue', 'Option')
 Price = models.get_model('pricelist', 'Price')
 Line = models.get_model('basket', 'Line')
 
+coption, cchoice = settings.OPTIONCHOICE_CUSTOMSIZE
+DEFAULT_CHOICE_DATA = {coption: {'width': 0, 'height': 0}}
+
 
 class PickOptionsView(OptionsSessionMixin, View):
     template_name = 'options/pick.html'
@@ -33,7 +36,7 @@ class PickOptionsView(OptionsSessionMixin, View):
             self.session.reset_product(product)
             self.session.reset_choices()
             self.session.reset_quantity()
-            self.session.reset_custom_size()
+            self.session.reset_choice_data(DEFAULT_CHOICE_DATA)
 
         groups = []
         for group in OptionPickerGroup.objects.all():
@@ -77,7 +80,7 @@ class PickOptionsView(OptionsSessionMixin, View):
         self.session.reset_product(product)
         self.session.reset_choices()
         self.session.reset_quantity()
-        self.session.reset_custom_size()
+        self.session.reset_choice_data(DEFAULT_CHOICE_DATA)
 
         allvalid = True
 
@@ -182,22 +185,20 @@ class QuoteView(OptionsSessionMixin, View):
 
         dp = utils.discrete_pricing(product)
 
-        custom_size = self.session.get('custom_size', {'width': 0, 'height': 0})
+        choice_data = self.session.get('choice_data', DEFAULT_CHOICE_DATA)
 
         if dp:
             quantity = None
         else:
             quantity = self.session.get_quantity()
 
-        prices = calc.calculate_cost(
-            choices,
-            quantity,
-            width=custom_size['width'],
-            height=custom_size['height'])
+        prices = calc.calculate_cost(choices, quantity, choice_data)
 
         calc_form = QuoteCalcForm(initial={'quantity': quantity})
-        custom_size_form = QuoteCustomSizeForm(
-            initial=self.session.get('custom_size', {}))
+
+        coption, cchoice = settings.OPTIONCHOICE_CUSTOMSIZE
+        cargs = choice_data.get(coption, {'width': 0, 'height': 0})
+        custom_size_form = QuoteCustomSizeForm(initial=cargs)
 
         return render(request, self.template_name, {
             'product': product,
@@ -233,11 +234,12 @@ class QuoteView(OptionsSessionMixin, View):
             width = custom_size_form.cleaned_data['width']
             height = custom_size_form.cleaned_data['height']
         else:
-            self.session.reset_custom_size()
             width = 0
             height = 0
 
-        self.session.set('custom_size', {'width': width, 'height': height})
+        coption, cchoice = settings.OPTIONCHOICE_CUSTOMSIZE
+        self.session.update_choice_data(
+            {coption: {'width': width, 'height': height}})
 
         dp = utils.discrete_pricing(product)
         calc_form = QuoteCalcForm(request.POST)
@@ -253,11 +255,10 @@ class QuoteView(OptionsSessionMixin, View):
                 if quantity < min_order:
                     errors.append('Minimum order quantity for this '
                                   'option set is {0}'.format(min_order))
-            prices = calc.calculate_cost(
-                choices,
-                quantity,
-                width=width,
-                height=height)
+
+            choice_data = self.session.get('choice_data', DEFAULT_CHOICE_DATA)
+
+            prices = calc.calculate_cost(choices, quantity, choice_data)
 
             try:
                 price = prices[calc_form.cleaned_data['quantity']]
@@ -269,7 +270,6 @@ class QuoteView(OptionsSessionMixin, View):
                 quote['quantity'] = calc_form.cleaned_data['quantity']
                 quote['width'] = width
                 quote['height'] = height
-
 
         else:
             prices = utils.available_quantities(product, choices)
@@ -322,24 +322,20 @@ class AddToBasketView(OptionsSessionMixin, View):
             pricing_group = Line.TRADE
         else:
             pricing_group = Line.RETAIL
-        custom_size = self.session.get('custom_size', {'width': 0, 'height': 0})
-        cs_option, cs_value = settings.OPTIONCHOICE_CUSTOMSIZE
-        extra_data = {}
-        extra_data[cs_option] = custom_size
+        choice_data = self.session.get('choice_data', DEFAULT_CHOICE_DATA)
         attachments = []
         for file in ArtworkItem.objects.filter(user=user):
             if file.available:
                 attachments.append(file)
 
         basket.add_dynamic_product(product, quantity, choices, attachments,
-                                   extra_data, pricing_group)
+                                   choice_data, pricing_group)
         msg = '{0} added successfully'.format(product.get_title())
         messages.add_message(request, messages.SUCCESS, msg)
 
         self.add_signal.send(sender=self, product=product, user=user)
 
         return HttpResponseRedirect(reverse('basket:summary'))
-
 
 
 class UploadView(OptionsSessionMixin, View):
@@ -353,8 +349,6 @@ class UploadView(OptionsSessionMixin, View):
                 items.append({'file': file,
                               'form': ArtworkDeleteForm()})
         return items
-
-# TODO: get from session and display product, choices, price, ... etc
 
     def get(self, request, *args, **kwargs):
         items = self.get_items(request.user)

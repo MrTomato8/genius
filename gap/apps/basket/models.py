@@ -39,7 +39,7 @@ class Line(AbstractLine):
         choices=PRICING_GROUP_CHOICES)
 
     def get_option_choices(self):
-        extra_data = {}
+        choice_data = {}
         choices = []
         for attr in self.attributes.all():
             # May be a lot of excetpions here, but it will mean problems in
@@ -50,13 +50,13 @@ class Line(AbstractLine):
                 data = json.loads(attr.data)
             except ValueError:
                 data = {}
-            extra_data.update(data)
-        return choices, extra_data
+            choice_data.update({attr.option.code: data})
+        return choices, choice_data
 
     def _get_price_from_pricelist(self):
-        choices, extra_data = self.get_option_choices()
+        choices, choice_data = self.get_option_choices()
         calc = OptionsCalculator(self.product)
-        prices = calc.calculate_cost(choices, self.quantity, **extra_data)
+        prices = calc.calculate_cost(choices, self.quantity, choice_data)
         try:
             return prices[self.quantity]
         except KeyError:
@@ -121,7 +121,7 @@ class Line(AbstractLine):
 class LineAttribute(AbstractLineAttribute):
     # Extra data for option value, for example for custom size
     # it may be {'width': x, 'height': y} dict
-    data = models.CharField('Extra option data', max_length=255, default='',
+    data = models.CharField('Extra choice data', max_length=255, default='',
                             blank=True)
     value_code = models.CharField('Code', max_length=30, default='', blank=True)
 
@@ -138,20 +138,24 @@ class LineAttachment(models.Model):
 
 class Basket(AbstractBasket):
     def add_dynamic_product(self, product, quantity=1, choices=None,
-                            attachments=None, extra_data=None,
+                            attachments=None, choice_data=None,
                             pricing_group=Line.RETAIL):
 
         if choices is None:
             choices = []
+
+        if choice_data is None:
+            choice_data = {}
+
         if not self.id:
             self.save()
 
         options = []
-        all_extra_data = {}
+
         for choice in choices:
             try:
-                # extra_data example: {'size':{'width':1, 'height':1}}
-                data = extra_data[choice.option.code]
+                # choice_data example: {'size':{'width':1, 'height':1}}
+                data = choice_data[choice.option.code]
             except KeyError:
                 data = {}
 
@@ -163,7 +167,6 @@ class Basket(AbstractBasket):
             else:
                 value = choice.caption
 
-            all_extra_data.update(data)
             options.append({'option': choice.option,
                             'value': value,
                             'value_code': choice.code,
@@ -176,7 +179,7 @@ class Basket(AbstractBasket):
         price_excl_tax = None
 
         calc = OptionsCalculator(product)
-        prices = calc.calculate_cost(choices, quantity, **all_extra_data)
+        prices = calc.calculate_cost(choices, quantity, choice_data)
         try:
             price = prices[quantity]
         except KeyError:

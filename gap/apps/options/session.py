@@ -34,8 +34,18 @@ class OptionsSession(object):
     def reset_quantity(self, quantity=0):
         self.set('quantity', quantity)
 
-    def reset_custom_size(self, width=0, height=0):
-        self.set('custom_size', {'width': width, 'height': height})
+    def reset_choice_data(self, choice_data=None):
+        if choice_data is None:
+            choice_data = {}
+        self.set('choice_data', choice_data)
+
+    def update_choice_data(self, data):
+        if 'choice_data' in self.request.session[self.SESSION_KEY]:
+            choice_data = self.request.session[self.SESSION_KEY]['choice_data']
+            choice_data.update(data)
+        else:
+            self.request.session[self.SESSION_KEY]['choice_data'] = data
+        self.request.session.modified = True
 
     def get_choices(self):
         choices = []

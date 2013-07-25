@@ -2,6 +2,7 @@ from apps.pricelist.models import Price
 from django.db.models import Max
 from apps.options.utils import custom_size_chosen
 from decimal import Decimal
+from django.conf import settings
 
 
 class OptionsCalculatorError(Exception):
@@ -55,13 +56,13 @@ class BaseOptionsCalculator:
         # Return prices for all found discrete quantities
         return prices
 
-    def calculate_cost(self, choices, quantity=None, *args, **kwargs):
+    def calculate_cost(self, choices, quantity=None, choice_data=None):
         '''
         Returns dictionary of available quantities
         each containing dictionaries with following keys:
 
         'rpl_price_incl_tax': Retail price with tax included
-        'rpl_unit_price_incl_tax': Retail unit price with tax included        
+        'rpl_unit_price_incl_tax': Retail unit price with tax included
         'tpl_price_incl_tax': Trade price with tax included
         'tpl_unit_price_incl_tax': Trade unit price with tax included
 
@@ -70,6 +71,11 @@ class BaseOptionsCalculator:
         and price value is per square metre for this case.
         '''
         result = {}
+
+        if choice_data is None:
+            choice_data = {}
+
+        coption, cchoice = settings.OPTIONCHOICE_CUSTOMSIZE
 
         TWOPLACES = Decimal(10) ** -2
 
@@ -81,9 +87,15 @@ class BaseOptionsCalculator:
             tpl_price = price.tpl_price
 
             if custom_size_chosen(choices):
-                if 'width' in kwargs and 'height' in kwargs:
+                try:
+                    cargs = choice_data[coption]
+                except KeyError:
+                    raise NotEnoughArguments(
+                        'choice_data argument does not contain {0} key'.format(coption))
+
+                if 'width' in cargs and 'height' in cargs:
                     # calculate area in square metres
-                    area = Decimal(kwargs['width'] * kwargs['height']) / Decimal(1000000)
+                    area = Decimal(cargs['width'] * cargs['height']) / Decimal(1000000)
 
                     rpl_price = rpl_price * area
                     tpl_price = tpl_price * area
