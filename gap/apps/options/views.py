@@ -13,6 +13,7 @@ from apps.options.calc import OptionsCalculator
 from apps.options.forms import ArtworkDeleteForm, ArtworkUploadForm
 from django.conf import settings
 from django.contrib import messages
+from oscar.apps.basket.signals import basket_addition
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
@@ -308,8 +309,10 @@ class ArtworkDeleteView(View):
 
 
 class AddToBasketView(OptionsSessionMixin, View):
+    add_signal = basket_addition
 
     def post(self, request, *args, **kwargs):
+
         basket = request.basket
         user = request.user
         product = Product.objects.get(pk=kwargs['pk'])
@@ -332,6 +335,9 @@ class AddToBasketView(OptionsSessionMixin, View):
                                    extra_data, pricing_group)
         msg = '{0} added successfully'.format(product.get_title())
         messages.add_message(request, messages.SUCCESS, msg)
+
+        self.add_signal.send(sender=self, product=product, user=user)
+
         return HttpResponseRedirect(reverse('basket:summary'))
 
 
