@@ -116,7 +116,6 @@ class PickOptionsView(OptionsSessionMixin, View):
                         {'picker': picker,
                          'form': opform})
 
-
             if pickers:
                 groups.append({'group': group, 'pickers': pickers})
 
@@ -277,6 +276,9 @@ class QuoteView(OptionsSessionMixin, View):
 
         if len(prices) == 0:
             errors.append('No prices found')
+
+        # TODO: quote = Quote.get_or_create(product, choices, price, choice_data, quantity ...)
+        # TODO: show model form on quote page if quote.is_valid()
 
         return render(request, self.template_name, {
             'product': product,
