@@ -9,7 +9,7 @@ import json
 from decimal import Decimal
 from oscar.templatetags.currency_filters import currency
 from django.utils.translation import ugettext as _
-
+from django.conf import settings
 
 class PriceNotAvailable(Exception):
     pass
@@ -152,6 +152,8 @@ class Basket(AbstractBasket):
 
         options = []
 
+        coption, cchoice = settings.OPTIONCHOICE_CUSTOMSIZE
+
         for choice in choices:
             try:
                 # choice_data example: {'size':{'width':1, 'height':1}}
@@ -159,11 +161,10 @@ class Basket(AbstractBasket):
             except KeyError:
                 data = {}
 
-            value_data = ','.join(
-                '{0}: {1}'.format(k, v) for k, v in data.iteritems())
-
-            if value_data:
-                value = '{0} ({1})'.format(choice.caption, value_data)
+            if choice.option.code == coption and choice.code == cchoice:
+                    value_data = ','.join(
+                        '{0}: {1}'.format(k, v) for k, v in data.iteritems())
+                    value = '{0} ({1})'.format(choice.caption, value_data)
             else:
                 value = choice.caption
 
@@ -173,8 +174,6 @@ class Basket(AbstractBasket):
                             'data': data})
 
         line_ref = self._create_line_reference(product, options)
-
-        #TODO: pdb debug line_ref value here
 
         price_excl_tax = None
 
