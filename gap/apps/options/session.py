@@ -45,7 +45,7 @@ class OptionsSession(object):
             choice_data.update(data)
         else:
             self.request.session[self.SESSION_KEY]['choice_data'] = data
-        self.request.session.modified = True
+            
 
     def get_choices(self):
         choices = []

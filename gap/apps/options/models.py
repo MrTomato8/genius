@@ -6,7 +6,9 @@ from django.dispatch import receiver
 from django.core.exceptions import ObjectDoesNotExist
 
 Option = models.get_model('catalogue', 'Option')
+Product = models.get_model('catalogue', 'Product')
 LineAttachment = models.get_model('basket', 'LineAttachment')
+
 
 class MissingOptionChoiceThumbnail(object):
 
@@ -136,5 +138,3 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
     if not old_file == new_file:
         if os.path.isfile(old_file.path):
             os.remove(old_file.path)
-
-# quotes here?

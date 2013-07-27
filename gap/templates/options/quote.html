@@ -118,11 +118,7 @@
   {% if quote.valid %}
   <div class="grid-7 float-left options-quote">
     <h2>
-      {% if trade_user %}
-      {{ quote.price.tpl_price_incl_tax|currency }}
-      {% else %}
-      {{ quote.price.rpl_price_incl_tax|currency }}
-      {% endif %}
+      {{ quote.price|currency }}
       for
       {{ quote.quantity }} unit(s) of {{ product }} with following options:</h2>
     <ul>

@@ -1,6 +1,5 @@
-from apps.pricelist.models import Price
 from django.db.models import Max
-from apps.options.utils import custom_size_chosen
+from apps.options.utils import custom_size_chosen, trade_user
 from decimal import Decimal
 from django.conf import settings
 
@@ -17,6 +16,42 @@ class NotEnoughArguments(OptionsCalculatorError):
     pass
 
 
+class PriceNotAvailable(Exception):
+    pass
+
+
+class CalculatedPrices:
+    def __init__(self):
+        self._prices = {}
+
+    def __len__(self):
+        return len(self._prices)
+
+    def add(self, quantity, price_data):
+        self._prices[quantity] = price_data
+
+    def iteritems(self):
+        return self._prices.iteritems()
+
+    def _get_price_attribute(self, quantity, user, attribute):
+
+        if trade_user(user):
+            prefix = 'tpl_'
+        else:
+            prefix = 'rpl_'
+
+        try:
+            return self._prices[quantity][prefix + attribute]
+        except KeyError:
+            raise PriceNotAvailable
+
+    def get_unit_price_incl_tax(self, quantity, user):
+        return self._get_price_attribute(quantity, user, 'unit_price_incl_tax')
+
+    def get_price_incl_tax(self, quantity, user):
+        return self._get_price_attribute(quantity, user, 'price_incl_tax')
+
+
 class BaseOptionsCalculator:
 
     def __init__(self, product):
@@ -27,7 +62,7 @@ class BaseOptionsCalculator:
         Picks Price objects which statisfy given quantity
         and choice selections
         '''
-        prices = Price.objects.filter(product=self.product)
+        prices = self.product.prices.all()
         if quantity is not None:
             prices = prices.filter(min_order__lte=quantity)
 
@@ -56,21 +91,15 @@ class BaseOptionsCalculator:
         # Return prices for all found discrete quantities
         return prices
 
-    def calculate_cost(self, choices, quantity=None, choice_data=None):
+    def calculate_costs(self, choices, quantity=None, choice_data=None):
         '''
-        Returns dictionary of available quantities
-        each containing dictionaries with following keys:
-
-        'rpl_price_incl_tax': Retail price with tax included
-        'rpl_unit_price_incl_tax': Retail unit price with tax included
-        'tpl_price_incl_tax': Trade price with tax included
-        'tpl_unit_price_incl_tax': Trade unit price with tax included
+        Returns CalculatedPrices object
 
         If custom size option is chosen - then take width and
         height arguments into account. Width and height units are millimeters
         and price value is per square metre for this case.
         '''
-        result = {}
+        result = CalculatedPrices()
 
         if choice_data is None:
             choice_data = {}
@@ -111,28 +140,32 @@ class BaseOptionsCalculator:
             tpl_unit_price = tpl_price / price.quantity
 
             if quantity is not None:
-                result[quantity] = {}
+                price_data = {}
 
-                result[quantity]['rpl_price_incl_tax'] = (
+                price_data['rpl_price_incl_tax'] = (
                     rpl_unit_price * quantity).quantize(TWOPLACES)
-                result[quantity]['tpl_price_incl_tax'] = (
+                price_data['tpl_price_incl_tax'] = (
                     tpl_unit_price * quantity).quantize(TWOPLACES)
 
-                result[quantity]['rpl_unit_price_incl_tax'] = (
+                price_data['rpl_unit_price_incl_tax'] = (
                     rpl_unit_price).quantize(TWOPLACES)
-                result[quantity]['tpl_unit_price_incl_tax'] = (
+                price_data['tpl_unit_price_incl_tax'] = (
                     tpl_unit_price).quantize(TWOPLACES)
-            else:
-                result[price.quantity] = {}
 
-                result[price.quantity]['rpl_price_incl_tax'] = (
+                result.add(quantity, price_data)
+            else:
+                price_data = {}
+
+                price_data['rpl_price_incl_tax'] = (
                     rpl_price).quantize(TWOPLACES)
-                result[price.quantity]['tpl_price_incl_tax'] = (
+                price_data['tpl_price_incl_tax'] = (
                     tpl_price).quantize(TWOPLACES)
-                result[price.quantity]['rpl_unit_price_incl_tax'] = (
+                price_data['rpl_unit_price_incl_tax'] = (
                     rpl_unit_price).quantize(TWOPLACES)
-                result[price.quantity]['tpl_unit_price_incl_tax'] = (
+                price_data['tpl_unit_price_incl_tax'] = (
                     tpl_unit_price).quantize(TWOPLACES)
+
+                result.add(price.quantity, price_data)
 
         return result
 

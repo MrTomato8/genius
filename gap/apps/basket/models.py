@@ -4,15 +4,12 @@ from oscar.apps.basket.abstract_models import (
     AbstractBasket, AbstractLine, AbstractLineAttribute)
 
 from apps.options.models import OptionChoice, ArtworkItem
-from apps.options.calc import OptionsCalculator
+from apps.options.calc import OptionsCalculator, PriceNotAvailable
 import json
 from decimal import Decimal
 from oscar.templatetags.currency_filters import currency
 from django.utils.translation import ugettext as _
 from django.conf import settings
-
-class PriceNotAvailable(Exception):
-    pass
 
 
 class Line(AbstractLine):
@@ -22,21 +19,12 @@ class Line(AbstractLine):
         (PRODUCT_STOCKRECORD, 'Product stockrecord'),
         (OPTIONS_CALCULATOR, 'Options calculator'))
 
-    RETAIL, TRADE = ('retail', 'trade')
-    PRICING_GROUP_CHOICES = (
-        (RETAIL, 'Retail pricing group'),
-        (TRADE, 'Trade pricing group'))
-
     # Selector used in overriden _get_stockrecord_property
     # For classic products use PRODUCT_STOCKRECORD
     # For dynamically priced products use OPTIONS_CALCULATOR
     stockrecord_source = models.CharField(
         'Stockrecord source', max_length=30, default=PRODUCT_STOCKRECORD,
         choices=STOCKRECORD_SOURCE_CHOICES)
-
-    pricing_group = models.CharField(
-        'Pricing group', max_length=30, default=RETAIL,
-        choices=PRICING_GROUP_CHOICES)
 
     def get_option_choices(self):
         choice_data = {}
@@ -53,14 +41,11 @@ class Line(AbstractLine):
             choice_data.update({attr.option.code: data})
         return choices, choice_data
 
-    def _get_price_from_pricelist(self):
+    def _get_unit_price_from_pricelist(self):
         choices, choice_data = self.get_option_choices()
         calc = OptionsCalculator(self.product)
-        prices = calc.calculate_cost(choices, self.quantity, choice_data)
-        try:
-            return prices[self.quantity]
-        except KeyError:
-            raise PriceNotAvailable
+        prices = calc.calculate_costs(choices, self.quantity, choice_data)
+        return prices.get_unit_price_incl_tax(self.quantity, self.basket.owner)
 
     def get_warning(self):
         if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
@@ -69,18 +54,11 @@ class Line(AbstractLine):
             if not self.price_incl_tax:
                 return
             try:
-                price = self._get_price_from_pricelist()
+                current_price_incl_tax = self._get_unit_price_from_pricelist()
             except PriceNotAvailable:
                 msg = u"'%(product)s' is no longer available"
                 return _(msg) % {'product': self.product.get_title()}
             else:
-                if self.pricing_group == self.RETAIL:
-                    prefix = 'rpl_'
-                if self.pricing_group == self.TRADE:
-                    prefix = 'tpl_'
-
-                current_price_incl_tax = price[prefix + 'unit_price_incl_tax']
-
                 if current_price_incl_tax > self.price_incl_tax:
                     msg = ("The price of '%(product)s' has increased from "
                            "%(old_price)s to %(new_price)s since you added it "
@@ -103,19 +81,9 @@ class Line(AbstractLine):
             return super(Line, self)._get_stockrecord_property(property)
         if self.stockrecord_source == self.OPTIONS_CALCULATOR:
             try:
-                price = self._get_price_from_pricelist()
+                return self._get_unit_price_from_pricelist()
             except PriceNotAvailable:
                 return Decimal('0.00')
-            else:
-                if self.pricing_group == self.RETAIL:
-                    prefix = 'rpl_'
-                if self.pricing_group == self.TRADE:
-                    prefix = 'tpl_'
-
-                if property == 'price_incl_tax':
-                    return price[prefix + 'unit_price_incl_tax']
-                else:
-                    return Decimal('0.00')
 
 
 class LineAttribute(AbstractLineAttribute):
@@ -138,8 +106,7 @@ class LineAttachment(models.Model):
 
 class Basket(AbstractBasket):
     def add_dynamic_product(self, product, quantity=1, choices=None,
-                            attachments=None, choice_data=None,
-                            pricing_group=Line.RETAIL):
+                            attachments=None, choice_data=None):
 
         if choices is None:
             choices = []
@@ -178,16 +145,11 @@ class Basket(AbstractBasket):
         price_excl_tax = None
 
         calc = OptionsCalculator(product)
-        prices = calc.calculate_cost(choices, quantity, choice_data)
+        prices = calc.calculate_costs(choices, quantity, choice_data)
         try:
-            price = prices[quantity]
-        except KeyError:
+            price_incl_tax = prices.get_unit_price_incl_tax(quantity, self.owner)
+        except PriceNotAvailable:
             price_incl_tax = None
-        else:
-            if pricing_group == Line.RETAIL:
-                price_incl_tax = price['rpl_unit_price_incl_tax']
-            if pricing_group == Line.TRADE:
-                price_incl_tax = price['tpl_unit_price_incl_tax']
 
         line, created = self.lines.get_or_create(
             line_reference=line_ref,
@@ -195,8 +157,7 @@ class Basket(AbstractBasket):
             defaults={'quantity': quantity,
                       'price_excl_tax': price_excl_tax,
                       'price_incl_tax': price_incl_tax,
-                      'stockrecord_source': Line.OPTIONS_CALCULATOR,
-                      'pricing_group': pricing_group})
+                      'stockrecord_source': Line.OPTIONS_CALCULATOR})
         if created:
             for option_dict in options:
                 line.attributes.create(option=option_dict['option'],
