@@ -143,7 +143,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.admin',
     # 'django.contrib.admindocs',
-    'gap',
+    #'gap',
     'geniusautoparts',
     'accounts',
     'csvimport',
@@ -155,9 +155,10 @@ INSTALLED_APPS = [
     'paypal',
     'apps.pricelist',
     'apps.options',
-    'apps.quotes'
+    'apps.quotes',
 ]
-INSTALLED_APPS = INSTALLED_APPS + get_core_apps(['apps.order', 'apps.basket'])
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
+    ['apps.order', 'apps.basket', 'apps.catalogue'])
 
 ACCOUNTS_SOURCE_NAME = 'Main Account'
 ACCOUNTS_REDEMPTIONS_NAME = 'Sales Account'
