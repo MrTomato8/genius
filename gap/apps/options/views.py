@@ -20,6 +20,20 @@ Price = models.get_model('pricelist', 'Price')
 Line = models.get_model('basket', 'Line')
 
 
+class OptionsContextMixin(object):
+
+    def dispatch(self, request, *args, **kwargs):
+        self.product = Product.objects.get(pk=kwargs['pk'])
+
+        if not self.session.valid(self.product):
+            return HttpResponseRedirect(reverse('options:pick', kwargs=kwargs))
+
+        self.choices = self.session.get_choices()
+
+        return super(OptionsContextMixin, self).dispatch(
+            request, *args, **kwargs)
+
+
 class PickOptionsView(OptionsSessionMixin, View):
     template_name = 'options/pick.html'
 
@@ -162,21 +176,14 @@ class PickOptionsView(OptionsSessionMixin, View):
         })
 
 
-class QuoteView(OptionsSessionMixin, View):
+class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
     template_name = 'options/quote.html'
 
     def get(self, request, *args, **kwargs):
 
-        product = Product.objects.get(pk=kwargs['pk'])
+        calc = OptionsCalculator(self.product)
 
-        if not self.session.valid(product):
-            return HttpResponseRedirect(reverse('options:pick', kwargs=kwargs))
-
-        choices = self.session.get_choices()
-
-        calc = OptionsCalculator(product)
-
-        discrete_pricing = utils.discrete_pricing(product)
+        discrete_pricing = utils.discrete_pricing(self.product)
 
         choice_data = self.session.get_choice_data()
 
@@ -185,7 +192,7 @@ class QuoteView(OptionsSessionMixin, View):
         else:
             quantity = self.session.get_quantity()
 
-        prices = calc.calculate_costs(choices, quantity, choice_data)
+        prices = calc.calculate_costs(self.choices, quantity, choice_data)
 
         calc_form = QuoteCalcForm(initial={'quantity': quantity})
 
@@ -193,12 +200,12 @@ class QuoteView(OptionsSessionMixin, View):
         custom_size_form = QuoteCustomSizeForm(initial=choice_data_custom_size)
 
         return TemplateResponse(request, self.template_name, {
-            'product': product,
-            'choices': choices,
+            'product': self.product,
+            'choices': self.choices,
             'params': kwargs,
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
-            'custom_size': utils.custom_size_chosen(choices),
+            'custom_size': utils.custom_size_chosen(self.choices),
             'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
             'discrete_pricing': discrete_pricing,
             'trade_user': utils.trade_user(request.user),
@@ -207,16 +214,9 @@ class QuoteView(OptionsSessionMixin, View):
     def post(self, request, *args, **kwargs):
         errors = []
 
-        product = Product.objects.get(pk=kwargs['pk'])
+        min_order = utils.min_order(self.product, self.choices)
 
-        if not self.session.valid(product):
-            return HttpResponseRedirect(reverse('options:pick', kwargs=kwargs))
-
-        choices = self.session.get_choices()
-
-        min_order = utils.min_order(product, choices)
-
-        calc = OptionsCalculator(product)
+        calc = OptionsCalculator(self.product)
 
         custom_size_form = QuoteCustomSizeForm(request.POST)
         if custom_size_form.is_valid():
@@ -226,7 +226,7 @@ class QuoteView(OptionsSessionMixin, View):
         else:
             self.session.set_choice_data_custom_size({'width': 0, 'height': 0})
 
-        discrete_pricing = utils.discrete_pricing(product)
+        discrete_pricing = utils.discrete_pricing(self.product)
 
         choice_data = self.session.get_choice_data()
 
@@ -240,9 +240,10 @@ class QuoteView(OptionsSessionMixin, View):
                               'option set is {0}'.format(min_order))
 
             if discrete_pricing:
-                prices = calc.calculate_costs(choices, None, choice_data)
+                prices = calc.calculate_costs(self.choices, None, choice_data)
             else:
-                prices = calc.calculate_costs(choices, quantity, choice_data)
+                prices = calc.calculate_costs(
+                    self.choices, quantity, choice_data)
 
             try:
                 price = prices.get_price_incl_tax(quantity, request.user)
@@ -252,11 +253,9 @@ class QuoteView(OptionsSessionMixin, View):
                 quote = {'valid': True}
                 quote['price'] = price
                 quote['quantity'] = quantity
-                quote['choice_data_custom_size'] = (
-                    self.session.get_choice_data_custom_size())
 
         else:
-            prices = calc.calculate_costs(choices, None, choice_data)
+            prices = calc.calculate_costs(self.choices, None, choice_data)
             quote = {'valid': False}
 
         if len(prices) == 0:
@@ -268,17 +267,18 @@ class QuoteView(OptionsSessionMixin, View):
         # TODO: show model form on quote page if quote.is_valid()
 
         return TemplateResponse(request, self.template_name, {
-            'product': product,
-            'choices': choices,
+            'product': self.product,
+            'choices': self.choices,
             'params': kwargs,
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
-            'custom_size': utils.custom_size_chosen(choices),
+            'custom_size': utils.custom_size_chosen(self.choices),
             'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
             'errors': errors,
             'discrete_pricing': discrete_pricing,
             'trade_user': utils.trade_user(request.user),
             'quote': quote,
+            'choice_data_custom_size': self.session.get_choice_data_custom_size(),
         })
 
 
@@ -294,15 +294,13 @@ class ArtworkDeleteView(View):
                             'pk': kwargs['pk']}))
 
 
-class AddToBasketView(OptionsSessionMixin, View):
+class AddToBasketView(OptionsSessionMixin, OptionsContextMixin, View):
     add_signal = basket_addition
 
     def post(self, request, *args, **kwargs):
 
         basket = request.basket
         user = request.user
-        product = Product.objects.get(pk=kwargs['pk'])
-        choices = self.session.get_choices()
         quantity = self.session.get_quantity()
         choice_data = self.session.get_choice_data()
         attachments = []
@@ -310,17 +308,17 @@ class AddToBasketView(OptionsSessionMixin, View):
             if file.available:
                 attachments.append(file)
 
-        basket.add_dynamic_product(product, quantity, choices, attachments,
-                                   choice_data)
-        msg = '{0} added successfully'.format(product.get_title())
+        basket.add_dynamic_product(self.product, quantity, self.choices,
+                                   attachments, choice_data)
+        msg = '{0} added successfully'.format(self.product.get_title())
         messages.add_message(request, messages.SUCCESS, msg)
 
-        self.add_signal.send(sender=self, product=product, user=user)
+        self.add_signal.send(sender=self, product=self.product, user=user)
 
         return HttpResponseRedirect(reverse('basket:summary'))
 
 
-class UploadView(OptionsSessionMixin, View):
+class UploadView(OptionsSessionMixin, OptionsContextMixin, View):
     template_name = 'options/upload.html'
 
     def get_items(self, user):
@@ -336,9 +334,12 @@ class UploadView(OptionsSessionMixin, View):
         items = self.get_items(request.user)
         uploadform = ArtworkUploadForm()
         return TemplateResponse(request, self.template_name, {
+            'product': self.product,
+            'choices': self.choices,
             'params': kwargs,
             'items': items,
             'uploadform': uploadform,
+            'choice_data_custom_size': self.session.get_choice_data_custom_size(),
         })
 
     def post(self, request, *args, **kwargs):
@@ -353,7 +354,10 @@ class UploadView(OptionsSessionMixin, View):
             return HttpResponseRedirect(reverse('options:upload', kwargs=kwargs))
 
         return TemplateResponse(request, self.template_name, {
+            'product': self.product,
+            'choices': self.choices,
             'params': kwargs,
             'items': items,
             'uploadform': uploadform,
+            'choice_data_custom_size': self.session.get_choice_data_custom_size(),
         })
