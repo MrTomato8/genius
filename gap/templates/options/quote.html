@@ -33,7 +33,7 @@
       </ul>
   </div>
   
-  <div class="grid-4 float-left price-calculator">
+  <div class="grid-7 float-left price-calculator">
     <form id="getquote" method="POST">{% csrf_token %}
       <table>
         <tr>
@@ -131,7 +131,7 @@
     {% endif %}
   </div>
 
-  <div class="grid-2 float-left options-next">
+  <div class="grid-7 float-left options-next">
     <form id="next" method="GET" action="{%url 'options:upload' pk=params.pk product_slug=params.product_slug %}">
       <input value="Proceed" type="submit" class="finish button"/>
     </form>
