@@ -149,7 +149,6 @@ INSTALLED_APPS = [
     'csvimport',
     'south',
     'compressor',
-    'apps.catalogue',
     'apps.checkout',
     'apps.dashboard.jobs',
     'paypal',
