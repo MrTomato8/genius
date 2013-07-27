@@ -29,9 +29,11 @@ class Price(models.Model):
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
         verbose_name='RPL Price')
 
-    quantity = models.IntegerField(validators=[MinValueValidator(0)])
+    quantity = models.IntegerField(
+        validators=[MinValueValidator(0)], db_index=True)
 
-    min_order = models.IntegerField(validators=[MinValueValidator(0)])
+    min_order = models.IntegerField(
+        validators=[MinValueValidator(0)], db_index=True)
 
     option_choices = models.ManyToManyField(
         OptionChoice, related_name='prices', blank=True,
