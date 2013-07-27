@@ -134,9 +134,16 @@ class BaseOptionsCalculator:
             # units (price.quantity).
             # For price calculation we need unit price.
 
-            rpl_unit_price = rpl_price / price.quantity
-            tpl_unit_price = tpl_price / price.quantity
+            rpl_unit_price = (rpl_price / price.quantity).quantize(TWOPLACES)
+            tpl_unit_price = (tpl_price / price.quantity).quantize(TWOPLACES)
 
+            # Unit price may be different for dfferent quantities
+            # of the same choice set. That is why we store them separately
+
+            # Totals (price*quantity) are recalculated to make price
+            # consistent with basket's price calculation. Basket stores only
+            # unit prices with 2 decimal places, so on the calculation one cent may be
+            # lost. Here we just need to adapt to Oscar's way of calculating things.
             if quantity is not None:
                 price_data = {}
 
@@ -145,23 +152,22 @@ class BaseOptionsCalculator:
                 price_data['tpl_price_incl_tax'] = (
                     tpl_unit_price * quantity).quantize(TWOPLACES)
 
-                price_data['rpl_unit_price_incl_tax'] = (
-                    rpl_unit_price).quantize(TWOPLACES)
-                price_data['tpl_unit_price_incl_tax'] = (
-                    tpl_unit_price).quantize(TWOPLACES)
+                # These are already quantized
+                price_data['rpl_unit_price_incl_tax'] = rpl_unit_price
+                price_data['tpl_unit_price_incl_tax'] = tpl_unit_price
 
                 result.add(quantity, price_data)
             else:
                 price_data = {}
 
                 price_data['rpl_price_incl_tax'] = (
-                    rpl_price).quantize(TWOPLACES)
+                    rpl_unit_price * price.quantity).quantize(TWOPLACES)
                 price_data['tpl_price_incl_tax'] = (
-                    tpl_price).quantize(TWOPLACES)
-                price_data['rpl_unit_price_incl_tax'] = (
-                    rpl_unit_price).quantize(TWOPLACES)
-                price_data['tpl_unit_price_incl_tax'] = (
-                    tpl_unit_price).quantize(TWOPLACES)
+                    tpl_unit_price * price.quantity).quantize(TWOPLACES)
+
+                # These are already quantized
+                price_data['rpl_unit_price_incl_tax'] = rpl_unit_price
+                price_data['tpl_unit_price_incl_tax'] = tpl_unit_price
 
                 result.add(price.quantity, price_data)
 
