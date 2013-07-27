@@ -10,6 +10,7 @@ from decimal import Decimal
 from oscar.templatetags.currency_filters import currency
 from django.utils.translation import ugettext as _
 from apps.options import utils
+import uuid
 
 
 class Line(AbstractLine):
@@ -140,12 +141,24 @@ class Basket(AbstractBasket):
                             'value_code': choice.code,
                             'data': data})
 
-        line_ref = self._create_line_reference(product, options)
-
         price_excl_tax = None
 
         calc = OptionsCalculator(product)
+
         prices = calc.calculate_costs(choices, quantity, choice_data)
+
+        # line_ref = self._create_line_reference(product, options)
+        # if prices.discrete_pricing:
+        #     # Put in unique lines, because quantity cannot add up
+        #     # with discrete pricing
+        #     line_ref = '_'.join([str(quantity), line_ref])
+
+        # Each addition gets it's own line because:
+        #   1. discrete priced quantities do no add up
+        #   2. even if option choices are exactly the same - it may be different
+        #      order with different artwork
+        line_ref = uuid.uuid1().hex
+
         try:
             price_incl_tax = prices.get_unit_price_incl_tax(quantity, self.owner)
         except PriceNotAvailable:
