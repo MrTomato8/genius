@@ -22,7 +22,17 @@
 
 {% block content %}
 <div class="clearfix center-block">
-  <div class="grid-8 float-left">
+
+  <div class="grid-4 float-left choice-list">
+    <h3>{{ product }}</h3>
+    <ul>
+      {% for choice in choices %}
+      <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.option }}"/></li>
+      {% endfor %}
+      </ul>
+  </div>
+
+  <div class="grid-4 float-left">
   {% if items %}
   <h2>Uploaded:</h2>
   <div class="upload-items float-left">
@@ -41,7 +51,7 @@
   {% endif %}
   </div>
 
-  <div class="grid-11 upload-form float-left">
+  <div class="grid-7 upload-form float-left">
     <form id="artworkuploadform" method="POST" enctype="multipart/form-data">{% csrf_token %}
       {{ uploadform.image }}
     <input value="Upload" type="submit" class="button"/>

@@ -25,12 +25,12 @@
 <div class="clearfix center-block">
 
   <div class="grid-4 float-left choice-list">
-  <h3>{{ product }}</h3>
-  <ul>
-  {% for choice in choices %}
-  <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.option }}"/></li>
-  {% endfor %}
-  </ul>
+    <h3>{{ product }}</h3>
+    <ul>
+      {% for choice in choices %}
+      <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.option }}"/></li>
+      {% endfor %}
+      </ul>
   </div>
   
   <div class="grid-4 float-left price-calculator">
