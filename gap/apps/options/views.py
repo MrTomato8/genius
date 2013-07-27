@@ -180,11 +180,11 @@ class QuoteView(OptionsSessionMixin, View):
 
         calc = OptionsCalculator(product)
 
-        dp = utils.discrete_pricing(product)
+        discrete_pricing = utils.discrete_pricing(product)
 
         choice_data = self.session.get('choice_data', DEFAULT_CHOICE_DATA)
 
-        if dp:
+        if discrete_pricing:
             quantity = None
         else:
             quantity = self.session.get_quantity()
@@ -205,7 +205,7 @@ class QuoteView(OptionsSessionMixin, View):
             'custom_size_form': custom_size_form,
             'custom_size': utils.custom_size_chosen(choices),
             'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
-            'discrete_pricing': utils.discrete_pricing(product),
+            'discrete_pricing': discrete_pricing,
             'trade_user': utils.trade_user(request.user),
         })
 
@@ -235,13 +235,13 @@ class QuoteView(OptionsSessionMixin, View):
         self.session.update_choice_data(
             {coption: {'width': width, 'height': height}})
 
-        dp = utils.discrete_pricing(product)
+        discrete_pricing = utils.discrete_pricing(product)
 
         choice_data = self.session.get('choice_data', DEFAULT_CHOICE_DATA)
 
         calc_form = QuoteCalcForm(request.POST)
 
-        if calc_form.is_valid():  # WRONG!
+        if calc_form.is_valid():
 
             self.session.set('quantity', calc_form.cleaned_data['quantity'])
 
@@ -250,7 +250,7 @@ class QuoteView(OptionsSessionMixin, View):
                 errors.append('Minimum order quantity for this '
                               'option set is {0}'.format(min_order))
 
-            if dp:
+            if discrete_pricing:
                 prices = calc.calculate_costs(choices, None, choice_data)
             else:
                 prices = calc.calculate_costs(choices, quantity, choice_data)
@@ -287,7 +287,7 @@ class QuoteView(OptionsSessionMixin, View):
             'custom_size': utils.custom_size_chosen(choices),
             'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
             'errors': errors,
-            'discrete_pricing': dp,
+            'discrete_pricing': discrete_pricing,
             'trade_user': utils.trade_user(request.user),
             'quote': quote,
         })

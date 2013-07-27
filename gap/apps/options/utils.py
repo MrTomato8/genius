@@ -31,8 +31,8 @@ def custom_size_chosen(choices):
 
 
 def discrete_pricing(product):
-    items = product.prices.all().values('quantity').distinct()
-    return len(items) > 1
+    cnt = product.prices.all().values('quantity').distinct().count()
+    return cnt > 1
 
 
 def trade_user(user):
