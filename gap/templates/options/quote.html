@@ -56,9 +56,9 @@
           <label for="quantity_{{ qty }}">{{ qty|floatformat }}</label></td>
           <td>
             {% if trade_user %}
-            {{ price.tpl_price_incl_tax|floatformat }}
+            {{ price.tpl_price_incl_tax|currency }}
             {% else %}
-            {{ price.rpl_price_incl_tax|floatformat }}
+            {{ price.rpl_price_incl_tax|currency }}
             {% endif %}
           </td>
         </tr>
@@ -69,9 +69,9 @@
           <td>{{ calc_form.quantity }}</td>
           <td>
             {% if trade_user %}
-            {{ price.tpl_price_incl_tax|floatformat }}
+            {{ price.tpl_price_incl_tax|currency }}
             {% else %}
-            {{ price.rpl_price_incl_tax|floatformat }}
+            {{ price.rpl_price_incl_tax|currency }}
             {% endif %}
           </td>
         </tr>
