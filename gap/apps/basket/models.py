@@ -9,7 +9,7 @@ import json
 from decimal import Decimal
 from oscar.templatetags.currency_filters import currency
 from django.utils.translation import ugettext as _
-from django.conf import settings
+from apps.options import utils
 
 
 class Line(AbstractLine):
@@ -119,8 +119,6 @@ class Basket(AbstractBasket):
 
         options = []
 
-        coption, cchoice = settings.OPTIONCHOICE_CUSTOMSIZE
-
         for choice in choices:
             try:
                 # choice_data example: {'size':{'width':1, 'height':1}}
@@ -128,10 +126,12 @@ class Basket(AbstractBasket):
             except KeyError:
                 data = {}
 
-            if choice.option.code == coption and choice.code == cchoice:
-                    value_data = ','.join(
-                        '{0}: {1}'.format(k, v) for k, v in data.iteritems())
-                    value = '{0} ({1})'.format(choice.caption, value_data)
+            if (choice.option.code == utils.custom_size_option_name() and
+                    choice.code == utils.custom_size_option_value()):
+
+                value_data = ','.join(
+                    '{0}: {1}'.format(k, v) for k, v in data.iteritems())
+                value = '{0} ({1})'.format(choice.caption, value_data)
             else:
                 value = choice.caption
 

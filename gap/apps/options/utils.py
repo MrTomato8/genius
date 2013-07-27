@@ -29,6 +29,13 @@ def custom_size_chosen(choices):
     else:
         return custom_size_choice in choices
 
+def custom_size_option_name():
+    return settings.OPTIONCHOICE_CUSTOMSIZE[0]
+
+
+def custom_size_option_value():
+    return settings.OPTIONCHOICE_CUSTOMSIZE[1]
+
 
 def discrete_pricing(product):
     cnt = product.prices.all().values('quantity').distinct().count()

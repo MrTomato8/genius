@@ -1,7 +1,6 @@
 from django.db.models import Max
-from apps.options.utils import custom_size_chosen, trade_user
+from apps.options import utils
 from decimal import Decimal
-from django.conf import settings
 
 
 class OptionsCalculatorError(Exception):
@@ -35,7 +34,7 @@ class CalculatedPrices:
 
     def _get_price_attribute(self, quantity, user, attribute):
 
-        if trade_user(user):
+        if utils.trade_user(user):
             prefix = 'tpl_'
         else:
             prefix = 'rpl_'
@@ -104,8 +103,6 @@ class BaseOptionsCalculator:
         if choice_data is None:
             choice_data = {}
 
-        coption, cchoice = settings.OPTIONCHOICE_CUSTOMSIZE
-
         TWOPLACES = Decimal(10) ** -2
 
         prices = self.pick_prices(choices, quantity)
@@ -115,12 +112,13 @@ class BaseOptionsCalculator:
             rpl_price = price.rpl_price
             tpl_price = price.tpl_price
 
-            if custom_size_chosen(choices):
+            if utils.custom_size_chosen(choices):
                 try:
-                    cargs = choice_data[coption]
+                    cargs = choice_data[utils.custom_size_option_name()]
                 except KeyError:
                     raise NotEnoughArguments(
-                        'choice_data argument does not contain {0} key'.format(coption))
+                        'choice_data argument does not contain {0} key'.format(
+                            utils.custom_size_option_name()))
 
                 if 'width' in cargs and 'height' in cargs:
                     # calculate area in square metres
