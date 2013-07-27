@@ -2,6 +2,7 @@ from django.db.models import Max
 from apps.options import utils
 from decimal import Decimal, ROUND_HALF_UP
 from django.core.exceptions import ObjectDoesNotExist
+from collections import OrderedDict
 
 TWOPLACES = Decimal(10) ** -2
 
@@ -35,6 +36,12 @@ class CalculatedPrices:
 
     def iteritems(self):
         return self._prices.iteritems()
+
+    def values(self):
+        return self._prices.values()
+
+    def ordered(self):
+        return OrderedDict(sorted(self._prices.iteritems(), key=lambda t: t[0]))
 
     def _get_price_attribute(self, quantity, user, attribute):
 

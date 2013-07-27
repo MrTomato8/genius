@@ -201,8 +201,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
             'custom_size': utils.custom_size_chosen(self.choices),
-            'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
-            'discrete_pricing': prices.discrete_pricing,
+            'prices': prices,
             'trade_user': utils.trade_user(request.user),
         })
 
@@ -262,9 +261,8 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'calc_form': calc_form,
             'custom_size_form': custom_size_form,
             'custom_size': utils.custom_size_chosen(self.choices),
-            'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
+            'prices': prices,
             'errors': errors,
-            'discrete_pricing': prices.discrete_pricing,
             'trade_user': utils.trade_user(request.user),
             'quote': quote,
             'choice_data_custom_size': self.session.get_choice_data_custom_size(),
