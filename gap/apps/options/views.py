@@ -183,14 +183,9 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
 
         calc = OptionsCalculator(self.product)
 
-        discrete_pricing = utils.discrete_pricing(self.product)
-
         choice_data = self.session.get_choice_data()
 
-        if discrete_pricing:
-            quantity = None
-        else:
-            quantity = self.session.get_quantity()
+        quantity = self.session.get_quantity()
 
         prices = calc.calculate_costs(self.choices, quantity, choice_data)
 
@@ -207,7 +202,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'custom_size_form': custom_size_form,
             'custom_size': utils.custom_size_chosen(self.choices),
             'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
-            'discrete_pricing': discrete_pricing,
+            'discrete_pricing': prices.discrete_pricing,
             'trade_user': utils.trade_user(request.user),
         })
 
@@ -226,8 +221,6 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
         else:
             self.session.set_choice_data_custom_size({'width': 0, 'height': 0})
 
-        discrete_pricing = utils.discrete_pricing(self.product)
-
         choice_data = self.session.get_choice_data()
 
         calc_form = QuoteCalcForm(request.POST)
@@ -239,11 +232,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
                 errors.append('Minimum order quantity for this '
                               'option set is {0}'.format(min_order))
 
-            if discrete_pricing:
-                prices = calc.calculate_costs(self.choices, None, choice_data)
-            else:
-                prices = calc.calculate_costs(
-                    self.choices, quantity, choice_data)
+            prices = calc.calculate_costs(self.choices, quantity, choice_data)
 
             try:
                 price = prices.get_price_incl_tax(quantity, request.user)
@@ -275,7 +264,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'custom_size': utils.custom_size_chosen(self.choices),
             'prices': OrderedDict(sorted(prices.iteritems(), key=lambda t: t[0])),
             'errors': errors,
-            'discrete_pricing': discrete_pricing,
+            'discrete_pricing': prices.discrete_pricing,
             'trade_user': utils.trade_user(request.user),
             'quote': quote,
             'choice_data_custom_size': self.session.get_choice_data_custom_size(),

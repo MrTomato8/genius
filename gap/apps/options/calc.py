@@ -66,6 +66,9 @@ class BaseOptionsCalculator:
         and choice selections
         '''
         prices = self.product.prices.all()
+
+        discrete = prices.values('quantity').distinct().count() > 1
+
         if quantity is not None:
             prices = prices.filter(min_order__lte=quantity)
 
@@ -92,7 +95,7 @@ class BaseOptionsCalculator:
             raise DuplicateQuantities
 
         # Return prices for all found discrete quantities
-        return prices
+        return prices, discrete
 
     def _apply_choice_data(self, price, choices, choice_data):
         if utils.custom_size_chosen(choices):
@@ -139,10 +142,10 @@ class BaseOptionsCalculator:
         if choice_data is None:
             choice_data = {}
 
-        prices = self.pick_prices(choices, quantity)
+        prices, discrete = self.pick_prices(choices, quantity)
 
         # Discrete pricing scheme
-        if len(prices) > 1:
+        if discrete:
             result.discrete_pricing = True
 
             for price in prices:
