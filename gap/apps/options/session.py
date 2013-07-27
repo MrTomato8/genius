@@ -45,8 +45,8 @@ class OptionsSession(object):
             choice_data.update(data)
         else:
             self.request.session[self.SESSION_KEY]['choice_data'] = data
-            
 
+    # TODO: Return QuerySet, not list
     def get_choices(self):
         choices = []
 
