@@ -191,7 +191,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
 
         prices = calc.calculate_costs(self.choices, quantity, choice_data)
 
-        calc_form = QuoteCalcForm(initial={'quantity': quantity})
+        calc_form = QuoteCalcForm(data={'quantity': quantity})
 
         choice_data_custom_size = self.session.get_choice_data_custom_size()
         custom_size_form = QuoteCustomSizeForm(initial=choice_data_custom_size)
