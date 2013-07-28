@@ -1,18 +1,20 @@
 from django.views.generic import View
-from django.db import models
+from django.db import models, DatabaseError
 from django.core.urlresolvers import reverse
 from apps.options.models import OptionPickerGroup, ArtworkItem
 from apps.options import utils
 from apps.options.forms import picker_form_factory
-from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm
+from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm, QuoteSaveForm, QuoteLoadForm
 from django.http import HttpResponseRedirect
 from apps.options.session import OptionsSessionMixin
-from collections import OrderedDict
 from apps.options.calc import OptionsCalculator, PriceNotAvailable
 from apps.options.forms import ArtworkDeleteForm, ArtworkUploadForm
 from django.contrib import messages
 from oscar.apps.basket.signals import basket_addition
 from django.template.response import TemplateResponse
+from apps.quotes.models import Quote
+import json
+from django.conf import settings
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
@@ -194,6 +196,8 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
         choice_data_custom_size = self.session.get_choice_data_custom_size()
         custom_size_form = QuoteCustomSizeForm(initial=choice_data_custom_size)
 
+        quote_save_form = QuoteSaveForm()
+
         return TemplateResponse(request, self.template_name, {
             'product': self.product,
             'choices': self.choices,
@@ -203,6 +207,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'custom_size': utils.custom_size_chosen(self.choices),
             'prices': prices,
             'trade_user': utils.trade_user(request.user),
+            'quote_save_form': quote_save_form,
         })
 
     def post(self, request, *args, **kwargs):
@@ -249,10 +254,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
         if len(prices) == 0:
             errors.append('No prices found')
 
-        # TODO: Proceed -> POST ModelForm(Quote) -> check and save -> Redirect to Upload(show message about addition)
-
-        # TODO: quote = Quote.get_or_create(product, choices, price, choice_data, quantity ...)
-        # TODO: show model form on quote page if quote.is_valid()
+        quote_save_form = QuoteSaveForm()
 
         return TemplateResponse(request, self.template_name, {
             'product': self.product,
@@ -266,7 +268,76 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'trade_user': utils.trade_user(request.user),
             'quote': quote,
             'choice_data_custom_size': self.session.get_choice_data_custom_size(),
+            'quote_save_form': quote_save_form,
         })
+
+
+class QuoteSaveView(OptionsSessionMixin, OptionsContextMixin, View):
+    def post(self, request, *args, **kwargs):
+        form = QuoteSaveForm(request.POST)
+        if form.is_valid():
+            if len(form.cleaned_data['reference']) > 0:
+                try:
+                    quote = Quote()
+                    quote.caption = form.cleaned_data['reference']
+                    quote.user = request.user
+                    quote.product = self.product
+                    quote.quantity = self.session.get_quantity()
+                    quote.choice_data = json.dumps(
+                        self.session.get_choice_data())
+                    quote.save()
+                    quote.choices = self.choices
+                    quote.save()
+                except DatabaseError:
+                    msg = 'Error saving reference {0}'.format(quote.caption)
+                    messages.add_message(request, messages.ERROR, msg)
+                else:
+                    msg = 'Saved reference {0}'.format(quote.caption)
+                    messages.add_message(request, messages.SUCCESS, msg)
+
+                    quotes = Quote.objects.filter(user=request.user)
+                    if quotes.count() > settings.MAX_SAVED_QUOTES:
+                        quotes.reverse()[0].delete()
+
+        return HttpResponseRedirect(
+            reverse('options:upload',
+                    kwargs={'product_slug': kwargs['product_slug'],
+                            'pk': kwargs['pk']}))
+
+
+class QuoteLoadView(OptionsSessionMixin, View):
+    def post(self, request, *args, **kwargs):
+        product = Product.objects.get(pk=kwargs['pk'])
+
+        form = QuoteLoadForm(request.user, product, request.POST)
+        if form.is_valid():
+            quote = form.cleaned_data['quote']
+
+            if quote.is_valid():
+                self.session.reset_product(quote.product)
+
+                choice_dict = {}
+                for choice in quote.choices.all():
+                    choice_dict[choice.option.code] = choice.pk
+                self.session.reset_choices(choice_dict)
+
+                self.session.reset_quantity(quote.quantity)
+                self.session.reset_choice_data(json.loads(quote.choice_data))
+            else:
+                return HttpResponseRedirect(
+                    reverse('options:pick',
+                            kwargs={'product_slug': kwargs['product_slug'],
+                                    'pk': kwargs['pk']}))
+
+            return HttpResponseRedirect(
+                reverse('options:quote',
+                        kwargs={'product_slug': kwargs['product_slug'],
+                                'pk': kwargs['pk']}))
+        else:
+            return HttpResponseRedirect(
+                reverse('catalogue:detail',
+                        kwargs={'product_slug': kwargs['product_slug'],
+                                'pk': kwargs['pk']}))
 
 
 class ArtworkDeleteView(View):

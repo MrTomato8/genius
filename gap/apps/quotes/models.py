@@ -2,6 +2,7 @@ from django.db import models
 from apps.options.calc import OptionsCalculator, PriceNotAvailable
 from django.contrib.auth.models import User
 from apps.options.models import OptionChoice
+import json
 
 Product = models.get_model('catalogue', 'Product')
 
@@ -16,7 +17,7 @@ class Quote(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return self.caption
+        return '{0} by {1}'.format(self.caption, self.user)
 
     class Meta:
         ordering = ['-date_added']
@@ -24,7 +25,7 @@ class Quote(models.Model):
     def is_valid(self):
         calc = OptionsCalculator(self.product)
         prices = calc.calculate_costs(
-            self.choices, self.quantity, self.choice_data)
+            list(self.choices.all()), self.quantity, json.loads(self.choice_data))
         try:
             prices.get_price_incl_tax(self.quantity, self.user)
         except PriceNotAvailable:
@@ -35,5 +36,5 @@ class Quote(models.Model):
     def price(self):
         calc = OptionsCalculator(self.product)
         prices = calc.calculate_costs(
-            self.choices, self.quantity, self.choice_data)
+            list(self.choices.all()), self.quantity, json.loads(self.choice_data))
         return prices.get_price_incl_tax(self.quantity, self.user)
