@@ -3,8 +3,11 @@ from django.conf import settings
 from django.contrib.auth.models import User
 import os
 from django.dispatch import receiver
+from django.core.exceptions import ObjectDoesNotExist
 
 Option = models.get_model('catalogue', 'Option')
+Product = models.get_model('catalogue', 'Product')
+LineAttachment = models.get_model('basket', 'LineAttachment')
 
 
 class MissingOptionChoiceThumbnail(object):
@@ -90,8 +93,13 @@ class ArtworkItem(models.Model):
 
     @property
     def available(self):
-        # TODO:Walk through Basket and Order lines here looking for an
-        # Option containing this image
+        try:
+            self.lines
+        except ObjectDoesNotExist:
+            return True
+        else:
+            if self.lines.count() > 0:
+                return False
         return True
 
     @property
@@ -130,5 +138,3 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
     if not old_file == new_file:
         if os.path.isfile(old_file.path):
             os.remove(old_file.path)
-
-# quotes here?

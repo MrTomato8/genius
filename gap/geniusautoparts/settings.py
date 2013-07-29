@@ -143,20 +143,21 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.admin',
     # 'django.contrib.admindocs',
-    'gap',
+    #'gap',
     'geniusautoparts',
     'accounts',
     'csvimport',
     'south',
     'compressor',
-    'apps.catalogue',
     'apps.checkout',
     'apps.dashboard.jobs',
     'paypal',
     'apps.pricelist',
-    'apps.options'
+    'apps.options',
+    'apps.quotes',
 ]
-INSTALLED_APPS = INSTALLED_APPS + get_core_apps(['apps.order'])
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
+    ['apps.order', 'apps.basket', 'apps.catalogue'])
 
 ACCOUNTS_SOURCE_NAME = 'Main Account'
 ACCOUNTS_REDEMPTIONS_NAME = 'Sales Account'
@@ -270,5 +271,6 @@ OSCAR_DASHBOARD_NAVIGATION += [
 MISSING_OPTIONCHOICE_THUMB_URL = 'options/img/missing-choice-thumbnail.png'
 OPTIONCHOICE_CUSTOMSIZE = ('size', 'custom')
 TRADE_GROUP_NAME = 'Trade'
+MAX_SAVED_QUOTES = 15
 
 from local_settings import *

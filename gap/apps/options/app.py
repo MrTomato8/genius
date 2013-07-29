@@ -11,6 +11,9 @@ class BaseOptionsApplication(Application):
     quote_view = views.QuoteView
     upload_view = views.UploadView
     artwork_delete_view = views.ArtworkDeleteView
+    add_to_basket_view = views.AddToBasketView
+    quote_save_view = views.QuoteSaveView
+    quote_load_view = views.QuoteLoadView
 
     def get_urls(self):
         urlpatterns = super(BaseOptionsApplication, self).get_urls()
@@ -19,10 +22,16 @@ class BaseOptionsApplication(Application):
             self.pick_view.as_view(), name='pick'),
             url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
             self.quote_view.as_view(), name='quote'),
+            url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/save/$',
+            self.quote_save_view.as_view(), name='quote-save'),
+            url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/load/$',
+            self.quote_load_view.as_view(), name='quote-load'),
             url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
             self.upload_view.as_view(), name='upload'),
             url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/delete/(?P<file_id>\d+)$',
-            self.artwork_delete_view.as_view(), name='upload-artwork-delete')
+            self.artwork_delete_view.as_view(), name='upload-artwork-delete'),
+            url(r'^add/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
+            self.add_to_basket_view.as_view(), name='add-to-basket')
         )
 
         return self.post_process_urls(urlpatterns)

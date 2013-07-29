@@ -22,37 +22,48 @@
 
 {% block content %}
 <div class="clearfix center-block">
-  <div class="grid-8 float-left">
-  {% if items %}
-  <h2>Uploaded:</h2>
-  <div class="upload-items float-left">
+
+  <div class="grid-4 float-left choice-list">
+    <h3>{{ product }}</h3>
     <ul>
-      {% for item in items %}
-      <li>
-        <form id="del-{{ item.file.pk }}" method="POST" action="{%url 'options:upload-artwork-delete' pk=params.pk product_slug=params.product_slug file_id=item.file.pk %}">{% csrf_token %}
-          <input value="delete" type="submit" class="button"/> {{ item.file.filename }}
-        </form>
-      </li>
+      {% for choice in choices %}
+      <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.option }}"/></li>
       {% endfor %}
-    </ul>
-  </div>
-  {% else %}
-  <h2>No files uploaded yet</h2>
-  {% endif %}
+      </ul>
   </div>
 
-  <div class="grid-11 upload-form float-left">
-    <form id="artworkuploadform" method="POST" enctype="multipart/form-data">{% csrf_token %}
-      {{ uploadform.image }}
-    <input value="Upload" type="submit" class="button"/>
-    </form>
-  </div>
+  <div class="grid-7 float-left">
+    {% if items %}
+    <h2>Uploaded:</h2>
+    <div class="upload-items">
+      <ul>
+        {% for item in items %}
+        <li>
+          <form id="del-{{ item.file.pk }}" method="POST" action="{%url 'options:upload-artwork-delete' pk=params.pk product_slug=params.product_slug file_id=item.file.pk %}">{% csrf_token %}
+            <input value="delete" type="submit" class="button"/> {{ item.file.filename }}
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% else %}
+    <h2>No files uploaded yet</h2>
+    {% endif %}
 
-  <div class="grid-2 float-left options-next">
-    <form id="next" method="GET" action="">
-      <input value="Add to basket" type="submit" class="finish button"/>
-    </form>
-  </div>
+
+    <div class="upload-form">
+      <form id="artworkuploadform" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        {{ uploadform.image }}
+      <input value="Upload" type="submit" class="button"/>
+      </form>
+    </div>
+
+    <div class="options-next">
+      <form id="next" method="POST" action="{%url 'options:add-to-basket' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
+        <input value="Add to basket" type="submit" class="finish button"/>
+      </form>
+    </div>
+</div>
 
 
 </div>

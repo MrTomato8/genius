@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load url from future %}
 {% load staticfiles %}
+{% load currency_filters %}
 
 {% block extrastyles %}
 {{ block.super }}
@@ -24,15 +25,15 @@
 <div class="clearfix center-block">
 
   <div class="grid-4 float-left choice-list">
-  <h3>{{ product }}</h3>
-  <ul>
-  {% for choice in choices %}
-  <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.option }}"/></li>
-  {% endfor %}
-  </ul>
+    <h3>{{ product }}</h3>
+    <ul>
+      {% for choice in choices %}
+      <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.option }}"/></li>
+      {% endfor %}
+      </ul>
   </div>
   
-  <div class="grid-4 float-left price-calculator">
+  <div class="grid-7 float-left price-calculator">
     <form id="getquote" method="POST">{% csrf_token %}
       <table>
         <tr>
@@ -45,8 +46,8 @@
             {% endif %}
           </th>
         </tr>
-        {% if discrete_pricing %}
-        {% for qty, price in prices.items %}
+        {% if prices.discrete_pricing %}
+        {% for qty, price in prices.ordered.iteritems %}
         <tr>
           <td><input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" 
           {% ifequal calc_form.quantity.data|slugify qty|slugify %}
@@ -55,9 +56,9 @@
           <label for="quantity_{{ qty }}">{{ qty|floatformat }}</label></td>
           <td>
             {% if trade_user %}
-            {{ price.tpl_price_incl_tax|floatformat }}
+            {{ price.tpl_price_incl_tax|currency }}
             {% else %}
-            {{ price.rpl_price_incl_tax|floatformat }}
+            {{ price.rpl_price_incl_tax|currency }}
             {% endif %}
           </td>
         </tr>
@@ -68,9 +69,9 @@
           <td>{{ calc_form.quantity }}</td>
           <td>
             {% if trade_user %}
-            {{ price.tpl_price_incl_tax|floatformat }}
+            {{ price.tpl_price_incl_tax|currency }}
             {% else %}
-            {{ price.rpl_price_incl_tax|floatformat }}
+            {{ price.rpl_price_incl_tax|currency }}
             {% endif %}
           </td>
         </tr>
@@ -115,30 +116,29 @@
 
 
   {% if quote.valid %}
-  <div class="grid-7 float-left options-quote">
-    <h2>
-      {% if trade_user %}
-      &pound;{{ quote.price.tpl_price_incl_tax|floatformat }}
-      {% else %}
-      &pound;{{ quote.price.rpl_price_incl_tax|floatformat }}
+  <div class="grid-7 float-left">
+    <div class="options-quote">
+      <h2>
+        {{ quote.price|currency }}
+        for
+        {{ quote.quantity }} unit(s) of {{ product }} with following options:</h2>
+      <ul>
+      {% for choice in choices %}
+        <li>{{ choice.option }} {{ choice.caption }}</li>
+      {% endfor %}
+      </ul>
+      {% if custom_size %}
+      Custom size is {{ choice_data_custom_size.width }}(mm) x {{ choice_data_custom_size.height }}(mm)
       {% endif %}
-      for
-      {{ quote.quantity }} unit(s) of {{ product }} with following options:</h2>
-    <ul>
-    {% for choice in choices %}
-      <li>{{ choice.option }} {{ choice.caption }}</li>
-    {% endfor %}
-    </ul>
-    {% if custom_size %}
-    Custom size is {{ width }}(mm) x {{ height }}(mm)
-    {% endif %}
-  </div>
+    </div>
 
-  <div class="grid-2 float-left options-next">
-    <form id="next" method="GET" action="{%url 'options:upload' pk=params.pk product_slug=params.product_slug %}">
-      <input value="Proceed" type="submit" class="finish button"/>
-    </form>
-  </div>
+    <div class="options-next">
+      <form id="quote-save" method="POST" action="{%url 'options:quote-save' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
+        <input value="Proceed" type="submit" class="finish button"/>
+        {{ quote_save_form }}
+      </form>
+    </div>
+  </div>  
   {% endif %}    
 
 </div>

@@ -1,14 +1,13 @@
-from apps.pricelist.models import Price, OptionChoice
-from apps.options.models import OptionPicker
 from django.conf import settings
 from django.contrib.auth.models import Group
-from django.db.models import Min
+from django.db import models
+from apps.options.models import OptionPicker, OptionChoice
 
 
 def available_choices(product, picker):
     return OptionChoice.objects.filter(
         option=picker.option,
-        prices__in=Price.objects.filter(product=product)).distinct()
+        prices__in=product.prices.all()).distinct()
 
 
 def available_pickers(product, group):
@@ -30,25 +29,17 @@ def custom_size_chosen(choices):
     else:
         return custom_size_choice in choices
 
+def custom_size_option_name():
+    return settings.OPTIONCHOICE_CUSTOMSIZE[0]
+
+
+def custom_size_option_value():
+    return settings.OPTIONCHOICE_CUSTOMSIZE[1]
+
 
 def discrete_pricing(product):
-    items = Price.objects.filter(product=product).values('quantity').distinct()
-    return len(items) > 1
-
-
-def available_quantities(product, choices):
-    result = {}
-    prices = Price.objects.filter(product=product)
-
-    for choice in choices:
-        prices = prices.filter(option_choices=choice)
-
-    items = prices.values('quantity').distinct()
-
-    for item in items:
-        result[item['quantity']] = None
-
-    return result
+    cnt = product.prices.all().values('quantity').distinct().count()
+    return cnt > 1
 
 
 def trade_user(user):
@@ -62,9 +53,9 @@ def trade_user(user):
 
 def min_order(product, choices):
 
-    prices = Price.objects.filter(product=product)
+    prices = product.prices.all()
 
     for choice in choices:
         prices = prices.filter(option_choices=choice)
 
-    return prices.aggregate(Min('min_order'))['min_order__min']
+    return prices.aggregate(models.Min('min_order'))['min_order__min']

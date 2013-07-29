@@ -1,4 +1,5 @@
 from apps.options.models import OptionPicker, ArtworkItem
+from apps.quotes.models import Quote
 from django import forms
 
 
@@ -32,8 +33,31 @@ class QuoteCalcForm(forms.Form):
 
 
 class QuoteCustomSizeForm(forms.Form):
-    width = forms.DecimalField()
-    height = forms.DecimalField()
+    width = forms.IntegerField()
+    height = forms.IntegerField()
+
+
+class QuoteSaveForm(forms.Form):
+    reference = forms.CharField(
+        max_length=30,
+        required=False,
+        label='Reference to save (Optional)')
+
+class QuoteChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.caption
+
+
+class QuoteLoadForm(forms.Form):
+    quote = QuoteChoiceField(
+        queryset=Quote.objects.none(),
+        required=True,
+        label='Reference')
+
+    def __init__(self, user, product, *args, **kwargs):
+        super(QuoteLoadForm, self).__init__(*args, **kwargs)
+        self.fields['quote'].queryset = Quote.objects.filter(
+            user=user.pk, product=product.pk)
 
 
 class ArtworkDeleteForm(forms.Form):

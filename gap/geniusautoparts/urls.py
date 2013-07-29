@@ -6,7 +6,7 @@ from django.conf import settings
 from accounts.dashboard.app import application as accounts_app
 from accounts.views import AccountBalanceView
 
-from gap.views import product_options, get_quote
+#from gap.views import product_options, get_quote
 from apps.app import application
 #from oscar.app import application
 
@@ -28,8 +28,8 @@ urlpatterns = patterns('',
 
     url(r'^giftcard-balance/', AccountBalanceView.as_view(),
         name="account-balance"),
-    url(r'^product-options/(?P<product_id>\d+)/$', product_options, name='product_options'),
-    url(r'^get-quote/(?P<id>\d+)/$', get_quote, name='get_quote'),
+#    url(r'^product-options/(?P<product_id>\d+)/$', product_options, name='product_options'),
+#    url(r'^get-quote/(?P<id>\d+)/$', get_quote, name='get_quote'),
     (r'^pricelist/', include('apps.pricelist.urls')),
     (r'^options/', include(options_app.urls)),
     # url(r'^dashboard/projects/', include(projects_app.urls)),

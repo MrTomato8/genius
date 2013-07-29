@@ -46,21 +46,31 @@
       <div class="pattern"></div>
 
       <div class="price">
-        <p><span class="price-new">{{ product.stockrecord.price_incl_tax|currency }}</span> <span class="price-old"></span></p>
-        <span class="price-tax">Ex Tax: {{ product.stockrecord.price_excl_tax|currency }}</span><br>
-        <span class="reward"><small></small></span><br>
-        <br>
-        <div class="discount"><br />
-        </div>
+        {% if product.prices.count > 0 %}
+          <a href="{% url 'options:pick' pk=product.pk product_slug=product.slug %}" class="button button-green">Get instant price</a>
+          <br />
+          <br />
+          <form id="quote-load" method="POST" action="{%url 'options:quote-load' pk=product.pk product_slug=product.slug %}">{% csrf_token %}
+            {{ quote_load_form }}<br />
+            <input value="Load saved quote" type="submit" class="finish button"/>
+            
+          </form>
+        {% else %}
+          <p><span class="price-new">{{ product.stockrecord.price_incl_tax|currency }}</span> <span class="price-old"></span></p>
+          <span class="price-tax">Ex Tax: {{ product.stockrecord.price_excl_tax|currency }}</span><br>
+          <span class="reward"><small></small></span><br>
+          <br>
+          <div class="discount"><br />
+          </div>
+        {% endif %}
       </div>
 
       <div class="add-to-carts">
-        <a href="{% url 'options:pick' pk=product.pk product_slug=product.slug %}" class="button button-green">Get instant price</a><br><br>
-        {% comment %}
-		{% block product_basket_form %}
+        {% if product.prices.count == 0 %}
+        	{% block product_basket_form %}
           {% include "catalogue/partials/add_to_basket_form.html" %}
-        {% endblock %}
-		{% endcomment %}
+          {% endblock %}
+		    {% endif %}
       </div>
 
     </div>
