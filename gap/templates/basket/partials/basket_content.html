@@ -27,7 +27,7 @@
         <div class="basket-header">
             <h4 class="grid-5 float-left">{% trans "Items to buy now" %}</h4>
             <h4 class="grid-4 float-left">{% trans "Quantity" %}</h4>
-            <h4 class="grid-2 float-right">{% trans "Price" %}</h4>
+            <h4 class="grid-2 float-right price-center">{% trans "Price" %}</h4>
         </div>
     </div>
     {% endblock %}
@@ -81,9 +81,9 @@
     </form>
     {% endblock %}
 
-    <div class="row-fluid">
+    <div class="basket_summary">
         {% block vouchers %}
-        <div class="span6">
+        <div class="grid-5 float-left well promo">
             <div class="sub-header">
                 <h2>{% trans "Voucher/promo code" %}</h2>
             </div>
@@ -104,7 +104,7 @@
         {% endblock vouchers %}
 
         {% block baskettotals %}
-        <div class="span6">
+        <div class="grid-6 float-left well total">
             <div class="sub-header">
                 <h2>{% trans "Totals" %}</h2>
             </div>
