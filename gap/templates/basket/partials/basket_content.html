@@ -2,6 +2,7 @@
 {% load thumbnail %}
 {% load currency_filters %}
 
+
 {% if basket_warnings %}
     <h5>{% trans "Important messages about items in your basket" %}</h5>
 	{% for warning in basket_warnings %}
@@ -23,10 +24,10 @@
 {% if not basket.is_empty %}
     {% block basket_form_headers %}
     <div class="basket-title hidden-phone">
-        <div class="row-fluid">
-            <h4 class="span6">{% trans "Items to buy now" %}</h4>
-            <h4 class="span4">{% trans "Quantity" %}</h4>
-            <h4 class="span2 align-right">{% trans "Price" %}</h4>
+        <div class="basket-header">
+            <h4 class="grid-5 float-left">{% trans "Items to buy now" %}</h4>
+            <h4 class="grid-4 float-left">{% trans "Quantity" %}</h4>
+            <h4 class="grid-2 float-right">{% trans "Price" %}</h4>
         </div>
     </div>
     {% endblock %}
@@ -38,10 +39,10 @@
 
         {% for form in formset %}
         <div class="basket-items">
-            <div class="row-fluid">
-            <div class="span6">
-                {{ form.id }}
-                <div class="image_container">
+            <div class="basket-header">
+                <div class="grid-5 float-left">
+                    {{ form.id }}
+                    <div class="image_container">
                         {% with image=form.instance.product.primary_image %}
                         {% thumbnail image.original "200x200" upscale=False as thumb %}
                         <a href="{{ form.instance.product.get_absolute_url }}"><img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}"></a>
@@ -51,7 +52,8 @@
                     <h4><a href="{{ form.instance.product.get_absolute_url }}">{{ form.instance.description }}</a></h4>
                     <p class="availability {{ form.instance.product.stockrecord.availability_code }}">{{ form.instance.product.stockrecord.availability }}</p>
                 </div>
-                <div class="span4">
+
+                <div class="grid-4 float-left">
                     <div class="checkout-quantity control-group {% if form.errors %}error{% endif %}">
                         {{ form.quantity }}
                         <button class="btn" type="submit">{% trans "Update" %}</button>
@@ -70,7 +72,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="span2">
+                <div class="grid-2 float-left">
                     <p class="price_color align-right">{{ form.instance.unit_price_incl_tax|currency }}<p>
                 </div>
             </div>

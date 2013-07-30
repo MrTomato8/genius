@@ -33,12 +33,14 @@
         {% block content_wrapper %}
     	<div class="container-fluid page">
             <div class="page_inner">
+                {% block page_title %}
                 <section id="page-title">
                     {% block breadcrumbs %}{% endblock %}
                     {% block header %}
                     <h1>{% block headertext %}{% endblock %}</h1>
-                {% endblock %}
+                    {% endblock %}
                 </section>
+                {% endblock %}
                 {% include "partials/alert_messages.html" %}
                 {% block subnavigation %}{% endblock %}
                 <section id="content" class="set-size clearfix">

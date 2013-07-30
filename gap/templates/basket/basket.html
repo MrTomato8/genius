@@ -5,8 +5,44 @@
 {% load thumbnail %}
 {% load i18n %}
 
-{% block title %}
-{% trans "Basket" %} | {{ block.super }}
+{% block extrastyles %}
+{{ block.super }}
+
+<style type="text/css">
+.basket-title {
+clear: both;
+border: 1px solid #ddd;
+background: #F2F2F2;
+padding: 20px;
+margin-bottom: 10px;
+}
+.basket-header{
+    min-height: 30px;
+}
+.basket-items {
+border-bottom: 1px solid #e5e5e5;
+padding: 15px 0;
+}
+.page-header {
+margin: 0 0 0 170px;
+font-size: 32px;
+line-height: 38px;
+text-transform: uppercase;
+}
+#page-title-no-border{
+    width: 100%;
+    padding: 24px 0px 24px 0px;
+}
+}
+</style>
+{% endblock %}
+
+{% block page_title %}
+<section id="page-title-no-border">
+<h1 class="page-header">
+{% trans "Basket" %} 
+</h1>
+</section>
 {% endblock %}
 
 {# Hide mini-basket so we don't have two baskets to keep in sync #}
