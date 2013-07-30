@@ -39,6 +39,8 @@ class BaseOptionsApplication(Application):
     def get_url_decorator(self, pattern):
         if pattern.name.startswith('upload'):
             return login_required
+        if pattern.name == 'quote-save' or pattern.name == 'quote-load':
+            return login_required
         return None
 
 

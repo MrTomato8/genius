@@ -1,5 +1,6 @@
 from oscar.apps.catalogue import views
 from apps.options.forms import QuoteLoadForm
+from apps.quotes.models import Quote
 
 
 class ProductDetailView(views.ProductDetailView):
@@ -11,4 +12,10 @@ class ProductDetailView(views.ProductDetailView):
         return ctx
 
     def get_quote_load_form(self):
-        return QuoteLoadForm(self.request.user, self.object)
+        if not self.request.user.is_authenticated():
+            return None
+        if Quote.objects.filter(
+                user=self.request.user, product=self.object).count() > 0:
+            return QuoteLoadForm(self.request.user, self.object)
+        else:
+            return None
