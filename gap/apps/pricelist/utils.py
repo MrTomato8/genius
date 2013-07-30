@@ -94,6 +94,11 @@ def import_csv(csvfile, create_options=True, create_choices=True):
             continue
 
         try:
+            data['min_area'] = Decimal(row.pop('min_area', None))
+        except DecimalException:
+            data['min_area'] = Decimal(0)
+
+        try:
             data['min_order'] = Decimal(row.pop('min_order', None))
         except DecimalException:
             report.skip('min_order', 'bad value', original_row)

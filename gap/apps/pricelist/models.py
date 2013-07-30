@@ -35,6 +35,11 @@ class Price(models.Model):
     min_order = models.IntegerField(
         validators=[MinValueValidator(0)], db_index=True)
 
+    min_area = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
+        verbose_name='Minimal Area in square meters (for custom sizes)',
+        default=0)
+
     option_choices = models.ManyToManyField(
         OptionChoice, related_name='prices', blank=True,
         verbose_name=u'Option Choices')

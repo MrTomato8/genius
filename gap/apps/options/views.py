@@ -15,6 +15,7 @@ from django.template.response import TemplateResponse
 from apps.quotes.models import Quote
 import json
 from django.conf import settings
+from decimal import Decimal
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
@@ -182,12 +183,24 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
     template_name = 'options/quote.html'
 
     def get(self, request, *args, **kwargs):
+        errors = []
 
         calc = OptionsCalculator(self.product)
 
         choice_data = self.session.get_choice_data()
 
         quantity = self.session.get_quantity()
+
+        min_order = utils.min_order(self.product, self.choices)
+        min_area = utils.min_area(self.product, self.choices)
+
+        if min_order > quantity:
+            errors.append('Minimum order quantity for this '
+                          'option set is {0}'.format(min_order))
+
+        if min_area > 0:
+            errors.append('Minimum custom size area for this '
+                          'option set is {0}'.format(min_area))
 
         prices = calc.calculate_costs(self.choices, quantity, choice_data)
 
@@ -208,17 +221,24 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'prices': prices,
             'trade_user': utils.trade_user(request.user),
             'quote_save_form': quote_save_form,
+            'errors': errors,
         })
 
     def post(self, request, *args, **kwargs):
         errors = []
 
         min_order = utils.min_order(self.product, self.choices)
+        min_area = utils.min_area(self.product, self.choices)
 
         calc = OptionsCalculator(self.product)
 
         custom_size_form = QuoteCustomSizeForm(request.POST)
         if custom_size_form.is_valid():
+            width = custom_size_form.cleaned_data['width']
+            height = custom_size_form.cleaned_data['height']
+            if min_area > Decimal(width * height) / 1000000:
+                errors.append('Minimum custom size area for this '
+                              'option set is {0}'.format(min_area))
             self.session.set_choice_data_custom_size(
                 {'width': custom_size_form.cleaned_data['width'],
                  'height': custom_size_form.cleaned_data['height']})

@@ -51,6 +51,7 @@ def trade_user(user):
     return group in user.groups.all()
 
 
+# TODO: these may be optimized
 def min_order(product, choices):
 
     prices = product.prices.all()
@@ -59,3 +60,13 @@ def min_order(product, choices):
         prices = prices.filter(option_choices=choice)
 
     return prices.aggregate(models.Min('min_order'))['min_order__min']
+
+
+def min_area(product, choices):
+
+    prices = product.prices.all()
+
+    for choice in choices:
+        prices = prices.filter(option_choices=choice)
+
+    return prices.aggregate(models.Min('min_area'))['min_area__min']
