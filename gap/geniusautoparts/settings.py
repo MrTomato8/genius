@@ -273,4 +273,7 @@ OPTIONCHOICE_CUSTOMSIZE = ('size', 'custom')
 TRADE_GROUP_NAME = 'Trade'
 MAX_SAVED_QUOTES = 15
 
+# TODO: Modify this
+OSCAR_MISSING_IMAGE_URL = STATIC_URL + 'options/img/missing-choice-thumbnail.png'
+
 from local_settings import *

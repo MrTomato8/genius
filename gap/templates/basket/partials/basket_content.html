@@ -39,14 +39,20 @@
 
         {% for form in formset %}
         <div class="basket-items">
-            <div class="basket-header">
+            <div class="basket-item">
                 <div class="grid-5 float-left">
                     {{ form.id }}
-                    <div class="image_container">
+                    <div class="">
                         {% with image=form.instance.product.primary_image %}
-                        {% thumbnail image.original "200x200" upscale=False as thumb %}
-                        <a href="{{ form.instance.product.get_absolute_url }}"><img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}"></a>
-                        {% endthumbnail %}
+                        {% if not image.url %}
+                            <a href="{{ form.instance.product.get_absolute_url }}">
+                            <img class="thumbnail" src="{{form.instance.product.primary_image.original.name}}" alt="{{ product.get_title }}"></a>
+                        {% else %}
+                            {% thumbnail image.original "200x200" upscale=False as thumb %}
+                            <a href="{{ form.instance.product.get_absolute_url }}"><img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}"></a>
+                            {% endthumbnail %}
+                        {% endif %}
+
                         {% endwith %}
                     </div>
                     <h4><a href="{{ form.instance.product.get_absolute_url }}">{{ form.instance.description }}</a></h4>
@@ -115,7 +121,7 @@
 
 
     {% block formactions %}
-        <div class="form-actions clearfix" >
+        <div class="clearfix" >
             <a href="{% url checkout:index %}" class="pull-right btn btn-large btn-primary btn-full">{% trans "Proceed to checkout" %}</a>
         </div>
     {% endblock formactions %}
@@ -150,11 +156,11 @@
 	    <div class="span8">
 			{{ form.id }}
 		    <div class="image_container">
-					{% with image=form.instance.product.primary_image %}
-					{% thumbnail image.original "200x200" upscale=False as thumb %}
-					<a href="{{ form.instance.product.get_absolute_url }}"><img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}"></a>
-					{% endthumbnail %}
-					{% endwith %}
+				{% with image=form.instance.product.primary_image %}
+				{% thumbnail image.original "200x200" upscale=False as thumb %}
+				<a href="{{ form.instance.product.get_absolute_url }}"><img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}"></a>
+				{% endthumbnail %}
+				{% endwith %}
 		    </div>
 			<h4><a href="{{ form.instance.product.get_absolute_url }}">{{ form.instance.description }}</a></h4>
                 <p class="availability {{ form.instance.product.stockrecord.availability_code }}">{{ form.instance.product.stockrecord.availability }}</p>
