@@ -1,4 +1,4 @@
-from django.db.models import Max
+from django.db.models import Min, Max
 from apps.options import utils
 from decimal import Decimal, ROUND_HALF_UP
 from django.core.exceptions import ObjectDoesNotExist
@@ -27,6 +27,8 @@ class CalculatedPrices:
     def __init__(self):
         self._prices = {}
         self.discrete_pricing = False
+        self.min_order = 1
+        self.min_area = Decimal(0)
 
     def __len__(self):
         return len(self._prices)
@@ -67,21 +69,54 @@ class BaseOptionsCalculator:
     def __init__(self, product):
         self.product = product
 
-    def pick_prices(self, choices, quantity=None):
+    def _get_area(self, choice_data):
+
+        result = 0
+
+        try:
+            cargs = choice_data[utils.custom_size_option_name()]
+        except KeyError:
+            raise NotEnoughArguments(
+                'choice_data argument does not contain {0} key'.format(
+                    utils.custom_size_option_name()))
+
+        if 'width' in cargs and 'height' in cargs:
+            # calculate area in square metres
+            area = Decimal(cargs['width'] * cargs['height']) / Decimal(1000000)
+
+            result = area
+
+        else:
+            raise NotEnoughArguments('For custom size width and height'
+                                     'should be supplied')
+
+        return result
+
+    def pick_prices(self, choices, choice_data, quantity=None):
         '''
         Picks Price objects which statisfy given quantity
         and choice selections
         '''
         prices = self.product.prices.all()
 
+        custom_size = utils.custom_size_chosen(choices)
+
         discrete = prices.values('quantity').distinct().count() > 1
 
         if quantity is not None:
             prices = prices.filter(min_order__lte=quantity)
 
+        if custom_size:
+            area = self._get_area(choice_data)
+            prices = prices.filter(min_area__lte=area)
+
         # Keep prices for selected options only
         for choice in choices:
             prices = prices.filter(option_choices=choice)
+
+        # There may be several minimal areas matched, lets get closest one
+        min_area_max = prices.aggregate(Max('min_area'))['min_area__max']
+        prices = prices.filter(min_area=min_area_max)
 
         # There may be several different prices for the same quantity
         # with different suitable min_order value. For example:
@@ -91,9 +126,9 @@ class BaseOptionsCalculator:
         #
         # so for the requested quantity=50 closest
         # will be MAX(min_order) = 30
-        if prices.count() > 1:
-            min_order = prices.aggregate(Max('min_order'))['min_order__max']
-            prices = prices.filter(min_order=min_order)
+
+        min_order_max = prices.aggregate(Max('min_order'))['min_order__max']
+        prices = prices.filter(min_order=min_order_max)
 
         # Abort if duplicate quantities found in discrete priced product.
         # You have to look for invalid lines in pricelist
@@ -106,25 +141,11 @@ class BaseOptionsCalculator:
 
     def _apply_choice_data(self, price, choices, choice_data):
         if utils.custom_size_chosen(choices):
-            try:
-                cargs = choice_data[utils.custom_size_option_name()]
-            except KeyError:
-                raise NotEnoughArguments(
-                    'choice_data argument does not contain {0} key'.format(
-                        utils.custom_size_option_name()))
+            return price * self._get_area(choice_data)
 
-            if 'width' in cargs and 'height' in cargs:
-                # calculate area in square metres
-                area = Decimal(cargs['width'] * cargs['height']) / Decimal(1000000)
-
-                return price * area
-
-            else:
-                raise NotEnoughArguments('For custom size width and height'
-                                         'should be supplied')
-
-        # More transformations may be added here in the future
-        return price
+        #elif ... More transformations may be added here in the future
+        else:
+            return price
 
     def _total(self, price, quantity):
         return (price * quantity).quantize(TWOPLACES, ROUND_HALF_UP)
@@ -149,7 +170,7 @@ class BaseOptionsCalculator:
         if choice_data is None:
             choice_data = {}
 
-        prices, discrete = self.pick_prices(choices, quantity)
+        prices, discrete = self.pick_prices(choices, choice_data, quantity)
 
         # Discrete pricing scheme
         if discrete:

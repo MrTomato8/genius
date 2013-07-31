@@ -53,7 +53,7 @@ def list(request):
         prices = paginator.page(paginator.num_pages)
 
     headers = ['Product', 'TPL Price', 'RPL Price', 'Quantity',
-               'Minimum Order']
+               'Minimum Order', 'Minimal Area']
     for option in Option.objects.all():
         headers.append(option.name)
 
@@ -65,6 +65,7 @@ def list(request):
         row.append(price.rpl_price)
         row.append(price.quantity)
         row.append(price.min_order)
+        row.append(price.min_area)
         for option in Option.objects.all():
             choices = []
             for choice in price.option_choices.filter(option=option):
