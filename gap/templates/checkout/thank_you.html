@@ -2,6 +2,13 @@
 {% load currency_filters %}
 {% load thumbnail %}
 {% load i18n %}
+{% load staticfiles %}
+
+{% block extrastyles %}
+{{ block.super }}
+
+<link rel="stylesheet" type="text/css" href="{% static "local/css/bootstrap.css" %}" />
+{% endblock %}
 
 {% block title %}
 {% trans "Confirmation of order" %} {{ order.number }} | {{ block.super }}
