@@ -145,16 +145,17 @@ outline: 0;
     {% block formactions %}
       <div class="form-actions">
       <a href="{% url paypal-redirect %}"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;"></a>
-      <a href="{% url checkout:index %}" class="pull-right btn btn-large btn-primary">Proceed to checkout</a>
+      <a href="/" class="pull-right btn btn-large btn-primary">Proceed to checkout</a>
       </div>
     {% endblock %}
 
 {% endblock content %}
 
+
 {% block onbodyload %}
-{# We pass in the URL to send AJAX requests to #}
-var options = {
+    {# We pass in the URL to send AJAX requests to #}
+    var options = {
     'basketURL': '{% url basket:summary %}'
-};
-oscar.basket.init(options);
+    };
+    oscar.basket.init(options);
 {% endblock %}
