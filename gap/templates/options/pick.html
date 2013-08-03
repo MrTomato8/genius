@@ -123,6 +123,8 @@ $(document).ready(function(){
     description: false,
     validate: false
   });
+  // remove cached checks 
+  $('.radio-choice').attr("checked", false);
 
   $('.options-group .option-choice').hide();
   $('.options-group > li:first-child').find('.option-choice').show();
