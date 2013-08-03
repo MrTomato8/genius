@@ -63,8 +63,9 @@
                         <div style="display:none">
                             {{ form.save_for_later }}
                             {{ form.DELETE }}
+                            {{ form.stockrecord_source }}
                         </div>
-                        {% for field_errors in form.errors.values %}
+                                                {% for field_errors in form.errors.values %}
                             {% for error in field_errors %}
                             <span class="help-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
                             {% endfor %}
