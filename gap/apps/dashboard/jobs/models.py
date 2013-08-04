@@ -55,7 +55,7 @@ def receive_order_placed(sender, order, user, **kwargs):
     stages=Stage.objects.filter(is_default=True)
     job = Job.objects.create(
             order=order,
-            name='Default Name',
+            name=order.number,
             creator=user
           )
     job.stage_set.add(*stages)
