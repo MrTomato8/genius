@@ -151,10 +151,11 @@ outline: 0;
 
 {% endblock content %}
 
+
 {% block onbodyload %}
-{# We pass in the URL to send AJAX requests to #}
-var options = {
+    {# We pass in the URL to send AJAX requests to #}
+    var options = {
     'basketURL': '{% url basket:summary %}'
-};
-oscar.basket.init(options);
+    };
+    oscar.basket.init(options);
 {% endblock %}

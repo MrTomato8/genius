@@ -46,7 +46,7 @@
                 <section id="content" class="set-size clearfix">
                     {% block subheader %}{% endblock subheader %}
                     {# Div exists for AJAX updates to entire content section #}
-                    {% block content %}{% endblock %}
+                    <div id="content_inner">{% block content %}{% endblock %}</div>
                 </section>
             </div>
         </div>
