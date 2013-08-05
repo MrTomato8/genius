@@ -12,8 +12,8 @@ LineAttachment = models.get_model('basket', 'LineAttachment')
 
 class MissingOptionChoiceThumbnail(object):
 
-    def __init__(self, name=None):
-        self.name = name if name else settings.MISSING_OPTIONCHOICE_THUMB_URL
+    def __init__(self, url=None):
+        self.url = url if url else settings.MISSING_OPTIONCHOICE_THUMB_URL
 
 
 class OptionChoice(models.Model):

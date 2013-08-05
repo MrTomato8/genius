@@ -78,7 +78,7 @@ background-color: #f9f9f9;
                     {% for choice in field.field.queryset %}
                     <li>
                         {{ choice.caption }}<br />
-                        <img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.caption }}"/><br />
+                        <img src="{{ choice.get_thumbnail.url }}" alt="{{ choice.caption }}"/><br />
                         <input class="radio-choice" type="radio" name="{{ field.name }}" value="{{ choice.pk }}"
                           {% ifequal field.data|slugify choice.pk|slugify %}
                              checked="checked"
