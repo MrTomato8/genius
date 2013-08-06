@@ -51,6 +51,9 @@ class OrderListView(ListView):
 class JobListView(ListView):
     model = Job
     template_name = 'dashboard/jobs/job_list.html'
+    
+    def get_queryset(self):
+        return Job.objects.all().order_by('name')
 
     def get_context_data(self, **kwargs):
         ctx = super(JobListView, self).get_context_data(**kwargs)
