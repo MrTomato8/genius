@@ -48,6 +48,21 @@ background-color: #f9f9f9;
     <tbody>
     </tbody>
   </table>
+<script type="text/javascript">
+  var AllChoices = new Object ();
+
+  function disableConflictingChoices()
+  {
+    choice_value = $(this).val()
+    conflicts = AllChoices[choice_value].conflicts_with;
+    $(":input:disabled").removeAttr("disabled");
+    if (conflicts.length > 0) {
+      for (var i = 0; i < conflicts.length; i++) {
+        $(":input[value='" + conflicts[i] + "']").attr('disabled', true);
+      }
+    }
+  }
+</script>
 
 <form id="pickoptions" method="POST" class="grid-7 float-left">{% csrf_token %}
 
@@ -76,6 +91,18 @@ background-color: #f9f9f9;
                 <div class="option-choice grid-7">
                   <ul id="carousel-{{ picker.picker.id }}" class="jcarousel-skin-tango grid-7">
                     {% for choice in field.field.queryset %}
+                    <script type="text/javascript">
+                      choice = new Object();
+                      choice.optioncode = "{{ choice.option.code }}";
+                      choice.optioncaption = "{{ choice.option.name }}";
+                      choice.code = "{{ choice.code }}";
+                      choice.caption = "{{ choice.caption }}";
+                      choice.conflicts_with = new Array();
+                      {% for conflicting_choice in choice.conflicts_with.all %}
+                      choice.conflicts_with.push({{ conflicting_choice.pk }});
+                      {% endfor %}
+                      AllChoices[{{ choice.pk }}] = choice;
+                    </script>
                     <li>
                         {{ choice.caption }}<br />
                         <img src="{{ choice.get_thumbnail.url }}" alt="{{ choice.caption }}"/><br />
@@ -117,6 +144,8 @@ background-color: #f9f9f9;
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
+  $(".radio-choice").click(disableConflictingChoices);
+
   $('#pickoptions').stepy({
     legend:false,
     titleTarget: '#title-target',

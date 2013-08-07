@@ -7,12 +7,12 @@ from apps.options.models import OptionPicker, OptionChoice
 def available_choices(product, picker):
     return OptionChoice.objects.filter(
         option=picker.option,
-        prices__in=product.prices.all()).distinct()
+        prices__in=product.prices.all()).distinct().prefetch_related('conflicts_with')
 
 
 def available_pickers(product, group):
     poptions = product.options
-    pickers = OptionPicker.objects.filter(group=group)
+    pickers = OptionPicker.objects.filter(group=group).prefetch_related('option')
     if poptions:
         return pickers.filter(option__in=poptions)
     else:
