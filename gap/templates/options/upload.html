@@ -27,7 +27,7 @@
     <h3>{{ product }}</h3>
     <ul>
       {% for choice in choices %}
-      <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.name %}" alt="{{ choice.option }}"/></li>
+      <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.url %}" alt="{{ choice.option }}"/></li>
       {% endfor %}
       </ul>
   </div>
