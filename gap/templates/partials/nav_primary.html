@@ -13,7 +13,21 @@
                             <div class="arrow-categories"></div>
                                 <ul>
                                     {% for category in categories %}
-                                        <li><a href="{{ category.0.get_absolute_url }}">{{ category.0.name }}</a></li>
+                                        <li>
+                                            <a href="{{ category.0.get_absolute_url }}">{{ category.0.name }}</a>
+                                            {% if category.1 %}
+                                            <div class="sub-menu">
+                                                <div class="arrow-categories"></div>
+                                                <ul>
+                                                    {% for subcategory in category.1 %}
+                                                        <li>
+                                                            <a href="{{ subcategory.0.get_absolute_url }}"> {{ subcategory.0.name }}</a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            <div>
+                                            {% endif %}
+                                        </li>
                                     {% endfor %}
                                 </ul>
                               </div>
@@ -26,32 +40,46 @@
             </ul>
         </nav>
 		<div class="mobile-navigation">
-				
+
 					<div class="click-menu">MENU</div>
-					
+
 					<div class="categories-mobile-links">
-					
+
 						<ul>
-							
-							<li class="mobile"><a href="{% url promotions:home %}" class="home"></a></li>		
+
+							<li class="mobile"><a href="{% url promotions:home %}" class="home"></a></li>
 							<li class="mobile"><div class="plus"></div><a href="{% url catalogue:index %}" class="effect-hover">{% trans "Products" %}</a>
-							
+
 								<ul>
-									
+
 									{% for category in categories %}
-                                        <li class="mobile"><a href="{{ category.0.get_absolute_url }}">{{ category.0.name }}</a></li>
+                                        <li class="mobile">
+                                            {% if category.1 %}
+                                                <div class="plus"></div>
+                                                <a href="{{ category.0.get_absolute_url }}" class="effect-hover">{{ category.0.name }}</a>
+                                                <ul>
+                                                    {% for subcategory in category.1 %}
+                                                        <li class="mobile">
+                                                            <a href="{{ subcategory.0.get_absolute_url }}"> {{ subcategory.0.name }}</a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% else %}
+                                                <a href="{{ category.0.get_absolute_url }}">{{ category.0.name }}</a>
+                                            {% endif %}
+                                        </li>
                                     {% endfor %}
-																	
+
 								</ul>
 							<li class="mobile"><a href="/about/" class="effect-hover">About Us</a></li>
 							<li class="mobile"><a href="/services/" class="effect-hover">Services</a></li>
 							<li class="mobile"><a href="/corporate-policies/" class="effect-hover">Corporate Policies</a></li>
-							<li class="mobile"><a href="/contact/" class="effect-hover">Contact us</a></li>									
+							<li class="mobile"><a href="/contact/" class="effect-hover">Contact us</a></li>
 
 						</ul>
-					
+
 					</div>
-				
+
 				</div>
     </div>
 </div>
