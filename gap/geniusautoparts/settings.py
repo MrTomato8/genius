@@ -156,6 +156,8 @@ INSTALLED_APPS = [
     'apps.options',
     'apps.quotes',
     'apps.utils',
+    'apps.partner',
+    'apps.globals',
 ]
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
     ['apps.order', 'apps.basket', 'apps.catalogue'])

@@ -10,6 +10,9 @@ from decimal import Decimal
 from oscar.templatetags.currency_filters import currency
 from django.utils.translation import ugettext as _
 from apps.options import utils
+from apps.partner.models import StockRecordForChoices
+from apps.globals.models import get_tax_percent
+from apps.partner.wrappers import DefaultWrapper
 import uuid
 
 
@@ -82,9 +85,27 @@ class Line(AbstractLine):
             return super(Line, self)._get_stockrecord_property(property)
         if self.stockrecord_source == self.OPTIONS_CALCULATOR:
             try:
-                return self._get_unit_price_from_pricelist()
+                unit_price = self._get_unit_price_from_pricelist()
             except PriceNotAvailable:
                 return Decimal('0.00')
+            return self._get_stockrecord_choices_property(property, unit_price)
+
+    def get_memory_stockrecord(self, price_excl_tax):
+        sr = getattr(self, 'memory_stockrecord', None)
+        if sr is None:
+            sr = StockRecordForChoices(price_excl_tax)
+            setattr(self, 'memory_stockrecord', sr)
+        else:
+            sr.price_excl_tax = price_excl_tax
+        return sr
+
+
+    def _get_stockrecord_choices_property(self, property, price_excl_tax):
+        stockrecord = self.get_memory_stockrecord(price_excl_tax)
+        attr = getattr(stockrecord, property, None)
+        if attr is None:
+            return price_excl_tax
+        return attr
 
 
 class LineAttribute(AbstractLineAttribute):
@@ -188,5 +209,31 @@ class Basket(AbstractBasket):
 
     add_dynamic_product.alters_data = True
 
+    @property
+    def default_wrapper(self):
+        wr = getattr(self, "_default_wrapper", None)
+        if wr is None:
+            wr = DefaultWrapper(get_tax_percent())
+            setattr(self, "_default_wrapper", wr)
+        return wr
+
+    @property
+    def apply_total_price_incl_tax_and_discounts(self):
+        return self.default_wrapper.get_total_price_incl_tax(self.total_excl_tax)
+
+    @property
+    def apply_total_tax(self):
+        return self.default_wrapper.get_tax(self.total_excl_tax)
+
+    def _get_total(self, property):
+        # to calculate tax apply tax func to total price, and not sum of
+        # all_lines, because tax is given in percent, and prices are shown
+        # with only two decimal places, total tax != sum of all_lines tax
+        if 'line_price_incl_tax_and_discounts' == property:
+            return getattr(self, 'apply_total_price_incl_tax_and_discounts')
+        elif 'line_tax' == property:
+            return getattr(self, 'apply_total_tax')
+        else:
+            return super(Basket, self)._get_total(property)
 
 from oscar.apps.basket.models import *

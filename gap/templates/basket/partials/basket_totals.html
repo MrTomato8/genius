@@ -55,7 +55,11 @@
         {% else %}
             {# No discounts to basket #}
             <tr class="success">
-                <th class="total">{% trans "Basket total" %}</th>
+                <th class="total">{% trans "Basket total (excl. VAT)" %}</th>
+                <th class="total align-right">{{ basket.total_excl_tax|currency }}</th>
+            </tr>
+            <tr class="success">
+                <th class="total">{% trans "Basket total (incl. VAT)" %}</th>
                 <th class="total align-right">{{ basket.total_incl_tax|currency }}</th>
             </tr>
         {% endif %}
@@ -127,6 +131,11 @@
         <tr>
             <th>&nbsp;</th>
             <td></td>
+        </tr>
+
+        <tr>
+            <th class="total">{% trans "Total VAT" %}</th>
+            <td class="total align-right">{{ basket.total_tax|currency }}</td>
         </tr>
         <tr class="success">
             <th class="total"><h4>{% trans "Order total" %}</h4></th>
