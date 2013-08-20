@@ -220,8 +220,8 @@ header .top .top-right ul.menu li { display:inline;padding:0px 0px 0px 18px; }
 .navigation_container nav > ul > li > .sub-menu { display:none;position:absolute;min-width:170px;margin:-11px 0px 0px -24px;border-top:5px solid #f92767;background:#fff;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-moz-box-shadow: 0 0px 14px 1px rgba(0, 0, 0, 0.25);-webkit-box-shadow: 0 0px 14px 1px rgba(0, 0, 0, 0.25);box-shadow: 0 0px 14px 1px rgba(0, 0, 0, 0.25);padding-top:20px; }
 .navigation_container nav > ul > li > .sub-menu > .arrow-categories { width:9px;height:5px;position:absolute;margin:-30px 0px 0px 31px; }
 .navigation_container nav > ul > li > .sub-menu > ul { margin:0px 11px 19px 31px; }
-.navigation_container nav > ul > li > .sub-menu > ul > li > a { padding-right:9px; }
-.navigation_container nav > ul > li > .sub-menu > ul > li a { line-height:30px;color:#000; }
+.navigation_container nav > ul > li > .sub-menu > ul > li > a { padding-right:9px; font-weight: 700;}
+.navigation_container nav > ul > li > .sub-menu > ul > li a { line-height:30px;color:#000;}
 .navigation_container nav > ul > li > .sub-menu > ul > li:hover > a { color:#f92767; }
 
 /* Navigation -> Submenu -> Submenu */
