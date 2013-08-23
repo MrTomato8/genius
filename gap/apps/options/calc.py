@@ -1,6 +1,6 @@
 from django.db.models import Min, Max
 from apps.options import utils
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP, ROUND_UP
 from django.core.exceptions import ObjectDoesNotExist
 from collections import OrderedDict
 
@@ -147,6 +147,14 @@ class BaseOptionsCalculator:
         else:
             return price
 
+    def _calc_units(self, items_per_pack, quantity):
+        if items_per_pack == 1:
+            return 1
+        if items_per_pack == quantity:
+            return 1
+        return (Decimal(quantity) / Decimal(items_per_pack)).quantize(
+            Decimal('1.'), rounding=ROUND_UP)
+
     def _total(self, price, quantity):
         return (price * quantity).quantize(TWOPLACES, ROUND_HALF_UP)
 
@@ -183,15 +191,18 @@ class BaseOptionsCalculator:
                 tpl_price = self._apply_choice_data(
                     price.tpl_price, choices, choice_data)
 
-                rpl_unit_price = self._unit(rpl_price, price.quantity)
-                tpl_unit_price = self._unit(tpl_price, price.quantity)
+                nr_of_units = self._calc_units(
+                    price.items_per_pack, price.quantity)
+
+                rpl_unit_price = self._unit(rpl_price, nr_of_units)
+                tpl_unit_price = self._unit(tpl_price, nr_of_units)
 
                 price_data = {}
 
                 price_data['rpl_price_incl_tax'] = self._total(
-                    rpl_unit_price, price.quantity)
+                    rpl_unit_price, nr_of_units)
                 price_data['tpl_price_incl_tax'] = self._total(
-                    tpl_unit_price, price.quantity)
+                    tpl_unit_price, nr_of_units)
 
                 # These are already quantized
                 price_data['rpl_unit_price_incl_tax'] = rpl_unit_price
@@ -211,8 +222,11 @@ class BaseOptionsCalculator:
                 tpl_price = self._apply_choice_data(
                     price.tpl_price, choices, choice_data)
 
-                rpl_unit_price = self._unit(rpl_price, price.quantity)
-                tpl_unit_price = self._unit(tpl_price, price.quantity)
+                nr_of_units = self._calc_units(
+                    price.items_per_pack, price.quantity)
+
+                rpl_unit_price = self._unit(rpl_price, nr_of_units)
+                tpl_unit_price = self._unit(tpl_price, nr_of_units)
 
                 price_data = {}
 

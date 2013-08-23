@@ -99,6 +99,11 @@ def import_csv(csvfile, create_options=True, create_choices=True):
             data['min_area'] = Decimal(0)
 
         try:
+            data['items_per_pack'] = int(row.pop('items_per_pack', 1))
+        except ValueError:
+            data['items_per_pack'] = 1
+
+        try:
             data['min_order'] = Decimal(row.pop('min_order', None))
         except DecimalException:
             report.skip('min_order', 'bad value', original_row)

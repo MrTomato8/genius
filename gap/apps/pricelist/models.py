@@ -40,6 +40,9 @@ class Price(models.Model):
         verbose_name='Minimal Area in square meters (for custom sizes)',
         default=0)
 
+    items_per_pack = models.IntegerField(
+        validators=[MinValueValidator(1)], default=1)
+
     option_choices = models.ManyToManyField(
         OptionChoice, related_name='prices', blank=True,
         verbose_name=u'Option Choices')
