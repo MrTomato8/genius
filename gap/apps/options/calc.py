@@ -239,14 +239,17 @@ class BaseOptionsCalculator:
                 nr_of_units = self._calc_units(
                     items_per_pack, price.quantity)
 
+                nr_of_units_required = self._calc_units(
+                    items_per_pack, quantity)
+
                 rpl_unit_price = self._unit(rpl_price, nr_of_units)
                 tpl_unit_price = self._unit(tpl_price, nr_of_units)
 
                 rpl_min_unit_price = self._unit(
-                    price.min_rpl_price, quantity)
+                    price.min_rpl_price, nr_of_units_required)
 
                 tpl_min_unit_price = self._unit(
-                    price.min_tpl_price, quantity)
+                    price.min_tpl_price, nr_of_units_required)
 
                 if rpl_unit_price < rpl_min_unit_price:
                     rpl_unit_price = rpl_min_unit_price
@@ -256,13 +259,13 @@ class BaseOptionsCalculator:
 
                 price_data = {}
 
-                price_data['nr_of_units'] = nr_of_units
+                price_data['nr_of_units'] = nr_of_units_required
                 price_data['items_per_pack'] = items_per_pack
 
                 price_data['rpl_price_incl_tax'] = self._total(
-                    rpl_unit_price, quantity)
+                    rpl_unit_price, nr_of_units_required)
                 price_data['tpl_price_incl_tax'] = self._total(
-                    tpl_unit_price, quantity)
+                    tpl_unit_price, nr_of_units_required)
 
                 # These are already quantized
                 price_data['rpl_unit_price_incl_tax'] = rpl_unit_price
