@@ -23,11 +23,19 @@ class Price(models.Model):
 
     tpl_price = models.DecimalField(
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
-        verbose_name='TPL Price')
+        verbose_name='Price for trade customers')
 
     rpl_price = models.DecimalField(
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
-        verbose_name='RPL Price')
+        verbose_name='Price for retail customers')
+
+    min_tpl_price = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
+        verbose_name='Minimal price for trade customers', default=0)
+
+    min_rpl_price = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
+        verbose_name='Minimal price for retail customers', default=0)
 
     quantity = models.IntegerField(
         validators=[MinValueValidator(0)], db_index=True)
@@ -41,7 +49,8 @@ class Price(models.Model):
         default=0)
 
     items_per_pack = models.IntegerField(
-        validators=[MinValueValidator(1)], default=1)
+        validators=[MinValueValidator(1)], default=1,
+        verbose_name=u'Items per pack/sheet')
 
     option_choices = models.ManyToManyField(
         OptionChoice, related_name='prices', blank=True,

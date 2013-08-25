@@ -5,6 +5,7 @@ import csv
 from decimal import Decimal, DecimalException
 from django.db import IntegrityError
 from django.template.defaultfilters import slugify
+from django.conf import settings
 
 
 Product = models.get_model('catalogue', 'Product')
@@ -88,6 +89,17 @@ def import_csv(csvfile, create_options=True, create_choices=True):
             continue
 
         try:
+            data['min_tpl_price'] = Decimal(row.pop('min_tpl_price', 0))
+        except DecimalException:
+            data['min_tpl_price'] = Decimal(0)
+
+        try:
+            data['min_rpl_price'] = Decimal(row.pop('min_rpl_price', 0))
+        except DecimalException:
+            data['min_rpl_price'] = Decimal(0)
+
+
+        try:
             data['quantity'] = Decimal(row.pop('quantity', None))
         except DecimalException:
             report.skip('quantity', 'bad value', original_row)
@@ -163,5 +175,13 @@ def import_csv(csvfile, create_options=True, create_choices=True):
         report.success()
 
     Price.objects.filter(state=Price.OLD).delete()
+
+    # Ensure option for storing items required exist
+    o, new = Option.objects.get_or_create(
+        code=settings.OPTION_ITEMSPERPACK, type=Option.OPTIONAL)
+    if len(o.name) == 0:
+        o.name = o.code
+        o.save()
+
 
     return report

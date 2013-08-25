@@ -194,6 +194,12 @@ class BaseOptionsCalculator:
                 tpl_price = self._apply_choice_data(
                     price.tpl_price, choices, choice_data)
 
+                if rpl_price < price.min_rpl_price:
+                    rpl_price = price.min_rpl_price
+
+                if tpl_price < price.min_tpl_price:
+                    tpl_price = price.min_tpl_price
+
                 items_per_pack = price.items_per_pack
                 nr_of_units = self._calc_units(
                     items_per_pack, price.quantity)
@@ -235,6 +241,18 @@ class BaseOptionsCalculator:
 
                 rpl_unit_price = self._unit(rpl_price, nr_of_units)
                 tpl_unit_price = self._unit(tpl_price, nr_of_units)
+
+                rpl_min_unit_price = self._unit(
+                    price.min_rpl_price, quantity)
+
+                tpl_min_unit_price = self._unit(
+                    price.min_tpl_price, quantity)
+
+                if rpl_unit_price < rpl_min_unit_price:
+                    rpl_unit_price = rpl_min_unit_price
+
+                if tpl_unit_price < tpl_min_unit_price:
+                    tpl_unit_price = tpl_min_unit_price
 
                 price_data = {}
 
