@@ -259,12 +259,15 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             prices = calc.calculate_costs(self.choices, quantity, choice_data)
 
             try:
-                price = prices.get_price_incl_tax(quantity, request.user)
+                price, nr_of_units, items_per_pack = prices.get_price_incl_tax(
+                    quantity, request.user)
             except PriceNotAvailable:
                 quote = {'valid': False}
             else:
                 quote = {'valid': True}
                 quote['price'] = price
+                quote['nr_of_units'] = nr_of_units
+                quote['items_per_pack'] = items_per_pack
                 quote['quantity'] = quantity
 
         else:

@@ -53,7 +53,10 @@ class CalculatedPrices:
             prefix = 'rpl_'
 
         try:
-            return self._prices[quantity][prefix + attribute]
+            return (
+                self._prices[quantity][prefix + attribute],
+                self._prices[quantity]['nr_of_units'],
+                self._prices[quantity]['items_per_pack'])
         except KeyError:
             raise PriceNotAvailable
 
@@ -191,13 +194,17 @@ class BaseOptionsCalculator:
                 tpl_price = self._apply_choice_data(
                     price.tpl_price, choices, choice_data)
 
+                items_per_pack = price.items_per_pack
                 nr_of_units = self._calc_units(
-                    price.items_per_pack, price.quantity)
+                    items_per_pack, price.quantity)
 
                 rpl_unit_price = self._unit(rpl_price, nr_of_units)
                 tpl_unit_price = self._unit(tpl_price, nr_of_units)
 
                 price_data = {}
+
+                price_data['nr_of_units'] = nr_of_units
+                price_data['items_per_pack'] = items_per_pack
 
                 price_data['rpl_price_incl_tax'] = self._total(
                     rpl_unit_price, nr_of_units)
@@ -222,13 +229,17 @@ class BaseOptionsCalculator:
                 tpl_price = self._apply_choice_data(
                     price.tpl_price, choices, choice_data)
 
+                items_per_pack = price.items_per_pack
                 nr_of_units = self._calc_units(
-                    price.items_per_pack, price.quantity)
+                    items_per_pack, price.quantity)
 
                 rpl_unit_price = self._unit(rpl_price, nr_of_units)
                 tpl_unit_price = self._unit(tpl_price, nr_of_units)
 
                 price_data = {}
+
+                price_data['nr_of_units'] = nr_of_units
+                price_data['items_per_pack'] = items_per_pack
 
                 price_data['rpl_price_incl_tax'] = self._total(
                     rpl_unit_price, quantity)

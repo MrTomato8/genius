@@ -14,7 +14,9 @@ from apps.partner.models import StockRecordForChoices
 from apps.globals.models import get_tax_percent
 from apps.partner.wrappers import DefaultWrapper
 import uuid
+from django.conf import settings
 
+Option = models.get_model('catalogue', 'Option')
 
 class Line(AbstractLine):
     PRODUCT_STOCKRECORD, OPTIONS_CALCULATOR = (
@@ -30,10 +32,14 @@ class Line(AbstractLine):
         'Stockrecord source', max_length=30, default=PRODUCT_STOCKRECORD,
         choices=STOCKRECORD_SOURCE_CHOICES)
 
+    # Total items required, nr of stickers or nr of business cards for example
+    items_required = models.PositiveIntegerField()
+
     def get_option_choices(self):
         choice_data = {}
         choices = []
-        for attr in self.attributes.all():
+        itemsperpack = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
+        for attr in self.attributes.exclude(option=itemsperpack):
             # May be a lot of excetpions here, but it will mean problems in
             # another parts of the code or hacking attempt.
             choices.append(OptionChoice.objects.get(option=attr.option,
@@ -48,8 +54,8 @@ class Line(AbstractLine):
     def _get_unit_price_from_pricelist(self):
         choices, choice_data = self.get_option_choices()
         calc = OptionsCalculator(self.product)
-        prices = calc.calculate_costs(choices, self.quantity, choice_data)
-        return prices.get_unit_price_incl_tax(self.quantity, self.basket.owner)
+        prices = calc.calculate_costs(choices, self.items_required, choice_data)
+        return prices.get_unit_price_incl_tax(self.items_required, self.basket.owner)
 
     def get_warning(self):
         if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
@@ -58,7 +64,8 @@ class Line(AbstractLine):
             if not self.price_incl_tax:
                 return
             try:
-                current_price_incl_tax = self._get_unit_price_from_pricelist()
+                current_price_incl_tax, nr_of_units, items_per_pack = (
+                    self._get_unit_price_from_pricelist())
             except PriceNotAvailable:
                 msg = u"'%(product)s' is no longer available"
                 return _(msg) % {'product': self.product.get_title()}
@@ -85,7 +92,8 @@ class Line(AbstractLine):
             return super(Line, self)._get_stockrecord_property(property)
         if self.stockrecord_source == self.OPTIONS_CALCULATOR:
             try:
-                unit_price = self._get_unit_price_from_pricelist()
+                unit_price, nr_of_units, items_per_pack = (
+                    self._get_unit_price_from_pricelist())
             except PriceNotAvailable:
                 return Decimal('0.00')
             return self._get_stockrecord_choices_property(property, unit_price)
@@ -181,25 +189,37 @@ class Basket(AbstractBasket):
         line_ref = uuid.uuid1().hex
 
         try:
-            price_incl_tax = prices.get_unit_price_incl_tax(quantity, self.owner)
+            price_incl_tax, nr_of_units, items_per_pack = (
+                prices.get_unit_price_incl_tax(quantity, self.owner))
         except PriceNotAvailable:
             price_incl_tax = None
+            nr_of_units = quantity
 
         line, created = self.lines.get_or_create(
             line_reference=line_ref,
             product=product,
-            defaults={'quantity': quantity,
+            defaults={'quantity': nr_of_units,
+                      'items_required': quantity,
                       'price_excl_tax': price_excl_tax,
                       'price_incl_tax': price_incl_tax,
                       'stockrecord_source': Line.OPTIONS_CALCULATOR})
         if created:
+            # Do not use get_or_create here - it is not thread safe, and may cause
+            # problems. Just ensure needed option exist before going production.
+            o = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
+            line.attributes.create(option=o,
+                                   value=items_per_pack,
+                                   value_code=items_per_pack,
+                                   data='')
+
             for option_dict in options:
                 line.attributes.create(option=option_dict['option'],
                                        value=option_dict['value'],
                                        value_code=option_dict['value_code'],
                                        data=json.dumps(option_dict['data']))
         else:
-            line.quantity += quantity
+            line.quantity += nr_of_units
+            line.items_required += quantity
             line.save()
 
         for attachment in attachments:
