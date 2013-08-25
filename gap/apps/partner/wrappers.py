@@ -23,3 +23,5 @@ class DefaultWrapper(wrappers.DefaultWrapper):
         tax = self.get_tax(price_excl_tax)
         price_excl_tax = price_excl_tax + tax
         return price_excl_tax
+
+from oscar.apps.partner.models import *
