@@ -121,7 +121,7 @@
       <h2>
         {{ quote.price|currency }}
         for
-        {{ quote.quantity }} unit(s) of {{ product }} with following options:</h2>
+        {{ quote.nr_of_units }} unit(s) ({{ quote.items_per_pack }} items per unit) of {{ product }} with following options:</h2>
       <ul>
       {% for choice in choices %}
         <li>{{ choice.option }} {{ choice.caption }}</li>
