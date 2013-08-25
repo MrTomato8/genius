@@ -57,8 +57,8 @@ class Price(models.Model):
         verbose_name=u'Option Choices')
 
     def __unicode__(self):
-        s = '{0}({1}) for {2} units of {3} ({4}). '\
-            'Minimum order of {5} units required.'
+        s = '{0}({1}) for {2} items of {3} ({4}). '\
+            'Minimum order of {5} items required.'
 
         choices = []
         for choice in self.option_choices.all():
