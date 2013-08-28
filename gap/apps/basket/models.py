@@ -15,7 +15,7 @@ from apps.globals.models import get_tax_percent
 from apps.partner.wrappers import DefaultWrapper
 import uuid
 from django.conf import settings
-
+from apps.basket.exceptions import ItemsRequiredException
 Option = models.get_model('catalogue', 'Option')
 
 class Line(AbstractLine):
@@ -33,14 +33,14 @@ class Line(AbstractLine):
         choices=STOCKRECORD_SOURCE_CHOICES)
 
     # Total items required, nr of stickers or nr of business cards for example
-    items_required = models.PositiveIntegerField()
-
+    # making this field nullable an exception will raise if there are problems 
+    items_required = models.PositiveIntegerField(null=True)
     def get_option_choices(self):
         choice_data = {}
         choices = []
         itemsperpack = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
         for attr in self.attributes.exclude(option=itemsperpack):
-            # May be a lot of excetpions here, but it will mean problems in
+            # May be a lot of exceptions here, but it will mean problems in
             # another parts of the code or hacking attempt.
             choices.append(OptionChoice.objects.get(option=attr.option,
                                                     code=attr.value_code))
@@ -61,6 +61,10 @@ class Line(AbstractLine):
         if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
             super(Line, self).get_warning()
         if self.stockrecord_source == self.OPTIONS_CALCULATOR:
+            if self.items_required is None:
+                # In this case there is probably a bug in the code
+                # execution should not continue
+                raise ItemsRequiredException
             if not self.price_incl_tax:
                 return
             try:
@@ -91,6 +95,11 @@ class Line(AbstractLine):
         if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
             return super(Line, self)._get_stockrecord_property(property)
         if self.stockrecord_source == self.OPTIONS_CALCULATOR:
+            
+            if self.items_required is None:
+                # In this case there is probably a bug in the code
+                # execution should not continue
+                raise ItemsRequiredException
             try:
                 unit_price, nr_of_units, items_per_pack = (
                     self._get_unit_price_from_pricelist())
@@ -198,7 +207,8 @@ class Basket(AbstractBasket):
         line, created = self.lines.get_or_create(
             line_reference=line_ref,
             product=product,
-            defaults={'quantity': nr_of_units,
+            defaults={
+                      'quantity': nr_of_units,
                       'items_required': quantity,
                       'price_excl_tax': price_excl_tax,
                       'price_incl_tax': price_incl_tax,
