@@ -1,0 +1,2 @@
+class ItemsRequiredException(Exception):
+    pass
