@@ -36,6 +36,8 @@ class Line(AbstractLine):
     # making this field nullable an exception will raise if there are problems 
     items_required = models.PositiveIntegerField(null=True, blank=True)
     def save(self,*args,**kwargs):
+        
+        super(Line,self).save(*args,**kwargs)
         if self.stockrecord_source == self.OPTIONS_CALCULATOR:
             choices, choice_data = self.get_option_choices()
             try:
@@ -52,11 +54,13 @@ class Line(AbstractLine):
                 nr_of_units = quantity
                 price_incl_tax = None
             #now we save with the new calculated variables
-            self.quantity=nr_of_units
-            self.price_incl_tax = price_incl_tax
-            self.save()
+            if self.quantity==nr_of_units and self.price_incl_tax == price_incl_tax:
+                pass
+            else:
+                self.quantity=nr_of_units
+                self.price_incl_tax = price_incl_tax
+                self.save()
             pass
-        super(Line,self).save(*args,**kwargs)
     def get_option_choices(self):
         choice_data = {}
         choices = []
