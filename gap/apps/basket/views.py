@@ -6,8 +6,7 @@ class BasketView(CoreBasketView):
     form_class = BasketLineForm
     def formset_valid(self, formset):
         '''
-        should import all the core oscar code for performance
-        for now it's just ok
+        Only some check
         '''
         # Never thrust user input
         formset_copy = formset
