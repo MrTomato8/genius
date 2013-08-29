@@ -9,8 +9,7 @@ class BasketView(CoreBasketView):
         Only some check
         '''
         # Never thrust user input
-        formset_copy = formset
-        for form in formset_copy:
+        for form in formset:
             line = form.instance
             if line.stockrecord_source == line.PRODUCT_STOCKRECORD:
                 if form.cleaned_data['items_required'] is not None:
