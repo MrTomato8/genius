@@ -59,7 +59,19 @@
 
                 <div class="grid-3 float-left">
                     <div class="checkout-quantity control-group {% if form.errors %}error{% endif %}">
-                        {{ form.quantity }}
+                    	{% with stockrecord=form.instance.stockrecord_source option=form.instance.OPTIONS_CALCULATOR product=form.instance.PRODUCT_STOCKRECORD   %}
+                    		{% if stockrecord = option %}
+		                   	<div style="display:none">
+		                        	{{ form.quantity }}
+		                    	</div>   
+		                        {{ form.items_required }}
+	                        {% elif stockrecord = product %}
+		                        {{ form.quantity }}
+		                        <div style="display:none">
+		                        	{{ form.items_required }}
+		                        </div>
+	                        {% endif %}
+                        {% endwith %}
                         <button class="btn" type="submit">{% trans "Update" %}</button>
                         <a href="#" data-id="{{ forloop.counter0 }}" data-behaviours="remove" class="inline">{% trans "Remove" %}</a>
                         <div style="display:none">
