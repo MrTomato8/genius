@@ -34,7 +34,29 @@ class Line(AbstractLine):
 
     # Total items required, nr of stickers or nr of business cards for example
     # making this field nullable an exception will raise if there are problems 
-    items_required = models.PositiveIntegerField(null=True)
+    items_required = models.PositiveIntegerField(null=True, blank=True)
+    def save(self,*args,**kwargs):
+        if self.stockrecord_source == self.OPTIONS_CALCULATOR:
+            choices, choice_data = self.get_option_choices()
+            try:
+                calc = OptionsCalculator(self.product)
+                prices = calc.calculate_costs(
+                    choices, self.items_required, choice_data
+                )
+                price_incl_tax, nr_of_units, items_per_pack = prices.get_unit_price_incl_tax(
+                    self.items_required, self.basket.owner
+                )
+            except PriceNotAvailable:
+                # something has gone wrong, we do what has been done in Basket.add_dynamic_product
+                # TODO(): Log
+                nr_of_units = quantity
+                price_incl_tax = None
+            #now we save with the new calculated variables
+            self.quantity=nr_of_units
+            self.price_incl_tax = price_incl_tax
+            self.save()
+            pass
+        super(Line,self).save(*args,**kwargs)
     def get_option_choices(self):
         choice_data = {}
         choices = []
