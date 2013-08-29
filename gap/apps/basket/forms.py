@@ -1,4 +1,5 @@
 from oscar.apps.basket.forms import BasketLineForm as CoreBasketLineForm
+from apps.basket.models import Line
 
 class BasketLineForm(CoreBasketLineForm):
     class Meta:
