@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load thumbnail %}
 {% load currency_filters %}
-
+{% load simple_math %}
 
 {% if basket_warnings %}
     <h5>{% trans "Important messages about items in your basket" %}</h5>
@@ -86,13 +86,13 @@
                     </div>
                 </div>
                 <div class="grid-2 float-left">
-                    <p class="price_color price-center">{{ form.instance.unit_price_excl_tax|currency }}<p/>
+                    <p class="price_color price-center">{{ form.instance.unit_price_excl_tax|multiply:form.quantity.value|currency }}<p/>
                 </div>
                 <div class="grid-1 float-left">
-                    <p class="price_color price-center">{{ form.instance.unit_tax|currency }}<p/>
+                    <p class="price_color price-center">{{ form.instance.unit_tax|multiply:form.quantity.value|currency }}<p/>
                 </div>
                 <div class="grid-2 float-left">
-                    <p class="price_color price-center">{{ form.instance.unit_price_incl_tax|currency }}<p/>
+                    <p class="price_color price-center">{{ form.instance.unit_price_incl_tax|multiply:form.quantity.value|currency }}<p/>
                 </div>
             </div>
         </div>
