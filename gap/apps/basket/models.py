@@ -38,8 +38,7 @@ class Line(AbstractLine):
     def save(self,*args,**kwargs):
         
         super(Line,self).save(*args,**kwargs)
-        
-        if self.stockrecord_source == self.OPTIONS_CALCULATOR:
+        if  self.stockrecord_source == self.OPTIONS_CALCULATOR and self.attributes.all().exists():
             # TODO(): a cache variable could be auspicable for performance, skipping all the code bellow
             choices, choice_data = self.get_option_choices()
             try:
