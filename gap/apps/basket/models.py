@@ -58,6 +58,14 @@ class Line(AbstractLine):
             if self.quantity==nr_of_units and self.price_incl_tax == price_incl_tax:
                 pass
             else:
+                # creating an option
+                o = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
+                ipp, created = self.attributes.get_or_create(option=o)
+                ipp.value=items_per_pack
+                ipp.value_code=items_per_pack,
+                ipp.data =''
+                ipp.save()
+                # now it will redo the cycle
                 self.quantity=nr_of_units
                 self.price_incl_tax = price_incl_tax
                 self.save()
