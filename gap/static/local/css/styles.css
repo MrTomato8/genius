@@ -1,0 +1,7 @@
+/* small customization for pages */
+
+.basket_summary .checkout-quantity input,
+.later_summary .checkout-quantity input {
+  /* 10% was too small*/
+  width: 20%; 
+}
