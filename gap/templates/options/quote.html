@@ -118,10 +118,18 @@
   {% if quote.valid %}
   <div class="grid-7 float-left">
     <div class="options-quote">
-      <h2>
-        {{ quote.price|divide:quote.items_per_pack|currency }}
+    <h2>
+      	{{product}}
+      	starting from
+      	{% if trade_user %}
+      		{{ prices.get_min_rtpl_price|divide:quote.items_per_pack|currency }}
+      	{% else %}
+        	{{ prices.get_min_rpl_price|divide:quote.items_per_pack|currency }}
+        {% endif %}
         each
-        {# quote.nr_of_units #} {{product}} with following options:</h2>
+        {# quote.nr_of_units #}  
+        with following options:
+        </h2>
       <ul >
       {% for choice in choices %}
         <li><p class="medium"><b> <i class="icon-level-up"></i> {{ choice.option }}</b> {{ choice.caption }}</p></li>
