@@ -72,10 +72,30 @@ class CalculatedPrices:
         pass
     
     def get_min_rpl_price(self):
-        return min(self.vanilla_rpl_prices)
+        selected = []
+        for price in self.vanilla_rpl_prices:
+            if price is []:
+                selected = price
+            else:
+                if price[0]<selected[0]:
+                    price = selected
+                elif price[0]==selected[0] and price[1]>selected[1]:
+                    price = selected
+                pass                
+        return selected
     
     def get_min_tpl_price(self):
-        return min(self.vanilla_tpl_prices)
+        selected = []
+        for price in self.vanilla_tpl_prices:
+            if price is []:
+                selected = price
+            else:
+                if price[0]<selected[0]:
+                    price = selected
+                elif price[0]==selected[0] and price[1]>selected[1]:
+                    price = selected
+                pass                
+        return selected
 
 class BaseOptionsCalculator:
 
@@ -203,8 +223,9 @@ class BaseOptionsCalculator:
 
             for price in prices:
                 
-                rpl_price_history.append(price.rpl_price)
-                tpl_price_history.append(price.tpl_price)
+                rpl_price_history.append((price.rpl_price, price.items_per_pack))
+                tpl_price_history.append((price.tpl_price, price.items_per_pack))
+
 
                 rpl_price = self._apply_choice_data(
                     price.rpl_price, choices, choice_data)
@@ -246,8 +267,8 @@ class BaseOptionsCalculator:
             except ObjectDoesNotExist:
                 return result
             
-            rpl_price_history.append(price.rpl_price)
-            tpl_price_history.append(price.tpl_price)
+            rpl_price_history.append((price.rpl_price, price.items_per_pack))
+            tpl_price_history.append((price.tpl_price, price.items_per_pack))
             
             if quantity is not None:
                 
