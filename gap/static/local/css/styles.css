@@ -1,0 +1,29 @@
+.basket_summary .checkout-quantity input,
+.later_summary .checkout-quantity input {
+  width: 20%;
+  margin-right: 2px;
+  margin-bottom: 0px;
+}
+h4{
+	font-size: 17px;
+}
+h5{
+	font-size:16px
+}
+h6{
+	font-size:15px
+}
+.medium{
+	font-size:12px
+}
+.medium-large{
+	font-size:13px
+}
+.underscore{
+	text-decoration: underline;
+}
+.boxed{
+	border: dotted 1px gray;
+	padding: 1px 2px;
+}
+

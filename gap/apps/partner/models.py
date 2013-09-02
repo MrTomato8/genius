@@ -23,3 +23,5 @@ class StockRecordForChoices(object):
         Return a product's tax value
         """
         return DefaultWrapper(self.curr_tax_percent).calculate_tax(self)
+
+from oscar.apps.partner.models import *

@@ -2,7 +2,7 @@
 {% load url from future %}
 {% load staticfiles %}
 {% load currency_filters %}
-
+{% load simple_math %}
 {% block extrastyles %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "options/css/styles.css" %}" />
@@ -40,9 +40,9 @@
           <th style="width: 160px;">Quantity</th>
           <th>
             {% if trade_user %}
-            Trade Price
+            Trade Price (min)
             {% else %}
-            Price
+            Price (min)
             {% endif %}
           </th>
         </tr>
@@ -119,17 +119,18 @@
   <div class="grid-7 float-left">
     <div class="options-quote">
       <h2>
-        {{ quote.price|currency }}
-        for
-        {{ quote.nr_of_units }} unit(s) ({{ quote.items_per_pack }} items per unit) of {{ product }} with following options:</h2>
-      <ul>
+        {{ quote.price|divide:quote.items_per_pack|currency }}
+        each
+        {# quote.nr_of_units #} {{product}} with following options:</h2>
+      <ul >
       {% for choice in choices %}
-        <li>{{ choice.option }} {{ choice.caption }}</li>
+        <li><p class="medium"><b> <i class="icon-level-up"></i> {{ choice.option }}</b> {{ choice.caption }}</p></li>
       {% endfor %}
       </ul>
       {% if custom_size %}
       Custom size is {{ choice_data_custom_size.width }}(mm) x {{ choice_data_custom_size.height }}(mm)
       {% endif %}
+      <p class="medium-large"><i class="icon-warning-sign"></i> <span class="boxed">Price per {{product}} can change with quantity</span></p>
     </div>
 
     <div class="options-next">
