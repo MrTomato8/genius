@@ -65,7 +65,17 @@ class CalculatedPrices:
 
     def get_price_incl_tax(self, quantity, user):
         return self._get_price_attribute(quantity, user, 'price_incl_tax')
-
+    
+    def add_price_history(self, tpl_prices, rpl_prices):
+        self.vanilla_tpl_prices = tpl_prices
+        self.vanilla_rpl_prices = rpl_prices
+        pass
+    
+    def get_min_rpl_price(self):
+        return min(self.vanilla_rpl_prices)
+    
+    def get_min_tpl_price(self):
+        return min(self.vanilla_tpl_prices)
 
 class BaseOptionsCalculator:
 
@@ -182,12 +192,19 @@ class BaseOptionsCalculator:
             choice_data = {}
 
         prices, discrete = self.pick_prices(choices, choice_data, quantity)
-
+        
+        # vanilla price history
+        rpl_price_history = []
+        tpl_price_history = []
+        
         # Discrete pricing scheme
         if discrete:
             result.discrete_pricing = True
 
             for price in prices:
+                
+                rpl_price_history.append(price.rpl_price)
+                tpl_price_history.append(price.tpl_price)
 
                 rpl_price = self._apply_choice_data(
                     price.rpl_price, choices, choice_data)
@@ -228,8 +245,12 @@ class BaseOptionsCalculator:
                 price = prices.get()
             except ObjectDoesNotExist:
                 return result
-
+            
+            rpl_price_history.append(price.rpl_price)
+            tpl_price_history.append(price.tpl_price)
+            
             if quantity is not None:
+                
                 rpl_price = self._apply_choice_data(
                     price.rpl_price, choices, choice_data)
                 tpl_price = self._apply_choice_data(
@@ -272,7 +293,7 @@ class BaseOptionsCalculator:
                 price_data['tpl_unit_price_incl_tax'] = tpl_unit_price
 
                 result.add(quantity, price_data)
-
+        result.add_price_history(rpl_price_history, tpl_price_history)
         return result
 
 
