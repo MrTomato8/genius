@@ -72,30 +72,31 @@ class CalculatedPrices:
         pass
     
     def get_min_rpl_price(self):
-        selected = []
+        selected = None
         for price in self.vanilla_rpl_prices:
-            if price is []:
+            if selected is None:
                 selected = price
             else:
-                if price[0]<selected[0]:
+                if price[0] and price[0]<selected[0]:
                     price = selected
                 elif price[0]==selected[0] and price[1]>selected[1]:
                     price = selected
                 pass                
-        return selected
+        return {'price':selected[0], 'items_per_pack':selected[1]}
     
     def get_min_tpl_price(self):
-        selected = []
+        selected = None
         for price in self.vanilla_tpl_prices:
-            if price is []:
+            if selected is None:
                 selected = price
             else:
-                if price[0]<selected[0]:
+                
+                if price[0] and price[0]<selected[0]:
                     price = selected
                 elif price[0]==selected[0] and price[1]>selected[1]:
                     price = selected
-                pass                
-        return selected
+                pass
+        return {'price':selected[0], 'items_per_pack':selected[1]}
 
 class BaseOptionsCalculator:
 
