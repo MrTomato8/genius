@@ -123,7 +123,7 @@
       	starting from
       	{% if trade_user %}
       	{% with vanilla_price=prices.get_min_rpl_price %}
-      		{ vanilla_price.price|divide:vanilla_price.items_per_pack|currency }}
+      		{{ vanilla_price.price|divide:vanilla_price.items_per_pack|currency }}
       	{% endwith %}
       	{% else %}
 		{% with vanilla_price=prices.get_min_tpl_price %}
