@@ -122,11 +122,16 @@
       	{{product}}
       	starting from
       	{% if trade_user %}
-      		{{ prices.get_min_rtpl_price|divide:quote.items_per_pack|currency }}
+      	{% with vanilla_price=prices.get_min_rpl_price %}
+      		{ vanilla_price.price|divide:vanilla_price.items_per_pack|currency }}
+      	{% endwith %}
       	{% else %}
-        	{{ prices.get_min_rpl_price|divide:quote.items_per_pack|currency }}
+		{% with vanilla_price=prices.get_min_tpl_price %}
+		       	{{ vanilla_price.price|divide:vanilla_price.items_per_pack|currency }}
+        {% endwith %}
         {% endif %}
-        each
+       	
+        each,
         {# quote.nr_of_units #}  
         with following options:
         </h2>
