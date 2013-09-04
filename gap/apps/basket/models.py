@@ -41,6 +41,7 @@ class Line(AbstractLine):
         if  self.stockrecord_source == self.OPTIONS_CALCULATOR and self.attributes.all().exists():
             # TODO(): a cache variable could be auspicable for performance, skipping all the code bellow
             choices, choice_data = self.get_option_choices()
+            failed=False
             try:
                 calc = OptionsCalculator(self.product)
                 prices = calc.calculate_costs(
@@ -52,19 +53,22 @@ class Line(AbstractLine):
             except PriceNotAvailable:
                 # something has gone wrong, we do what has been done in Basket.add_dynamic_product
                 # TODO(): Log
-                nr_of_units = quantity
+                nr_of_units = self.quantity
                 price_incl_tax = None
+                failed=True
             #now we save with the new calculated variables
             if self.quantity==nr_of_units and self.price_incl_tax == price_incl_tax:
                 pass
             else:
-                # creating an option
-                o = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
-                ipp, created = self.attributes.get_or_create(option=o)
-                ipp.value=items_per_pack
-                ipp.value_code=items_per_pack,
-                ipp.data =''
-                ipp.save()
+                #we crate an option only if PriceNotAvailable was not raised
+                if not failed:
+                    # creating an option
+                    o = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
+                    ipp, created = self.attributes.get_or_create(option=o)
+                    ipp.value=items_per_pack
+                    ipp.value_code=items_per_pack,
+                    ipp.data =''
+                    ipp.save()
                 # now it will redo the cycle
                 self.quantity=nr_of_units
                 self.price_incl_tax = price_incl_tax
