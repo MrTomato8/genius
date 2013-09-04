@@ -51,13 +51,54 @@ class CalculatedPrices:
             prefix = 'tpl_'
         else:
             prefix = 'rpl_'
-
+        
+        # Initialization of multipliers
+        units_multipler = Decimal('1')
+        price_multiplier = Decimal('1')
+        
+        # variables
+        sheet_type = False
+        selected_quantity = 0
+        found = False
+        
+        # It will found if is sheet type using an euristic method
+        for key in self._prices:
+            if self._prices[key]['items_per_pack']>key:
+                sheet_type =True
+                found = False
+                selected_quantity = 0
+                break
+            if key == quantity:
+                selected_quantity= key
+                found = True
+            elif not found and key > selected_quantity and key < quantity:
+                selected_quantity= key
+        # If the algorithm found it to be a sheet like product it will do this      
+        if sheet_type:
+            for key in self._prices:
+                price = self._prices[key]
+                nr_of_items = (Decimal(quantity) / Decimal(price['items_per_pack'])).quantize(Decimal('1.'), rounding=ROUND_UP)
+                if key == nr_of_items:
+                    units_multiplier=Decimal(nr_of_items)
+                    selected_quantity = key
+                    break
+                elif key > selected_quantity and key < nr_of_items:
+                    units_multiplier=Decimal(nr_of_items)
+                    selected_quantity = key
+        else:
+            #we do not want a division by zero
+            if selected_quantity == 0:
+                raise PriceNotAvailable
+            units_multiplier = price_multiplier = Decimal(ceil(quantity/float(selected_quantity)))
+        
+        quantity = selected_quantity
+        
         try:
-            return (
-                self._prices[quantity][prefix + attribute],
-                self._prices[quantity]['nr_of_units'],
+            return  (
+                self._prices[quantity][prefix + attribute]*price_multiplier,
+                self._prices[quantity]['nr_of_units']*units_multiplier,
                 self._prices[quantity]['items_per_pack'])
-        except KeyError:
+        except: 
             raise PriceNotAvailable
 
     def get_unit_price_incl_tax(self, quantity, user):
