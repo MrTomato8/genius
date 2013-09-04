@@ -98,7 +98,7 @@ class CalculatedPrices:
                 self._prices[quantity][prefix + attribute]*price_multiplier,
                 self._prices[quantity]['nr_of_units']*units_multiplier,
                 self._prices[quantity]['items_per_pack'])
-        except: 
+        except KeyError: 
             raise PriceNotAvailable
 
     def get_unit_price_incl_tax(self, quantity, user):
