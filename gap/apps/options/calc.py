@@ -60,7 +60,6 @@ class CalculatedPrices:
         # variables
         sheet_type = False
         selected_quantity = 0
-        found = False
         
         if self.matrix_for_pack:
             for key in self._prices:
@@ -78,8 +77,8 @@ class CalculatedPrices:
             for key in self._prices:
                 if key == quantity:
                     selected_quantity= key
-                    found = True
-                elif not found and key > selected_quantity and key < quantity:
+                    break
+                elif key > selected_quantity and key < quantity:
                     selected_quantity= key
             if selected_quantity == 0:
                 raise PriceNotAvailable
