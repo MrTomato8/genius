@@ -16,3 +16,7 @@ def divide(value, arg, prec=2):
 def int_multiply(value, arg):
     """multiply: value * arg"""
     return value*arg
+@register.filter
+def divide_triple(value, arg):
+    """divide: value / arg"""
+    return divide(value, arg, prec=3)
