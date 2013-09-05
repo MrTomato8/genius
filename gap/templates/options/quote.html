@@ -47,14 +47,15 @@
           </th>
         </tr>
         {% if prices.discrete_pricing and prices.matrix_for_pack %}
-        {% if trade_user %}
-        	{% for qty, price in prices.ordered.iteritems %}
+        	{% if trade_user %}
+        		{% with prices.values|last as price %}
         		<tr>
         			<td>{{ calc_form.quantity }}</td>
         			<td>
-	        		Starting from {{price.tpl_price_incl_tax|divide_triple:price.items_per_pack|currency}} each
+	        		Starting from £{{price.rpl_price_incl_tax|divide_triple:price.items_per_pack}} each
 	        		</td>
 	        	</tr>
+	        	{% endwith %}
 	        {% else %}
 	        	{% with prices.values|last as price %}
 	        	<tr>
