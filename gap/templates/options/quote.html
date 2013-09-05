@@ -54,14 +54,15 @@
         			{{qty|int_multiply:price.items_per_pack}}
         			</td>
         			<td>
-	        		{{price.tpl_price_incl_tax|divide:price.items_per_pack|currency}}
+	        		{{price.tpl_price_incl_tax|int_multiply:qty|currency}}
 	        		</td>
 	        	</tr>
+	        	
+	        	{%endfor%}
 	        	<tr>
 	        		<td>{{ calc_form.quantity }}</td>
 	        		<td>input desidered quantity.</td>
 	        	</tr>
-	        	{%endfor%}
 	        {% else %}
 	        	{% with prices.values|last as price %}
 	        	<tr>
