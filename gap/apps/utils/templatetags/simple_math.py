@@ -12,3 +12,7 @@ def multiply(value, arg, prec=2):
 def divide(value, arg, prec=2):
     """divide: value / arg"""
     return round(Decimal(str(value))/Decimal(str(arg)), prec)
+@register.filter
+def int_multiply(value, arg):
+    """multiply: value * arg"""
+    return value*arg
