@@ -3,6 +3,7 @@ from apps.options import utils
 from decimal import Decimal, ROUND_HALF_UP, ROUND_UP
 from django.core.exceptions import ObjectDoesNotExist
 from collections import OrderedDict
+from math import ceil
 
 TWOPLACES = Decimal(10) ** -2
 
