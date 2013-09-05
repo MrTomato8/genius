@@ -40,30 +40,58 @@
           <th style="width: 160px;">Quantity</th>
           <th>
             {% if trade_user %}
-            Trade Price (min)
+            Trade Price
             {% else %}
-            Price (min)
+            Price
             {% endif %}
           </th>
         </tr>
-        {% if prices.discrete_pricing %}
-        {% for qty, price in prices.ordered.iteritems %}
-        <tr>
-          <td><input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" 
-          {% ifequal calc_form.quantity.data|slugify qty|slugify %}
-          checked="checked"
-          {% endifequal %} />
-          <label for="quantity_{{ qty }}">{{ qty|floatformat }}</label></td>
-          <td>
-            {% if trade_user %}
-            {{ price.tpl_price_incl_tax|currency }}
-            {% else %}
-            {{ price.rpl_price_incl_tax|currency }}
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-        {% else %}
+        {% if prices.discrete_pricing and prices.matrix_for_pack %}
+        {% if trade_user %}
+        	{% for qty, price in prices.ordered.iteritems %}
+        		<tr>
+        			<td>
+        			{{qty|int_multiply:price.items_per_pack}}
+        			</td>
+        			<td>
+	        		{{price.tpl_price_incl_tax|int_multiply:qty|currency}}
+	        		</td>
+	        	</tr>
+	        	
+	        	{%endfor%}
+	        	<tr>
+	        		<td>{{ calc_form.quantity }}</td>
+	        		<td>input desidered quantity.</td>
+	        	</tr>
+	        {% else %}
+	        	{% with prices.values|last as price %}
+	        	<tr>
+        			<td>{{ calc_form.quantity }}</td>
+        			<td>
+	        		Starting from {{price.rpl_price_incl_tax|divide:price.items_per_pack|currency}} each
+	        		</td>
+	        	</tr>
+	        	{% endwith %}
+	        {% endif %}
+        	
+        {% elif prices.discrete_pricing%}
+	        {% for qty, price in prices.ordered.iteritems %}
+	        <tr>
+	          <td><input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" 
+	          {% ifequal calc_form.quantity.data|slugify qty|slugify %}
+	          checked="checked"
+	          {% endifequal %} />
+	          <label for="quantity_{{ qty }}">{{ qty|floatformat }}</label></td>
+	          <td>
+	            {% if trade_user %}
+	            {{ price.tpl_price_incl_tax|currency }}
+	            {% else %}
+	            {{ price.rpl_price_incl_tax|currency }}
+	            {% endif %}
+	          </td>
+	        </tr>
+	        {% endfor %}
+	        {% else %}
         {% with prices.values|first as price %}
         <tr>
           <td>{{ calc_form.quantity }}</td>
@@ -118,15 +146,15 @@
   {% if quote.valid %}
   <div class="grid-7 float-left">
     <div class="options-quote">
-    <h2>
+      <h2>
       	{{product}}
       	starting from
       	{% if trade_user %}
-      	{% with vanilla_price=prices.get_min_rpl_price %}
+      	{% with vanilla_price=prices.get_min_tpl_price %}
       		{{ vanilla_price.price|divide:vanilla_price.items_per_pack|currency }}
       	{% endwith %}
       	{% else %}
-		{% with vanilla_price=prices.get_min_tpl_price %}
+		{% with vanilla_price=prices.get_min_rpl_price %}
 		       	{{ vanilla_price.price|divide:vanilla_price.items_per_pack|currency }}
         {% endwith %}
         {% endif %}
@@ -137,7 +165,7 @@
         </h2>
       <ul >
       {% for choice in choices %}
-        <li><p class="medium-large"><b> <i class="icon-level-up"></i> {{ choice.option }}</b> {{ choice.caption }}</p></li>
+        <li><p class="medium"><b> <i class="icon-level-up"></i> {{ choice.option }}</b> {{ choice.caption }}</p></li>
       {% endfor %}
       </ul>
       {% if custom_size %}
