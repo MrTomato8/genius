@@ -26,6 +26,7 @@ class PriceNotAvailable(Exception):
 class CalculatedPrices:
     def __init__(self):
         self._prices = {}
+        self.matrix_for_pack = False
         self.discrete_pricing = False
         self.min_order = 1
         self.min_area = Decimal(0)
@@ -61,32 +62,25 @@ class CalculatedPrices:
         selected_quantity = 0
         found = False
         
-        # It will found if is sheet type using an euristic method
-        for key in self._prices:
-            if self._prices[key]['items_per_pack']>key:
-                sheet_type =True
-                found = False
-                selected_quantity = 0
-                break
-            if key == quantity:
-                selected_quantity= key
-                found = True
-            elif not found and key > selected_quantity and key < quantity:
-                selected_quantity= key
-        # If the algorithm found it to be a sheet like product it will do this      
-        if sheet_type:
+        if self.matrix_for_pack:
             for key in self._prices:
                 price = self._prices[key]
                 nr_of_items = (Decimal(quantity) / Decimal(price['items_per_pack'])).quantize(Decimal('1.'), rounding=ROUND_UP)
                 if key == nr_of_items:
-                    units_multiplier=Decimal(nr_of_items)
                     selected_quantity = key
                     break
                 elif key > selected_quantity and key < nr_of_items:
-                    units_multiplier=Decimal(nr_of_items)
                     selected_quantity = key
+            units_multiplier=Decimal(nr_of_items)
+            if selected_quantity == 0:
+                raise PriceNotAvailable
         else:
-            #we do not want a division by zero
+            for key in self._prices:
+                if key == quantity:
+                    selected_quantity= key
+                    found = True
+                elif not found and key > selected_quantity and key < quantity:
+                    selected_quantity= key
             if selected_quantity == 0:
                 raise PriceNotAvailable
             units_multiplier = price_multiplier = Decimal(ceil(quantity/float(selected_quantity)))
@@ -249,7 +243,8 @@ class BaseOptionsCalculator:
         # unit prices with 2 decimal places, so on the calculation one cent may be
         # lost. Here we just need to adapt to Oscar's way of calculating things.
         result = CalculatedPrices()
-
+        matrix_for_pack = False
+        
         if choice_data is None:
             choice_data = {}
 
@@ -262,7 +257,10 @@ class BaseOptionsCalculator:
         # Discrete pricing scheme
         if discrete:
             result.discrete_pricing = True
-
+            for price in prices:
+                if price.quantity<price.items_per_pack:
+                    matrix_for_pack = result.matrix_for_pack = True
+                    break
             for price in prices:
                 
                 rpl_price_history.append((price.rpl_price, price.items_per_pack))
@@ -273,16 +271,25 @@ class BaseOptionsCalculator:
                     price.rpl_price, choices, choice_data)
                 tpl_price = self._apply_choice_data(
                     price.tpl_price, choices, choice_data)
-
-                if rpl_price < price.min_rpl_price:
-                    rpl_price = price.min_rpl_price
-
-                if tpl_price < price.min_tpl_price:
-                    tpl_price = price.min_tpl_price
-
+                
                 items_per_pack = price.items_per_pack
                 nr_of_units = self._calc_units(
                     items_per_pack, price.quantity)
+                
+                if matrix_for_pack:
+                    if rpl_price*price.quantity < price.min_rpl_price:
+                        rpl_price = price.min_rpl_price
+    
+                    if tpl_price*price.quantity < price.min_tpl_price:
+                        tpl_price = price.min_tpl_price
+                else:    
+                    if rpl_price*nr_of_units < price.min_rpl_price:
+                        rpl_price = price.min_rpl_price
+    
+                    if tpl_price*nr_of_units < price.min_tpl_price:
+                        tpl_price = price.min_tpl_price
+
+                
 
                 rpl_unit_price = self._unit(rpl_price, nr_of_units)
                 tpl_unit_price = self._unit(tpl_price, nr_of_units)
@@ -296,7 +303,8 @@ class BaseOptionsCalculator:
                     rpl_unit_price, nr_of_units)
                 price_data['tpl_price_incl_tax'] = self._total(
                     tpl_unit_price, nr_of_units)
-
+                #it was not there
+                price_data['nr_of_units']=nr_of_units
                 # These are already quantized
                 price_data['rpl_unit_price_incl_tax'] = rpl_unit_price
                 price_data['tpl_unit_price_incl_tax'] = tpl_unit_price
