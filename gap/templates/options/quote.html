@@ -76,7 +76,6 @@
         {% elif prices.discrete_pricing%}
 	        {% for qty, price in prices.ordered.iteritems %}
 	        <tr>
-	        	{{price.nr_of_units}}
 	          <td><input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" 
 	          {% ifequal calc_form.quantity.data|slugify qty|slugify %}
 	          checked="checked"
