@@ -54,7 +54,7 @@
         			{{qty|int_multiply:price.items_per_pack}}
         			</td>
         			<td>
-	        		{{price.tpl_price_incl_tax|currency}} each
+	        		{{price.tpl_price_incl_tax|int_multiply:qty|currency}}
 	        		</td>
 	        	</tr>
 	        	{%endfor%}
