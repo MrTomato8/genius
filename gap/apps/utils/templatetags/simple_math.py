@@ -6,12 +6,18 @@ register = template.Library()
 @register.filter
 def multiply(value, arg, prec=2):
     """multiply: value * arg"""
-    return round(Decimal(str(value))*Decimal(str(arg)), prec)
+    try:
+        return round(Decimal(str(value))*Decimal(str(arg)), prec)
+    except:
+        return D(0)
     
 @register.filter
 def divide(value, arg, prec=2):
     """divide: value / arg"""
-    return round(Decimal(str(value))/Decimal(str(arg)), prec)
+    try:
+        return round(Decimal(str(value))/Decimal(str(arg)), prec)
+    except:
+        return D(0)
 @register.filter
 def int_multiply(value, arg):
     """multiply: value * arg"""
