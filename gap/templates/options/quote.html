@@ -140,21 +140,23 @@
   <div class="grid-7 float-left">
     <div class="options-quote">
       <h2>
-      	{{product}}
-      	starting from
-      	{% if trade_user %}
-      	{% with vanilla_price=prices.get_min_tpl_price %}
-      		{{ vanilla_price.price|divide:vanilla_price.items_per_pack|currency }}
-      	{% endwith %}
+      	{% if prices.matrix_for_pack %}
+      		{{product}}
+      		starting from
+      		{% if trade_user %}
+      			{% with vanilla_price=prices.get_min_tpl_price %}
+      				£{{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
+      			{% endwith %}
+      		{% else %}
+      			{% with vanilla_price=prices.get_min_rpl_price %}
+					{{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
+				{% endwith %}
+      		{% endif %}
+      		 each, with following options:
       	{% else %}
-		{% with vanilla_price=prices.get_min_rpl_price %}
-		       	{{ vanilla_price.price|divide:vanilla_price.items_per_pack|currency }}
-        {% endwith %}
-        {% endif %}
-       	
-        each,
-        {# quote.nr_of_units #}  
-        with following options:
+      			{{ quote.price|currency}} for {{ quote.quantity }} {{product}},
+      			with the following options: 
+      	{% endif %}
         </h2>
       <ul >
       {% for choice in choices %}
