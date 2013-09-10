@@ -6,7 +6,7 @@ from collections import OrderedDict
 from math import ceil
 
 TWOPLACES = Decimal(10) ** -2
-
+THREEPLACES = Decimal(10)**-3
 
 class OptionsCalculatorError(Exception):
     pass
