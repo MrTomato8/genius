@@ -35,6 +35,7 @@ class Line(AbstractLine):
     # Total items required, nr of stickers or nr of business cards for example
     # making this field nullable an exception will raise if there are problems 
     items_required = models.PositiveIntegerField(null=True, blank=True)
+    real_quantity = models.PositiveIntegerField(null=True, blank=True)
     def save(self,*args,**kwargs):
         
         super(Line,self).save(*args,**kwargs)
@@ -42,11 +43,13 @@ class Line(AbstractLine):
             # TODO(): a cache variable could be auspicable for performance, skipping all the code bellow
             choices, choice_data = self.get_option_choices()
             failed=False
-            try:
-                calc = OptionsCalculator(self.product)
-                prices = calc.calculate_costs(
+            
+            calc = OptionsCalculator(self.product)
+            prices = calc.calculate_costs(
                     choices, self.items_required, choice_data
                 )
+            try:
+                
                 price_incl_tax, nr_of_units, items_per_pack = prices.get_unit_price_incl_tax(
                     self.items_required, self.basket.owner
                 )
@@ -57,7 +60,15 @@ class Line(AbstractLine):
                 price_incl_tax = None
                 failed=True
             #now we save with the new calculated variables
-            if self.quantity==nr_of_units and self.price_incl_tax == price_incl_tax:
+            if (
+                (
+                    self.quantity==nr_of_units 
+                    or 
+                    (prices.triple_decimal and self.real_quantity==nr_of_units)
+                ) 
+                and 
+                self.price_incl_tax == price_incl_tax
+                ):
                 pass
             else:
                 #we crate an option only if PriceNotAvailable was not raised
@@ -70,7 +81,12 @@ class Line(AbstractLine):
                     ipp.data =''
                     ipp.save()
                 # now it will redo the cycle
-                self.quantity=nr_of_units
+                if prices.triple_decimal:
+                    self.quantity = 1
+                    self.real_quantity=nr_of_units
+                else:
+                    self.quantity=nr_of_units
+                    self.real_quantity=None
                 self.price_incl_tax = price_incl_tax
                 self.save()
             pass
@@ -242,16 +258,22 @@ class Basket(AbstractBasket):
         except PriceNotAvailable:
             price_incl_tax = None
             nr_of_units = quantity
-
+        
+        defaults = {  
+                'quantity': nr_of_units,
+                'items_required': quantity,
+                'price_excl_tax': price_excl_tax,
+                'price_incl_tax': price_incl_tax,
+                'stockrecord_source': Line.OPTIONS_CALCULATOR
+            }
+        if prices.triple_decimal:
+            defaults['real_quantity']=nr_of_units
+            defaults['quantity']=1
+        
         line, created = self.lines.get_or_create(
             line_reference=line_ref,
             product=product,
-            defaults={
-                      'quantity': nr_of_units,
-                      'items_required': quantity,
-                      'price_excl_tax': price_excl_tax,
-                      'price_incl_tax': price_incl_tax,
-                      'stockrecord_source': Line.OPTIONS_CALCULATOR})
+            defaults=defaults)
         if created:
             # Do not use get_or_create here - it is not thread safe, and may cause
             # problems. Just ensure needed option exist before going production.

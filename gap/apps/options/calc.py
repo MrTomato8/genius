@@ -29,6 +29,7 @@ class CalculatedPrices:
         self._prices = {}
         self.matrix_for_pack = False
         self.discrete_pricing = False
+        self.triple_decimal = False
         self.min_order = 1
         self.min_area = Decimal(0)
 
@@ -86,12 +87,19 @@ class CalculatedPrices:
             units_multiplier = price_multiplier = Decimal(ceil(quantity/float(selected_quantity)))
         
         quantity = selected_quantity
-        
+        price = self._prices[quantity]
+        if not (
+            price[prefix + attribute].quantize((Decimal(10)**-2)) 
+            == 
+            price[prefix + attribute].quantize((Decimal(10)**-3))
+            ):
+            price_multiplier = nr_of_items
+            self.real_quantity = True
         try:
             return  (
-                self._prices[quantity][prefix + attribute]*price_multiplier,
-                self._prices[quantity]['nr_of_units']*units_multiplier,
-                self._prices[quantity]['items_per_pack'])
+                price[prefix + attribute]*price_multiplier,
+                price['nr_of_units']*units_multiplier,
+                price['items_per_pack'])
         except KeyError: 
             raise PriceNotAvailable
 
@@ -273,8 +281,11 @@ class BaseOptionsCalculator:
                     price.tpl_price, choices, choice_data)
                 
                 items_per_pack = price.items_per_pack
-                nr_of_units = self._calc_units(
-                    items_per_pack, price.quantity)
+                if not matrix_for_pack:
+                    nr_of_units = self._calc_units(
+                        items_per_pack, price.quantity)
+                else:
+                    nr_of_units=1
                 
                 if matrix_for_pack:
                     if rpl_price*price.quantity < price.min_rpl_price:
