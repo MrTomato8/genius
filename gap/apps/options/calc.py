@@ -233,10 +233,16 @@ class BaseOptionsCalculator:
             Decimal('1.'), rounding=ROUND_UP)
 
     def _total(self, price, quantity):
-        return (price * quantity).quantize(TWOPLACES, ROUND_HALF_UP)
-
+        quantize = TWOPLACES
+        if price.quantize(THREEPLACES) != price.quantize(TWOPLACES):
+            quantize = THREEPLACES
+        return (price * quantity).quantize(quantize, ROUND_HALF_UP)
+        
     def _unit(self, price, quantity):
-        return (price / quantity).quantize(TWOPLACES, ROUND_HALF_UP)
+        quantize = TWOPLACES
+        if price.quantize(THREEPLACES) != price.quantize(TWOPLACES):
+            quantize = THREEPLACES
+        return (price / quantity).quantize(quantize, ROUND_HALF_UP)
 
     def calculate_costs(self, choices, quantity=None, choice_data=None):
         '''
