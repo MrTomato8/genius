@@ -94,7 +94,7 @@ class CalculatedPrices:
             price[prefix + attribute].quantize((Decimal(10)**-3))
             ):
             price_multiplier = nr_of_items
-            self.real_quantity = True
+            self.triple_decimal = True
         try:
             return  (
                 price[prefix + attribute]*price_multiplier,
