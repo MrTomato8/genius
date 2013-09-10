@@ -224,6 +224,11 @@ LOGGING = {
         },
     }
 }
+LOG_ROOT = location('logs')
+# Ensure log root exists
+if not os.path.exists(LOG_ROOT):
+    os.mkdir(LOG_ROOT)
+
 
 OSCAR_SHOP_NAME = 'Genius'
 OSCAR_SHOP_TAGLINE = 'Test Shop'
