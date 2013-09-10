@@ -224,7 +224,7 @@ LOGGING = {
         },
     }
 }
-
+LOG_ROOT = location('logs')
 
 
 OSCAR_SHOP_NAME = 'Genius'
