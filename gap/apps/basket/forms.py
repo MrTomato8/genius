@@ -7,5 +7,5 @@ class BasketLineForm(CoreBasketLineForm):
         exclude = (
            'basket', 'product', 'line_reference',
            'price_excl_tax', 'price_incl_tax',
-           'stockrecord_source'
+           'stockrecord_source','real_quantity',
         )
