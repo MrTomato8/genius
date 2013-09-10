@@ -4,9 +4,9 @@ from decimal import Decimal, ROUND_HALF_UP, ROUND_UP
 from django.core.exceptions import ObjectDoesNotExist
 from collections import OrderedDict
 from math import ceil
-
 TWOPLACES = Decimal(10) ** -2
-THREEPLACES = Decimal(10)**-3
+THREEPLACES=Decimal(10) ** -3
+
 
 class OptionsCalculatorError(Exception):
     pass
@@ -49,19 +49,17 @@ class CalculatedPrices:
         return OrderedDict(sorted(self._prices.iteritems(), key=lambda t: t[0]))
 
     def _get_price_attribute(self, quantity, user, attribute):
-
+        
         if utils.trade_user(user):
             prefix = 'tpl_'
         else:
             prefix = 'rpl_'
-        
-        # Initialization of multipliers
         units_multipler = Decimal('1')
         price_multiplier = Decimal('1')
-        
-        # variables
+
         sheet_type = False
         selected_quantity = 0
+        found = False
         
         if self.matrix_for_pack:
             for key in self._prices:
@@ -72,37 +70,39 @@ class CalculatedPrices:
                     break
                 elif key > selected_quantity and key < nr_of_items:
                     selected_quantity = key
-            units_multiplier=Decimal(nr_of_items)
-            if selected_quantity == 0:
-                raise PriceNotAvailable
-        else:
+            units_multiplier= Decimal(nr_of_items)
+            #price_multiplier = Decimal(ceil(nr_of_items/Decimal(selected_quantity)))
+        elif self.discrete_pricing:
             for key in self._prices:
                 if key == quantity:
                     selected_quantity= key
-                    break
-                elif key > selected_quantity and key < quantity:
+                    found = True
+                elif not found and key > selected_quantity and key < quantity:
                     selected_quantity= key
             if selected_quantity == 0:
                 raise PriceNotAvailable
-            units_multiplier = price_multiplier = Decimal(ceil(quantity/float(selected_quantity)))
+            units_multiplier = Decimal(ceil(quantity/Decimal(selected_quantity)))
+            
+        
         
         quantity = selected_quantity
-        price = self._prices[quantity]
-        if not (
-            price[prefix + attribute].quantize((Decimal(10)**-2)) 
-            == 
-            price[prefix + attribute].quantize((Decimal(10)**-3))
+        prices = self._prices[quantity]
+        if (
+            prices[prefix + attribute].quantize((Decimal(10)**-2)) 
+            != 
+            prices[prefix + attribute].quantize((Decimal(10)**-3))
             ):
             price_multiplier = nr_of_items
             self.triple_decimal = True
         try:
-            return  (
-                price[prefix + attribute]*price_multiplier,
+            tuple = (
+                prices[prefix + attribute]*price_multiplier,
                 price['nr_of_units']*units_multiplier,
-                price['items_per_pack'])
-        except KeyError: 
+                prices['items_per_pack'])
+            return tuple
+        except: 
             raise PriceNotAvailable
-
+            
     def get_unit_price_incl_tax(self, quantity, user):
         return self._get_price_attribute(quantity, user, 'unit_price_incl_tax')
 
@@ -125,7 +125,8 @@ class CalculatedPrices:
                 elif price[0]==selected[0] and price[1]>selected[1]:
                     price = selected
                 pass                
-        return {'price':selected[0], 'items_per_pack':selected[1]}
+        dict = {'price':selected[0], 'items_per_pack':selected[1]}
+        return dict
     
     def get_min_tpl_price(self):
         selected = None
@@ -139,8 +140,9 @@ class CalculatedPrices:
                 elif price[0]==selected[0] and price[1]>selected[1]:
                     price = selected
                 pass
-        return {'price':selected[0], 'items_per_pack':selected[1]}
-
+        dict = {'price':selected[0], 'items_per_pack':selected[1]}
+        return dict
+        
 class BaseOptionsCalculator:
 
     def __init__(self, product):
@@ -186,7 +188,6 @@ class BaseOptionsCalculator:
         if custom_size:
             area = self._get_area(choice_data)
             prices = prices.filter(min_area__lte=area)
-
         # Keep prices for selected options only
         for choice in choices:
             prices = prices.filter(option_choices=choice)
@@ -206,7 +207,7 @@ class BaseOptionsCalculator:
 
         min_order_max = prices.aggregate(Max('min_order'))['min_order__max']
         prices = prices.filter(min_order=min_order_max)
-
+        
         # Abort if duplicate quantities found in discrete priced product.
         # You have to look for invalid lines in pricelist
         if (prices.values('quantity').count() >
@@ -234,15 +235,15 @@ class BaseOptionsCalculator:
 
     def _total(self, price, quantity):
         quantize = TWOPLACES
-        if price.quantize(THREEPLACES) != price.quantize(TWOPLACES):
+        if price.quantize(THREEPLACES) !=price.quantize(TWOPLACES):
             quantize = THREEPLACES
-        return (price * quantity).quantize(THREEPLACES, ROUND_HALF_UP)
+        return (price * quantity).quantize(quantize, ROUND_HALF_UP)
         
     def _unit(self, price, quantity):
         quantize = TWOPLACES
         if price.quantize(THREEPLACES) != price.quantize(TWOPLACES):
             quantize = THREEPLACES
-        return (price / quantity).quantize(THREEPLACES, ROUND_HALF_UP)
+        return (price / quantity).quantize(quantize, ROUND_HALF_UP)
 
     def calculate_costs(self, choices, quantity=None, choice_data=None):
         '''
@@ -276,11 +277,9 @@ class BaseOptionsCalculator:
                     matrix_for_pack = result.matrix_for_pack = True
                     break
             for price in prices:
-                
                 rpl_price_history.append((price.rpl_price, price.items_per_pack))
                 tpl_price_history.append((price.tpl_price, price.items_per_pack))
-
-
+                
                 rpl_price = self._apply_choice_data(
                     price.rpl_price, choices, choice_data)
                 tpl_price = self._apply_choice_data(
@@ -305,27 +304,23 @@ class BaseOptionsCalculator:
     
                     if tpl_price*nr_of_units < price.min_tpl_price:
                         tpl_price = price.min_tpl_price
-
-                
-
                 rpl_unit_price = self._unit(rpl_price, nr_of_units)
                 tpl_unit_price = self._unit(tpl_price, nr_of_units)
 
                 price_data = {}
 
-                price_data['nr_of_units'] = nr_of_units
+                
                 price_data['items_per_pack'] = items_per_pack
 
                 price_data['rpl_price_incl_tax'] = self._total(
                     rpl_unit_price, nr_of_units)
                 price_data['tpl_price_incl_tax'] = self._total(
                     tpl_unit_price, nr_of_units)
-                #it was not there
                 price_data['nr_of_units']=nr_of_units
+                price_data['tpl_price'] = tpl_price
                 # These are already quantized
                 price_data['rpl_unit_price_incl_tax'] = rpl_unit_price
                 price_data['tpl_unit_price_incl_tax'] = tpl_unit_price
-
                 result.add(price.quantity, price_data)
         else:
             result.discrete_pricing = False
@@ -333,11 +328,11 @@ class BaseOptionsCalculator:
                 price = prices.get()
             except ObjectDoesNotExist:
                 return result
-            
-            rpl_price_history.append((price.rpl_price, price.items_per_pack))
-            tpl_price_history.append((price.tpl_price, price.items_per_pack))
-            
+
             if quantity is not None:
+                
+                rpl_price_history.append((price.rpl_price, price.items_per_pack))
+                tpl_price_history.append((price.tpl_price, price.items_per_pack))
                 
                 rpl_price = self._apply_choice_data(
                     price.rpl_price, choices, choice_data)
