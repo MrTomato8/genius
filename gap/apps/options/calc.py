@@ -236,13 +236,13 @@ class BaseOptionsCalculator:
         quantize = TWOPLACES
         if price.quantize(THREEPLACES) != price.quantize(TWOPLACES):
             quantize = THREEPLACES
-        return (price * quantity).quantize(quantize, ROUND_HALF_UP)
+        return (price * quantity).quantize(THREEPLACES, ROUND_HALF_UP)
         
     def _unit(self, price, quantity):
         quantize = TWOPLACES
         if price.quantize(THREEPLACES) != price.quantize(TWOPLACES):
             quantize = THREEPLACES
-        return (price / quantity).quantize(quantize, ROUND_HALF_UP)
+        return (price / quantity).quantize(THREEPLACES, ROUND_HALF_UP)
 
     def calculate_costs(self, choices, quantity=None, choice_data=None):
         '''
