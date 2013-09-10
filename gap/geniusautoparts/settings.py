@@ -189,6 +189,14 @@ HAYSTACK_CONNECTIONS = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s',
+        },
+        'simple': {
+            'format': '[%(asctime)s] %(message)s'
+        },
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -199,11 +207,18 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'error_file': {
+            'level': 'INFO',
+            'class': 'oscar.core.logging.handlers.EnvFileHandler',
+            'filename': 'errors.log',
+            'formatter': 'verbose'
+        },
     },
+    
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'error_file'],
             'level': 'ERROR',
             'propagate': True,
         },
