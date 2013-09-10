@@ -22,11 +22,11 @@ class Price(models.Model):
                              default=CURRENT, editable=False, db_index=True)
 
     tpl_price = models.DecimalField(
-        max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
+        max_digits=11, decimal_places=3, validators=[MinValueValidator(0)],
         verbose_name='Price for trade customers')
 
     rpl_price = models.DecimalField(
-        max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
+        max_digits=11, decimal_places=3, validators=[MinValueValidator(0)],
         verbose_name='Price for retail customers')
 
     min_tpl_price = models.DecimalField(
