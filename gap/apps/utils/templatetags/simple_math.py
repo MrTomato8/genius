@@ -1,6 +1,6 @@
 from django import template
 from decimal import Decimal, Context, setcontext
-
+from math import ceil
 register = template.Library()
 
 @register.filter
@@ -26,3 +26,6 @@ def int_multiply(value, arg):
 def divide_triple(value, arg):
     """divide: value / arg"""
     return divide(value, arg, prec=3)
+@register.filter
+def divide_int(value,arg):
+    return ceil(value/arg)

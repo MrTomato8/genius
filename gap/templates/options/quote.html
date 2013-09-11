@@ -39,7 +39,7 @@
       <table>
         <tr>
           <th style="width: 160px;">Quantity</th>
-          {% if not prices.matrix_for_pack %}
+          {% if not prices.matrix_for_pack or quote %}
           <th>
             {% if trade_user %}
             Trade Price
@@ -52,6 +52,15 @@
         {% if prices.discrete_pricing and prices.matrix_for_pack %}
 	        <tr>
 		        <td>{{ calc_form.quantity }}</td>
+		        {% if quote %}
+		        <td>
+		        	{% with prices.values|last as price %}
+		        	{% with quote.quantity|divide_int:price.items_per_pack|int_multiply:price.items_per_pack as quantity %}
+		        	 £{{quote.price|divide_triple:quantity}} each
+		        	 {% endwith %}
+		        	 {%endwith %}
+		       	</td>
+		        {% endif %}
 		        </tr>
         	{% comment %}
 	        	{% if trade_user %}
