@@ -87,13 +87,8 @@ class CalculatedPrices:
         
         quantity = selected_quantity
         prices = self._prices[quantity]
-        if (
-            prices[prefix + attribute].quantize((Decimal(10)**-2)) 
-            != 
-            prices[prefix + attribute].quantize((Decimal(10)**-3))
-            ):
+        if self.triple_decimal:
             price_multiplier = nr_of_items
-            self.triple_decimal = True
         try:
             tuple = (
                 prices[prefix + attribute]*price_multiplier,
@@ -147,7 +142,7 @@ class BaseOptionsCalculator:
 
     def __init__(self, product):
         self.product = product
-
+        self.quantize = TWOPLACES
     def _get_area(self, choice_data):
 
         result = 0
@@ -234,16 +229,10 @@ class BaseOptionsCalculator:
             Decimal('1.'), rounding=ROUND_UP)
 
     def _total(self, price, quantity):
-        quantize = TWOPLACES
-        if price.quantize(THREEPLACES) !=price.quantize(TWOPLACES):
-            quantize = THREEPLACES
-        return (price * quantity).quantize(quantize, ROUND_HALF_UP)
+        return (price * quantity).quantize(self.quantize, ROUND_HALF_UP)
         
     def _unit(self, price, quantity):
-        quantize = TWOPLACES
-        if price.quantize(THREEPLACES) != price.quantize(TWOPLACES):
-            quantize = THREEPLACES
-        return (price / quantity).quantize(quantize, ROUND_HALF_UP)
+        return (price / quantity).quantize(self.quantize, ROUND_HALF_UP)
 
     def calculate_costs(self, choices, quantity=None, choice_data=None):
         '''
@@ -275,6 +264,14 @@ class BaseOptionsCalculator:
             for price in prices:
                 if price.quantity<price.items_per_pack:
                     matrix_for_pack = result.matrix_for_pack = True
+                if ( not result.triple_decimal and
+                    price.rpl_price.quantize(THREEPLACES) != price.rpl_price.quantize(TWOPLACES) 
+                    or
+                    price.tpl_price.quantize(THREEPLACES) != price.tpl_price.quantize(TWOPLACES)
+                    ):
+                    result.triple_decimal = True
+                    self.quantize = THREEPLACES
+                if result.triple_decimal and matrix_for_pack:
                     break
             for price in prices:
                 rpl_price_history.append((price.rpl_price, price.items_per_pack))
