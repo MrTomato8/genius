@@ -28,4 +28,7 @@ def divide_triple(value, arg):
     return divide(value, arg, prec=3)
 @register.filter
 def divide_int(value,arg):
-    return ceil(value/arg)
+    v = ceil(value/arg)
+    if value != 0 and v == 0:
+        v =1
+    return v
