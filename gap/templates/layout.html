@@ -41,7 +41,9 @@
                     {% endblock %}
                 </section>
                 {% endblock %}
+                {%block alert_messages %}
                 {% include "partials/alert_messages.html" %}
+                {% endblock %}
                 {% block subnavigation %}{% endblock %}
                 <section id="content" class="set-size clearfix">
                     {% block subheader %}{% endblock subheader %}
