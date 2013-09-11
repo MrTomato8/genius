@@ -9,7 +9,7 @@ def multiply(value, arg, prec=2):
     try:
         return round(Decimal(str(value))*Decimal(str(arg)), prec)
     except:
-        return D(0)
+        return Decimal(0)
     
 @register.filter
 def divide(value, arg, prec=2):
@@ -17,7 +17,7 @@ def divide(value, arg, prec=2):
     try:
         return round(Decimal(str(value))/Decimal(str(arg)), prec)
     except:
-        return D(0)
+        return Decimal(0)
 @register.filter
 def int_multiply(value, arg):
     """multiply: value * arg"""
