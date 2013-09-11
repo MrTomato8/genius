@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load currency_filters %}
 {% load simple_math %}
+{% load humanize %}
 {% block extrastyles %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "options/css/styles.css" %}" />
@@ -38,6 +39,7 @@
       <table>
         <tr>
           <th style="width: 160px;">Quantity</th>
+          {% if not prices.matrix_for_pack %}
           <th>
             {% if trade_user %}
             Trade Price
@@ -45,27 +47,33 @@
             Price
             {% endif %}
           </th>
+          {%endif%}
         </tr>
         {% if prices.discrete_pricing and prices.matrix_for_pack %}
-        	{% if trade_user %}
-        		{% with prices.values|last as price %}
-        		<tr>
-        			<td>{{ calc_form.quantity }}</td>
-        			<td>
-	        		Starting from £{{price.rpl_price_incl_tax|divide_triple:price.items_per_pack}} each
-	        		</td>
-	        	</tr>
-	        	{% endwith %}
-	        {% else %}
-	        	{% with prices.values|last as price %}
-	        	<tr>
-        			<td>{{ calc_form.quantity }}</td>
-        			<td>
-	        		Starting from {{price.rpl_price_incl_tax|divide_triple:price.items_per_pack|currency}} each
-	        		</td>
-	        	</tr>
-	        	{% endwith %}
-	        {% endif %}
+	        <tr>
+		        <td>{{ calc_form.quantity }}</td>
+		        </tr>
+        	{% comment %}
+	        	{% if trade_user %}
+	        		{% with prices.values|last as price %}
+	        		<tr>
+	        			<td>{{ calc_form.quantity }}</td>
+	        			<td>
+		        		Starting from £{{price.rpl_price_incl_tax|divide_triple:price.items_per_pack}} each
+		        		</td>
+		        	</tr>
+		        	{% endwith %}
+		        {% else %}
+		        	{% with prices.values|last as price %}
+		        	<tr>
+	        			<td>{{ calc_form.quantity }}</td>
+	        			<td>
+		        		Starting from {{price.rpl_price_incl_tax|divide_triple:price.items_per_pack|currency}} each
+		        		</td>
+		        	</tr>
+		        	{% endwith %}
+		        {% endif %}
+	        {% endcomment %}
         	
         {% elif prices.discrete_pricing%}
 	        {% for qty, price in prices.ordered.iteritems %}
@@ -140,7 +148,7 @@
   <div class="grid-7 float-left">
     <div class="options-quote">
       <h2>
-      	{{product}} with the following options: 
+      	{{quote.quantity|intcomma  }} {{product}} at {{quote.price|currency}} (exl. tax), with the following options: 
       	
       	{% comment %}
       	{% if prices.matrix_for_pack %}
