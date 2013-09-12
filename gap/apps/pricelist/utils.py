@@ -6,11 +6,13 @@ from decimal import Decimal, DecimalException
 from django.db import IntegrityError
 from django.template.defaultfilters import slugify
 from django.conf import settings
-
+from zlib import crc32
+from django.core.exceptions import ObjectDoesNotExist
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
-
+Partner = models.get_model('partner', 'Partner')
+StockRecord = models.get_model('partner', 'StockRecord')
 
 class ImportReport:
     def __init__(self):
@@ -165,7 +167,15 @@ def import_csv(csvfile, create_options=True, create_choices=True):
                     choices.append(c)
         except OptionError:
             continue
-
+        try:
+            product.stockrecord
+        except ObjectDoesNotExist:
+            partner = Partner.objects.all()[0]
+            sku = crc32(product.get_title())
+            StockRecord.objects.create(
+                product = product, partner = partner, partner_sku = sku
+                )
+            
         p = Price(**data)
         p.save()
         for choice in choices:
