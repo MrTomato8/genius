@@ -167,6 +167,7 @@ def import_csv(csvfile, create_options=True, create_choices=True):
                     choices.append(c)
         except OptionError:
             continue
+        
         try:
             product.stockrecord
         except ObjectDoesNotExist:
