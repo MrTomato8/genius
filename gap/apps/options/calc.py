@@ -92,10 +92,12 @@ class CalculatedPrices:
         try:
             tuple = (
                 prices[prefix + attribute]*price_multiplier,
-                price['nr_of_units']*units_multiplier,
+                prices['nr_of_units']*units_multiplier,
                 prices['items_per_pack'])
+            print tuple
             return tuple
-        except: 
+        except Exception as e: 
+            print e
             raise PriceNotAvailable
             
     def get_unit_price_incl_tax(self, quantity, user):
