@@ -27,3 +27,65 @@ h6{
 	padding: 1px 2px;
 }
 
+/* basket */
+#basket-table{
+	border: solid 1px #ddd;
+	border-collapse:separate;
+	border-left:0;
+	border-bottom:0;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	margin-bottom:50px;
+}
+#basket-table thead th:first-child{
+	webkit-border-top-left-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+	border-top-left-radius: 4px;
+}
+#basket-table thead th:last-child{
+	webkit-border-top-right-radius: 4px;
+	-moz-border-radius-topright: 4px;
+	border-top-right-radius: 4px;
+}
+#basket-table td, #basket-table th{
+	border-left:solid 1px #ddd;
+	border-bottom:solid 1px #ddd;
+	padding: .5em;
+}
+#basket-table tr td [class*="span"]{
+	margin-left:5px;
+}
+#basket-table tr td input{
+	width:60%;
+	padding:1px 1%;
+}
+#basket-table li{
+	list-style-type: disc;
+}
+#basket-table tbody tr{
+	background-color: #fff;
+}
+#basket-table tbody tr:hover{
+	background-color: #f5f5f5;
+}
+#basket-table .btn-danger{
+	background: #e22525;
+	margin-top: 5px;
+}
+#basket-table .btn-danger:hover{
+	background: #f04e53;
+}
+#basket-table .collspan{
+	background:#f5f5f5;
+	height:15px;
+}
+#basket-order{
+	margin: 50px 0;
+}
+#basket-order h4{
+	margin-bottom: 10px;
+}
+#voucher-id {
+	margin-bottom: 50px;
+}
