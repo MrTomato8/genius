@@ -73,6 +73,7 @@ class CalculatedPrices:
             units_multiplier= Decimal(nr_of_items)
             #price_multiplier = Decimal(ceil(nr_of_items/Decimal(selected_quantity)))
         elif self.discrete_pricing:
+            
             for key in self._prices:
                 if key == quantity:
                     selected_quantity= key
@@ -87,17 +88,17 @@ class CalculatedPrices:
         
         quantity = selected_quantity
         prices = self._prices[quantity]
-        if self.triple_decimal:
+        if self.triple_decimal and self.matrix_for_pack:
             price_multiplier = nr_of_items
+        else:
+            self.triple_decimal = False
         try:
             tuple = (
                 prices[prefix + attribute]*price_multiplier,
                 prices['nr_of_units']*units_multiplier,
                 prices['items_per_pack'])
-            print tuple
             return tuple
-        except Exception as e: 
-            print e
+        except:
             raise PriceNotAvailable
             
     def get_unit_price_incl_tax(self, quantity, user):

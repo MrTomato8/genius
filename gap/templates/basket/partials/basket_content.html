@@ -23,7 +23,9 @@
 {% endif %}
 
 {% if not basket.is_empty %}
-    
+    <form action="." method="post" class="basket_summary" id="basket_formset">{% csrf_token %}
+	{{ formset.management_form }}
+	
     <table id="basket-table">
     	<thead class="basket_table-header" >
     		{% block basket_form_headers %}
@@ -37,13 +39,11 @@
 			</tr>
 			{% endblock %}
 		</thead>
-    	<tbody>
-    	{% block basket_form_main %}
-    		<form action="." method="post" class="basket_summary" id="basket_formset">
-	    	{% csrf_token %}
-	    	{{ formset.management_form }}
+    	
+    	<tbody>		
+	    	
     		{% for form in formset %}
-    		{% with form.instance.product as  product%}
+    		{% with form.instance.product as product%}
     		<tr>
     			{{ form.id }}
     			<td class="">
@@ -102,6 +102,10 @@
           			<a class="btn btn-small span1" href="{% url options:pick pk=product.pk product_slug=product.slug %}" class="button button-green">Duplicate</a>
     				{% endif %}
     				 <a class="btn btn-danger btn-small span1" href="#" data-id="{{ forloop.counter0 }}" data-behaviours="remove" class="inline">{% trans "Remove" %}</a>
+    				<div style="display:none" hidden="true" aria-hidden="true">
+                            {{ form.save_for_later }}
+                            {{ form.DELETE }}
+                    </div>
     			</td>
     		</tr>
     		<tr>
@@ -110,11 +114,11 @@
     		{% endwith %}
     		{% endfor %}
     		
-    		</form>
-    	{% endblock %}
+
     	</tbody>
+    	
     </table>
-	
+	</form>
 	{% include 'basket/partials/basket_totals.html' with editable=1 %}
 	<div class="row" id="basket-order">
 		<h4>Proceed with order</h4>
