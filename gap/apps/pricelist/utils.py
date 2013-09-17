@@ -65,7 +65,11 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Fa
     qs = Price.objects.filter(state=Price.CURRENT)
     if chirurgical:
         p_list = []
+        rows=[]
         for row in csv.DictReader(csvfile.read().splitlines()):
+            rows.append(row)
+            
+        for row in rows:
             try:
                 product = Product.objects.get(title=row.pop('product', None))
             except Product.DoesNotExist:
@@ -79,7 +83,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Fa
     data = {}
 
     
-    for row in csv.DictReader(csvfile.read().splitlines()):
+    for row in rows:
         original_row = row.copy()
 
         try:
