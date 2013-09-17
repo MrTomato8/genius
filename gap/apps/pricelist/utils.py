@@ -67,12 +67,9 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Fa
     qs = Price.objects.filter(state=Price.CURRENT)
     if chirurgical:
         p_list = []
-        
-        
-            
         for row in rows:
             try:
-                product = Product.objects.get(title=row.pop('product', None))
+                product = Product.objects.get(title=row['product'])
             except Product.DoesNotExist:
                 continue
             p_list.append(product)
