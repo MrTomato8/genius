@@ -79,8 +79,8 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Fa
     qs.update(state=Price.OLD)
 
     data = {}
-
-    
+    option_cache = {}
+    coiches_cache= {}
     for row in rows:
         original_row = row.copy()
 
@@ -142,41 +142,51 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Fa
         try:
             for col, vals in row.items():
                 for val in filter(len, vals.replace(' ', '').split(',')):
-                    if create_options:
-                        try:
-                            o, new = Option.objects.get_or_create(
-                                code=slugify(col), type=Option.OPTIONAL)
-                        except IntegrityError:
-                            report.skip(col, 'integrity error', original_row)
-                            raise OptionError
-                        if len(o.name) == 0:
-                            o.name = o.code
-                            o.save()
-                    else:
-                        try:
-                            o = Option.objects.get(code=slugify(col))
-                        except Option.DoesNotExist:
-                            report.skip(
-                                col, 'option missing'.format([val]),
-                                original_row)
-                            raise OptionError
-
-                    if create_choices:
-                        try:
-                            c, new = OptionChoice.objects.get_or_create(
-                                option=o, code=slugify(val))
-                        except IntegrityError:
-                            report.skip(col, 'integrity error', original_row)
-                            raise OptionError
-                    else:
-                        try:
-                            c = OptionChoice.objects.get(option=o,
-                                                         code=slugify(val))
-                        except OptionChoice.DoesNotExist:
-                            report.skip(
-                                col, '{0} choice missing'.format([val]),
-                                original_row)
-                            raise OptionError
+                    slug = slugify(col)
+                    
+                    try:
+                        o=option_cache[slug]
+                    except:
+                        if create_options:
+                            try:
+                                o, new = Option.objects.get_or_create(
+                                    code=slugify(col), type=Option.OPTIONAL)
+                            except IntegrityError:
+                                report.skip(col, 'integrity error', original_row)
+                                raise OptionError
+                            if len(o.name) == 0:
+                                o.name = o.code
+                                o.save()
+                        else:
+                            try:
+                                o = Option.objects.get(code=slugify(col))
+                            except Option.DoesNotExist:
+                                report.skip(
+                                    col, 'option missing'.format([val]),
+                                    original_row)
+                                raise OptionError
+                        option_cache[slug]=o
+                    slug = slugify(val)
+                    try:
+                        c = coiches_cache[(slug,o)]
+                    except:
+                        if create_choices:
+                            try:
+                                c, new = OptionChoice.objects.get_or_create(
+                                    option=o, code=slugify(val))
+                            except IntegrityError:
+                                report.skip(col, 'integrity error', original_row)
+                                raise OptionError
+                        else:
+                            try:
+                                c = OptionChoice.objects.get(option=o,
+                                                             code=slugify(val))
+                            except OptionChoice.DoesNotExist:
+                                report.skip(
+                                    col, '{0} choice missing'.format([val]),
+                                    original_row)
+                                raise OptionError
+                            coiches_cache[(slug,o)] = c
 
                     choices.append(c)
         except OptionError:
