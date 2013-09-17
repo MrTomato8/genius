@@ -54,7 +54,7 @@ class CalculatedPrices:
             prefix = 'tpl_'
         else:
             prefix = 'rpl_'
-        units_multipler = Decimal('1')
+        units_multiplier = Decimal('1')
         price_multiplier = Decimal('1')
 
         sheet_type = False
@@ -73,7 +73,6 @@ class CalculatedPrices:
             units_multiplier= Decimal(nr_of_items)
             #price_multiplier = Decimal(ceil(nr_of_items/Decimal(selected_quantity)))
         elif self.discrete_pricing:
-            
             for key in self._prices:
                 if key == quantity:
                     selected_quantity= key
@@ -83,10 +82,8 @@ class CalculatedPrices:
             if selected_quantity == 0:
                 raise PriceNotAvailable
             units_multiplier = Decimal(ceil(quantity/Decimal(selected_quantity)))
-            
-        
-        
-        quantity = selected_quantity
+        if selected_quantity != 0:
+            quantity = selected_quantity   
         prices = self._prices[quantity]
         if self.triple_decimal and self.matrix_for_pack:
             price_multiplier = nr_of_items
@@ -97,6 +94,7 @@ class CalculatedPrices:
                 prices[prefix + attribute]*price_multiplier,
                 prices['nr_of_units']*units_multiplier,
                 prices['items_per_pack'])
+            
             return tuple
         except:
             raise PriceNotAvailable
