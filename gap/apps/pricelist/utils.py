@@ -144,7 +144,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Fa
                 for val in filter(len, vals.replace(' ', '').split(',')):
                     
                     slug = slugify(col)
-                                        try:
+                    try:
                         o=option_cache[slug]
                     except:
                         if create_options:
