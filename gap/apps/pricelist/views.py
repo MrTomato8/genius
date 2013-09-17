@@ -21,7 +21,8 @@ def import_pricelist(request):
             report = import_csv(
                 request.FILES['csvfile'],
                 form.cleaned_data['create_options'],
-                form.cleaned_data['create_choices'])
+                form.cleaned_data['create_choices'],
+                form.cleaned_data['chirurgical'])
 
             if report.skipped_total == 0:
                 return HttpResponseRedirect(reverse('apps.pricelist.views.list'))

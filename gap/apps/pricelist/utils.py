@@ -43,7 +43,7 @@ class OptionError(Exception):
     pass
 
 
-def import_csv(csvfile, create_options=True, create_choices=True):
+def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=False):
     '''
     Imports whole pricelist from CSV file.
 
@@ -61,13 +61,25 @@ def import_csv(csvfile, create_options=True, create_choices=True):
     '''
 
     report = ImportReport()
-
-    Price.objects.filter(state=Price.CURRENT).update(state=Price.OLD)
+    
+    qs = Price.objects.filter(state=Price.CURRENT)
+    if chirurgical:
+        p_list = []
+        for row in csv.DictReader(csvfile.read().splitlines()):
+            try:
+                product = Product.objects.get(title=row.pop('product', None))
+            except Product.DoesNotExist:
+                continue
+            p_list.append(product)
+        qs.filter(product__in=p_list)
+        
+    
+    qs.update(state=Price.OLD)
 
     data = {}
 
+    
     for row in csv.DictReader(csvfile.read().splitlines()):
-
         original_row = row.copy()
 
         try:
