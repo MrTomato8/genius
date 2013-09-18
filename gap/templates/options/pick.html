@@ -85,7 +85,7 @@ background-color: #f9f9f9;
                   </ul>
                   {% endif %}
                 </div>
-
+				
                 {% for field in picker.form.visible_fields %}
                 {% if picker.picker.widget == picker.picker.THUMBNAIL %}
                 <div class="option-choice grid-7">
@@ -105,11 +105,13 @@ background-color: #f9f9f9;
                     </script>
                     <li>
                         {{ choice.caption }}<br />
+                        <label for="{{ field.name }}_{{ choice.pk }}">
                         <img src="{{ choice.get_thumbnail.url }}" alt="{{ choice.caption }}"/><br />
                         <input class="radio-choice" type="radio" name="{{ field.name }}" value="{{ choice.pk }}"
                           {% ifequal field.data|slugify choice.pk|slugify %}
                              checked="checked"
-                          {% endifequal %} />
+                          {% endifequal %} id ="{{ field.name }}_{{ choice.pk }}"/>
+                         </label>
                     </li>
                     {% endfor %}
                   </ul>

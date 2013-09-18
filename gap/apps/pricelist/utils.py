@@ -73,7 +73,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Fa
             except Product.DoesNotExist:
                 continue
             p_list.append(product)
-        qs.filter(product__in=p_list)
+        qs = qs.filter(product__in=p_list)
         
     
     qs.update(state=Price.OLD)
