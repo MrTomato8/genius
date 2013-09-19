@@ -278,7 +278,8 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             errors.append('No prices found')
 
         quote_save_form = QuoteSaveForm()
-
+        if self.request.is_ajax():
+            self.template_name = 'options/partials/quote-content.html'
         return TemplateResponse(request, self.template_name, {
             'product': self.product,
             'choices': self.choices,

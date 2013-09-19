@@ -1,9 +1,6 @@
 {% extends 'layout.html' %}
 {% load url from future %}
 {% load staticfiles %}
-{% load currency_filters %}
-{% load simple_math %}
-{% load humanize %}
 {% block extrastyles %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "options/css/styles.css" %}" />
@@ -23,182 +20,15 @@
 {% endblock %}
 
 {% block content %}
-<div class="clearfix center-block">
-
-  <div class="grid-4 float-left choice-list">
-    <h3>{{ product }}</h3>
-    <ul>
-      {% for choice in choices %}
-      <li>{{ choice.caption }}<br /><img src="{% static choice.get_thumbnail.url %}" alt="{{ choice.option }}"/></li>
-      {% endfor %}
-      </ul>
-  </div>
-  
-  <div class="grid-7 float-left price-calculator">
-    <form id="getquote" method="POST">{% csrf_token %}
-      <table>
-        <tr>
-          <th style="width: 160px;">Quantity</th>
-          {% if not prices.matrix_for_pack or quote %}
-          <th>
-            {% if trade_user %}
-            Trade Price
-            {% else %}
-            Price
-            {% endif %}
-          </th>
-          {%endif%}
-        </tr>
-        {% if prices.discrete_pricing and prices.matrix_for_pack %}
-	        <tr>
-		        <td>{{ calc_form.quantity }}</td>
-		        {% if quote %}
-		        <td>
-		        	{% with prices.values|last as price %}
-		        	{% with quote.quantity|divide_int:price.items_per_pack|int_multiply:price.items_per_pack as quantity %}
-		        	 £{{quote.price|divide_triple:quantity}} each
-		        	 {% endwith %}
-		        	 {%endwith %}
-		       	</td>
-		        {% endif %}
-		        </tr>
-        	{% comment %}
-	        	{% if trade_user %}
-	        		{% with prices.values|last as price %}
-	        		<tr>
-	        			<td>{{ calc_form.quantity }}</td>
-	        			<td>
-		        		Starting from £{{price.rpl_price_incl_tax|divide_triple:price.items_per_pack}} each
-		        		</td>
-		        	</tr>
-		        	{% endwith %}
-		        {% else %}
-		        	{% with prices.values|last as price %}
-		        	<tr>
-	        			<td>{{ calc_form.quantity }}</td>
-	        			<td>
-		        		Starting from {{price.rpl_price_incl_tax|divide_triple:price.items_per_pack|currency}} each
-		        		</td>
-		        	</tr>
-		        	{% endwith %}
-		        {% endif %}
-	        {% endcomment %}
-        	
-        {% elif prices.discrete_pricing%}
-	        {% for qty, price in prices.ordered.iteritems %}
-	        <tr>
-	          <td><input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" 
-	          {% ifequal calc_form.quantity.data|slugify qty|slugify %}
-	          checked="checked"
-	          {% endifequal %} />
-	          <label for="quantity_{{ qty }}">{{ qty|floatformat }}</label></td>
-	          <td>
-	            {% if trade_user %}
-	            {{ price.tpl_price_incl_tax|currency }}
-	            {% else %}
-	            {{ price.rpl_price_incl_tax|currency }}
-	            {% endif %}
-	          </td>
-	        </tr>
-	        {% endfor %}
-	        {% else %}
-        {% with prices.values|first as price %}
-        <tr>
-          <td>{{ calc_form.quantity }}</td>
-          <td>
-            {% if trade_user %}
-            {{ price.tpl_price_incl_tax|currency }}
-            {% else %}
-            {{ price.rpl_price_incl_tax|currency }}
-            {% endif %}
-          </td>
-        </tr>
-        {% endwith %}
-        {% endif %}
-      </table>
-
-      {% if custom_size %}
-      <div class="custom_size">
-        <h3>Custom Size:</h3>
-        <div class="custom-size-columns">
-          <div>
-            {{ custom_size_form.width.errors }}
-            <label for="width">Width (mm):</label><br />
-            {{ custom_size_form.width }}
-          </div>
-          <div>
-            {{ custom_size_form.height.errors }}
-            <label for="height">Height (mm):</label><br />
-            {{ custom_size_form.height }}
-          </div>
-        </div>
-      </div>
-      {% endif %}
-
-      <div id="form-errors" class="quote-errors">
-        {% if errors %}
-        <ul>
-        {% for error in errors %}
-        <li><strong>{{ error }}</strong></li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-      </div>
-
-      <div class="options-calculate">
-        <input value="Get Quote" type="submit" class="button"/>
-      </div>
-
-    </form>
-  </div>
-
-
-  {% if quote.valid %}
-  <div class="grid-7 float-left">
-    <div class="options-quote">
-      <h2>
-      	{{quote.quantity|intcomma  }} {{product}} at {{quote.price|currency}} (exl. tax), with the following options: 
-      	
-      	{% comment %}
-      	{% if prices.matrix_for_pack %}
-      		
-      		starting from
-      		
-      		{% if trade_user %}
-      			{% with vanilla_price=prices.get_min_tpl_price %}
-      				£{{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
-      			{% endwith %}
-      		{% else %}
-      			{% with vanilla_price=prices.get_min_rpl_price %}
-					{{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
-				{% endwith %}
-      		{% endif %}
-      		 each, with following options:
-      	{% else %}
-      			{{ quote.price|currency}} for {{ quote.quantity }} {{product}},
-      			with the following options: 
-      	{% endif %}
-      	{% endcomment %}
-        </h2>
-      <ul >
-      {% for choice in choices %}
-        <li><p class="medium"><b> <i class="icon-level-up"></i> {{ choice.option }}</b> {{ choice.caption }}</p></li>
-      {% endfor %}
-      </ul>
-      {% if custom_size %}
-      Custom size is {{ choice_data_custom_size.width }}(mm) x {{ choice_data_custom_size.height }}(mm)
-      {% endif %}
-      <p class="medium-large"><i class="icon-warning-sign"></i> <span class="boxed">Price per {{product}} can change with quantity</span></p>
-    </div>
-
-    <div class="options-next">
-      <form id="quote-save" method="POST" action="{%url 'options:quote-save' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
-        <input value="Proceed" type="submit" class="finish button"/>
-        {{ quote_save_form }}
-      </form>
-    </div>
-  </div>  
-  {% endif %}    
-
+<div id="quote-content" class="clearfix center-block">
+	{% include 'options/partials/quote-content.html' %}
+	
 </div>
+{% endblock %}
+{% block morescripts %}
+	{{block.super}}
+	{% if prices.discrete_pricing and not prices.matrix_for_pack and not costum_size %}
+	<!-- some javascript -->
+	<script type="text/javascript" src="{% static 'local/js/quote.js' %}"></script>
+	{%endif%}
 {% endblock %}
