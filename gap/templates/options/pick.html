@@ -49,11 +49,10 @@ background-color: #f9f9f9;
     </tbody>
   </table>
 <script type="text/javascript">
-  var AllChoices = new Object ();
-
-  function disableConflictingChoices()
+  AllChoices = new Object ();
+  var disableConflictingChoices =function()
   {
-    choice_value = $(this).val()
+    choice_value = $(this).val()*1;
     conflicts = AllChoices[choice_value].conflicts_with;
     $(":input:disabled").removeAttr("disabled");
     if (conflicts.length > 0) {
@@ -61,14 +60,16 @@ background-color: #f9f9f9;
         $(":input[value='" + conflicts[i] + "']").attr('disabled', true);
       }
     }
-  }
+  };
+  
 </script>
 
 <form id="pickoptions" method="POST" class="grid-7 float-left">{% csrf_token %}
 
     {% for group in groups %}
 
-    <fieldset title="{{ group.group.name }}">
+    <fieldset title="{{ group.group.name }}" class="group_fieldset">
+    	<h3 class="button group_name">{{ group.group.name }}</h3>
       <br />
       <div class="grid-7 float-left">
         <ul class="options-group">
@@ -92,7 +93,8 @@ background-color: #f9f9f9;
                   <ul id="carousel-{{ picker.picker.id }}" class="jcarousel-skin-tango grid-7">
                     {% for choice in field.field.queryset %}
                     <script type="text/javascript">
-                      choice = new Object();
+                      
+                      var choice = new Object();
                       choice.optioncode = "{{ choice.option.code }}";
                       choice.optioncaption = "{{ choice.option.name }}";
                       choice.code = "{{ choice.code }}";
@@ -146,19 +148,23 @@ background-color: #f9f9f9;
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
+  
+  
   $(".radio-choice").click(disableConflictingChoices);
-
+  /*
   $('#pickoptions').stepy({
     legend:false,
     titleTarget: '#title-target',
     description: false,
     validate: false
-  });
+  });*/
   // remove cached checks 
-  $('.radio-choice').attr("checked", false);
-
-  $('.options-group .option-choice').hide();
-  $('.options-group > li:first-child').find('.option-choice').show();
+  $('input.radio-choice').attr("checked", false);
+  $('.group_fieldset .options-group').hide();
+  $('.group_fieldset:first').addClass('active_fieldset');
+  $('.group_fieldset:first .options-group').show();
+  $('.group_fieldset:first .options-group .option-choice').hide();
+  $('.group_fieldset:first .options-group > li:first-child').find('.option-choice').show();
 
   $('.option-title').click(function(){
     $(this).parent().parent().find('.option-choice').hide('slow');
@@ -174,6 +180,20 @@ $(document).ready(function(){
     });
   });
 
+  $(".options-group :last-child .option-choice .radio-choice").click(function(){
+  	var fieldset = $(this).closest('fieldset');
+  	fieldset.removeClass('active_fieldset').find('.options-group').hide('slow');
+  	fieldset.next('fieldset').addClass('active_fieldset').find('.options-group').show('slow');
+  })
+   $(".group_fieldset h3.group_name").click(function(){
+  	var fieldset = $(this).closest('fieldset'),
+  	active = fieldset.hasClass('active_fieldset');
+  	if (!active){
+  		fieldset.addClass('active_fieldset').find('.options-group').show('slow');
+  	}else{
+  		fieldset.removeClass('active_fieldset').find('.options-group').hide('slow');
+  	}
+  	  })
   $('.jcarousel-skin-tango').hover(function(){
     $(this).find('.jcarousel-prev-horizontal').css({'background-position': '0 -50px'});
     $(this).find('.jcarousel-next-horizontal').css({'background-position': '0 0px'});
