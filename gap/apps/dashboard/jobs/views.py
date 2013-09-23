@@ -225,7 +225,7 @@ class TaskUpdateView(UpdateView):
 
     def get_success_url(self):
         if 'job_id' in self.kwargs:
-            return reverse('task-detail', args=[self.object.job.id, self.object.id])
+            return reverse('job-task-list', args=[self.object.job.id])
 
         return '/dashboard/jobs/tasks/'
 
