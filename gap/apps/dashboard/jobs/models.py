@@ -1,8 +1,10 @@
+
 from django.db import models
 from django.db.models.loading import get_model
 from django.contrib.auth.models import User
-
 from oscar.core.loading import get_class
+from decimal import Decimal as D
+from .exceptions import WrongJob
 
 Order = get_model('order', 'Order')
 
@@ -13,6 +15,19 @@ class Job(models.Model):
 
     # def create_default_sategs(self):
     #     self.stage_set.add(*Stage.objects.filter(is_default=True))
+    def completeness(self):
+        total = D(0); number = D(0)
+        for task in self.task_set.all():
+            total += task.completeness
+            number += 1
+        if number == D(0):
+            return None
+        return D(total/number).quantize(D(10)**-2)
+    def completeness_percentage(self):
+        completeness = self.completeness()
+        if completeness is None:
+            return None
+        return ('%s ' % completeness) +'%'
 
     def __unicode__(self):
         return self.name
@@ -28,18 +43,42 @@ class Task(models.Model):
     priority = models.CharField('Priority', max_length=250, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-
+    completeness = models.PositiveSmallIntegerField(default=0)
+    
+    def save(self,*args,**kwargs):
+        if self.completeness >100:
+            self.completeness = 100
+        super(Task, self).save(*args, **kwargs)
+    
     def __unicode__(self):
         return self.name
     
 
 class Stage(models.Model):
+    cache={}
+    completeness = None
     jobs = models.ManyToManyField(Job, null=True, blank=True)
-    name = models.CharField('Stage Name', max_length=250)
+    name = models.CharField('Stage Name', max_length=250, unique=True)
     description = models.TextField('Description', null=True, blank=True)
     related_status = models.CharField('Related status', max_length=250)
     is_default = models.BooleanField(default=False)
-
+    
+    def completeness(self, job):
+        if not job in self.jobs.all():
+            raise WrongJob, 'job:%s' % job
+        tasks = self.job_tasks(job)
+        total = D(0); number = D(0)
+        for task in tasks:
+            total += task.completeness
+            number += 1
+        if number == D(0).quantize(D(10)**-2):
+            return number
+        return D(total/number).quantize(D(10)**-2)
+        
+    
+    def job_tasks(self,job):
+        return Task.objects.filter(job=job, stage=self)
+    
     def __unicode__(self):
         return self.name
 

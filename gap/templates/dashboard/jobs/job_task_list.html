@@ -1,11 +1,15 @@
 {% extends 'dashboard/jobs/job_base.html' %}
 
 {% load url from future %}
-
+{% load staticfiles %}
 {% load currency_filters %}
 {% load sorting_tags %}
 {% load i18n %}
+{% block extrastyles %}
 
+<link rel="stylesheet" type="text/css" href="{% static "local/css/jquery-ui-1.8.16.custom.css" %}"/>
+{{block.super}}
+{% endblock %}
 {% block breadcrumbs %}
     <ul class="breadcrumb">
         <li>
@@ -35,8 +39,12 @@
 <table class="table">
     <thead>
         <tr>
-    {% for stage in job.stage_set.all %}
-            <th class="task-list-column"><a href="" title="{{ stage.description }}">{{ stage.name }}</a></th>
+    {% for stage in stages %}
+            <th class="task-list-column"><a href="" title="{{ stage.description }}">{{ stage.name }}:</a>
+            	
+            	<meter min="0" low="49" optimum="100" high="99" max="100" value="{{stage.completeness}}"></meter>
+            	{{stage.completeness}}%
+            </th>
     {% endfor %}
         </tr>
     </thead>
@@ -44,11 +52,21 @@
         {% for group in groups %}
         <td class="task-list-column">
             {% for task in group %}
-                <div class="well job" style="max-width:150px;">
-                    <a href="{% url 'task-detail' job.id task.id %}"> {{ task.name }}</a>
-                    <br />
+                <div class="well alert-success clearfix" >
+                    <h4>
+                    	<a class="btn btn-primary" href="{% url 'task-detail' job.id task.id %}"> {{ task.name }}</a>
+                    </h4>
+                    <p class="alert-info">{{task.description}}</p>
+                    <p>assigned: {% if not task.assigned_to %}
+                    	No one {% else  %}{% with task.assigned_to as user %}
+                    	{{user.first_name}} {{user.last_name}} - ({{user.username}}).
+                    	{% endwith %}{% endif %}</p>
+                    <p>Completeness: <meter min="0" low="49" optimum="100" high="99" max="100" value="{{task.completeness}}"></meter>
+                    	{{task.completeness}} %
+                    </p>
                     <div class="task-actions pull-right">
-                        <a href="{% url 'job-task-edit' job.id task.id %}">Edit</a>
+                    	<a class="btn btn-primary email_sender" href='{% url 'email-sender'%}' name="{{task.pk}}">Send Email</a>
+                        <a class="btn btn-danger" href="{% url 'job-task-edit' job.id task.id %}">Edit</a>
                     </div>  
                 </div>
             {% endfor %}
@@ -57,4 +75,82 @@
         {% endfor %}
     </tr>
 </table>
+
 {% endblock dashboard_content %}
+{% block extrascripts %}
+
+    <script type="text/javascript" src="{% static "local/js/jquery-ui-1.8.16.custom.min.js"%}">
+    </script>
+    <script type="text/javascript">
+    	{% with job.order as order %}
+    	// using jQuery
+	function getCookie(name) {
+	    var cookieValue = null;
+	    if (document.cookie && document.cookie != '') {
+	        var cookies = document.cookie.split(';');
+	        for (var i = 0; i < cookies.length; i++) {
+	            var cookie = jQuery.trim(cookies[i]);
+	            // Does this cookie string begin with the name we want?
+	            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                break;
+	            }
+	        }
+	    }
+	    return cookieValue;
+	}
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+var csrftoken = getCookie('csrftoken');
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+		$(function(){
+			
+			var email = '{{ order.email }}',
+			order ='{{order.pk}}',
+			senders = $('.email_sender');
+			senders.each(function(i,el){
+			var url = $(el).attr('href');
+			console.log(url)
+				$(el).click(function(ev) {
+					ev.preventDefault()
+					var task=$(el).attr('name'),
+					data={
+						'order':order,
+						'task':task
+					};
+					$.post(url, data, function(data,s,x){
+						var klass = data['success']?'alert-success':'alert-error',
+						html = "<div class='"+klass+"'>"+data['message']+"</div>";
+						$(el).closest('div.well').append(html);
+					});
+				});
+			});
+		});
+		
+		{% endwith %}
+    </script>
+   {%endblock%}

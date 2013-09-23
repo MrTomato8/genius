@@ -1,20 +1,53 @@
 from django.db.models.loading import get_model
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, FormView, RedirectView, DeleteView
-
+from django.core.mail import send_mail
 from .models import Job, Task, Stage, CommonTaskDescription
+from apps.order.models import Order
 from .forms import JobForm, StageForm, TaskForm
 
-
+import json
+from django.views.generic.base import View
 Order = get_model('order', 'Order')
-
+Communication = get_model('custumer', 'CommunicationEventType')
 GROUP_SMALL = 'small'
 GROUP_LARGE = 'large'
 GROUP_EXHIBITION = 'exhibition'
 
-
+class SendEmail(View):
+    def post(self, request):
+        post = request.POST
+        data = {}
+        task = Task.objects.get(pk=post['task'])
+        print task
+        try:
+            communication = Communication.objects.get(name=task.name)
+        except:
+            data['message']="No email found for task name: %s" % task.name
+            data['success']=False
+            data = json.dumps(data)
+            return HttpResponse(data,mimetype="application/json")
+        order=Order.objects.get(pk=order)
+        ctx ={
+            "order":order,
+            'task':task
+            }
+        email = communication.get_messages(ctx)
+        try:
+            send_mail(email['subject'], email['html'], order.email, 'orders@geniusautoparts.com')
+        except:
+            data['message']="emails aren't configured properly"
+            data['success']=False
+            data = json.dumps(data)
+            return HttpResponse(data,mimetype="application/json")
+        data['message']="Email sent successfully"
+        data['success']=True
+        data = json.dumps(data)
+        return HttpResponse(data,mimetype="application/json")
+        pass
+#!TODO: is this class usefull?
 class OrderListView(ListView):
     model = Order
     template_name = 'dashboard/jobs/order_list.html'
@@ -50,8 +83,19 @@ class OrderListView(ListView):
 
 class JobListView(ListView):
     model = Job
+    queryset = Job.objects.all().prefetch_related('order')
     template_name = 'dashboard/jobs/job_list.html'
-
+    def get_queryset(self):
+        return self.sort_queryset(super(JobListView, self).get_queryset())
+    
+    def sort_queryset(self, queryset):
+        sort = self.request.GET.get('sort', None)
+        allowed_sorts = ['order__number',]
+        if sort in allowed_sorts:
+            direction = self.request.GET.get('dir', 'desc')
+            sort = ('-' if direction == 'desc' else '') + sort
+            queryset = queryset.order_by(sort)
+        return queryset
     def get_context_data(self, **kwargs):
         ctx = super(JobListView, self).get_context_data(**kwargs)
         user = self.request.user
@@ -81,10 +125,11 @@ class JobTaskListView(DetailView):
         groups = []
         ctx = super(JobTaskListView, self).get_context_data(**kwargs)
         stages = self.object.stage_set.all()
-        ctx['stages'] = stages
+        dict={}
         for stage in stages:
+            stage.completeness=stage.completeness(self.object)
             groups.append(self.object.task_set.filter(stage=stage))
-
+        ctx['stages'] =stages
         ctx['groups'] = groups
         return ctx
 

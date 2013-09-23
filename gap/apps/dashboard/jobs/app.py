@@ -18,7 +18,7 @@ class JobDashboardApplication(Application):
     task_detail_redirect = views.TaskDetailRedirect
     stage_create = views.StageCreateView
     stage_list = views.StageListView
-
+    send_email = views.SendEmail
     task_follow = views.FollowTaskView
     task_unfollow = views.UnfollowTaskView
 
@@ -31,7 +31,7 @@ class JobDashboardApplication(Application):
     def get_urls(self):
     	urlpatterns = patterns('',
             url(r'^orders/$', self.order_list.as_view(), name='order-list'),
-
+            url(r'^send/$', self.send_email.as_view(), name='email-sender'),
             url(r'^orders/(?P<order_id>\d+)/create/$', self.job_create.as_view(), name='order-job-create'),
             url(r'^$', self.job_list.as_view(), name='job-list'),
             url(r'^create/$', self.job_create.as_view(), name='job-create'),

@@ -5,8 +5,12 @@
 {% load currency_filters %}
 {% load sorting_tags %}
 {% load i18n %}
+{% load staticfiles %}
+{% block extrastyles %}
 
-
+<link rel="stylesheet" type="text/css" href="{% static "local/css/jquery-ui-1.8.16.custom.css" %}"/>
+{{block.super}}
+{% endblock %}
 {% block breadcrumbs %}
     <ul class="breadcrumb">
         <li>
@@ -22,6 +26,7 @@
 {% endblock %}
 
 {% block dashboard_content %}
+
 <div class="row-fluid">
     <div class="span3">
         <h3>Common Descriptions</h3>
@@ -35,6 +40,8 @@
     <div class="span6 well job">
     <form action="." method="post">{% csrf_token%}
         <legend>Task</legend>
+        <p>Completeness: <span id="comp_value"></span>%</p>
+        <div id="completeness"></div>
     {{ form.as_p }}
     
     <button type="submit" class="btn btn-primary">Save</button>
@@ -44,8 +51,10 @@
 {% endblock dashboard_content %}
 
 
-{% block onbodyload %}
-    {{ block.super }}
+{% block extrascripts %}
+
+    <script type="text/javascript" src="{% static "local/js/jquery-ui-1.8.16.custom.min.js"%}"></script>
+    <script type="text/javascript">
     $(function() {
         $(".datePicker").datepicker();
         $('.radio-select').click(function(){
@@ -68,4 +77,28 @@
             });
         });
     });
-{% endblock onbodyload %}
+    
+    $(function(){
+    	var slide = $( "#completeness" ),
+    	input = $( "#id_completeness" )
+    	value= $('#comp_value');
+    	slide.slider({
+    		orientation: "horizontal",
+			range: "min",
+			min:0,
+			max: 100,
+			value:{{form.instance.completeness}},
+			slide:function(){
+				input.val(slide.slider('value'));
+				value.html(slide.slider('value'));
+			},
+			change:function(){
+				input.val(slide.slider('value'));
+				value.html(slide.slider('value'));
+			},
+			});
+		input.hide().prev('label').hide()
+		value.html(slide.slider('value'));
+	});
+    </script>
+{% endblock %}

@@ -1,0 +1,2 @@
+class WrongJob(Exception):
+    pass

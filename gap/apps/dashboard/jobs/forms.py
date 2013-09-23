@@ -50,7 +50,7 @@ class JobForm(forms.ModelForm):
 class TaskForm(forms.ModelForm):
     formfield_callback = make_custom_datefield
 
-    common_description = forms.BooleanField('Common Description')
+    common_description = forms.BooleanField(required=False)
 
     def __init__(self, *args, **kwargs):
         forms.ModelForm.__init__(self, *args, **kwargs)
@@ -63,7 +63,7 @@ class TaskForm(forms.ModelForm):
         
     class Meta:
         model = Task
-        fields = ('job', 'name', 'stage', 'assigned_to', 'description', 'common_description', 'priority', 'start_date', 'end_date')
+        fields = ('job', 'name', 'stage', 'assigned_to','completeness', 'description', 'common_description', 'priority', 'start_date', 'end_date')
 
 class StageForm(forms.ModelForm):
    
