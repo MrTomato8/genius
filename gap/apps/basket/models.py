@@ -17,7 +17,7 @@ import uuid
 from django.conf import settings
 from apps.basket.exceptions import ItemsRequiredException
 from .managers import LineManager
-from .cache import LineCache
+
 Option = models.get_model('catalogue', 'Option')
 
 class Line(AbstractLine):

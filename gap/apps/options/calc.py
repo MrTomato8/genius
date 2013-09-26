@@ -203,7 +203,7 @@ class BaseOptionsCalculator:
         Picks Price objects which statisfy given quantity
         and choice selections
         '''
-        self.current_choices = zlib.crc32(str(choices)+str(choice_data))
+        self.current_choices = zlib.crc32(str(choices)+str(choice_data)+str(quantity))
         prices = CalcCache.get_or_set(self.current_choices, 'prices', False)
         if prices:
             print 'found: %s' % self.current_choices
@@ -291,7 +291,7 @@ class BaseOptionsCalculator:
         # consistent with basket's price calculation. Basket stores only
         # unit prices with 2 decimal places, so on the calculation one cent may be
         # lost. Here we just need to adapt to Oscar's way of calculating things.
-        self.current_choices = zlib.crc32(str(choices)+str(choice_data))
+        self.current_choices = zlib.crc32(str(choices)+str(choice_data)+str(quantity))
         prices = CalcCache.get_or_set(self.current_choices, 'prices', False)
         result = CalcCache.get(self.current_choices, 'result', None)
         if result is not None:
