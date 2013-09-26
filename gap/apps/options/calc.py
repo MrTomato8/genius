@@ -4,6 +4,7 @@ from decimal import Decimal, ROUND_HALF_UP, ROUND_UP
 from django.core.exceptions import ObjectDoesNotExist
 from collections import OrderedDict
 from math import ceil
+import zlib
 TWOPLACES = Decimal(10) ** -2
 THREEPLACES=Decimal(10) ** -3
 
@@ -83,8 +84,11 @@ class CalculatedPrices:
                 raise PriceNotAvailable
             units_multiplier = Decimal(ceil(quantity/Decimal(selected_quantity)))
         if selected_quantity != 0:
-            quantity = selected_quantity   
-        prices = self._prices[quantity]
+            quantity = selected_quantity
+        try:
+            prices = self._prices[quantity]
+        except:
+            raise PriceNotAvailable, 'quantity %s not found'%quantity
         if self.triple_decimal and self.matrix_for_pack:
             price_multiplier = nr_of_items
         else:
@@ -138,12 +142,39 @@ class CalculatedPrices:
                 pass
         dict = {'price':selected[0], 'items_per_pack':selected[1]}
         return dict
-        
-class BaseOptionsCalculator:
 
+class CalcCache(object):
+    dict = {}
+    @classmethod
+    def create(cls, p):
+        r = cls.dict.has_key(p)
+        if not r:
+            r = cls.dict[p] = {}
+    @classmethod
+    def get(cls, p, key, default = None):
+        cls.create(p)
+        return cls.dict[p].get(key, None)
+    @classmethod
+    def set(cls, p, key, value):
+        cls.create(p)
+        cls.dict[p][key]= value
+        return cls.dict[p][key]
+    
+    @classmethod
+    def get_or_set(cls, p, key, default = None):
+        cls.create(p)
+        r = cls.get(p, key)
+        if not r:
+            r = cls.set(p, key, default)
+        return cls.get(p, key)
+
+class BaseOptionsCalculator:
+    cache = {}
     def __init__(self, product):
         self.product = product
         self.quantize = TWOPLACES
+        self.current_coiches = None
+        
     def _get_area(self, choice_data):
 
         result = 0
@@ -172,6 +203,12 @@ class BaseOptionsCalculator:
         Picks Price objects which statisfy given quantity
         and choice selections
         '''
+        self.current_choices = zlib.crc32(str(choices)+str(choice_data))
+        prices = CalcCache.get_or_set(self.current_choices, 'prices', False)
+        if prices:
+            print 'found: %s' % self.current_choices
+            return prices, CalcCache.get(self.current_choices, 'discrete')
+        print 'not found: %s' % self.current_choices
         prices = self.product.prices.all()
 
         custom_size = utils.custom_size_chosen(choices)
@@ -209,14 +246,21 @@ class BaseOptionsCalculator:
         if (prices.values('quantity').count() >
                 prices.values('quantity').distinct().count()):
             raise DuplicateQuantities
-
+        CalcCache.set(self.current_choices, 'prices', prices)
+        CalcCache.set(self.current_choices, 'discrete', discrete)
         # Return prices for all found discrete quantities
+        
         return prices, discrete
 
     def _apply_choice_data(self, price, choices, choice_data):
-        if utils.custom_size_chosen(choices):
-            return price * self._get_area(choice_data)
-
+        size_chosen = CalcCache.get(self.current_choices, 'custom_size', None)
+        if size_chosen is None:
+            CalcCache.set(self.current_choices, 'custom_size', utils.custom_size_chosen(choices))
+            size_chosen = CalcCache.get(self.current_choices, 'custom_size', None)
+            if  size_chosen:
+                CalcCache.set(self.current_choices, 'area',self._get_area(choice_data))
+        if size_chosen:
+            return price*CalcCache.get(self.current_choices, 'custom_size', None)
         #elif ... More transformations may be added here in the future
         else:
             return price
@@ -247,6 +291,11 @@ class BaseOptionsCalculator:
         # consistent with basket's price calculation. Basket stores only
         # unit prices with 2 decimal places, so on the calculation one cent may be
         # lost. Here we just need to adapt to Oscar's way of calculating things.
+        self.current_choices = zlib.crc32(str(choices)+str(choice_data))
+        prices = CalcCache.get_or_set(self.current_choices, 'prices', False)
+        result = CalcCache.get(self.current_choices, 'result', None)
+        if result is not None:
+            return result
         result = CalculatedPrices()
         matrix_for_pack = False
         
@@ -375,6 +424,7 @@ class BaseOptionsCalculator:
 
                 result.add(quantity, price_data)
         result.add_price_history(rpl_price_history, tpl_price_history)
+        CalcCache.set(self.current_choices, 'result',result)
         return result
 
 

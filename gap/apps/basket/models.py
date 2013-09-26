@@ -16,9 +16,13 @@ from apps.partner.wrappers import DefaultWrapper
 import uuid
 from django.conf import settings
 from apps.basket.exceptions import ItemsRequiredException
+from .managers import LineManager
+from .cache import LineCache
 Option = models.get_model('catalogue', 'Option')
 
 class Line(AbstractLine):
+    itemsperpack = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
+    objects = LineManager()
     PRODUCT_STOCKRECORD, OPTIONS_CALCULATOR = (
         'stockrecord', 'optionscalc')
     STOCKRECORD_SOURCE_CHOICES = (
@@ -36,6 +40,7 @@ class Line(AbstractLine):
     # making this field nullable an exception will raise if there are problems 
     items_required = models.PositiveIntegerField(null=True, blank=True)
     real_quantity = models.PositiveIntegerField(null=True, blank=True)
+    
     def save(self,*args,**kwargs):
         
         super(Line,self).save(*args,**kwargs)
@@ -74,7 +79,7 @@ class Line(AbstractLine):
                 #we crate an option only if PriceNotAvailable was not raised
                 if not failed:
                     # creating an option
-                    o = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
+                    o = self.itemsperpack
                     ipp, created = self.attributes.get_or_create(option=o)
                     ipp.value=items_per_pack
                     ipp.value_code=items_per_pack,
@@ -93,19 +98,22 @@ class Line(AbstractLine):
     def get_option_choices(self):
         choice_data = {}
         choices = []
-        itemsperpack = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
-        for attr in self.attributes.exclude(option=itemsperpack):
+        query = None
+        for attr in self.attributes.exclude(option=self.itemsperpack).prefetch_related('option'):
             # May be a lot of exceptions here, but it will mean problems in
             # another parts of the code or hacking attempt.
-            choices.append(OptionChoice.objects.get(option=attr.option,
-                                                    code=attr.value_code))
+            if query is None:
+                query = models.Q(option=attr.option, code=attr.value_code)
+            else:
+                query = models.Q(option=attr.option, code=attr.value_code)|query
             try:
                 data = json.loads(attr.data)
             except ValueError:
                 data = {}
             choice_data.update({attr.option.code: data})
+        [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
         return choices, choice_data
-
+        
     def _get_unit_price_from_pricelist(self):
         choices, choice_data = self.get_option_choices()
         calc = OptionsCalculator(self.product)
