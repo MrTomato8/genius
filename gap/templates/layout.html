@@ -14,7 +14,9 @@
                     {% include "partials/nav_accounts.html" %}
                     {# Site logo/title, mini-basket, browse dropdown and searchbox #}
 					<div id="service-add-to-cart" class="clearfix">
-						<div id="cart-add" class="float-right"><i class="float-left icon-shopping-cart icon-3x"></i><div class="float-left padded2"><span class="rnd-btn">{{ basket.total_incl_tax|currency }} <strong>{{ request.basket.num_lines }} ITEMS</strong></span></div></div>
+						<div id="cart-add" class="float-right"><a id="" href="{% url basket:summary %}"><i class="float-left icon-shopping-cart icon-3x"></i><div class="float-left padded2"><span class="rnd-btn">{{ basket.total_incl_tax|currency }} <strong>{{ request.basket.num_lines }} ITEMS</strong></span></div>
+							</a>
+						</div>
 						<div id="cust-service" class="float-right"><i class=" float-left icon-mobile-phone icon-3x"></i><div class="float-left padded">Customer Service</br><strong>1-800-424-1324</strong></div></div>
 					</div>
 					{% comment %}
