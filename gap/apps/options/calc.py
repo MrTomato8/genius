@@ -82,8 +82,6 @@ class CalculatedPrices:
             if selected_quantity == 0:
                 raise PriceNotAvailable
             units_multiplier = Decimal(ceil(quantity/Decimal(selected_quantity)))
-        else:
-            units_multiplier = quantity
         if selected_quantity != 0:
             quantity = selected_quantity
        
@@ -97,7 +95,7 @@ class CalculatedPrices:
         else:
             self.triple_decimal = False
         try:
-            
+
             tuple = (
                 prices[prefix + attribute]*price_multiplier,
                 prices['nr_of_units']*units_multiplier,
@@ -269,8 +267,8 @@ class BaseOptionsCalculator:
             return price
 
     def _calc_units(self, items_per_pack, quantity):
-        if items_per_pack == 1:
-            return 1
+        #there was this line
+        # if items_per_pack == 1: return 1
         if items_per_pack == quantity:
             return 1
         return (Decimal(quantity) / Decimal(items_per_pack)).quantize(
@@ -409,7 +407,6 @@ class BaseOptionsCalculator:
                     tpl_unit_price = tpl_min_unit_price
 
                 price_data = {}
-
                 price_data['nr_of_units'] = nr_of_units_required
                 price_data['items_per_pack'] = items_per_pack
 
