@@ -183,6 +183,10 @@ var oscar = (function(o, $) {
                 o.basket.hideVoucherForm();
                 event.preventDefault();
             });
+            $('#content_inner').on('click', 'button[type~=submit]', function(event){
+            	event.preventDefault();
+            	o.basket.submitBasketForm(event)
+            });
             $('#content_inner').on('submit', '#basket_formset', o.basket.submitBasketForm);
             if (window.location.hash == '#voucher') {
                 o.basket.showVoucherForm();
