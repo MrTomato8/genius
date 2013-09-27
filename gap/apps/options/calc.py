@@ -70,7 +70,7 @@ class CalculatedPrices:
                     break
                 elif key > selected_quantity and key < nr_of_items:
                     selected_quantity = key
-            units_multiplier= Decimal(nr_of_items)
+            #units_multiplier= Decimal(nr_of_items)
             #price_multiplier = Decimal(ceil(nr_of_items/Decimal(selected_quantity)))
         elif self.discrete_pricing:
             for key in self._prices:
