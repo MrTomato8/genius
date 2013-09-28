@@ -70,6 +70,7 @@ class CalculatedPrices:
                     break
                 elif key > selected_quantity and key < nr_of_items:
                     selected_quantity = key
+            
             #units_multiplier= Decimal(nr_of_items)
             #price_multiplier = Decimal(ceil(nr_of_items/Decimal(selected_quantity)))
         elif self.discrete_pricing:
@@ -81,17 +82,19 @@ class CalculatedPrices:
                     selected_quantity= key
             if selected_quantity == 0:
                 raise PriceNotAvailable
+            # It should be 1, if not we will fix it
             units_multiplier = Decimal(ceil(quantity/Decimal(selected_quantity)))
         if selected_quantity != 0:
             quantity = selected_quantity
-       
         try:
             prices = self._prices[quantity]
         except:
             raise PriceNotAvailable, 'quantity %s not found'%quantity
         
         if self.triple_decimal and self.matrix_for_pack:
-            price_multiplier = nr_of_items
+            #this has sense since quantity will be set to 1
+            #price_multiplier = nr_of_items
+            pass
         else:
             self.triple_decimal = False
         try:
