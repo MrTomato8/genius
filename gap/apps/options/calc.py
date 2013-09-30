@@ -307,7 +307,7 @@ class BaseOptionsCalculator:
         if choice_data is None:
             choice_data = {}
 
-        if quantity == 0 or quantity == Decimal(0):
+        if quantity == 0:
             quantity = None
             
         prices, discrete = self.pick_prices(choices, choice_data, quantity)
@@ -385,7 +385,7 @@ class BaseOptionsCalculator:
             except ObjectDoesNotExist:
                 return result
 
-            if quantity is not None or quantity != 0:
+            if quantity is not None:
                 
                 rpl_price_history.append((price.rpl_price, price.items_per_pack))
                 tpl_price_history.append((price.tpl_price, price.items_per_pack))
