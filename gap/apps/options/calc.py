@@ -291,8 +291,7 @@ class BaseOptionsCalculator:
         height arguments into account. Width and height units are millimeters
         and price value is per square metre for this case.
         '''
-        if quantity == 0:
-            quantity = None
+        
         # Totals (price*quantity) are recalculated to make price
         # consistent with basket's price calculation. Basket stores only
         # unit prices with 2 decimal places, so on the calculation one cent may be
@@ -308,6 +307,9 @@ class BaseOptionsCalculator:
         if choice_data is None:
             choice_data = {}
 
+        if quantity == 0 or quantity == Decimal(0):
+            quantity = None
+            
         prices, discrete = self.pick_prices(choices, choice_data, quantity)
         # vanilla price history
         rpl_price_history = []
@@ -383,7 +385,7 @@ class BaseOptionsCalculator:
             except ObjectDoesNotExist:
                 return result
 
-            if quantity is not None:
+            if quantity is not None or quantity != 0:
                 
                 rpl_price_history.append((price.rpl_price, price.items_per_pack))
                 tpl_price_history.append((price.tpl_price, price.items_per_pack))
