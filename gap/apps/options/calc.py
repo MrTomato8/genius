@@ -291,6 +291,8 @@ class BaseOptionsCalculator:
         height arguments into account. Width and height units are millimeters
         and price value is per square metre for this case.
         '''
+        if quantity == 0:
+            quantity = None
         # Totals (price*quantity) are recalculated to make price
         # consistent with basket's price calculation. Basket stores only
         # unit prices with 2 decimal places, so on the calculation one cent may be
@@ -338,7 +340,7 @@ class BaseOptionsCalculator:
                 items_per_pack = price.items_per_pack
                 if not matrix_for_pack or quantity is not None:
                     nr_of_units = self._calc_units(
-                        items_per_pack, price.quantity)
+                        items_per_pack, quantity)
                 elif quantity is None:
                     nr_of_units = self._calc_units(
                         items_per_pack, price.quantity)
