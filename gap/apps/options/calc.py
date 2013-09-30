@@ -338,7 +338,7 @@ class BaseOptionsCalculator:
                 items_per_pack = price.items_per_pack
                 if not matrix_for_pack or quantity is not None:
                     nr_of_units = self._calc_units(
-                        items_per_pack, quantity)
+                        items_per_pack, price.quantity)
                 elif quantity is None:
                     nr_of_units = self._calc_units(
                         items_per_pack, price.quantity)
