@@ -93,7 +93,7 @@ class CalculatedPrices:
         
         if self.triple_decimal and self.matrix_for_pack:
             #this has sense since quantity will be set to 1
-            #price_multiplier = nr_of_items
+            price_multiplier = nr_of_items
             pass
         else:
             self.triple_decimal = False
