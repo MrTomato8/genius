@@ -24,7 +24,7 @@ class OptionPickerForm(forms.ModelForm):
 
 class OptionPickerAdmin(admin.ModelAdmin):
     form = OptionPickerForm
-    search_fields =['code', 'option__name']
+    search_fields =['code']
 
 
 class OptionChoiceAdmin(admin.ModelAdmin):
