@@ -43,7 +43,7 @@ class OptionError(Exception):
     pass
 
 
-def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=False):
+def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=True):
     '''
     Imports whole pricelist from CSV file.
 
@@ -141,7 +141,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Fa
 
         try:
             for col, vals in row.items():
-                for val in filter(len, vals.replace(' ', '').split(',')):
+                for val in filter(len, vals.replace(', ', ',').replace(' ,',',').split(',')):
                     
                     slug = slugify(col)
                     try:

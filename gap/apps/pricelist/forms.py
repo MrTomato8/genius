@@ -11,4 +11,5 @@ class PricelistUploadForm(forms.Form):
         label='Allow creation of missing option choices')
     chirurgical = forms.BooleanField(
         required=False,
-        label='Selective load of pricelist')
+        label='Selective load of pricelist',
+        initial=True)
