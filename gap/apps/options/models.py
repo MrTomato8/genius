@@ -31,6 +31,10 @@ class OptionChoice(models.Model):
     caption = models.CharField('Caption', max_length=30, blank=True)
     thumbnail = models.ImageField('Thumbnail', upload_to='options', blank=True)
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('code__iexact',)
+    
     def get_thumbnail(self):
         if self.thumbnail.name:
             return self.thumbnail
