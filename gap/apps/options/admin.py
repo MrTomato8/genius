@@ -24,13 +24,12 @@ class OptionPickerForm(forms.ModelForm):
 
 class OptionPickerAdmin(admin.ModelAdmin):
     form = OptionPickerForm
-    search_fields =['code']
-    @staticmethod
-    def autocomplete_search_fields():
-        return ('code__iexact',)
+    
+    
 
 class OptionChoiceAdmin(admin.ModelAdmin):
     filter_horizontal = ('conflicts_with',)
+    search_fields =['code']
     def get_readonly_fields(self, request, obj=None):
         if obj:  # editing an existing object
             return self.readonly_fields + ('code',)

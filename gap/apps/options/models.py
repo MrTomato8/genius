@@ -33,7 +33,7 @@ class OptionChoice(models.Model):
 
     @staticmethod
     def autocomplete_search_fields():
-        return ("id__iexact", "code__icontains",)
+        return ("code__icontains",)
     
     def get_thumbnail(self):
         if self.thumbnail.name:
