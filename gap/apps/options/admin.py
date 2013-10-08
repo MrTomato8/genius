@@ -25,7 +25,9 @@ class OptionPickerForm(forms.ModelForm):
 class OptionPickerAdmin(admin.ModelAdmin):
     form = OptionPickerForm
     search_fields =['code']
-
+    @staticmethod
+    def autocomplete_search_fields():
+        return ('code__iexact',)
 
 class OptionChoiceAdmin(admin.ModelAdmin):
     filter_horizontal = ('conflicts_with',)
