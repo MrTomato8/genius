@@ -287,7 +287,11 @@ OSCAR_DASHBOARD_NAVIGATION += [
          ]
     },
 ]
-
+GRAPPELLI_AUTOCOMPLETE_SEARCH_FIELDS = {
+    "apps.options": {
+        "OptionChoice": ("id__iexact", "code__icontains",)
+    }
+}
 MISSING_OPTIONCHOICE_THUMB_URL = STATIC_URL + 'options/img/missing-choice-thumbnail.png'
 OPTIONCHOICE_CUSTOMSIZE = ('size', 'custom')
 TRADE_GROUP_NAME = 'Trade'
