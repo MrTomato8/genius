@@ -141,7 +141,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
 
         try:
             for col, vals in row.items():
-                for val in filter(len, vals.replace(' ','').split(',')):#vals.replace(', ', ',').replace(' ,',',').split(',')):
+                for val in filter(len, vals.replace(', ', ',').replace(' ,',',').split(',')):
                     
                     slug = slugify(col)
                     try:
