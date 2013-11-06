@@ -50,6 +50,12 @@ Order {{ number }} - Line #{{ id }}
             <tr>
 				<th>{% trans "Quantity" %}</th><td>{{ line.quantity }}</td>
             </tr>
+            {% for attribute in line.attributes.all %}
+            	<tr>
+            		<th> {{ attribute.type }}</th>
+            		<td> {{ attribute.value }}</td>
+            	</tr>
+            {% endfor %}
         </table>
     </div>
     <div class="span4">
