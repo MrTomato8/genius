@@ -211,7 +211,9 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
         report.success()
 
     Price.objects.filter(state=Price.OLD).delete()
-
+    # clean up all non-used option choices
+    if create_choices:
+        OptionChoices.objects.filter(prices = None).delete()
     # Ensure option for storing items required exist
     o, new = Option.objects.get_or_create(
         code=settings.OPTION_ITEMSPERPACK, type=Option.OPTIONAL)
@@ -219,5 +221,5 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
         o.name = o.code
         o.save()
 
-
+    
     return report
