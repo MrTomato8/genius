@@ -29,7 +29,7 @@ class OptionPickerAdmin(admin.ModelAdmin):
 
 class OptionChoiceAdmin(admin.ModelAdmin):
     filter_horizontal = ('conflicts_with',)
-    #search_fields =['code']
+    search_fields =('code',)
     def get_readonly_fields(self, request, obj=None):
         if obj:  # editing an existing object
             return self.readonly_fields + ('code',)
