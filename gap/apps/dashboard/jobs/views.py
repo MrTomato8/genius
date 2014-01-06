@@ -7,9 +7,11 @@ from django.core.mail import send_mail
 from .models import Job, Task, Stage, CommonTaskDescription
 from apps.order.models import Order
 from .forms import JobForm, StageForm, TaskForm
+from oscar.apps.dashboard.orders.views import LineDetailView as LineDetailViewBase
 
 import json
 from django.views.generic.base import View
+
 Order = get_model('order', 'Order')
 Communication = get_model('custumer', 'CommunicationEventType')
 GROUP_SMALL = 'small'
@@ -47,6 +49,8 @@ class SendEmail(View):
         data = json.dumps(data)
         return HttpResponse(data,mimetype="application/json")
         pass
+
+        
 #!TODO: is this class usefull?
 class OrderListView(ListView):
     model = Order
@@ -80,6 +84,7 @@ class OrderListView(ListView):
         elif GROUP_EXHIBITION in groups:
             return 'Exhibition Format Digital Team'
         return ''
+
 
 class JobListView(ListView):
     model = Job
@@ -370,3 +375,10 @@ class DeleteCommonDesc(DeleteView):
             return reverse('job-task-create', args=[self.kwargs['job_id']])
 
         return '/dashboard/jobs/tasks/'
+
+class LineDetailView(LineDetailViewBase):
+    def get_context_data(self, **kwargs):
+        ctx = super(LineDetailView, self).get_context_data(**kwargs)
+        ctx['item'] = self.object
+        ctx['quantity'] = self.object.quantity
+        return ctx

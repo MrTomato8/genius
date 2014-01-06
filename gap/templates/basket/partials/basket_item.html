@@ -1,0 +1,37 @@
+{% include 'basket/partials/line_item.html' with quantity=form.quantity.value item=form.instance %}
+
+{% block line_item_header %}
+    {{ form.id }}
+{% endblock %}
+
+{% block line_item_thumbnail_data %}
+    {% with stockrecord=item.stockrecord_source option=item.OPTIONS_CALCULATOR product=item.PRODUCT_STOCKRECORD %}
+        {% if stockrecord = option %}
+            <div style="display:none">
+                {{ form.quantity }}
+            </div>
+            {{ form.items_required }}
+        {% elif stockrecord = product %}
+            {{ form.quantity }}
+            <div style="display:none">
+                {{ form.items_required }}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <button class="btn btn-small pull-right" type="submit">{% trans "Update" %}</button>
+
+    {{ block.super }}
+{% endblock %}
+
+{% block line_item_footer %}
+    <td class="centered">
+        {% if product.prices.count > 0 %}
+        <a class="btn btn-small span1" href="{% url options:pick pk=product.pk product_slug=product.slug %}" class="button button-green">Duplicate</a>
+        {% endif %}
+         <a class="btn btn-danger btn-small span1" href="#" data-id="{{ forloop.counter0 }}" data-behaviours="remove" class="inline">{% trans "Remove" %}</a>
+        <div style="display:none" hidden="true" aria-hidden="true">
+                {{ form.save_for_later }}
+                {{ form.DELETE }}
+        </div>
+    </td>
+{% endblock %}

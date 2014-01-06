@@ -1,0 +1,57 @@
+{% load i18n %}
+{% load thumbnail %}
+{% currency_filters %}
+{% load simple_math %}
+
+{# Input params: item, quantity #}
+
+{% with item.product as product %}
+<tr>
+    {% block line_item_header %}
+    {% endblock %}
+
+    <td class="">
+        {% block line_item_thumbnail_data %}
+            {% with image=product.primary_image %}
+                {% thumbnail image.original "200x200" upscale=False as thumb %}
+                <img class="thumbnail" src="/media/{{ thumb.name }}" alt="{{ product.get_title }}">
+                {% endthumbnail %}
+            {% endwith %}
+        {% endblock %}
+    </td>
+    <td>
+        <a href="{{ product.get_absolute_url }}"><b>{{ product.get_title }}</b></a>
+        <ul>
+        {% with  item.attributes.all as attributes %}
+            {% for attribute in attributes %}
+                {% if attribute.option.name == 'items_per_pack' %}
+                {% else %}
+                <li>{{ attribute.option.name }}: {{attribute.value}}</li>
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
+        </ul>
+    </td>
+    <td>
+        {{ item.unit_price_excl_tax|multiply:quantity|currency }}
+    </td>
+    <td>
+        {% with item.unit_tax|multiply:quantity as vat %}
+            {% if not vat or vat == 0 %}
+                n/d
+            {% else %}
+                {{vat|currency}}
+            {% endif %}
+        {% endwith %}
+    </td>
+    <td>
+        {{ item.unit_price_incl_tax|multiply:quantity|currency }}
+    </td>
+
+    {% block line_item_footer %}
+    {% endblock %}
+</tr>
+<tr>
+    <td class="collspan" colspan="6"></td>
+</tr>
+{% endwith %}

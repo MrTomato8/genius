@@ -22,6 +22,8 @@ class JobDashboardApplication(Application):
     task_follow = views.FollowTaskView
     task_unfollow = views.UnfollowTaskView
 
+    line_detail_view = views.LineDetailView
+
     delete_common_desc = views.DeleteCommonDesc
     # project_detail = views.ProjectDetailView
     # line_detail = views.ProjectLineItemDetailView

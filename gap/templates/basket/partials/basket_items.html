@@ -1,0 +1,28 @@
+
+
+<form action="." method="post" class="basket_summary" id="basket_formset">
+{% csrf_token %}
+{{ formset.management_form }}
+
+<table id="basket-table">
+    <thead class="basket_table-header" >
+        {% block basket_form_headers %}
+        <tr>
+            <th class="span3">{% trans "Quantity/Size" %}</th>
+            <th class="span4">{% trans "Specification" %}</th>
+            <th class="span2">{% trans "Price exc. VAT" %}</th>
+            <th class="span1">{% trans "VAT" %}</th>
+            <th class="span2">{% trans "Price inc. VAT" %}</th>
+            <th class="span2"></th>
+        </tr>
+        {% endblock %}
+    </thead>
+
+    <tbody>
+        {% for form in formset %}
+            {% include 'basket/partials/basket_item.html' with form=form %}
+        {% endfor %}
+    </tbody>
+
+</table>
+</form>
