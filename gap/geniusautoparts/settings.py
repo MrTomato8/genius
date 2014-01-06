@@ -50,6 +50,8 @@ USE_TZ = True
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
+MEDIA_ROOT = location('static')
+
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
@@ -159,8 +161,8 @@ INSTALLED_APPS = [
     'apps.globals',
     'apps.adminx',
 ]
-INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
-    ['apps.order', 'apps.basket', 'apps.catalogue', 'apps.partner',])
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps()
+    # ['apps.order', 'apps.basket', 'apps.catalogue', 'apps.partner',])
 
 ACCOUNTS_SOURCE_NAME = 'Main Account'
 ACCOUNTS_REDEMPTIONS_NAME = 'Sales Account'
@@ -233,8 +235,15 @@ OSCAR_SHOP_TAGLINE = 'Test Shop'
 OSCAR_INITIAL_ORDER_STATUS = 'Pending'
 OSCAR_INITIAL_LINE_STATUS = 'Pending'
 OSCAR_ORDER_STATUS_PIPELINE = {
-    'Pending': ('Being processed', 'Cancelled',),
-    'Being processed': ('Processed', 'Cancelled',),
+    'Pending': ('Downloaded', 'Cancelled',),
+    'On hold': ('Cancelled'),
+    'Downloaded/Verified': ('Cancelled'),
+    # 'Uploaded': ('Cancelled'),
+    'In progress': ('To be collected', 'Waiting dispatch', 'Cancelled'),
+    'To be collected': ('Collected', 'Cancelled',),
+    'Being dispatched': ('Dispatched', 'Cancelled'),
+    'Collected': (),
+    'Dispatched': (),
     'Cancelled': (),
     }
 
