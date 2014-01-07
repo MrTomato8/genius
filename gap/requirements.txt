@@ -1,0 +1,8 @@
+django-oscar==0.5.2
+django-oscar-accounts==0.3
+MySQL-python==1.2.5
+paypal==1.2.1
+django-csvimport==1.0
+django-grappelli==2.5.1
+django-oscar-datacash==0.7
+django-oscar-paypal==0.7
