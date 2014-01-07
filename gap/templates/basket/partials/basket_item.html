@@ -1,3 +1,5 @@
+{% load i18n %}
+
 {% include 'basket/partials/line_item.html' with quantity=form.quantity.value item=form.instance %}
 
 {% block line_item_header %}
