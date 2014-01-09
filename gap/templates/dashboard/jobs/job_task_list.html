@@ -34,6 +34,83 @@
     <h1>
     	{% blocktrans with number=order.number %}Order #{{ number }}{% endblocktrans %}
 	</h1>
+
+<div class="row">
+    <div class="span12">
+    <!-- Progress Bar -->
+    <ol class="progtrckr" data-progtrckr-steps="4">
+        <li class="progtrckr-done">Downloaded</li><!--
+     --><li class="progtrckr-done">Uploaded</li><!--
+     --><li class="progtrckr-todo">In Progress</li><!--
+     --><li class="progtrckr-todo">Collect / Dithpatch</li>
+    </ol>
+    </div>
+</div>
+<script type="text/javascript">
+$(window).load(function(){
+    $("ol.progtrckr").each(function(){
+        $(this).attr("data-progtrckr-steps", 
+                     $(this).children("li").length);
+    });
+})
+</script>
+<style type="text/css">
+ol.progtrckr {
+    margin: 0 0 50px 0;
+    padding: 0;
+    list-style-type none;
+}
+ol.progtrckr li {
+    display: inline-block;
+    text-align: center;
+    line-height: 3em;
+}
+ol.progtrckr li.progtrckr-done {
+    color: black;
+    border-bottom: 4px solid yellowgreen;
+}
+ol.progtrckr li.progtrckr-todo {
+    color: silver; 
+    border-bottom: 4px solid silver;
+}
+    ol.progtrckr[data-progtrckr-steps="2"] li { width: 49%; }
+    ol.progtrckr[data-progtrckr-steps="3"] li { width: 33%; }
+    ol.progtrckr[data-progtrckr-steps="4"] li { width: 24%; }
+    ol.progtrckr[data-progtrckr-steps="5"] li { width: 19%; }
+    ol.progtrckr[data-progtrckr-steps="6"] li { width: 16%; }
+    ol.progtrckr[data-progtrckr-steps="7"] li { width: 14%; }
+    ol.progtrckr[data-progtrckr-steps="8"] li { width: 12%; }
+    ol.progtrckr[data-progtrckr-steps="9"] li { width: 11%; }
+ol.progtrckr li:after {
+    content: "\00a0\00a0";
+}
+ol.progtrckr li:before {
+    position: relative;
+    bottom: -2.5em;
+    float: left;
+    left: 50%;
+    line-height: 1em;
+}
+ol.progtrckr li.progtrckr-done:before {
+    content: "\2713";
+    color: white;
+    background-color: yellowgreen;
+    height: 1.2em;
+    width: 1.2em;
+    line-height: 1.2em;
+    border: none;
+    border-radius: 1.2em;
+}
+ol.progtrckr li.progtrckr-todo:before {
+    content: "\039F";
+    color: silver;
+    background-color: white;
+    font-size: 1.5em;
+    bottom: -1.6em;
+}
+</style>
+
+
 	
 <table class="table table-striped table-bordered table-hover">
     <caption><i class="icon-group icon-large"></i>{% trans "Customer Information" %}</caption>
@@ -632,6 +709,21 @@
 </div>
 
 	</div>
+
+    <div class="span12" style="margin:40px 0">
+        <button class="btn btn-large btn-primary btn-big" type="button">Download</button>&nbsp;
+        <button class="btn btn-large btn-success btn-big" type="button">In progress</button>&nbsp;
+        <button class="btn btn-large btn-danger btn-big" type="button">Cancel</button>
+        <br/><br/>
+    </div>
+
+<style type="text/css">
+    .btn-big{
+        padding: 30px;
+        margin: 0 20px 0 0;
+    }
+</style>
+
 </div>
 {% endwith %}
 

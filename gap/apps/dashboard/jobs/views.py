@@ -378,6 +378,7 @@ class DeleteCommonDesc(DeleteView):
 
 class LineDetailView(LineDetailViewBase):
     def get_context_data(self, **kwargs):
+        import ipdb; ipdb.set_trace()
         ctx = super(LineDetailView, self).get_context_data(**kwargs)
         ctx['item'] = self.object
         ctx['quantity'] = self.object.quantity
