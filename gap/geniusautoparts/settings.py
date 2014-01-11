@@ -161,8 +161,8 @@ INSTALLED_APPS = [
     'apps.globals',
     'apps.adminx',
 ]
-INSTALLED_APPS = INSTALLED_APPS + get_core_apps()
-    # ['apps.order', 'apps.basket', 'apps.catalogue', 'apps.partner',])
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
+    ['apps.order', 'apps.basket', 'apps.catalogue', 'apps.partner',])
 
 ACCOUNTS_SOURCE_NAME = 'Main Account'
 ACCOUNTS_REDEMPTIONS_NAME = 'Sales Account'
