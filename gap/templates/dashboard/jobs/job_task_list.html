@@ -6,6 +6,8 @@
 {% load sorting_tags %}
 {% load i18n %}
 {% block extrastyles %}
+{% load thumbnail %}
+{% load mathfilters %}
 
 <link rel="stylesheet" type="text/css" href="{% static "local/css/jquery-ui-1.8.16.custom.css" %}"/>
 {{block.super}}
@@ -91,15 +93,13 @@
 				<table class="table table-striped table-bordered table-hover">
 					<thead>
 						<tr>
-							<th>{% trans "Select" %}</th>
 							<th>{% trans "Quantity" %}</th>
-							<th>{% trans "Product" %}</th>
-							<th>{% trans "UPC" %}</th>
-							<th>{% trans "Status" %}</th>
-							<th>{% trans "Supplier" %}</th>
-							<th>{% trans "Supplier SKU" %}</th>
-							<th>{% trans "Est. delivery date" %}</th>
-							<th>{% trans "Price (before discounts)" %}</th>
+							<th>{% trans "Specification" %}</th>
+                            <th>{% trans "Price exc. VAT" %}</th>
+                            <th>{% trans "VAT" %}</th>
+                            <th>{% trans "Price inc. VAT" %}</th>
+<!-- 							<th>{% trans "Supplier" %}</th>
+							<th>{% trans "Supplier SKU" %}</th> -->
 							<th>{% trans "Actions" %}</th>
 						</tr>
 					</thead>
@@ -107,17 +107,29 @@
 						{% for line in order.lines.all %}
 						<tr>
 							<td>
-								<input type="checkbox" name="selected_line" value="{{ line.id }}" />
-								<input type="text" name="selected_line_qty_{{ line.id }}" value="{{ line.quantity }}" class="span1" size="2" />
-							</td>
-							<td>{{ line.quantity }}</td>
-							<td>{{ line.title }}</td>
-							<td>{{ line.upc|default:"-" }}</td>
-							<td>{{ line.status|default:"-" }}</td>
-							<td>{{ line.partner_name }}</td>
-							<td>{{ line.partner_sku }}</td>
-							<td>{{ line.est_dispatch_date|default:"-" }}</td>
-							<td style="text-align: right">{{ line.line_price_before_discounts_incl_tax|currency }}</td>
+                                {{ line.quantity }}
+                                {% with image=line.product.primary_image %}
+                                    {% thumbnail image.original "200x200" upscale=False as thumb %}
+                                        <img class="thumbnail" src="/media/{{ thumb.name }}" alt="{{ product.get_title }}">
+                                    {% endthumbnail %}
+                                {% endwith %}
+                            </td>
+							<td>
+                                <a href="{{ form.instance.product.get_absolute_url }}">
+                                    <b>{{ line.title }}</b></a>
+                                <ul>
+                                {% for attr in line.attributes.all %}
+                                    {% if attr.option.name == 'items_per_pack' %}
+                                    {% else %}
+                                    <li>{{ attr.option.name }}: {{attr.value}}</li>
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                {{ line.line_price_excl_tax|currency }}</td>
+                            <td>{{ line.line_price_tax|currency }}</td>
+							<td>{{ line.line_price_incl_tax|currency }}</td>
 							<td>
 								<a href="{% url 'dashboard:order-line-detail' order.number line.id %}" class="btn btn-info">{% trans "View" %}</a>
 							</td>
@@ -125,84 +137,74 @@
 						{% endfor %}
 
 						<tr>
-							<td colspan="7"></td>
+							<td colspan="4"></td>
 							<th>{% trans "Discount" %}</th>
 							<td style="text-align: right">{{ order.total_discount_incl_tax|currency }}</td>
-							<td></td>
 						</tr>
                         {% with discounts=order.basket_discounts %}
                             {% if discounts %}
                                 <tr>
-                                    <td colspan="7"></td>
+                                    <td colspan="4"></td>
                                     <th>{% trans "Basket total (excl. discounts)" %}</th>
                                     <td style="text-align: right">{{ order.basket_total_before_discounts_incl_tax|currency }}</td>
-                                    <td></td>
                                 </tr>
                                 {% for discount in discounts %}
                                 <tr>
-                                    <td colspan="7"></td>
+                                    <td colspan="4"></td>
                                     <td>
                                         <span class="label label-success">{% trans "Discount" %}</span>
                                         {{ discount.offer_name }}
                                     </td>
                                     <td style="text-align: right">- {{ discount.amount|currency }}</td>
-                                    <td></td>
                                 </tr>
                                 {% endfor %}
                                 <tr>
-                                    <td colspan="7"></td>
+                                    <td colspan="4"></td>
                                     <th>{% trans "Basket total (inc. discounts)" %}</th>
                                     <th style="text-align: right">{{ order.basket_total_incl_tax|currency }}</th>
-                                    <td></td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="7"></td>
+                                    <td colspan="4"></td>
                                     <th>{% trans "Basket total" %}</th>
                                     <th style="text-align: right">{{ order.basket_total_incl_tax|currency }}</th>
-                                    <td></td>
                                 </tr>
                             {% endif %}
                         {% endwith %}
 
                         {% if order.has_shipping_discounts %}
                             <tr>
-                                <td colspan="7"></td>
+                                <td colspan="4"></td>
                                 <td>{% trans "Shipping total (excl. discounts)" %}</td>
                                 <td style="text-align: right">{{ order.shipping_before_discounts_incl_tax|currency }}</td>
-                                <td></td>
                             </tr>
                             {% for discount in order.shipping_discounts %}
                             <tr>
-                                <td colspan="7"></td>
+                                <td colspan="4"></td>
                                 <td>
                                     <span class="label label-success">{% trans "Discount" %}</span>
                                     {{ discount.offer_name }}
                                 </td>
                                 <td style="text-align: right">- {{ discount.amount|currency }}</td>
-                                <td></td>
                             </tr>
                             {% endfor %}
                             <tr>
-                                <td colspan="7"></td>
+                                <td colspan="4"></td>
                                 <th>{% trans "Shipping total (inc. discounts)" %}</th>
                                 <th style="text-align: right">{{ order.shipping_incl_tax|currency }}</th>
-                                <td></td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="7"></td>
+                                <td colspan="4"></td>
                                 <th>{% trans "Shipping total" %}</th>
                                 <th style="text-align: right">{{ order.shipping_incl_tax|currency }}</th>
-                                <td></td>
                             </tr>
                         {% endif %}
 
 						<tr>
-							<td colspan="7"></td>
+							<td colspan="4"></td>
 							<th>{% trans "Order total" %}</th>
 							<th style="text-align: right">{{ order.total_incl_tax|currency }}</th>
-							<td></td>
 						</tr>
 					</tbody>
 				</table>

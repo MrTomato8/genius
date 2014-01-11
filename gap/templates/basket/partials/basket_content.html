@@ -41,33 +41,31 @@
                 </thead>
             
             <tbody>                
-                    
                     {% for form in formset %}
-                    {% with form.instance.product as product%}
-                    <tr>
+                        {% with form.instance.product as product%}
+                        <tr>
                             {{ form.id }}
                             <td class="">
-                            {% with stockrecord=form.instance.stockrecord_source option=form.instance.OPTIONS_CALCULATOR product=form.instance.PRODUCT_STOCKRECORD   %}
-                            {% if stockrecord = option %}
-                           <div style="display:none">
-                                {{ form.quantity }}
-                            </div>   
-                        {{ form.items_required }}
-                    {% elif stockrecord = product %}
-                        {{ form.quantity }}
-                        <div style="display:none">
-                                {{ form.items_required }}
-                        </div>
-                    {% endif %}
-                {% endwith %}
-                <button class="btn btn-small pull-right" type="submit">{% trans "Update" %}</button>
-                            {% with image=product.primary_image %}
+                                {% with stockrecord=form.instance.stockrecord_source option=form.instance.OPTIONS_CALCULATOR product=form.instance.PRODUCT_STOCKRECORD   %}
+                                    {% if stockrecord = option %}
+                                       <div style="display:none">
+                                            {{ form.quantity }}
+                                        </div>   
+                                        {{ form.items_required }}
+                                    {% elif stockrecord = product %}
+                                        {{ form.quantity }}
+                                        <div style="display:none">
+                                                {{ form.items_required }}
+                                        </div>
+                                    {% endif %}
+                                {% endwith %}
+                                <button class="btn btn-small pull-right" type="submit">{% trans "Update" %}</button>
+                                {% with image=product.primary_image %}
+                                    {% thumbnail image.original "200x200" upscale=False as thumb %}
+                                        <img class="thumbnail" src="/media/{{ thumb.name }}" alt="{{ product.get_title }}">
+                                    {% endthumbnail %}
 
-                            {% thumbnail image.original "200x200" upscale=False as thumb %}
-                            <img class="thumbnail" src="/media/{{ thumb.name }}" alt="{{ product.get_title }}">
-                            {% endthumbnail %}
-
-                        {% endwith %}
+                                {% endwith %}
                             </td>
                             <td>
                                     <a href="{{ form.instance.product.get_absolute_url }}"><b>{{ form.instance.product.get_title }}</b></a>
