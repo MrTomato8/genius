@@ -40,21 +40,19 @@ class Line(AbstractLine):
     # making this field nullable an exception will raise if there are problems 
     items_required = models.PositiveIntegerField(null=True, blank=True)
     real_quantity = models.PositiveIntegerField(null=True, blank=True)
-    
+
     def save(self,*args,**kwargs):
-        
         super(Line,self).save(*args,**kwargs)
         if  self.stockrecord_source == self.OPTIONS_CALCULATOR and self.attributes.all().exists():
             # TODO(): a cache variable could be auspicable for performance, skipping all the code bellow
             choices, choice_data = self.get_option_choices()
             failed=False
-            
+
             calc = OptionsCalculator(self.product)
             prices = calc.calculate_costs(
                     choices, self.items_required, choice_data
                 )
             try:
-                
                 price_incl_tax, nr_of_units, items_per_pack = prices.get_unit_price_incl_tax(
                     self.items_required, self.basket.owner
                 )
@@ -113,7 +111,7 @@ class Line(AbstractLine):
             choice_data.update({attr.option.code: data})
         [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
         return choices, choice_data
-        
+
     def _get_unit_price_from_pricelist(self):
         choices, choice_data = self.get_option_choices()
         calc = OptionsCalculator(self.product)

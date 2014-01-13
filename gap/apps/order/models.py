@@ -39,6 +39,7 @@ class ExhibitionOrderManager(models.Manager):
         
         return qs.filter(lines__in=Line.objects.filter(product__categories__in=exhibition_categories)).distinct()
 
+
 class Order(AbstractOrder):
     objects = models.Manager()
     small = SmallOrderManager()

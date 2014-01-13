@@ -4,15 +4,23 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect,HttpResponse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, FormView, RedirectView, DeleteView
 from django.core.mail import send_mail
+from django.utils.translation import ugettext as _
+from django.utils.encoding import smart_str
+from django.views.generic.base import View
+
 from .models import Job, Task, Stage, CommonTaskDescription
 from apps.order.models import Order
 from .forms import JobForm, StageForm, TaskForm
 from oscar.apps.dashboard.orders.views import LineDetailView as LineDetailViewBase
 
 import json
-from django.views.generic.base import View
+import cStringIO
+from zipfile import ZipFile
+import os
+
 
 Order = get_model('order', 'Order')
+Basket = get_model('basket', 'Basket')
 Communication = get_model('custumer', 'CommunicationEventType')
 GROUP_SMALL = 'small'
 GROUP_LARGE = 'large'
@@ -48,7 +56,6 @@ class SendEmail(View):
         data['success']=True
         data = json.dumps(data)
         return HttpResponse(data,mimetype="application/json")
-        pass
 
         
 #!TODO: is this class usefull?
@@ -125,6 +132,34 @@ class JobListView(ListView):
 class JobTaskListView(DetailView):
     model = Job
     template_name = 'dashboard/jobs/job_task_list.html'
+
+    def _process_download(self, request):
+        job = self.object
+        try:
+            basket = Basket.objects.get(pk=job.order.basket_id)
+        except Basket.DoesNotExist:
+            # TODO(analytic): how should we handle this?
+            return HttpResponse()
+        inmem_file = cStringIO.StringIO()
+        with ZipFile(inmem_file, 'a') as zip_file:
+            for line in basket.all_lines():
+                for att in line.attachments.all():
+                    img = att.artwork_item.image
+                    zip_file.writestr(os.path.basename(img.path), open(img.path, 'rb').read())
+        response = HttpResponse(inmem_file.getvalue(), mimetype='application/force-download')
+        filename = 'artwork.zip'
+        response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(filename)
+        return response
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        if 'submit' in request.POST:
+            btn_name = request.POST['submit']
+            if btn_name == _('Download'):
+                return self._process_download(request)
+
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         groups = []
@@ -378,7 +413,6 @@ class DeleteCommonDesc(DeleteView):
 
 class LineDetailView(LineDetailViewBase):
     def get_context_data(self, **kwargs):
-        import ipdb; ipdb.set_trace()
         ctx = super(LineDetailView, self).get_context_data(**kwargs)
         ctx['item'] = self.object
         ctx['quantity'] = self.object.quantity

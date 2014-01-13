@@ -59,7 +59,6 @@ class JobDashboardApplication(Application):
             url(r'^stages/$', self.stage_list.as_view(), name='stage-list'),
 
     		url(r'^(?P<job_id>\d+)/common-desc/(?P<pk>\d+)/delete/$', self.delete_common_desc.as_view(), name='delete-common-desc'),
-            
     	)
     	return self.post_process_urls(urlpatterns)
 
