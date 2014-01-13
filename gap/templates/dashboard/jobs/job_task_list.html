@@ -39,15 +39,40 @@
     <div class="span12">
     <!-- Progress Bar -->
     <ol class="progtrckr" data-progtrckr-steps="4">
-        {% for status in job_statuses %}
+        {% for status in job_progress %}
+            {% if status.type == 1 %}
+            <li class "progtrckr-neutral">
+            {% elif status.type == 2 %}
+            <li class "progtrckr-info">
+            {% elif status.type == 3 %}
+            <li class "progtrckr-done">
+            {% elif status.type == 4 %}
+            <li class "progtrckr-problem">
+            {% endif %}
+                {{ status.value }}
+            </li>
         {% endfor %}
-        <li class="progtrckr-done">Downloaded</li><!--
-     --><li class="progtrckr-done">Uploaded</li><!--
-     --><li class="progtrckr-todo">In Progress</li><!--
-     --><li class="progtrckr-todo">Collect / Dithpatch</li>
     </ol>
     </div>
 </div>
+
+<form action="." method="post" class="form-inline">
+    {% csrf_token %}
+    <div class="span12" style="margin:40px 0">
+        {% for button in buttons %}
+            {% if button.type == 1 %}
+                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-neutral btn-big" value="{{ button.value }}"/>&nbsp;
+            {% elif button.type == 2 %}
+                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-info btn-big" value="{{ button.value }}"/>&nbsp;
+            {% elif button.type == 3 %}
+                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-achievement btn-big" value="{{ button.value }}"/>&nbsp;
+            {% elif button.type == 4 %}
+                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-problem btn-big" value="{{ button.value }}"/>&nbsp;
+            {% endif %}
+        {% endfor %}
+    </div>
+</form>
+
 <script type="text/javascript">
 $(window).load(function(){
     $("ol.progtrckr").each(function(){
@@ -67,12 +92,16 @@ ol.progtrckr li {
     text-align: center;
     line-height: 3em;
 }
-ol.progtrckr li.progtrckr-done {
-    color: black;
-    border-bottom: 4px solid yellowgreen;
+ol.progtrckr li.progtrckr-info {
+    color: blue;
+    border-bottom: 4px solid blue;
 }
-ol.progtrckr li.progtrckr-todo {
-    color: silver; 
+ol.progtrckr li.progtrckr-done {
+    color: green;
+    border-bottom: 4px solid green;
+}
+ol.progtrckr li.progtrckr-neutral {
+    color: silver;
     border-bottom: 4px solid silver;
 }
     ol.progtrckr[data-progtrckr-steps="2"] li { width: 49%; }
@@ -96,14 +125,14 @@ ol.progtrckr li:before {
 ol.progtrckr li.progtrckr-done:before {
     content: "\2713";
     color: white;
-    background-color: yellowgreen;
+    background-color: green;
     height: 1.2em;
     width: 1.2em;
     line-height: 1.2em;
     border: none;
     border-radius: 1.2em;
 }
-ol.progtrckr li.progtrckr-todo:before {
+ol.progtrckr li.progtrckr-neutral:before {
     content: "\039F";
     color: silver;
     background-color: white;
@@ -291,13 +320,6 @@ ol.progtrckr li.progtrckr-todo:before {
             {% csrf_token %}
             <div class="well">
 				<h3><i class="icon-refresh"></i> {% trans "With selected lines" %}:</h3>
-
-                <div class="span12" style="margin:40px 0">
-                    <input type="submit" name="submit" class="btn btn-large btn-primary btn-big" value="Download"/>&nbsp;
-                    <input type="submit" name="submit" class="btn btn-large btn-success btn-big" value="In progress"/>&nbsp;
-                    <input type="submit" name="submit" class="btn btn-large btn-danger btn-big" value="Cancel"/>
-                    <br/><br/>
-                </div>
 
 				<div class="control-group">
 					<div class="controls">

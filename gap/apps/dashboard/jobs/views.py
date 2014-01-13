@@ -129,6 +129,17 @@ class JobListView(ListView):
         return ''
 
 
+class StatusWithType(object):
+    def __init__(self, value, status_type):
+        self.value = value
+        self.type = status_type
+
+class Button(StatusWithType):
+    def __init__(self, value, status_type, name):
+        super(Button, self).__init__(value, status_type)
+        self.name = name
+
+                
 class JobTaskListView(DetailView):
     model = Job
     template_name = 'dashboard/jobs/job_task_list.html'
@@ -140,6 +151,9 @@ class JobTaskListView(DetailView):
         except Basket.DoesNotExist:
             # TODO(analytic): how should we handle this?
             return HttpResponse()
+
+        if job.status == 'pending':
+            job.set_status('downloaded')
         inmem_file = cStringIO.StringIO()
         with ZipFile(inmem_file, 'a') as zip_file:
             for line in basket.all_lines():
@@ -153,12 +167,20 @@ class JobTaskListView(DetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        if 'submit' in request.POST:
-            btn_name = request.POST['submit']
-            if btn_name == _('Download'):
-                return self._process_download(request)
+        job = self.object
+        if 'download' in request.POST:
+            return self._process_download(request)
+        else:
+            status_btns = set(job.pipeline.keys()) & set(request.POST.keys())
+            if len(status_btns) > 1:
+                # too many statuses received
+                # TODO(analytic): handle this
+                pass
+            elif len(status_btns) == 1:
+                status = status_btns.pop()
+                job.set_status(status)
 
+        context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -171,7 +193,34 @@ class JobTaskListView(DetailView):
             groups.append(self.object.task_set.filter(stage=stage))
         ctx['stages'] =stages
         ctx['groups'] = groups
+        job = self.object
+
+        progress = job.progress()
+        progress_with_types = []
+        for status in progress:
+            progress_with_types.append(StatusWithType(status, Job.status_type(status)))
+        ctx['job_progress'] = progress_with_types
+
+        next_statuses = job.next_statuses() or []
+        buttons = []
+        # download button is always accessible
+        buttons.append(Button(_('Download'), Job.status_type(status), name='download'))
+        for status in next_statuses:
+            if status == 'on hold':
+                buttons.append(Button(_('On Hold'), Job.status_type(status), name=status))
+            elif status == 'in progress':
+                buttons.append(Button(_('In progress'), Job.status_type(status), name=status))
+            elif status == 'waiting collection':
+                buttons.append(Button(_('Collect'), Job.status_type(status), name=status))
+            elif status == 'waiting dispatch':
+                buttons.append(Button(_('Dispatch'), Job.status_type(status), name=status))
+            elif status == 'collected':
+                buttons.append(Button(_('Collected'), Job.status_type(status), name=status))
+            elif status == 'dispatched':
+                buttons.append(Button(_('Dispatched'), Job.status_type(status), name=status))
+        ctx['buttons'] = buttons
         return ctx
+
 
 class JobCreateView(CreateView):
     model = Job
@@ -196,6 +245,7 @@ class JobCreateView(CreateView):
             "order": Order.objects.get(pk=self.kwargs['order_id'])
         }
         
+
 class JobUpdateView(UpdateView):
     model = Job
     form_class = JobForm

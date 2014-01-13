@@ -228,16 +228,28 @@ LOGGING = {
 }
 LOG_ROOT = location('logs')
 
-
 OSCAR_SHOP_NAME = 'Genius'
 OSCAR_SHOP_TAGLINE = 'Test Shop'
 
-OSCAR_INITIAL_ORDER_STATUS = 'Pending'
 OSCAR_INITIAL_LINE_STATUS = 'Pending'
+
+OSCAR_INITIAL_JOB_STATUS = 'Pending'
+OSCAR_JOB_STATUS_PIPELINE = {
+    'pending': ('downloaded',),
+    'downloaded': ('in progress', 'on hold',),
+    'on hold': ('in progress',),
+    'in progress': ('waiting collection', 'waiting dispatch',),
+    'waiting collection': ('collected',),
+    'waiting dispatch': ('dispatched',),
+    'collected': (),
+    'dispatched': (),
+}
+
+OSCAR_INITIAL_ORDER_STATUS = 'Pending'
 OSCAR_ORDER_STATUS_PIPELINE = {
-    'Pending': ('Downloaded', 'Cancelled',),
-    'On hold': ('Cancelled'),
-    'Downloaded/Verified': ('Cancelled'),
+    'Pending': ('Downloaded',),
+    'Downloaded': ('On hold', 'In progress'),
+    'On hold': ('Donwloaded', 'In progress'),
     # 'Uploaded': ('Cancelled'),
     'In progress': ('To be collected', 'Waiting dispatch', 'Cancelled'),
     'To be collected': ('Collected', 'Cancelled',),
