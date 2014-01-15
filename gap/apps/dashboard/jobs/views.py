@@ -204,7 +204,7 @@ class JobTaskListView(DetailView):
         next_statuses = job.next_statuses() or []
         buttons = []
         # download button is always accessible
-        buttons.append(Button(_('Download'), Job.status_type(status), name='download'))
+        buttons.append(Button(_('Download'), Job.status_type('downloaded'), name='download'))
         for status in next_statuses:
             if status == 'on hold':
                 buttons.append(Button(_('On Hold'), Job.status_type(status), name=status))

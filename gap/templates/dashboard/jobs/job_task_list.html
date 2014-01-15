@@ -35,19 +35,36 @@
     	{% blocktrans with number=order.number %}Order #{{ number }}{% endblocktrans %}
 	</h1>
 
+
+<script type="text/javascript">
+$(window).load(function(){
+    $("ol.progtrckr").each(function(){
+        $(this).attr("data-progtrckr-steps", 
+                     $(this).children("li").length);
+    });
+
+    var blockForm = $('.block-form').hide();
+    $('.btn-danger.onhold').click(function() {
+        blockForm.slideToggle(300);
+    });
+
+})
+</script>
+
 <div class="row">
     <div class="span12">
     <!-- Progress Bar -->
-    <ol class="progtrckr" data-progtrckr-steps="4">
+
+    <ol class="progtrckr" data-progtrckr-steps="{{ job_progress|length }}">
         {% for status in job_progress %}
             {% if status.type == 1 %}
-            <li class "progtrckr-neutral">
-            {% elif status.type == 2 %}
-            <li class "progtrckr-info">
-            {% elif status.type == 3 %}
-            <li class "progtrckr-done">
-            {% elif status.type == 4 %}
-            <li class "progtrckr-problem">
+            <li class="progtrckr-pending">
+            {% elif status.type == 2 %}</li>
+            <li class="progtrckr-download">
+            {% elif status.type == 3 %}</li>
+            <li class="progtrckr-progress">
+            {% elif status.type == 4 %}</li>
+            <li class="progtrckr-onhold">
             {% endif %}
                 {{ status.value }}
             </li>
@@ -56,90 +73,32 @@
     </div>
 </div>
 
+<div class="block-form">
+    <textarea rows="3" style="height:100px!important" name="custom_message"></textarea><br/>
+    <button type="submit" class="btn" name="on hold">Send</button>
+</div>    
+
+
 <form action="." method="post" class="form-inline">
     {% csrf_token %}
     <div class="span12" style="margin:40px 0">
         {% for button in buttons %}
-            {% if button.type == 1 %}
-                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-neutral btn-big" value="{{ button.value }}"/>&nbsp;
-            {% elif button.type == 2 %}
-                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-info btn-big" value="{{ button.value }}"/>&nbsp;
-            {% elif button.type == 3 %}
-                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-achievement btn-big" value="{{ button.value }}"/>&nbsp;
-            {% elif button.type == 4 %}
-                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-problem btn-big" value="{{ button.value }}"/>&nbsp;
+            {% if button.name == 'on hold' %}
+            <input type="button" name="{{ button.name }}" class="btn btn-large btn-problem btn-big btn-danger onhold" value="{{ button.value }}"/>
+            {% else %}
+                {% if button.type == 1 %}
+                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-neutral btn-big btn-primary" value="{{ button.value }}"/>&nbsp;
+                {% elif button.type == 2 %}
+                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-info btn-big btn-primary" value="{{ button.value }}"/>&nbsp;
+                {% elif button.type == 3 %}
+                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-achievement btn-big btn-success" value="{{ button.value }}"/>&nbsp;
+                {% elif button.type == 4 %}
+                <input type="submit" name="{{ button.name }}" class="btn btn-large btn-problem btn-big btn-danger" value="{{ button.value }}"/>&nbsp;
+                {% endif %}
             {% endif %}
         {% endfor %}
     </div>
 </form>
-
-<script type="text/javascript">
-$(window).load(function(){
-    $("ol.progtrckr").each(function(){
-        $(this).attr("data-progtrckr-steps", 
-                     $(this).children("li").length);
-    });
-})
-</script>
-<style type="text/css">
-ol.progtrckr {
-    margin: 0 0 50px 0;
-    padding: 0;
-    list-style-type none;
-}
-ol.progtrckr li {
-    display: inline-block;
-    text-align: center;
-    line-height: 3em;
-}
-ol.progtrckr li.progtrckr-info {
-    color: blue;
-    border-bottom: 4px solid blue;
-}
-ol.progtrckr li.progtrckr-done {
-    color: green;
-    border-bottom: 4px solid green;
-}
-ol.progtrckr li.progtrckr-neutral {
-    color: silver;
-    border-bottom: 4px solid silver;
-}
-    ol.progtrckr[data-progtrckr-steps="2"] li { width: 49%; }
-    ol.progtrckr[data-progtrckr-steps="3"] li { width: 33%; }
-    ol.progtrckr[data-progtrckr-steps="4"] li { width: 24%; }
-    ol.progtrckr[data-progtrckr-steps="5"] li { width: 19%; }
-    ol.progtrckr[data-progtrckr-steps="6"] li { width: 16%; }
-    ol.progtrckr[data-progtrckr-steps="7"] li { width: 14%; }
-    ol.progtrckr[data-progtrckr-steps="8"] li { width: 12%; }
-    ol.progtrckr[data-progtrckr-steps="9"] li { width: 11%; }
-ol.progtrckr li:after {
-    content: "\00a0\00a0";
-}
-ol.progtrckr li:before {
-    position: relative;
-    bottom: -2.5em;
-    float: left;
-    left: 50%;
-    line-height: 1em;
-}
-ol.progtrckr li.progtrckr-done:before {
-    content: "\2713";
-    color: white;
-    background-color: green;
-    height: 1.2em;
-    width: 1.2em;
-    line-height: 1.2em;
-    border: none;
-    border-radius: 1.2em;
-}
-ol.progtrckr li.progtrckr-neutral:before {
-    content: "\039F";
-    color: silver;
-    background-color: white;
-    font-size: 1.5em;
-    bottom: -1.6em;
-}
-</style>
 
 
 	
@@ -747,6 +706,141 @@ ol.progtrckr li.progtrckr-neutral:before {
         padding: 30px;
         margin: 0 20px 0 0;
     }
+
+.btn-primary {
+color: #ffffff;
+text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+background-color: #006dcc;
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+background-repeat: repeat-x;
+border-color: #0044cc #0044cc #002a80;
+border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+}
+.btn-primary:hover, .btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] {
+color: #ffffff;
+background-color: #0044cc;
+}
+
+.btn-success {
+color: #ffffff;
+text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+background-color: #5bb75b;
+background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351));
+background-image: -webkit-linear-gradient(top, #62c462, #51a351);
+background-image: -o-linear-gradient(top, #62c462, #51a351);
+background-image: linear-gradient(to bottom, #62c462, #51a351);
+background-image: -moz-linear-gradient(top, #62c462, #51a351);
+background-repeat: repeat-x;
+border-color: #51a351 #51a351 #387038;
+border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+}
+.btn-success:hover, .btn-success:active, .btn-success.active, .btn-success.disabled, .btn-success[disabled] {
+color: #ffffff;
+background-color: #51a351;
+}
+
+
+ol.progtrckr {
+    margin: 0 0 50px 0;
+    padding: 0;
+    list-style-type none;
+}
+ol.progtrckr li {
+    display: inline-block;
+    text-align: center;
+    line-height: 3em;
+}
+ol.progtrckr li.progtrckr-done {
+    color: black;
+    border-bottom: 4px solid yellowgreen;
+}
+ol.progtrckr li.progtrckr-todo {
+    color: silver; 
+    border-bottom: 4px solid silver;
+}
+    ol.progtrckr[data-progtrckr-steps="2"] li { width: 49%; }
+    ol.progtrckr[data-progtrckr-steps="3"] li { width: 33%; }
+    ol.progtrckr[data-progtrckr-steps="4"] li { width: 24%; }
+    ol.progtrckr[data-progtrckr-steps="5"] li { width: 19%; }
+    ol.progtrckr[data-progtrckr-steps="6"] li { width: 16%; }
+    ol.progtrckr[data-progtrckr-steps="7"] li { width: 14%; }
+    ol.progtrckr[data-progtrckr-steps="8"] li { width: 12%; }
+    ol.progtrckr[data-progtrckr-steps="9"] li { width: 11%; }
+ol.progtrckr li:after {
+    content: "\00a0\00a0";
+}
+ol.progtrckr li:before {
+    position: relative;
+    bottom: -2.5em;
+    float: left;
+    left: 50%;
+    line-height: 1em;
+}
+ol.progtrckr li.progtrckr-done:before {
+    content: "\2713";
+    color: white;
+    background-color: yellowgreen;
+    height: 1.2em;
+    width: 1.2em;
+    line-height: 1.2em;
+    border: none;
+    border-radius: 1.2em;
+}
+ol.progtrckr li.progtrckr-todo:before {
+    content: "\039F";
+    color: silver;
+    background-color: white;
+    font-size: 1.5em;
+    bottom: -1.6em;
+}
+.progtrckr-pending{border-bottom: 4px solid silver!important;}
+.progtrckr-download{border-bottom: 4px solid blue!important;}
+.progtrckr-progress{border-bottom: 4px solid green!important;}
+.progtrckr-onhold{border-bottom: 4px solid red!important;}
+
+ol.progtrckr li.progtrckr-pending:before {
+    content: "\039F";
+    color: silver;
+    background-color: white;
+    font-size: 1.5em;
+    bottom: -1.6em;
+}
+
+ol.progtrckr li.progtrckr-download:before {
+    content: "\039F";
+    color: blue;
+    background-color: white;
+    font-size: 1.5em;
+    bottom: -1.6em;
+}
+
+ol.progtrckr li.progtrckr-progress:before {
+    content: "\2713";
+    color: green;
+    background-color: yellowgreen;
+    height: 1.2em;
+    width: 1.2em;
+    line-height: 1.2em;
+    border: none;
+    border-radius: 1.2em;
+}
+
+ol.progtrckr li.progtrckr-onhold:before {
+    content: "\039F";
+    color: red;
+    background-color: white;
+    font-size: 1.5em;
+    bottom: -1.6em;
+}
+.block-form{padding: 20px}
 </style>
 
 </div>
