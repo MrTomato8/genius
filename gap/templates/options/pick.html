@@ -3,11 +3,19 @@
 
 {% block extrastyles %}
 {{ block.super }}
-<link rel="stylesheet" type="text/css" href="{% static "options/css/styles.css" %}" />
-<style type="text/css">
-.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
-background-color: #f9f9f9;
-}
+<link rel="stylesheet" href="{% static "options/css/styles.css" %}" />
+<style>
+  .table-striped tr:nth-child(odd) > td {
+    background-color: #f9f9f9;
+  }
+  
+  #selected-choices img {
+    width: 50px;
+  }
+
+  .jcarousel-item img {
+    width: 100px;
+  }
 </style>
 {% endblock %}
 
@@ -48,7 +56,7 @@ background-color: #f9f9f9;
     <tbody>
     </tbody>
   </table>
-<script type="text/javascript">
+<script>
   AllChoices = new Object ();
   var disableConflictingChoices =function()
   {
@@ -69,7 +77,7 @@ background-color: #f9f9f9;
     {% for group in groups %}
 
     <fieldset title="{{ group.group.name }}" class="group_fieldset">
-    	<h3 class="button group_name">{{ group.group.name }}</h3>
+      <h3 class="button group_name">{{ group.group.name }}</h3>
       <br />
       <div class="grid-7 float-left">
         <ul class="options-group">
@@ -86,7 +94,7 @@ background-color: #f9f9f9;
                   </ul>
                   {% endif %}
                 </div>
-				
+        
                 {% for field in picker.form.visible_fields %}
                 {% if picker.picker.widget == picker.picker.THUMBNAIL %}
                 <div class="option-choice grid-7">
@@ -181,26 +189,40 @@ $(document).ready(function(){
   });
 
   $(".options-group :last-child .option-choice .radio-choice").click(function(){
-  	var fieldset = $(this).closest('fieldset');
-  	fieldset.removeClass('active_fieldset').find('.options-group').hide('slow');
-  	fieldset.next('fieldset').addClass('active_fieldset').find('.options-group').show('slow');
+    var fieldset = $(this).closest('fieldset');
+    fieldset.removeClass('active_fieldset').find('.options-group').hide('slow');
+    fieldset.next('fieldset').addClass('active_fieldset').find('.options-group').show('slow');
   })
    $(".group_fieldset h3.group_name").click(function(){
-  	var fieldset = $(this).closest('fieldset'),
-  	active = fieldset.hasClass('active_fieldset');
-  	if (!active){
-  		fieldset.addClass('active_fieldset').find('.options-group').show('slow');
-  	}else{
-  		fieldset.removeClass('active_fieldset').find('.options-group').hide('slow');
-  	}
-  	  })
-  $('.jcarousel-skin-tango').hover(function(){
-    $(this).find('.jcarousel-prev-horizontal').css({'background-position': '0 -50px'});
-    $(this).find('.jcarousel-next-horizontal').css({'background-position': '0 0px'});
-  }, function(){
-    $(this).find('.jcarousel-prev-horizontal').css({'background-position': '0 50px'});
-    $(this).find('.jcarousel-next-horizontal').css({'background-position': '0 50px'});
-  });
+    var fieldset = $(this).closest('fieldset'),
+    active = fieldset.hasClass('active_fieldset');
+    if (!active){
+      fieldset.addClass('active_fieldset').find('.options-group').show('slow');
+    }else{
+      fieldset.removeClass('active_fieldset').find('.options-group').hide('slow');
+    }
+      })
+      
 });
 </script>
+
+
+<style>
+  .jcarousel-skin-tango .jcarousel-prev-horizontal {
+     background-position: 0 50px;
+  }
+
+  .jcarousel-skin-tango:hover .jcarousel-prev-horizontal {
+     background-position: 0 -50px;
+  }
+
+  .jcarousel-skin-tango .jcarousel-next-horizontal {
+     background-position: 0 50px;
+  }
+
+  .jcarousel-skin-tango:hover .jcarousel-next-horizontal {
+     background-position: 0 0;
+  }
+</style>
+
 {% endblock %}

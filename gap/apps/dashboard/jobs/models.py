@@ -84,8 +84,8 @@ class Job(models.Model):
             return progress
 
         if self.status == 'collected':
-            progress.append('Waiting collection')
-            progress.append('Collected')
+            progress.append('waiting collection')
+            progress.append('collected')
             return progress
 
         if self.status == 'waiting dispatch':

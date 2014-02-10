@@ -3,6 +3,16 @@
 {% load currency_filters %}
 {% load simple_math %}
 {% load humanize %}
+
+
+{% block extrastyles %}
+<style>
+  div.choice-list img {
+    width: 50px;
+  }
+</style>
+{% endblock %}
+
   <div class="grid-4 float-left choice-list">
     <h3>{{ product }}</h3>
     <ul>
