@@ -1,6 +1,10 @@
 {% extends 'dashboard/layout.html' %}
+{% load staticfiles %}
 {% load i18n %}
-
+{% block extrastyles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css"/>
+{% endblock %}
 {% block body_class %}create-page pricelist{% endblock %}
 
 {% block title %}
@@ -20,6 +24,7 @@
 {% block header %}
 <div class="page-header action">
     <h1>{% trans "Pricelist" %}</h1>
+    <div class="alert hidden"></div>
 </div>
 {% endblock header %}
 
@@ -27,21 +32,87 @@
 <div class="table-header">
     <h2><i class="icon-sitemap icon-large"></i>{{ title }}</h2>
 </div>
-<table class="table table-striped table-bordered">
+<form id="form">
+{% csrf_token %}
+<table id="csv_table" class="table table-striped table-bordered">
+<thead>
 <tr>
 {% for header in headers %}
     <th>{{ header }}</th>
 {% endfor %}
 </tr>
+</thead>
+<tbody>
 {% for row in table %}
 <tr> 
 {% for column in row %}
+    {% if forloop.counter0 == 6 %}
+    <td><input type="text" id="{{row|last}}" name="{{row|last}}" value="{{column}}" /></td>
+    {% elif forloop.last %}
+    {% else %}
     <td>{{ column }}</td>
+    {% endif%}
+    </td>
 {% endfor %}
 </tr>
 {% endfor %}
+</tbody>
 </table>
+<button type="submit" class="btn">Submit</button><div id="download" class="btn">download</div>
+</form>
 
-{% include "partials/pagination.html" %}
+
 
 {% endblock dashboard_content %}
+{% block cdn_scripts %}
+    {{ block.super }}
+    <!-- Custom Jquery UI, only contains date picker -->    
+        
+{% block extrascripts %}
+{{ block.super }}
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.9.4/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="http://www.kunalbabre.com/projects/table2CSV.js" > </script> 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#csv_table').DataTable(),
+            csrftoken=$('input[name=csrfmiddlewaretoken]').attr('value'),
+            callback= function(data,textStatus,jqXHR){
+                var text='<div class="alert">';
+                if (data=='200'){
+                            text=text+'success'
+                        }else{
+                            text=text+'error'
+                        }
+                text=text+'</div>'
+                $('.page-header').children('.alert').fadeOut(500,function(){
+                    $('.page-header').children('.alert').remove();
+                    
+                    $('.page-header').append(text);
+                });
+                
+                
+            };
+            $('#download').on('click',function(){
+                $('#csv_table').table2CSV();
+            });
+            $('form').submit(function(ev) {
+            ev.preventDefault()
+                var data = table.$('input, select').serializeArray();
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                });
+                
+                $.ajax({
+                    type:'POST',
+                    dataType:'json',
+                    data:data,
+                    success:callback
+                });
+                return false;
+            } );
+        } );
+    </script>
+{% endblock %}
+    {% endblock %}
