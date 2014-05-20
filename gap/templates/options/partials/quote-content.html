@@ -110,7 +110,7 @@
         </ul>
         {% endif %}
       </div>
-		{% if not prices.discrete_pricing or prices.matrix_for_pack or costum_size %}
+		{% if costum_size or prices.matrix_for_pack or not prices.discrete_pricing  %}
       <div class="options-calculate">
         <input value="Get Quote" type="submit" class="button"/>
       </div>
