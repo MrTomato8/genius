@@ -339,7 +339,7 @@ class BaseOptionsCalculator:
                 tpl_price = self._apply_choice_data(
                     price.tpl_price, choices, choice_data)
                 
-                items_per_pack = price.items_per_pack or 1
+                items_per_pack = price.items_per_pack
                 if not matrix_for_pack and quantity is not None:
                     nr_of_units = self._calc_units(
                         items_per_pack, quantity)
