@@ -84,6 +84,7 @@ class CalculatedPrices:
                 raise PriceNotAvailable
             # It should be 1, if not we will fix it
             units_multiplier = Decimal(ceil(quantity/Decimal(selected_quantity)))
+            price_multiplier = quantity
         if selected_quantity != 0:
             quantity = selected_quantity
         try:
@@ -274,6 +275,8 @@ class BaseOptionsCalculator:
         # if items_per_pack == 1: return 1
         if items_per_pack == quantity:
             return 1
+        if items_per_pack == 1:
+            return quantity
         return (Decimal(quantity) / Decimal(items_per_pack)).quantize(
             Decimal('1.'), rounding=ROUND_UP)
 
