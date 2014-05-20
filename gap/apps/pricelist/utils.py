@@ -233,9 +233,10 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                         fixed = Decimal(anomaly[1])
                     except:
                         fixed = Decimal(0)
-                    data['tpl_price'] = base_tpl_price*(1-discount/100)+fixed
-                    data['rpl_price'] = base_rpl_price*(1-discount/100)+fixed
                     data['quantity'] = int(quantity)
+                    data['tpl_price'] = (base_tpl_price*(1-discount/100)+fixed)*data['quantity']
+                    data['rpl_price'] = (base_rpl_price*(1-discount/100)+fixed)*data['quantity']
+                    
                     p = Price(**data)
                     p.csv=csvrow
                     p.save()
