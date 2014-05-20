@@ -21,7 +21,7 @@ from .managers import LineManager
 Option = models.get_model('catalogue', 'Option')
 
 class Line(AbstractLine):
-    itemsperpack = Option.objects.get_or_create(code=settings.OPTION_ITEMSPERPACK)
+    itemsperpack = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
     objects = LineManager()
     PRODUCT_STOCKRECORD, OPTIONS_CALCULATOR = (
         'stockrecord', 'optionscalc')
