@@ -11,7 +11,7 @@ from oscar.views.decorators import staff_member_required
 from .models import CsvRow
 
 Option = models.get_model('catalogue', 'Option')
-
+ProductClass = models.get_model('catalogue', 'ProductClass')
 
 @staff_member_required
 def import_pricelist(request):
@@ -38,9 +38,18 @@ def import_pricelist(request):
         'title': 'Pricelist Import from CSV',
     })
 
-
 @staff_member_required
-def list(request):
+def list(request, slug=None):
+    if slug is None:
+        dict= {}
+        for klass in ProductClass.objects.all().prefetch_related('product_set'):
+            dict[klass.name]=[]
+            for product in klass.product_set.all():
+                dict[klass.name].append((product.title,product.slug))
+        return render(request, 'pricelist/categories.html', {
+            'classes':dict,
+            'title': 'Products',
+        })
     if request.method=='POST':
         for key in request.POST:
             csvrow= CsvRow.objects.get(pk=key)
@@ -50,7 +59,9 @@ def list(request):
                 print e
         return HttpResponse('200')
     if request.method=='GET':
-        prices_all = Price.objects.filter(~Q(state='inactive')).filter(Q(quantity=0)|Q(quantity=1)).prefetch_related('csv')
+        prices_all = Price.objects.filter(~Q(state='inactive')).filter(product__slug=slug).prefetch_related('csv')
+        print prices_all
+        print slug
         paginator = Paginator(prices_all, 20)
 
         page = request.GET.get('page')
@@ -65,8 +76,7 @@ def list(request):
         prices = prices_all
         headers = ['Product', 'TPL Price', 'RPL Price', 'Quantity',
                 'Minimum Order', 'Minimal Area','quantity-discount']
-        for option in Option.objects.all():
-            headers.append(option.name)
+            
 
         table = []
         for price in prices:
@@ -85,7 +95,11 @@ def list(request):
                 choices = []
                 for choice in price.option_choices.filter(option=option):
                     choices.append(choice.caption)
-                row.append(' / '.join(choices))
+                choices = ' , '.join(choices)
+                if choices != '':   
+                    row.append(choices)
+                    if option.name not in headers:
+                        headers.append(option.name)
             try:
                 row.append(price.csv.pk)
             except:

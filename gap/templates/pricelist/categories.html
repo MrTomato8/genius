@@ -1,0 +1,55 @@
+{% extends 'dashboard/layout.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block extrastyles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css"/>
+{% endblock %}
+{% block body_class %}create-page pricelist{% endblock %}
+
+{% block title %}
+{% trans "Pricelist" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url dashboard:index %}">{% trans "Dashboard" %}</a>
+        <span class="divider">/</span>
+    </li>
+    <li class="active">{% trans "Pricelist" %}</li>
+</ul>
+{% endblock %}
+
+{% block header %}
+<div class="page-header action">
+    <h1>{% trans "Pricelist" %}</h1>
+    <div class="alert hidden"></div>
+</div>
+{% endblock header %}
+
+{% block dashboard_content %}
+<div id="accordion">
+   {% for class, products in classes.items  %}
+        <h3>{{class}}</h3>
+        <div>
+        {%for product in products %}
+            <a href="list/{{product.1}}">{{product.0}}</a>
+        {% endfor%}
+        </div>
+        
+   {% endfor %}
+</div>
+{% endblock dashboard_content %}
+{% block cdn_scripts %}
+    {{ block.super }}
+    <!-- Custom Jquery UI, only contains date picker -->    
+        
+{% block extrascripts %}
+{{ block.super }}
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.9.4/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="http://www.kunalbabre.com/projects/table2CSV.js" > </script> 
+    <script type="text/javascript">
+    </script>
+{% endblock %}
+    {% endblock %}

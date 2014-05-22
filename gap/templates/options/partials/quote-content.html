@@ -67,7 +67,7 @@
 	          </td>
 	        </tr>
 	        {% endfor %}
-	        {% else %}
+	{% else %}
         {% with prices.values|first as price %}
         <tr>
           <td>{{ calc_form.quantity }}</td>
