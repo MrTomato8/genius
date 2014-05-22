@@ -218,8 +218,6 @@ class BaseOptionsCalculator:
         
         custom_size = utils.custom_size_chosen(choices)
         
-        discrete = prices.values('quantity').distinct().count() > 1
-
         if quantity is not None:
             prices = prices.filter(min_order__lte=quantity)
 
@@ -229,7 +227,8 @@ class BaseOptionsCalculator:
         # Keep prices for selected options only
         for choice in choices:
             prices = prices.filter(option_choices=choice)
-
+            
+        discrete = prices.values('quantity').distinct().count() > 1
         # There may be several minimal areas matched, lets get closest one
         min_area_max = prices.aggregate(Max('min_area'))['min_area__max']
         prices = prices.filter(min_area=min_area_max)
