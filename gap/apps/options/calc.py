@@ -260,11 +260,11 @@ class BaseOptionsCalculator:
         size_chosen = CalcCache.get(self.current_choices, 'custom_size', None)
         if size_chosen is None:
             CalcCache.set(self.current_choices, 'custom_size', utils.custom_size_chosen(choices))
-            size_chosen = CalcCache.get(self.current_choices, 'custom_size', None)
-            if  size_chosen:
-                CalcCache.set(self.current_choices, 'area',self._get_area(choice_data))
+            size_chosen = CalcCache.get(self.current_choices, 'custom_size', None)           
         if size_chosen:
-            return price*CalcCache.get(self.current_choices, 'custom_size', None)
+            area = self._get_area(choice_data)
+            CalcCache.set(self.current_choices, 'area',area)
+            return price*area
         #elif ... More transformations may be added here in the future
         else:
             return price
