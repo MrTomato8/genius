@@ -33,9 +33,13 @@
    {% for class, products in classes.items  %}
         <h3>{{class}}</h3>
         <div>
+        <ul>
         {%for product in products %}
-            <a href="list/{{product.1}}">{{product.0}}</a>
+            <li>
+                <a href="list/{{product.1}}">{{product.0}}</a>
+            </li>
         {% endfor%}
+        </ul>
         </div>
         
    {% endfor %}
