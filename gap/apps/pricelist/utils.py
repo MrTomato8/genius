@@ -264,7 +264,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
         OptionChoice.objects.filter(prices = None).delete()
     # Ensure option for storing items required exist
     o, new = Option.objects.get_or_create(
-        code=settings.OPTION_ITEMSPERPACK, defaults={type:Option.OPTIONAL})
+        code=settings.OPTION_ITEMSPERPACK, defaults={'type':Option.OPTIONAL})
     if len(o.name) == 0:
         o.name = o.code
         o.save()
