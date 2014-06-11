@@ -1,23 +1,23 @@
 {% load i18n %}
-
-<ul class="menu" style="margin-right: 15px">
+{% load currency_filters %}
     {% if user.is_authenticated %}
         <li>
-            <a href="{% url customer:summary %}">{% trans "Account" %}</a>
+            <a href="{% url customer:summary %}" class="btn btn-primary">{% trans "Account" %}</a>
         </li>
         <li>
-            <a href="{% url customer:notifications-inbox %}">
+            <a href="{% url customer:notifications-inbox %}" class="btn btn-primary">
                 {% trans "Notifications" %}
                 {% if num_unread_notifications > 0 %}
                     <span >{{ num_unread_notifications }}</span>
                 {% endif %}</a>
         </li>
+        <li class="hidden-xs"><a href="{% url basket:summary %}" class="basket btn btn-primary"><i class="fa fa-shopping-cart"></i> BASKET <span class="rnd-btn">{{ basket.total_incl_tax|currency }} <strong>{{ request.basket.num_lines }} ITEMS</strong></span></a></li>
         {% if user.is_staff %}
-            <li><a href="{% url dashboard:index %}">{% trans "Dashboard" %}</a></li>
+            <li><a href="{% url dashboard:index %}" class="btn btn-primary">{% trans "DASHBOARD" %}</a></li>
         {% endif %}
-        <li><a href="{% url customer:logout %}">{% trans "Logout" %}</a></li>
+        <li><a href="{% url customer:logout %}" class="btn btn-primary">{% trans "LOGOUT" %}</a></li>
     {% else %}
-        <li><a href="{% url customer:login %}">{% trans "Login or register" %}</a></li>
+        <li class="hidden-xs"><a href="{% url customer:login %}" class="login btn btn-primary" data-toggle="modal" data-target="#modal-login"><i class="fa fa-user"></i>{% trans " LOGIN" %}</a></li>
+        <li class="hidden-xs"><a href="{% url basket:summary %}" class="basket btn btn-primary"><i class="fa fa-shopping-cart"></i> BASKET <span class="rnd-btn">{{ basket.total_incl_tax|currency }} <strong>{{ request.basket.num_lines }} ITEMS</strong></span></a></li>
     {% endif %}
-</ul>
             

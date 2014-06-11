@@ -34,7 +34,7 @@ urlpatterns = patterns('',
     (r'^options/', include(options_app.urls)),
     # url(r'^dashboard/projects/', include(projects_app.urls)),
     url(r'^dashboard/jobs/', include(jobs_app.urls)),
-
+    url('^markdown/', include( 'django_markdown.urls')),
     (r'', include(application.urls))
 )
 

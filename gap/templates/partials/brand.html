@@ -1,1 +1,2 @@
-<h1 class="float-left"><a href="{% url promotions:home %}">{% block brand_title %}<img src="/static/local/img/logo.png" alt="Genius" title="Genius" width="250" />{% endblock %}</a></h1>
+{% load staticfiles %}
+<a href="{% url promotions:home %}">{% block brand_title %}<img alt="" src="{% static 'local/images/logo.png' %}">{% endblock %}</a>

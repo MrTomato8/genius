@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'layout_3_col.html' %}
 {% load url from future %}
 {% load currency_filters %}
 {% load history_tags %}
@@ -6,6 +6,7 @@
 {% load staticfiles %}
 {% load product_tags %}
 {% load i18n %}
+{% load price_calc %}
 
 {% block title %}
     {{ product.title }} | {{ block.super }}
@@ -20,66 +21,141 @@
 <div>
 {% endblock %}
 
-{% block content %}
-<div class="grid-12 float-left" style="padding-top:20px !important">
-
-  <div class="product-info custom-block">
-
-    <div class="left">
-      <div class="image">
-        <a href="http://themes.jelliz.com/opencart/dilecta/image/cache/data/2-800x800.jpg" title="" class="jqzoom" rel="gal1" style="outline-style: none; text-decoration: none;">
-          <div class="zoomPad">
-            {% with image=product.primary_image %}
-              <img src="/media/{{ image.original }}" title="{{ product.title }}" alt="{{ product.title }}" style="opacity: 1;">
-            {% endwith %}
-            </div>
-          </a>
-      </div>
-    </div>
-
-    <div class="right">
-      <div class="description">
-        <span>Product Code:</span> {{ product.upc }}<br>
-        <span>Rating:</span> {{ product.rating }}<br>
-        <span>Availability:</span> {% if product.is_available_to_buy %}{% trans "In Stock" %}{% else %}{% trans "Out of Stock" %}{% endif %}
-      </div>
-      <div class="pattern"></div>
-
-      <div class="price">
-        {% if product.prices.count > 0 %}
-          <a href="{% url 'options:pick' pk=product.pk product_slug=product.slug %}" class="button button-green">Get instant price</a>
-
-          {% if quote_load_form %}
-          <br />
-          <br />
-          <form id="quote-load" method="POST" action="{%url 'options:quote-load' pk=product.pk product_slug=product.slug %}">{% csrf_token %}
-            {{ quote_load_form }}<br />
-            <input value="Load saved quote" type="submit" class="finish button"/>
-          </form>
-          {% endif %}
-        {% else %}
-          <p><span class="price-new">{{ product.stockrecord.price_incl_tax|currency }}</span> <span class="price-old"></span></p>
-          <span class="price-tax">Ex Tax: {{ product.stockrecord.price_excl_tax|currency }}</span><br>
-          <span class="reward"><small></small></span><br>
-          <br>
-          <div class="discount"><br />
+{% block column_left %}
+<div class="sidebar-left hidden-sm hidden-xs">
+  {% if categories %}
+  {% with category as main_category %}
+      {% for category in categories %}
+      <div class="panel panel-primary">
+          <a class="panel-heading" data-toggle="collapse" href="#panel-category-{{ category.0.pk }}">{{ category.0.name }}</a>
+          {% if category.1 %}
+          <div class="panel-body panel-collapse collapse in" id="panel-category-{{ category.0.pk }}">
+             <ul class="list-unstyled">
+                  {% for subcategory in category.1 %}
+                  <li><a href="{{ subcategory.0.get_absolute_url }}" >{{ subcategory.0.name }}</a></li>
+                  {% endfor %}
+              </ul>
           </div>
-        {% endif %}
+          {% endif %}
       </div>
+      {% endfor %}
+  {% endwith %}
+  {% endif %} 
 
-      <div class="add-to-carts">
-        {% if product.prices.count == 0 %}
-        	{% block product_basket_form %}
-          {% include "catalogue/partials/add_to_basket_form.html" %}
-          {% endblock %}
-		    {% endif %}
-      </div>
-
+    <div class="download-section text-center">
+      <h4>Download Templates</h4>
+        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons.png" %} " alt=""></a>
+        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons1.png" %} " alt=""></a>
+        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons2.png" %} " alt=""></a>
+        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons3.png" %} " alt=""></a>
     </div>
 
-    <div class="custom-block-product"><h3>{{ product.title }}</h3>
-        <p><strong>Description</strong><br>{{ product.description }}</p>
-    <p class="clears"></p>
-
-</div>
+  </div>
 {% endblock %}
+
+{% block content %}
+
+{% endblock %}
+
+
+{% block column_right %} 
+        <div class="sidebar-right">
+
+        <div class="price-table">
+                    <h4>Print price is</h4>
+                    <h1 id="calculated_price"></h1>
+                    <p>including VAT<br/>price does not include delivery</p>
+
+                    <a href="#" id="buy_button" class="btn btn-info btn-block btn-sm">Buy Now</a>
+                    <a href="#" class="btn btn-info btn-block btn-sm"><img src="{% static "local/images/quotebuilder.png" %} " alt="">Add to QuoteBuilder</a>
+                </div>
+                <div class="summary" id="selected-choices">
+                    <h4>Summary <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}"  /></span>
+          </h4>
+                    <ul class="list-inline">
+
+                    </ul>
+                </div>
+        
+
+        <div class="panel panel-primary bordered" id="quote-builder">
+            <div class="panel-heading">
+              <span class="pull-left"><img src="{% static "local/images/quote.png" %} " /></span>
+              Quotebuilder
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblank.png" %} " /></span>
+            </div>
+            <div class="panel-body">
+               <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>DEL</th>
+                    <th>Live</th>
+                    <th>Qty</th>
+                    <th>Brief Description</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a href="#"><img src="{% static "local/images/delete.png" %} " alt=""></a></td>
+                    <td><a href="#"><img src="{% static "local/images/live.png" %} " alt=""></a></td>
+                    <td>100K <a href="#"><img alt="" src="{% static "local/images/arrow.png" %} "></a></td>
+                    <td><p>A5 Leaflets, 4/4, 250 gloss</p></td>
+                    <td>£15</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#"><img src="{% static "local/images/delete.png" %} " alt=""></a></td>
+                    <td><a href="#"><img src="{% static "local/images/live.png" %} " alt=""></a></td>
+                    <td>100K <a href="#"><img alt="" src="{% static "local/images/arrow.png" %} "></a></td>
+                    <td><p>A5 Leaflets, 4/4, 250 gloss</p></td>
+                    <td>£15</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#"><img src="{% static "local/images/delete.png" %} " alt=""></a></td>
+                    <td><a href="#"><img src="{% static "local/images/live.png" %} " alt=""></a></td>
+                    <td>100K <a href="#"><img alt="" src="{% static "local/images/arrow.png" %} "></a></td>
+                    <td><p>A5 Leaflets, 4/4, 250 gloss</p></td>
+                    <td>£15</td>
+                  </tr>
+                </tbody>
+               </table>
+
+               <p>click an item to edit</p>
+
+            <div class="text-right price"><p>Total Price (inc VAT) <span>{{ product.stockrecord.price_incl_tax|currency }}</span></p></div>
+            
+            <div class="text-center checkout">
+              <a href="#" class="btn btn-primary btn-block">Proceed to Checkout</a>
+
+              <ul class="list-inline">
+                <li>
+                                  <a href="#">
+                                      <div><img src="{% static "local/images/bespoke.png" %} " alt=""></div>
+                                      Bespoke<br/> Quote
+                                  </a>
+                                </li>
+                <li>
+                                  <a href="#">
+                                      <div><img src="{% static "local/images/print.png" %} " alt=""></div>
+                                      Print<br/> Quote
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                      <div><img src="{% static "local/images/save-btn.png" %} " alt=""></div>
+                                      Save<br/> Quote
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                      <div><img src="{% static "local/images/mail.png" %} " alt=""></i></div>
+                                      Email<br/> Quote
+                                  </a>
+                                </li>
+                            </ul>
+            </div>
+            </div>
+          </div>
+        </div>
+{% endblock %}
+

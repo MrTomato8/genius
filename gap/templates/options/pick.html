@@ -1,37 +1,75 @@
-{% extends 'layout.html' %}
+{% extends 'catalogue/detail.html' %}
 {% load staticfiles %}
-
-{% block extrastyles %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static "options/css/styles.css" %}" />
-<style>
-  .table-striped tr:nth-child(odd) > td {
-    background-color: #f9f9f9;
-  }
-  
-  #selected-choices img {
-    width: 50px;
-  }
-
-  .jcarousel-item img {
-    width: 100px;
-  }
-</style>
-{% endblock %}
-
-{% block breadcrumbs %}
-<div class="set-size-grid clearfix">
-  <div class="wizard-progress">
-    <ul>
-      <li><strong>Select Options</strong></li>
-      <li>Get Quote</li>
-      <li>Upload Files</li>
-    </ul>
-  </div>
-  <h2>Select {{ product }}  Options</h2>
-</div>
-{% endblock %}
 {% block content %}
+
+<div class="container-fluid">
+  <div class="row">
+  <div class="flexslider">
+    <ul class="slides">
+         <li>
+            <article>
+                <div class="media">
+                  <div class="visible-xs">
+                    <h3 class="media-heading text-center">Leaflet and flyer printing</h3>
+                    <h4 class="text-center">Prices from £15 for 600 flyers</h4>
+                    <a href="#">
+                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+                    </a>
+                    <div class="media-body">
+                      <h3 class="media-heading hidden-xs">Leaflet and flyer printing</h3>
+                      <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    </div>
+                  </div>
+
+                  <div class="hidden-xs">
+                    <a class="pull-left" href="#">
+                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+                    </a>
+                    <div class="media-body">
+                      <h3 class="media-heading hidden-xs">Leaflet and flyer printing</h3>
+                      <h4>Prices from £15 for 600 flyers</h4>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                </div>
+                              </div>
+                            </div>
+                        </article>
+                    </li>
+                   <li>
+                        <article>
+                <div class="media">
+                  <div class="visible-xs">
+                    <h3 class="media-heading text-center">Leaflet and flyer printing</h3>
+                    <h4 class="text-center">Prices from £15 for 600 flyers</h4>
+                    <a href="#">
+                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+                    </a>
+                    <div class="media-body">
+                      <h3 class="media-heading hidden-xs">Leaflet and flyer printing</h3>
+                      <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    </div>
+                  </div>
+
+              <div class="hidden-xs">
+                    <a class="pull-left" href="#">
+                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+                    </a>
+                    <div class="media-body">
+                      <h3 class="media-heading hidden-xs">Leaflet and flyer printing</h3>
+                      <h4>Prices from £15 for 600 flyers</h4>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    </div>
+                  </div>
+                </div>
+            </article>
+        </li>
+    </ul>
+</div>
+
+<div class="clearfix"></div>
+
+
 
 <div id="title-target" class="center-block clearfix"></div>
 
@@ -47,15 +85,6 @@
 {% endif %}
 </div>
 
-  <table id="selected-choices" class="grid-3 float-right table-striped">
-    <thead>
-      <tr>
-        <th>Selected Choices</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
 <script>
   AllChoices = new Object ();
   var disableConflictingChoices =function()
@@ -72,157 +101,138 @@
   
 </script>
 
-<form id="pickoptions" method="POST" class="grid-7 float-left">{% csrf_token %}
+<form id="pickoptions" method="POST">
+{% csrf_token %}
+  <div class="panel-group" id="product-accordion">
+  {% for group in groups %} 
+   <h3 class="button group_name">{{ group.group.name }}</h3>        
+  {% for picker in group.pickers %}
 
-    {% for group in groups %}
-
-    <fieldset title="{{ group.group.name }}" class="group_fieldset">
-      <h3 class="button group_name">{{ group.group.name }}</h3>
-      <br />
-      <div class="grid-7 float-left">
-        <ul class="options-group">
-            {% for picker in group.pickers %}
-            <li>
-                <h3 class="option-title">&nbsp;&nbsp;{{ picker.picker.option }}</h3>
-
-                <div id="choice-{{ picker.picker.option.code }}-errors" class="option-choice-errors">
-                  {% if picker.form.choice_errors %}
-                  <ul>
-                    {% for error in picker.form.choice_errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </div>
-        
-                {% for field in picker.form.visible_fields %}
+  <div class="panel panel-default">
+          <a data-toggle="collapse" href="#panel-collapse-{{ picker.picker.option.pk }}" class="panel-heading collapsed" data-parent="#product-accordion">{{ picker.picker.option }}</a>
+          <div id="panel-collapse-{{ picker.picker.option.pk }}" class="panel-collapse collapse {% if forloop.first and forloop.parentloop.first %}in{% endif %}">
+            <div class="panel-body">
+              <div class="text-right">
+                <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
+              </div>
+              {% for field in picker.form.visible_fields %}
                 {% if picker.picker.widget == picker.picker.THUMBNAIL %}
                 <div class="option-choice grid-7">
-                  <ul id="carousel-{{ picker.picker.id }}" class="jcarousel-skin-tango grid-7">
+                  <ul class="list-inline">
                     {% for choice in field.field.queryset %}
-                    <script type="text/javascript">
-                      
-                      var choice = new Object();
-                      choice.optioncode = "{{ choice.option.code }}";
-                      choice.optioncaption = "{{ choice.option.name }}";
-                      choice.code = "{{ choice.code }}";
-                      choice.caption = "{{ choice.caption }}";
-                      choice.conflicts_with = new Array();
-                      {% for conflicting_choice in choice.conflicts_with.all %}
-                      choice.conflicts_with.push({{ conflicting_choice.pk }});
-                      {% endfor %}
-                      AllChoices[{{ choice.pk }}] = choice;
-                    </script>
-                    <li>
-                        {{ choice.caption }}<br />
-                        <label for="{{ field.name }}_{{ choice.pk }}">
-                        <img src="{{ choice.get_thumbnail.url }}" alt="{{ choice.caption }}"/><br />
-                        <input class="radio-choice" type="radio" name="{{ field.name }}" value="{{ choice.pk }}"
-                          {% ifequal field.data|slugify choice.pk|slugify %}
-                             checked="checked"
-                          {% endifequal %} id ="{{ field.name }}_{{ choice.pk }}"/>
-                         </label>
-                    </li>
+                      <script type="text/javascript">
+                        
+                        var choice = new Object();
+                        choice.optioncode = "{{ choice.option.code }}";
+                        choice.optioncaption = "{{ choice.option.name }}";
+                        choice.code = "{{ choice.code }}";
+                        choice.caption = "{{ choice.caption }}";
+                        choice.conflicts_with = new Array();
+                        {% for conflicting_choice in choice.conflicts_with.all %}
+                        choice.conflicts_with.push({{ conflicting_choice.pk }});
+                        {% endfor %}
+                        AllChoices[{{ choice.pk }}] = choice;
+                      </script>
+                      <li>
+                          {{ choice.caption }}<br />
+                          <label for="{{ field.name }}_{{ choice.pk }}">
+                          <img src="{{ choice.get_thumbnail.url }}" alt="{{ choice.caption }}"/><br />
+                          <input class="radio-choice" type="radio" name="{{ field.name }}" value="{{ choice.pk }}"
+                            {% ifequal field.data|slugify choice.pk|slugify %}
+                               checked="checked"
+                            {% endifequal %} id ="{{ field.name }}_{{ choice.pk }}"/>
+                           </label>
+                      </li>
                     {% endfor %}
                   </ul>
                 </div>
-                <script type="text/javascript">
-                $( document ).ready(function(){
-                  $('#carousel-{{ picker.picker.id }}').jcarousel({
-                    vertical: false, 
-                    wrap: 'last',
-                    itemFallbackDimension: 376,
-                  });
-                });
-                </script>
                 {% endif %}
-
                 {% if picker.picker.widget == picker.picker.DROPDOWN %}
                 <div class="option-choice">
                   {{ field }}
                 </div>
                 {% endif %}
+          {% endfor %}
+        </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% endfor %}
+  </form>
 
-                {% endfor %}
-            </li>
-            {% endfor %}
-        </ul>
-      </div>
-    </fieldset>
-    {% endfor %}
+<div id="modalchangepw">
+</div>
 
-    <input value="Get Quote" type="submit" class="finish button"/>
-</form>
+  </div>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-  
-  
-  $(".radio-choice").click(disableConflictingChoices);
-  /*
-  $('#pickoptions').stepy({
-    legend:false,
-    titleTarget: '#title-target',
-    description: false,
-    validate: false
-  });*/
-  // remove cached checks 
-  $('input.radio-choice').attr("checked", false);
-  $('.group_fieldset .options-group').hide();
-  $('.group_fieldset:first').addClass('active_fieldset');
-  $('.group_fieldset:first .options-group').show();
-  $('.group_fieldset:first .options-group .option-choice').hide();
-  $('.group_fieldset:first .options-group > li:first-child').find('.option-choice').show();
 
-  $('.option-title').click(function(){
-    $(this).parent().parent().find('.option-choice').hide('slow');
-    $(this).parent().find('.option-choice').show('slow');
+var calculared =false;
+
+$.ajax({
+  data: $('form#pickoptions').serialize(),
+  type: $('form#pickoptions').attr('method'),
+  url: $('form#pickoptions').attr('action'),
+  success: function(response) {
+    x = $('<div></div>');
+    x.html(response);
+    res = x.find('#getquote_wrap');
+    $('#modalchangepw').html(res);
+  }
+});
+
+$('.panel-default:last .option-choice .radio-choice').click(function (){
+  $.ajax({
+      data: $('form#pickoptions').serialize(),
+      type: $('form#pickoptions').attr('method'),
+      url: $('form#pickoptions').attr('action'),
+      success: function(response) {
+        x = $('<div></div>');
+        x.html(response);
+        res = x.find('#getquote_wrap');
+        $('#modalchangepw').html(res);
+      }
   });
+  calculared = true;
+  return false;
+});
 
   $('.option-choice .radio-choice').click(function(){
-    $(this).closest('.option-choice').hide('slow');
-    $(this).closest('.option-choice').parent().next().find('.option-choice').show('slow');
-    $('#selected-choices tbody').html('');
-    $('.option-choice .radio-choice:checked').each(function(a,b){
-      $('#selected-choices tbody').append('<tr><td>' + $(b).closest('li').html()  + '</td></tr>')  
-    });
-  });
-
-  $(".options-group :last-child .option-choice .radio-choice").click(function(){
-    var fieldset = $(this).closest('fieldset');
-    fieldset.removeClass('active_fieldset').find('.options-group').hide('slow');
-    fieldset.next('fieldset').addClass('active_fieldset').find('.options-group').show('slow');
-  })
-   $(".group_fieldset h3.group_name").click(function(){
-    var fieldset = $(this).closest('fieldset'),
-    active = fieldset.hasClass('active_fieldset');
-    if (!active){
-      fieldset.addClass('active_fieldset').find('.options-group').show('slow');
-    }else{
-      fieldset.removeClass('active_fieldset').find('.options-group').hide('slow');
+    if (calculared) {
+      var quantity = $('#getquote li input:checked').attr('value');
+      $.ajax({
+        data: $('form#pickoptions').serialize(),
+        type: $('form#pickoptions').attr('method'),
+        url: $('form#pickoptions').attr('action'),
+        success: function(response) {
+          x = $('<div></div>');
+          x.html(response);
+          res = x.find('#getquote_wrap');
+          $('#modalchangepw').html(res);
+          $('li[data-qty="'+quantity+'"]').trigger("click");
+        },
+      });
     }
-      })
-      
+    prev = $(this).first().closest('.panel-collapse');
+    prev.collapse('toggle');
+    next = prev.parent('.panel').next();
+    if (next.hasClass('group_name')) next = next.next().children('.panel-collapse');
+    else next = next.children('.panel-collapse');
+    next.collapse('show');
+    $('#selected-choices ul').html('');
+    $('.option-choice .radio-choice:checked').each(function(a,b){
+        $('#selected-choices ul').append('<li>' + $(b).closest('li').html()  + '</li>')
+    });
+  });  
+  
+  $(".radio-choice").click(disableConflictingChoices);
+
+  $('input.radio-choice').attr("checked", false);
+
 });
 </script>
-
-
-<style>
-  .jcarousel-skin-tango .jcarousel-prev-horizontal {
-     background-position: 0 50px;
-  }
-
-  .jcarousel-skin-tango:hover .jcarousel-prev-horizontal {
-     background-position: 0 -50px;
-  }
-
-  .jcarousel-skin-tango .jcarousel-next-horizontal {
-     background-position: 0 50px;
-  }
-
-  .jcarousel-skin-tango:hover .jcarousel-next-horizontal {
-     background-position: 0 0;
-  }
-</style>
+</div>
+</div>
 
 {% endblock %}

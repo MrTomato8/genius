@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Django settings for geniusautoparts project.
 import os
 
@@ -153,6 +154,7 @@ INSTALLED_APPS = [
     'compressor',
     'apps.checkout',
     'apps.dashboard.jobs',
+    'apps.dashboard.promotions',
     'paypal',
     'apps.pricelist',
     'apps.options',
@@ -160,9 +162,12 @@ INSTALLED_APPS = [
     'apps.utils',
     'apps.globals',
     'apps.adminx',
+    'django_markdown',
 ]
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
-    ['apps.order', 'apps.basket', 'apps.catalogue', 'apps.partner',])
+    ['apps.catalogue','apps.order', 'apps.basket', 'apps.partner',])
+
+OSCAR_CURRENCY_FORMAT = u'¤#,##0.00'
 
 ACCOUNTS_SOURCE_NAME = 'Main Account'
 ACCOUNTS_REDEMPTIONS_NAME = 'Sales Account'

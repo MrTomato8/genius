@@ -1,0 +1,523 @@
+{% extends 'layout_3_col.html' %}
+{% load url from future %}
+{% load currency_filters %}
+{% load history_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load product_tags %}
+{% load i18n %}
+{% load price_calc %}
+
+{% block title %}
+    {{ product.title }} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="set-size-grid">
+    <a href="/">{% trans 'Home' %}</a>
+    <span class="divider">/</span>
+    <a href="#">{{ product.title }}</a>
+    <h2>{{ product.title }}</h2> 
+<div>
+{% endblock %}
+
+{% block column_left %}
+<div class="sidebar-left hidden-sm hidden-xs">
+  {% if categories %}
+  {% with category as main_category %}
+      {% for category in categories %}
+      <div class="panel panel-primary">
+          <a class="panel-heading" data-toggle="collapse" href="#panel-category-{{ category.0.pk }}">{{ category.0.name }}</a>
+          {% if category.1 %}
+          <div class="panel-body panel-collapse collapse in" id="panel-category-{{ category.0.pk }}">
+             <ul class="list-unstyled">
+                  {% for subcategory in category.1 %}
+                  <li><a href="{{ subcategory.0.get_absolute_url }}" >{{ subcategory.0.name }}</a></li>
+                  {% endfor %}
+              </ul>
+          </div>
+          {% endif %}
+      </div>
+      {% endfor %}
+  {% endwith %}
+  {% endif %} 
+
+    <div class="download-section text-center">
+      <h4>Download Templates</h4>
+        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons.png" %} " alt=""></a>
+        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons1.png" %} " alt=""></a>
+        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons2.png" %} " alt=""></a>
+        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons3.png" %} " alt=""></a>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row">
+  <div class="flexslider">
+                <ul class="slides">
+                     <li>
+                        <article>
+                            <div class="media">
+                              <div class="visible-xs">
+                                <h3 class="media-heading text-center">Leaflet and flyer printing</h3>
+                                <h4 class="text-center">Prices from £15 for 600 flyers</h4>
+                                <a href="#">
+                                  <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+                                </a>
+                                <div class="media-body">
+                                  <h3 class="media-heading hidden-xs">Leaflet and flyer printing</h3>
+                                  <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
+                                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                </div>
+                              </div>
+
+            <div class="hidden-xs">
+                                <a class="pull-left" href="#">
+                                  <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+                                </a>
+                                <div class="media-body">
+                                  <h3 class="media-heading hidden-xs">Leaflet and flyer printing</h3>
+                                  <h4>Prices from £15 for 600 flyers</h4>
+                                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                </div>
+                              </div>
+                            </div>
+                        </article>
+                    </li>
+                   <li>
+                        <article>
+                            <div class="media">
+                              <div class="visible-xs">
+                                <h3 class="media-heading text-center">Leaflet and flyer printing</h3>
+                                <h4 class="text-center">Prices from £15 for 600 flyers</h4>
+                                <a href="#">
+                                  <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+                                </a>
+                                <div class="media-body">
+                                  <h3 class="media-heading hidden-xs">Leaflet and flyer printing</h3>
+                                  <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
+                                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                </div>
+                              </div>
+
+            <div class="hidden-xs">
+                                <a class="pull-left" href="#">
+                                  <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+                                </a>
+                                <div class="media-body">
+                                  <h3 class="media-heading hidden-xs">Leaflet and flyer printing</h3>
+                                  <h4>Prices from £15 for 600 flyers</h4>
+                                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                </div>
+                              </div>
+                            </div>
+                        </article>
+                    </li>
+                    <!-- <li>
+                        <article>
+                            <div class="media">
+                              <div class="visible-xs">
+                                <h3 class="media-heading">Leaflet and flyer printing</h3>
+                                <h4>Prices from £15 for 600 flyers</h4>
+                              </div>
+                              <a class="pull-left" href="#">
+                                <img class="media-object" src="images/product.jpg" alt="Image">
+                              </a>
+                              <div class="media-body">
+                                <h3 class="media-heading hidden-xs">Leaflet and flyer printing</h3>
+                                <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                              </div>
+                            </div>
+                        </article>
+                    </li> -->
+                </ul>
+            </div>
+
+            <div class="clearfix"></div>
+<script>
+  AllChoices = new Object ();
+  var disableConflictingChoices =function()
+  {
+    choice_value = $(this).val()*1;
+    conflicts = AllChoices[choice_value].conflicts_with;
+    $(":input:disabled").removeAttr("disabled");
+    if (conflicts.length > 0) {
+      for (var i = 0; i < conflicts.length; i++) {
+        $(":input[value='" + conflicts[i] + "']").attr('disabled', true);
+      }
+    }
+  };
+</script>
+<form id="pickoptions" method="POST">
+  <div class="panel-group" id="product-accordion">
+  {% for group in groups %} 
+   <h3 class="button group_name">{{ group.group.name }}</h3>        
+  {% for picker in group.pickers %}
+
+  <div class="panel panel-default">
+          <a data-toggle="collapse" href="#panel-collapse-{{ picker.picker.option.pk }}" class="panel-heading collapsed" data-parent="#product-accordion">{{ picker.picker.option }}</a>
+          <div id="panel-collapse-{{ picker.picker.option.pk }}" class="panel-collapse collapse {% if forloop.first and forloop.parentloop.first %}in{% endif %}">
+            <div class="panel-body">
+              <div class="text-right">
+                <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
+              </div>
+              {% for field in picker.form.visible_fields %}
+                {% if picker.picker.widget == picker.picker.THUMBNAIL %}
+                <div class="option-choice grid-7">
+                  <ul class="list-inline">
+                    {% for choice in field.field.queryset %}
+                    <script type="text/javascript">
+                      
+                      var choice = new Object();
+                      choice.optioncode = "{{ choice.option.code }}";
+                      choice.optioncaption = "{{ choice.option.name }}";
+                      choice.code = "{{ choice.code }}";
+                      choice.caption = "{{ choice.caption }}";
+                      choice.conflicts_with = new Array();
+                      {% for conflicting_choice in choice.conflicts_with.all %}
+                      choice.conflicts_with.push({{ conflicting_choice.pk }});
+                      {% endfor %}
+                      AllChoices[{{ choice.pk }}] = choice;
+                    </script>
+                    <li>
+                        {{ choice.caption }}<br />
+                        <label for="{{ field.name }}_{{ choice.pk }}">
+                        <img src="{{ choice.get_thumbnail.url }}" alt="{{ choice.caption }}"/><br />
+                        <input class="radio-choice" type="radio" name="{{ field.name }}" value="{{ choice.pk }}"
+                          {% ifequal field.data|slugify choice.pk|slugify %}
+                             checked="checked"
+                          {% endifequal %} id ="{{ field.name }}_{{ choice.pk }}"/>
+                         </label>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% endif %}
+
+                {% if picker.picker.widget == picker.picker.DROPDOWN %}
+                <div class="option-choice">
+                  {{ field }}
+                </div>
+                {% endif %}
+
+                {% endfor %}
+            </div>
+        </div>
+  </div>
+  {% endfor %}
+
+  {% if forloop.last %}
+    <div class="panel panel-default">
+      <a data-toggle="collapse" href="#panel-collapse-6" class="panel-heading  collapsed" data-parent="#product-accordion">Quantity (choose quantity or enter your own)</a>
+      <div id="panel-collapse-6" class="panel-collapse collapse">
+          <div class="panel-body">
+            <div class="text-right">
+                <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
+            </div>
+
+              <div class="row">
+              <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                <ul class="list-unstyled">
+                  <li><input type="button" class="quantity" name="25" value="25"></li>
+                  <li>50</li>
+                  <li>100</li>
+                  <li>250</li>
+                  <li>500</li>
+                  <li>1000</li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                <ul class="list-unstyled">
+                  <li>2000</li>
+                  <li>2500</li>
+                  <li>5000</li>
+                  <li>7500</li>
+                  <li>10000</li>
+                  <li>12500</li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                <ul class="list-unstyled">
+                  <li>15000</li>
+                  <li>20000</li>
+                  <li>25000</li>
+                  <li>30000</li>
+                  <li>35000</li>
+                  <li>40000</li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                <ul class="list-unstyled">
+                  <li>45000</li>
+                  <li>50000</li>
+                  <li>60000</li>
+                  <li>70000</li>
+                  <li>80000</li>
+                  <li>100000</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <span class="toggle-live active" onclick="$(this).toggleClass('active'); $('#product-quantity-inputs, #product-table-wrap').slideToggle();"> Multi-file discount </span>
+                <span class="info" data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
+              </div>
+              <div class="col-md-8">
+                <form action="#" class="form-horizontal" id="product-quantity-inputs">
+                  <div class="form-group">
+                    <label class="col-sm-8 col-xs-12 control-label">Choose or enter quantity for each</label>
+                    <div class="col-sm-4 col-xs-12">
+                      <div class="input-group">
+                        <input type="text" class="form-control" />
+                        <span class="input-group-btn"><button class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-8 col-xs-12 control-label">Number of files</label>
+                    <div class="col-sm-4 col-xs-12">
+                      <div class="input-group">
+                        <input type="text" class="form-control" />
+                        <span class="input-group-btn btn-group-vertical">
+                          <button class="btn btn-default"><span class="fa fa-angle-up"></span></button>
+                          <button class="btn btn-default"><span class="fa fa-angle-down"></span></button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-8 col-xs-12 control-label">Total quantity</label>
+                    <div class="col-sm-4 col-xs-12">
+                      <div class="input-group">
+                        <input type="text" class="form-control" />
+                        <span class="input-group-btn"><button class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-4 col-xs-12 col-sm-offset-8">
+                      <button class="btn btn-primary btn-block">Add <span class="fa fa-angle-down"></button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div id="product-table-wrap">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>DEL</th>
+                    <th>Live</th>
+                    <th>Qty</th>
+                    <th>Size <div class="word-spaced">width height</div></th>
+                    <th>Brief Description</th>
+                    <th>Unit</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-center"><a href="#"><img src="{% static "local/images/delete.png" %}" alt=""></a></td>
+                    <td class="text-center"><a href="#"><img src="{% static "local/images/live.png" %}" alt=""></a></td>
+                    <td class="text-center">100K</td>
+                    <td class="text-center word-spaced">500 x 150</td>
+                    <td><p>A5 Leaflets, 4/4, 250 gloss</p></td>
+                    <td class="text-center">£15</td>
+                    <td class="text-center">£15</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><a href="#"><img src="{% static "local/images/delete.png" %}" alt=""></a></td>
+                    <td class="text-center"><a href="#"><img src="{% static "local/images/live.png" %}" alt=""></a></td>
+                    <td class="text-center">100K</td>
+                    <td class="text-center word-spaced">500 x 150</td>
+                    <td><p>A5 Leaflets, 4/4, 250 gloss</p></td>
+                    <td class="text-center">£15</td>
+                    <td class="text-center">£15</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><a href="#"><img src="{% static "local/images/delete.png" %}" alt=""></a></td>
+                    <td class="text-center"><a href="#"><img src="{% static "local/images/live.png" %}" alt=""></a></td>
+                    <td class="text-center">100K</td>
+                    <td class="text-center word-spaced">500 x 150</td>
+                    <td><p>A5 Leaflets, 4/4, 250 gloss</p></td>
+                    <td class="text-center">£15</td>
+                    <td class="text-center">£15</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <ul class="product-total">
+                <li><h4 class="text-dark">Total Price (inc VAT) £36</h4></li>
+                <li><button type="button" class="btn btn-primary"><img src="{% static "local/images/quote.png" %}" /> Add QB</button></li>
+              </ul>
+            </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+  </div>
+  </form>
+
+  <div class="tabs-section">
+      <!-- Nav tabs -->                    
+      <ul class="nav nav-tabs">
+          <li class="active">
+              <a href="#home" data-toggle="tab">Tab Name</a>
+          </li>
+          <li>
+              <a href="#profile" data-toggle="tab">Tab Name</a>
+          </li>
+          <li>
+              <a href="#messages" data-toggle="tab">Tab Name</a>
+          </li>
+      </ul>
+
+      <!-- Tab panes -->                    
+      <div class="tab-content">
+          <div class="tab-pane active" id="home">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis, molestias, magni, doloribus, vero ab quas necessitatibus eum asperiores placeat odit facilis mollitia rerum quibusdam deserunt laboriosam error sed eos molestiae?</p>
+          </div>
+          <div class="tab-pane" id="profile">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam, eos fuga molestias maiores fugit dolorem explicabo iusto sed recusandae repellat! Ab, possimus eum laudantium cumque assumenda totam id sequi dolore.</p>
+          </div>
+          <div class="tab-pane" id="messages">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis maxime incidunt sed asperiores cupiditate quibusdam facere minima porro voluptatem vitae. Odit, aliquid laborum porro rerum iusto dolore doloribus sint facere.</p>
+          </div>
+      </div>
+  </div>
+
+  <div id="sidebar-right-responsive"></div>
+  
+  </div>
+</div>
+{% endblock %}
+
+
+{% block column_right %} 
+        <div class="sidebar-right">
+
+        <div class="price-table">
+                    <h4>Print price is</h4>
+                    <h1 id="calculated_price"></h1>
+                    <p>including VAT<br/>price does not include delivery</p>
+
+                    <a href="#" class="btn btn-info btn-block btn-sm">Buy Now</a>
+                    <a href="#" class="btn btn-info btn-block btn-sm"><img src="{% static "local/images/quotebuilder.png" %} " alt="">Add to QuoteBuilder</a>
+                </div>
+                <div class="summary" id="selected-choices">
+                    <h4>Summary <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}"  /></span>
+          </h4>
+                    <ul class="list-inline">
+
+                    </ul>
+                </div>
+        
+
+        <div class="panel panel-primary bordered" id="quote-builder">
+            <div class="panel-heading">
+              <span class="pull-left"><img src="{% static "local/images/quote.png" %} " /></span>
+              Quotebuilder
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblank.png" %} " /></span>
+            </div>
+            <div class="panel-body">
+               <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>DEL</th>
+                    <th>Live</th>
+                    <th>Qty</th>
+                    <th>Brief Description</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a href="#"><img src="{% static "local/images/delete.png" %} " alt=""></a></td>
+                    <td><a href="#"><img src="{% static "local/images/live.png" %} " alt=""></a></td>
+                    <td>100K <a href="#"><img alt="" src="{% static "local/images/arrow.png" %} "></a></td>
+                    <td><p>A5 Leaflets, 4/4, 250 gloss</p></td>
+                    <td>£15</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#"><img src="{% static "local/images/delete.png" %} " alt=""></a></td>
+                    <td><a href="#"><img src="{% static "local/images/live.png" %} " alt=""></a></td>
+                    <td>100K <a href="#"><img alt="" src="{% static "local/images/arrow.png" %} "></a></td>
+                    <td><p>A5 Leaflets, 4/4, 250 gloss</p></td>
+                    <td>£15</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#"><img src="{% static "local/images/delete.png" %} " alt=""></a></td>
+                    <td><a href="#"><img src="{% static "local/images/live.png" %} " alt=""></a></td>
+                    <td>100K <a href="#"><img alt="" src="{% static "local/images/arrow.png" %} "></a></td>
+                    <td><p>A5 Leaflets, 4/4, 250 gloss</p></td>
+                    <td>£15</td>
+                  </tr>
+                </tbody>
+               </table>
+
+               <p>click an item to edit</p>
+
+            <div class="text-right price"><p>Total Price (inc VAT) <span>{{ product.stockrecord.price_incl_tax|currency }}</span></p></div>
+            
+            <div class="text-center checkout">
+              <a href="#" class="btn btn-primary btn-block">Proceed to Checkout</a>
+
+              <ul class="list-inline">
+                <li>
+                                  <a href="#">
+                                      <div><img src="{% static "local/images/bespoke.png" %} " alt=""></div>
+                                      Bespoke<br/> Quote
+                                  </a>
+                                </li>
+                <li>
+                                  <a href="#">
+                                      <div><img src="{% static "local/images/print.png" %} " alt=""></div>
+                                      Print<br/> Quote
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                      <div><img src="{% static "local/images/save-btn.png" %} " alt=""></div>
+                                      Save<br/> Quote
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="#">
+                                      <div><img src="{% static "local/images/mail.png" %} " alt=""></i></div>
+                                      Email<br/> Quote
+                                  </a>
+                                </li>
+                            </ul>
+            </div>
+            </div>
+          </div>
+        </div>
+{% endblock %}
+
+{% block onbodyload %}
+  $('.option-choice .radio-choice').click(function(){
+    prev = $(this).first().closest('.panel-collapse');
+    prev.collapse('toggle');
+    next = prev.parent('.panel').next();
+    if (next.hasClass('group_name')) next = next.next().children('.panel-collapse');
+    else next = next.children('.panel-collapse');
+    next.collapse('show');
+   $('#selected-choices ul').append('<li>' + $(this).closest('li').html()  + '</li>')
+    });
+
+$('.quantity').click(function(){
+  choices =  $('#pickoptions').serialize();
+  quantity = parseInt($(this).attr('value'));
+  price = '{% calc_price product=product choices=choices quantity=10 %}';
+  $('#calculated_price').html(price);
+});
+
+{% endblock %}

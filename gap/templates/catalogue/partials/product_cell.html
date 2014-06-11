@@ -1,34 +1,26 @@
 {% load currency_filters %}
 {% load reviews_tags %}
 {% load thumbnail %}
+{% load staticfiles %}
 {% load i18n %}
 
-<!-- Product -->
-<div>
-        <div class="left">
-            <!-- Image -->
-            <div class="image">
-                {% block product_image %}
+<div class="col-md-3 col-sm-6 col-xs-6 product_wrap">
+    <article class="product">
+        <a href="{{ product.get_absolute_url }}" class="product-avatar">
+            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+            <img src="{% static 'local/images/info.png' %}" />
+            </span>
+            {% block product_image %}
                     {% with image=product.primary_image %}
                         {% if not image.is_missing %}
                             <a href="{{ product.get_absolute_url }}"><img src="/media/{{ image.original }}" alt="">{{ product.get_title|truncatewords:4 }}</a>
+                        {% else %}
+                            <img alt="" src="{% static 'local/images/product-img.jpg' %}"/>
                         {% endif %}   
                     {% endwith %}
                 {% endblock %}
-            </div>
-        </div>
-
-        <div class="right">
-            <div class="off-hover" style="display: block;">
-                <div class="name"><a href="{{ product.get_absolute_url }}">{{ product.get_title|truncatewords:4 }}</a></div>
-                <div class="price">
-                    <span class="price-new">{% include "catalogue/partials/stock_record.html" %}</span> <span class="price-old"></span>
-                </div>
-            </div>
-            <div class="on-hover" style="display: none;">
-                <!-- Add to cart -->
-                <a href="{{ product.get_absolute_url }}" class="add-to-cart"></a>
-            </div>
-        </div>
+        </a>
+        <a href="{{ product.get_absolute_url }}" class="product-name">{{ product.get_title|truncatewords:4 }}</a>
+        <span class="info pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static 'local/images/infoblue.png' %}" /></span>
+    </article>
 </div>
-<!-- End Product -->

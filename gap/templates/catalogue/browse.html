@@ -27,60 +27,36 @@
 {% endblock breadcrumbs %}
 
 {% block column_left %}
-<div class="grid-3 float-left">
-    <div class="column-left" style="padding: 8px 0;">
-        <div class="box">
-            <div class="box-content">
-                <div class="box-category">
-                {% if categories %}
-                <div class="box-heading" style="padding-top: 0;">{% trans "Browse categories" %}</div>
-                <div class="search" style="margin-top: 13px;">
-                            <form  method="get" action="{% url search:search %}" class="navbar-form pull-right">
-
-
-
-                            <input type="text" class="enterkey autoclear" name="filter_name" value="Product search" style="width: 80%;"/>
-                            <input type="submit" value="{% trans "Search" %}" class="button" />
-                            </form>
-                        </div>
-                <ul>
-                    {% with category as main_category %}
-                        {% for category in categories %}
-                        <li>
-                            <a href="{{ category.0.get_absolute_url }}"{% if category|is_category_active:main_category %} class="active"{% endif %}>{{ category.0.name }}</a>
-                            {% if category.1 %}
-                                <ul>
-                                    {% for subcategory in category.1 %}
-                                        <li>
-                                            <a href="{{ subcategory.0.get_absolute_url }}"{% if subcategory|is_category_active:main_category %} class="active"{% endif %}>{{ subcategory.0.name }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </li>
-                        {% endfor %}
-                    {% endwith %}
-                </ul>
-                {% endif %}
-                </div>
-            </div>
+<div class="sidebar-left hidden-sm hidden-xs">
+{% if categories %}
+{% with category as main_category %}
+    {% for category in categories %}
+    <div class="panel panel-primary">
+        <a class="panel-heading" data-toggle="collapse" href="#panel-category-{{ category.0.pk }}">{{ category.0.name }}</a>
+        {% if category.1 %}
+        <div class="panel-body panel-collapse collapse in" id="panel-category-{{ category.0.pk }}">
+           <ul class="list-unstyled">
+                {% for subcategory in category.1 %}
+                <li><a href="{{ subcategory.0.get_absolute_url }}" >{{ subcategory.0.name }}</a></li>
+                {% endfor %}
+            </ul>
         </div>
+        {% endif %}
     </div>
+    {% endfor %}
+{% endwith %}
+{% endif %}    
 </div>
 {% endblock %}
 
 {% block content %}
-<div class="grid-9 float-left" style="padding-top:19px !important">
-    <div class="product-grid">
-        <div class="overflow-products clearfix">
-            <div class="products-grid product-4 grid-9-product-3">
+    <div class="container-fluid">
+        <div class="row products-list">
                 {% if products.count %}
                     {% for product in products %}
                         {% include 'catalogue/partials/product_cell.html' %}
                     {% endfor %}
                 {% endif %}
-            </div>
         </div>
-    <div>
-</div>
+    </div>
 {% endblock content %}

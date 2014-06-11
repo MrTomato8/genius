@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout_2_col.html" %}
 {% load i18n %}
 
 {% block body_class %}account-pages{% endblock %}
@@ -13,18 +13,23 @@
     <h2>{% trans 'Edit profile' %}</h2>
 <div>
 {% endblock %}
+{% block column_left %}
+{% include "partials/nav_profile.html" with profile="active" %}
+{% endblock %}
 
 {% block content %}
-{% include "partials/nav_profile.html" with profile="active" %}
-
-<div class="grid-9 float-left" style="padding-top:39px !important; padding-left:10px;">
-    <form id="profile_form" action="." method="post">
+<div class="main-content">
+<div class="container-fluid">
+    <form id="profile_form" action="." method="post" class="form-horizontal">
     	{% csrf_token %}
+        <div class="form-group">
     	{% include 'partials/form_fields.html' with form=form %}
+        </div>
     	<div class="form-actions">
-    		<button type="submit" class="button">{% trans 'Save' %}</button>
+    		<button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
     		{% trans 'or' %} <a href="{% url customer:summary %}">{% trans 'cancel' %}</a>.
     	</div>
     </form>
+</div>
 </div>
 {% endblock content %}

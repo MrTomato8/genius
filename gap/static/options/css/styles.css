@@ -1,0 +1,47 @@
+/*.option-choice ul li { display: inline-block; text-align: center; margin: 8px;}*/
+.option-choice select {margin: 8px;}
+
+.option-choice-errors { color: red;}
+.option-choice-errors strong { font-size: 12px;}
+
+.wizard-progress ul li { display:  inline; font-size: 12px; vertical-align: baseline;}
+.wizard-progress ul li:after { content: ' > ';}
+.wizard-progress ul li:last-child:after { content: '';}
+.wizard-progress strong { font-weight: bold;}
+
+.choice-list ul li { display: inline-block; text-align: center; margin: 8px;}
+
+.price-calculator table { margin-bottom: 16px;}
+.price-calculator div { margin-bottom: 16px;}
+.price-calculator table tr th { text-align: left; font-size: 12px; padding-bottom: 8px;}
+.quote-errors { color: red;}
+.quote-errors strong { font-size: 12px;}
+
+.options-quote { padding-top: 24px;}
+.options-quote ul { padding-left: 8px;}
+.options-next { padding-top: 24px;}
+.options-calculate { padding-top: 24px;}
+
+.custom-size-columns div { display: inline-block;}
+
+.upload-items { padding-top: 8px;}
+.upload-items ul li { font-size: 16px;}
+
+.upload-form { padding-top: 24px;}
+.option-title {
+    cursor: pointer; 
+margin-bottom: 10px;
+padding: 7px;
+border: 1px solid #ddd;
+background: #F5F5F5;
+background: -moz-linear-gradient(top, #FAFAFA 0%, #F5F5F5 100%);
+background: -webkit-linear-gradient(top, #FAFAFA 0%, #F5F5F5 100%);
+background: -o-linear-gradient(top, #FAFAFA 0%, #F5F5F5 100%);
+background: linear-gradient(to bottom, #FAFAFA 0%, #F5F5F5 100%);
+border-radius: 5px;
+box-shadow: 0 1px 0 #fff inset;
+text-shadow: 0 1px 0 #fff;
+}
+.option-title:hover {color: #ec1978; }
+.options-group > li{ padding-top: 5px;}
+.options-group > li:first-child{padding-top: 10px;}

@@ -32,3 +32,13 @@ def divide_int(value,arg):
     if value != 0 and v == 0:
         v =1
     return v
+@register.filter
+def divide_int_ceil(value,arg):
+    v = ceil(value/arg+0.5)
+    if value != 0 and v == 0:
+        v =1
+    return v
+@register.filter
+def mod(value,arg):
+    """ value % arg"""
+    return value%arg

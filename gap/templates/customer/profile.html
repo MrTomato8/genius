@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout_2_col.html" %}
 {% load currency_filters %}
 {% load i18n %}
 
@@ -19,28 +19,27 @@
 
 {% block headertext %}
 {% endblock %}
+{% block column_left %}
 
-{% block content %}
-    <div class="grid-3 float-left">
-        <div id="column-left">
-            <div class="box">
-                <div class="box-content" style="margin-top: 39px">
-                    <div class="box-heading" style="padding-top: 0">Account</div>
-                        <ul>
-                            <li><a href="#profile">{% trans 'Profile' %}</a></li>
-                            <li><a href="#orders">{% trans 'Order History' %}</a></li>
-                            <li><a href="#addresses">{% trans 'Address Book' %}</a></li>
-                            <li><a href="#emails">{% trans 'Email History' %}</a></li>
-                            <li><a href="#alerts">{% trans "Alerts" %}</a></li>
-                            {% block extra_tabs_nav %}
-                            {% endblock %}
-                        </ul>
+<div class="sidebar-left hidden-sm hidden-xs">
+        <div class="panel panel-primary">
+            <a class="panel-heading" data-toggle="collapse" href="#panel-category-1">Account</a>
+                <div class="panel-body panel-collapse collapse in" id="panel-category-1">
+                    <ul class="list-unstyled">
+                        <li><a href="#profile">{% trans 'Profile' %}</a></li>
+                        <li><a href="#orders">{% trans 'Order History' %}</a></li>
+                        <li><a href="#addresses">{% trans 'Address Book' %}</a></li>
+                        <li><a href="#emails">{% trans 'Email History' %}</a></li>
+                        <li><a href="#alerts">{% trans "Alerts" %}</a></li>
+                        {% block extra_tabs_nav %}
+                        {% endblock %}
+                    </ul>
                 </div>
-            </div>
         </div>
-    </div>
-    <div class="grid-9 float-left" style="padding-top:39px !important; padding-left:10px;">
-
+</div>
+{% endblock %}
+{% block content %}
+<div>
 		<div class="tab-pane {% if active_tab == 'profile' %}active{% endif %}" id="profile">
             {% block tab_profile %}
             <div class="sub-header">
@@ -73,7 +72,6 @@
 
             <div class="form-actions">
                 <a href="{% url customer:profile-update %}" class="btn btn-primary">{% trans 'Edit profile' %}</a>
-                <br />
                 <a href="{% url customer:change-password %}" class="btn btn-danger">{% trans 'Change password' %}</a>
             </div>
             {% endblock %}

@@ -1,4 +1,3 @@
-
 var oscar = (function(o, $) {
     // Replicate Django's flash messages so they can be used by AJAX callbacks.
     o.messages = {
@@ -160,7 +159,7 @@ var oscar = (function(o, $) {
                 options = {'basketURL': document.URL};
             }
             o.basket.url = options.basketURL || document.URL;
-            $('#basket-table').on('click', 'a[data-behaviours~="remove"]', function(event) {
+            $('#content_inner').on('click', '#basket_formset a[data-behaviours~="remove"]', function(event) {
                 o.basket.checkAndSubmit($(this), 'form', 'DELETE');
                 event.preventDefault();
             });
@@ -183,10 +182,6 @@ var oscar = (function(o, $) {
                 o.basket.hideVoucherForm();
                 event.preventDefault();
             });
-            $('#content_inner').on('click', 'button[type~=submit]', function(event){
-            	event.preventDefault();
-            	o.basket.submitBasketForm(event)
-            });
             $('#content_inner').on('submit', '#basket_formset', o.basket.submitBasketForm);
             if (window.location.hash == '#voucher') {
                 o.basket.showVoucherForm();
@@ -199,7 +194,7 @@ var oscar = (function(o, $) {
             event.preventDefault();
         },
         submitFormSuccess: function(data) {
-            $('#basket-content').html(data.content_html);
+            $('#content_inner').html(data.content_html);
             $('#messages').html('');
             for (var level in data.messages) {
                 for (var i=0; i<data.messages[level].length; i++) {
@@ -223,9 +218,8 @@ var oscar = (function(o, $) {
             var formID = $ele.attr('data-id');
             var inputID = '#id_' + formPrefix + '-' + formID + '-' + idSuffix;
             $(inputID).attr('checked', 'checked');
-            $('#basket_formset').submit();
+            $ele.closest('form').submit();
             o.basket.is_form_being_submitted = true;
-			
         }
     };
 
