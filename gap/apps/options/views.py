@@ -204,6 +204,13 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
 
         prices = calc.calculate_costs(self.choices, quantity, choice_data)
 
+        more_prices = []
+        if not prices.discrete_pricing and not prices.matrix_for_pack:
+            for i in range(min_order, 26):
+                generate_prices = calc.calculate_costs(self.choices, i, choice_data)
+                more_prices += [generate_prices.get_price_incl_tax(i, request.user),]
+            print more_prices
+
         calc_form = QuoteCalcForm(data={'quantity': quantity})
 
         choice_data_custom_size = self.session.get_choice_data_custom_size()
@@ -222,6 +229,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'trade_user': utils.trade_user(request.user),
             'quote_save_form': quote_save_form,
             'errors': errors,
+            'more_prices': more_prices,
         })
 
     def post(self, request, *args, **kwargs):

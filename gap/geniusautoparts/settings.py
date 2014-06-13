@@ -153,8 +153,6 @@ INSTALLED_APPS = [
     'south',
     'compressor',
     'apps.checkout',
-    'apps.dashboard.jobs',
-    'apps.dashboard.promotions',
     'paypal',
     'apps.pricelist',
     'apps.options',
@@ -165,8 +163,9 @@ INSTALLED_APPS = [
     'django_markdown',
 ]
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
-    ['apps.catalogue','apps.order', 'apps.basket', 'apps.partner',])
+    ['apps.catalogue','apps.order', 'apps.basket', 'apps.partner', 'apps.dashboard',])
 
+MARKDOWN_EDITOR_SKIN = 'simple'
 OSCAR_CURRENCY_FORMAT = u'¤#,##0.00'
 
 ACCOUNTS_SOURCE_NAME = 'Main Account'

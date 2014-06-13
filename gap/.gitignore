@@ -3,4 +3,5 @@
 *.pyc
 .ropeproject
 local_settings.py
+apps/static/
 

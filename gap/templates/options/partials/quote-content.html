@@ -7,7 +7,15 @@
 <div id="getquote_wrap">
 <script type="text/javascript">
 $(document).ready(function(){
-  $('#getquote li').click(function(){
+ $( "#getquote #id_quantity" ).change(function() {
+    if ($(this).data('type')=='1'){
+      quantity = $(this)[0].value;
+      price=$('li[data-qty="'+quantity+'"]').data('price')+ ' for each';
+      $('#calculated_price').html(price);
+      $('#quantity_'+$(this).data('qty')).prop('checked', true);
+    }
+  });
+  $('#getquote li, #getquote span').click(function(){
     if ($(this).data('type')=='2') price = $(this).data('price');
     else price = $(this).data('price') + ' for each';
       $('#calculated_price').html(price);
@@ -20,7 +28,7 @@ $(document).ready(function(){
 });
 </script>
 
-<form id="getquote" method="POST" action="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
+<form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
 <div class="panel panel-default">
 <a data-toggle="collapse" href="#panel-collapse-6" class="panel-heading  collapsed" data-parent="#product-accordion">Quantity (choose quantity or enter your own)</a>
   <div id="panel-collapse-6" class="panel-collapse collapse in">
@@ -30,11 +38,9 @@ $(document).ready(function(){
       </div>
       <div class="row">
           {% if prices.discrete_pricing and prices.matrix_for_pack %}
-            {% with prices.values|last as price %}
-              {% with quote.quantity|divide_int:price.items_per_pack|int_multiply:price.items_per_pack as quantity %}
-               <li data-type="1" data-price="{{quote.price|divide_triple:quantity}}">{{ calc_form.quantity }} £{{quote.price|divide_triple:quantity}} each</li>
-              {% endwith %}
-            {% endwith %}
+            {% for qty, price in prices.ordered.iteritems %}
+                <input data-type="1" data-qty="{{qty}}" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}" style="display:none">
+            {% endfor %}
           {% elif prices.discrete_pricing %}
           <div class="col-md-2 col-sm-3 col-xs-6 text-center">
           <ul class="list-unstyled">
@@ -51,20 +57,77 @@ $(document).ready(function(){
             {% endfor %}
             {% endwith %}
           {% else %}
-          {% with prices.values|first as price %}
-          <li data-type="3" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}">{{ calc_form.quantity }} 
-          {% if trade_user %}
-            {{ price.tpl_price_incl_tax|currency }}
-            {% else %}
-            {{ price.rpl_price_incl_tax|currency }}
-            {% endif %}
-          </li>
-          {% endwith %}
+            <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+            <ul class="list-unstyled">
+              {% with more_prices|length|divide_int_ceil:6 as divi %}
+              {% for item in more_prices %}
+              <li data-type="2" data-qty="{{item.1}}" data-price="{{item.0|currency}}">{{ item.1|floatformat }}
+              <input type="radio" id="quantity_{{ item.1 }}" name="quantity" value="{{ item.1 }}" style="display:none" />
+              {% if not forloop.counter|mod:divi %}
+              </ul>
+              </div>
+              <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+              <ul class="list-unstyled">
+              {% endif %}
+              {% endfor %}
+              {% endwith %}
           {% endif %}
       </div>
     </div>
   </div>
 </div>
+
+      <div class="row">
+      <div class="col-md-4">
+        <span class="toggle-live" onclick="$(this).toggleClass('active'); $('#product-quantity-inputs, #product-table-wrap').slideToggle();"> Multi-file discount </span>
+        <span class="info" data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
+      </div>
+      <div class="col-md-8">
+          <div class="form-group">
+            <label class="col-sm-8 col-xs-12 control-label">Choose or enter quantity for each</label>
+            <div class="col-sm-4 col-xs-12">
+              <div class="input-group">
+              {% if prices.discrete_pricing and prices.matrix_for_pack %}
+                <input data-type="1" type="text" class="form-control" name="quantity" id="id_quantity">
+              {% else %}
+              {% with prices.values|first as price %}
+                <span data-type="3" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}"><input type="text" class="form-control" name="quantity" id="id_quantity"></span>
+                {% endwith %}
+              {% endif %}
+                <span class="input-group-btn"><button class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
+              </div>
+            </div>
+          </div>
+          <div id="product-quantity-inputs"  style="display:none;">
+              <div class="form-group">
+                <label class="col-sm-8 col-xs-12 control-label">Number of files</label>
+                <div class="col-sm-4 col-xs-12">
+                  <div class="input-group">
+                    <input type="text" class="form-control" />
+                    <span class="input-group-btn btn-group-vertical">
+                      <button class="btn btn-default"><span class="fa fa-angle-up"></span></button>
+                      <button class="btn btn-default"><span class="fa fa-angle-down"></span></button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-8 col-xs-12 control-label">Total quantity</label>
+                <div class="col-sm-4 col-xs-12">
+                  <div class="input-group">
+                    <input type="text" class="form-control" />
+                    <span class="input-group-btn"><button class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-4 col-xs-12 col-sm-offset-8">
+                  <button class="btn btn-primary btn-block">Add <span class="fa fa-angle-down"></button>
+                </div>
+              </div>
+          </div>
+      </div>
+    </div>
   
   
       {% if custom_size %}
@@ -96,53 +159,6 @@ $(document).ready(function(){
       </div>
     </form>
 
-      <div class="row">
-      <div class="col-md-4">
-        <span class="toggle-live" onclick="$(this).toggleClass('active'); $('#product-quantity-inputs, #product-table-wrap').slideToggle();"> Multi-file discount </span>
-        <span class="info" data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-      </div>
-      <div class="col-md-8">
-        <form action="#" class="form-horizontal" >
-          <div class="form-group">
-            <label class="col-sm-8 col-xs-12 control-label">Choose or enter quantity for each</label>
-            <div class="col-sm-4 col-xs-12">
-              <div class="input-group">
-                <input type="text" class="form-control" />
-                <span class="input-group-btn"><button class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
-              </div>
-            </div>
-          </div>
-          <div id="product-quantity-inputs"  style="display:none;">
-              <div class="form-group">
-                <label class="col-sm-8 col-xs-12 control-label">Number of files</label>
-                <div class="col-sm-4 col-xs-12">
-                  <div class="input-group">
-                    <input type="text" class="form-control" />
-                    <span class="input-group-btn btn-group-vertical">
-                      <button class="btn btn-default"><span class="fa fa-angle-up"></span></button>
-                      <button class="btn btn-default"><span class="fa fa-angle-down"></span></button>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-8 col-xs-12 control-label">Total quantity</label>
-                <div class="col-sm-4 col-xs-12">
-                  <div class="input-group">
-                    <input type="text" class="form-control" />
-                    <span class="input-group-btn"><button class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-4 col-xs-12 col-sm-offset-8">
-                  <button class="btn btn-primary btn-block">Add <span class="fa fa-angle-down"></span></button>
-                </div>
-              </div>
-          </div>
-        </form>
-      </div>
-    </div>
 
   {% if quote.valid %}
   <div class="grid-7 float-left">

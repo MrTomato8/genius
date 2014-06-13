@@ -6574,3 +6574,6 @@ div#selected-choices input {
 div#modalchangepw {
   margin-top: 5px;
 }
+.page-header.action {
+  margin: 0 0 18px;
+}

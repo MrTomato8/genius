@@ -1,6 +1,8 @@
 from django import forms
 from django_markdown.widgets import MarkdownWidget
-from apps.promotions.models import RawHTML
+from oscar.core.loading import get_classes
+
+RawHTML = get_classes('promotions.models', ['RawHTML', ])[0]
 
 
 class MarkdownRawHTMLForm(forms.ModelForm):
@@ -9,6 +11,7 @@ class MarkdownRawHTMLForm(forms.ModelForm):
         widgets = {
             'body': MarkdownWidget(),
         }
-        exclude = ('display_type',)
+        exclude = ('display_type', 'body')
 
+from oscar.apps.dashboard.promotions.forms import RawHTMLForm
 RawHTMLForm = MarkdownRawHTMLForm

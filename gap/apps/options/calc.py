@@ -215,7 +215,7 @@ class BaseOptionsCalculator:
         if prices:
             return prices, CalcCache.get(self.current_choices, 'discrete')
         prices = self.product.prices.all()
-        
+
         custom_size = utils.custom_size_chosen(choices)
         
         if quantity is not None:
@@ -253,7 +253,7 @@ class BaseOptionsCalculator:
         CalcCache.set(self.current_choices, 'prices', prices)
         CalcCache.set(self.current_choices, 'discrete', discrete)
         # Return prices for all found discrete quantities
-        
+
         return prices, discrete
 
     def _apply_choice_data(self, price, choices, choice_data):

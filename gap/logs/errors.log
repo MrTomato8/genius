@@ -6679,3 +6679,2408 @@ Traceback (most recent call last):
   File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/forms/models.py", line 146, in fields_for_model
     opts = model._meta
 AttributeError: 'list' object has no attribute '_meta'
+ERROR 2014-06-11 06:04:37,206 base Internal Server Error: /options/quote/rectangular-on-a4-sheets_81/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-11 06:04:37,220 base Internal Server Error: /options/quote/rectangular-on-a4-sheets_81/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-11 06:05:34,323 base Internal Server Error: /options/quote/rectangular-on-a4-sheets_81/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-11 06:05:38,363 base Internal Server Error: /options/quote/rectangular-on-a4-sheets_81/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-11 06:05:38,413 base Internal Server Error: /options/quote/rectangular-on-a4-sheets_81/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-11 06:05:59,063 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-11 06:05:59,076 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-11 06:06:17,463 base Internal Server Error: /options/quote/rectangular-on-a4-sheets_81/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-11 06:06:18,020 base Internal Server Error: /options/quote/rectangular-on-a4-sheets_81/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 02:53:23,818 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 6, in <module>
+    from accounts.dashboard.app import application as accounts_app
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/accounts/dashboard/app.py", line 1, in <module>
+    from django.conf.urls.defaults import patterns, url
+ImportError: No module named defaults
+ERROR 2014-06-12 02:55:12,409 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 6, in <module>
+    from accounts.dashboard.app import application as accounts_app
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/accounts/dashboard/app.py", line 1, in <module>
+    from django.conf.urls.defaults import patterns, url
+ImportError: No module named defaults
+ERROR 2014-06-12 02:56:18,765 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 6, in <module>
+    from accounts.dashboard.app import application as accounts_app
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/accounts/dashboard/app.py", line 1, in <module>
+    from django.conf.urls.defaults import patterns, url
+ImportError: No module named defaults
+ERROR 2014-06-12 03:01:55,746 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 337, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 365, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 360, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 40, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 6, in <module>
+    from accounts.dashboard.app import application as accounts_app
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/accounts/dashboard/app.py", line 1, in <module>
+    from django.conf.urls.defaults import patterns, url
+ImportError: No module named defaults
+ERROR 2014-06-12 03:13:12,639 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 10, in <module>
+    from apps.app import application
+  File "/home/nastya/projects/genius/gap/apps/app.py", line 1, in <module>
+    from oscar.app import Shop
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/app.py", line 8, in <module>
+    from oscar.apps.basket.app import application as basket_app
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/app.py", line 4, in <module>
+    from oscar.apps.basket import views
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 24, in <module>
+    'SavedLineForm', 'ProductSelectionForm'))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/core/loading.py", line 50, in get_classes
+    imported_local_module = __import__(local_app, fromlist=classnames)
+  File "/home/nastya/projects/genius/gap/apps/basket/forms.py", line 14
+    django-oscar.oscar.apps.dashboard.promotions.forms.RawHTMLForm = MarkdownRawHTMLForm
+SyntaxError: can't assign to operator
+ERROR 2014-06-12 03:13:28,460 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 10, in <module>
+    from apps.app import application
+  File "/home/nastya/projects/genius/gap/apps/app.py", line 1, in <module>
+    from oscar.app import Shop
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/app.py", line 8, in <module>
+    from oscar.apps.basket.app import application as basket_app
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/app.py", line 4, in <module>
+    from oscar.apps.basket import views
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 24, in <module>
+    'SavedLineForm', 'ProductSelectionForm'))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/core/loading.py", line 50, in get_classes
+    imported_local_module = __import__(local_app, fromlist=classnames)
+  File "/home/nastya/projects/genius/gap/apps/basket/forms.py", line 14
+    django-oscar.oscar.apps.dashboard.promotions.forms.RawHTMLForm = MarkdownRawHTMLForm
+SyntaxError: can't assign to operator
+ERROR 2014-06-12 03:14:01,588 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 10, in <module>
+    from apps.app import application
+  File "/home/nastya/projects/genius/gap/apps/app.py", line 1, in <module>
+    from oscar.app import Shop
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/app.py", line 8, in <module>
+    from oscar.apps.basket.app import application as basket_app
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/app.py", line 4, in <module>
+    from oscar.apps.basket import views
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 24, in <module>
+    'SavedLineForm', 'ProductSelectionForm'))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/core/loading.py", line 50, in get_classes
+    imported_local_module = __import__(local_app, fromlist=classnames)
+  File "/home/nastya/projects/genius/gap/apps/basket/forms.py", line 14
+    django-oscar.oscar.apps.dashboard.promotions.forms.RawHTMLForm = MarkdownRawHTMLForm
+SyntaxError: can't assign to operator
+ERROR 2014-06-12 03:14:21,311 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 10, in <module>
+    from apps.app import application
+  File "/home/nastya/projects/genius/gap/apps/app.py", line 1, in <module>
+    from oscar.app import Shop
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/app.py", line 8, in <module>
+    from oscar.apps.basket.app import application as basket_app
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/app.py", line 4, in <module>
+    from oscar.apps.basket import views
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 24, in <module>
+    'SavedLineForm', 'ProductSelectionForm'))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/core/loading.py", line 50, in get_classes
+    imported_local_module = __import__(local_app, fromlist=classnames)
+  File "/home/nastya/projects/genius/gap/apps/basket/forms.py", line 14
+    django-oscar.oscar.apps.dashboard.promotions.forms.RawHTMLForm = MarkdownRawHTMLForm
+SyntaxError: can't assign to operator
+ERROR 2014-06-12 03:14:58,390 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 10, in <module>
+    from apps.app import application
+  File "/home/nastya/projects/genius/gap/apps/app.py", line 1, in <module>
+    from oscar.app import Shop
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/app.py", line 8, in <module>
+    from oscar.apps.basket.app import application as basket_app
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/app.py", line 4, in <module>
+    from oscar.apps.basket import views
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 24, in <module>
+    'SavedLineForm', 'ProductSelectionForm'))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/core/loading.py", line 50, in get_classes
+    imported_local_module = __import__(local_app, fromlist=classnames)
+  File "/home/nastya/projects/genius/gap/apps/basket/forms.py", line 14
+    django-oscar.oscar.apps.dashboard.promotions.forms.RawHTMLForm = MarkdownRawHTMLForm
+SyntaxError: can't assign to operator
+ERROR 2014-06-12 04:40:17,138 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 21, in <module>
+    from apps.dashboard.promotions.forms import MarkdownRawHTMLForm
+  File "/home/nastya/projects/genius/gap/apps/dashboard/promotions/forms.py", line 8, in <module>
+    class MarkdownRawHTMLForm(forms.ModelForm):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/forms/models.py", line 206, in __new__
+    opts.exclude, opts.widgets, formfield_callback)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/forms/models.py", line 146, in fields_for_model
+    opts = model._meta
+AttributeError: 'list' object has no attribute '_meta'
+ERROR 2014-06-12 04:41:43,847 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 21, in <module>
+    from apps.dashboard.promotions.forms import MarkdownRawHTMLForm
+  File "/home/nastya/projects/genius/gap/apps/dashboard/promotions/forms.py", line 8, in <module>
+    class MarkdownRawHTMLForm(forms.ModelForm):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/forms/models.py", line 206, in __new__
+    opts.exclude, opts.widgets, formfield_callback)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/forms/models.py", line 146, in fields_for_model
+    opts = model._meta
+AttributeError: 'list' object has no attribute '_meta'
+ERROR 2014-06-12 04:42:54,678 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 21, in <module>
+    from apps.dashboard.promotions.forms import MarkdownRawHTMLForm
+  File "/home/nastya/projects/genius/gap/apps/dashboard/promotions/forms.py", line 8, in <module>
+    class MarkdownRawHTMLForm(forms.ModelForm):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/forms/models.py", line 206, in __new__
+    opts.exclude, opts.widgets, formfield_callback)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/forms/models.py", line 146, in fields_for_model
+    opts = model._meta
+AttributeError: 'list' object has no attribute '_meta'
+ERROR 2014-06-12 04:45:40,079 base Internal Server Error: /dashboard/content-blocks/update/rawhtml/1/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/nastya/projects/genius/gap/geniusautoparts/urls.py", line 21, in <module>
+    from apps.dashboard.promotions.forms import MarkdownRawHTMLForm
+  File "/home/nastya/projects/genius/gap/apps/dashboard/promotions/forms.py", line 8, in <module>
+    class MarkdownRawHTMLForm(forms.ModelForm):
+  File "/home/nastya/projects/genius/gap/apps/dashboard/promotions/forms.py", line 9, in MarkdownRawHTMLForm
+    class Meta:
+  File "/home/nastya/projects/genius/gap/apps/dashboard/promotions/forms.py", line 13, in Meta
+    },ftfyttyd
+NameError: name 'ftfyttyd' is not defined
+ERROR 2014-06-12 08:21:17,725 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 208, in get
+    print calc.pick_prices(self.choices, choice_data, 2.0, ).prices
+AttributeError: 'tuple' object has no attribute 'prices'
+ERROR 2014-06-12 08:21:31,730 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 208, in get
+    print calc.pick_prices(self.choices, choice_data, 2.0, ).prices
+AttributeError: 'tuple' object has no attribute 'prices'
+ERROR 2014-06-12 08:21:43,286 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 208, in get
+    print calc.pick_prices(self.choices, choice_data, 2.0, ).prices
+AttributeError: 'tuple' object has no attribute 'prices'
+ERROR 2014-06-12 08:21:43,402 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 208, in get
+    print calc.pick_prices(self.choices, choice_data, 2.0, ).prices
+AttributeError: 'tuple' object has no attribute 'prices'
+ERROR 2014-06-12 08:29:06,266 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 208, in get
+    print prices.get_price_incl_tax(25, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 25 not found
+ERROR 2014-06-12 08:29:31,682 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 208, in get
+    print prices.get_price_incl_tax(25.0, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 25.0 not found
+ERROR 2014-06-12 08:34:22,759 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:35:18,960 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:38:03,587 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 208, in get
+    more_prices = [(prices.values().first, 1), ]
+AttributeError: 'list' object has no attribute 'first'
+ERROR 2014-06-12 08:38:53,412 base Internal Server Error: /options/quote/paper-stickers_125/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:39:02,073 base Internal Server Error: /options/quote/rectangular-on-a4-sheets_81/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 08:39:02,555 base Internal Server Error: /options/quote/rectangular-on-a4-sheets_81/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 08:39:09,194 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 08:39:09,699 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 08:39:16,241 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 08:41:34,230 base Internal Server Error: /options/quote/digitally-printed-self-adhesive-vinyl_146/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:41:38,618 base Internal Server Error: /options/quote/digitally-printed-self-adhesive-vinyl_146/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:41:47,099 base Internal Server Error: /options/quote/digitally-printed-self-adhesive-vinyl_146/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:41:47,360 base Internal Server Error: /options/quote/digitally-printed-self-adhesive-vinyl_146/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:41:57,574 base Internal Server Error: /options/quote/digitally-printed-self-adhesive-vinyl_146/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:42:28,362 base Internal Server Error: /options/quote/digitally-printed-self-adhesive-vinyl_146/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 2 not found
+ERROR 2014-06-12 08:43:08,432 base Internal Server Error: /options/quote/digitally-printed-self-adhesive-vinyl_146/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:43:31,414 base Internal Server Error: /options/quote/digitally-printed-self-adhesive-vinyl_146/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 212, in get
+    more_prices += generate_prices.get_price_incl_tax(i, request.user)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 1 not found
+ERROR 2014-06-12 08:54:38,935 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    for i in range(min_order, 26):
+TypeError: range() integer start argument expected, got NoneType.
+ERROR 2014-06-12 08:54:39,041 base Internal Server Error: /options/quote/200mic-backlit-film_119/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    for i in range(min_order, 26):
+TypeError: range() integer start argument expected, got NoneType.
+ERROR 2014-06-12 08:59:08,188 base Internal Server Error: /options/quote/static-cling_129/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += [generate_prices.get_price_incl_tax(i, request.user),]
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 0 not found
+ERROR 2014-06-12 08:59:08,189 base Internal Server Error: /options/quote/static-cling_129/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 211, in get
+    more_prices += [generate_prices.get_price_incl_tax(i, request.user),]
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 116, in get_price_incl_tax
+    return self._get_price_attribute(quantity, user, 'price_incl_tax')
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 93, in _get_price_attribute
+    raise PriceNotAvailable, 'quantity %s not found'%quantity
+PriceNotAvailable: quantity 0 not found
+ERROR 2014-06-12 09:57:24,678 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 232, in get
+    'more_prices': more_prices,
+UnboundLocalError: local variable 'more_prices' referenced before assignment
+ERROR 2014-06-12 09:57:24,787 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 232, in get
+    'more_prices': more_prices,
+UnboundLocalError: local variable 'more_prices' referenced before assignment
+ERROR 2014-06-12 09:58:06,943 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 232, in get
+    'more_prices': more_prices,
+UnboundLocalError: local variable 'more_prices' referenced before assignment
+ERROR 2014-06-12 09:59:08,638 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 09:59:35,483 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(int(value)/int(arg))
+ValueError: invalid literal for int() with base 10: ''
+ERROR 2014-06-12 10:00:30,486 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 32, in divide_int
+    v = ceil(int(value)/int(arg))
+ValueError: invalid literal for int() with base 10: ''
+ERROR 2014-06-12 10:01:43,756 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 282, in render
+    return nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 10:15:11,494 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 10:15:42,705 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
+ERROR 2014-06-12 10:33:23,388 base Internal Server Error: /options/quote/square-on-a4-sheets_80/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 155, in render
+    return self.render_template(self.template, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 137, in render_template
+    output = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 478, in render
+    output = self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 476, in render
+    self.extra_context.iteritems()])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 599, in resolve
+    new_obj = func(obj, *arg_vals)
+  File "/home/nastya/projects/genius/gap/apps/utils/templatetags/simple_math.py", line 31, in divide_int
+    v = ceil(value/arg)
+TypeError: unsupported operand type(s) for /: 'str' and 'long'
