@@ -1,4 +1,3 @@
-
 @import "bootstrap.less";
 @import "theme.less";
 @import "retina.less";
@@ -39,7 +38,7 @@ header .navbar-wrap {display: table;  margin: 0 auto;}
         background-color: @brand-primary;
         padding: 10px 0;
         position: absolute;
-        z-index: 9999;
+        z-index: 80;
         width: 100%
     }
 
@@ -48,7 +47,7 @@ header .navbar-wrap {display: table;  margin: 0 auto;}
 #main-nav {margin-bottom: 5px;}
 #main-nav .navbar-nav > li > a {padding: 19px 35px;}
 #main-nav .dropdown-menu {border: 0; width: 100%; position: absolute; .box-shadow(0 9px 15px -5px rgba(0, 0, 0, 0.176))}
-#main-nav .dropdown-menu .row {padding: 0px 35px 20px; margin: 0;}
+#main-nav .dropdown-menu .row {padding: 0px 35px 20px; max-width: 1200px; margin: 0 auto;}
 #main-nav .navbar-nav > li {position: static;}
 #main-nav .dropdown-menu ul {list-style: none; padding-left: 0;}
 #main-nav .dropdown-menu a {
@@ -313,28 +312,6 @@ span.info img {margin-top: -2px;}
 
 // #modal-login .input-group-addon, #modal-login .form-control {background-color: @btn-default-bg; border-color: @btn-default-bg; color: #fff;}
 
-// #modal-login .first-group .input-group-addon {border-radius: @input-border-radius 0 0 0;}
-// #modal-login .last-group .input-group-addon {border-radius: 0 0 0 @input-border-radius;}
-// #modal-login .first-group .form-control {border-radius: 0 @input-border-radius 0 0;}
-// #modal-login .last-group .form-control {border-radius: 0 0 @input-border-radius 0;}
-// #modal-login .last-group {margin-bottom: 15px;}
-
-// #modal-login ::-webkit-input-placeholder {
-//    color: #fff;
-// }
-
-// #modal-login :-moz-placeholder { /* Firefox 18- */
-//    color: #fff;  
-// }
-
-// #modal-login ::-moz-placeholder {  /* Firefox 19+ */
-//    color: #fff;  
-// }
-
-// #modal-login :-ms-input-placeholder {  
-//    color: #fff;  
-// }
-
 .social-login {color: @gray-light; margin-top: 20px; font-size: 13px;}
 .social-login .fa {color: @brand-primary; font-size: 18px;}
 
@@ -350,6 +327,6 @@ div#selected-choices input { display: none; }
 
 div#modalchangepw {margin-top: 5px;}
 
-.page-header.action{
-    margin:0 0 18px;
-}
+.page-header.action{ margin:0 0 18px;}
+
+.product_wrap {width: 250px;}

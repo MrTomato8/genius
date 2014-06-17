@@ -180,7 +180,6 @@ class PickOptionsView(OptionsSessionMixin, View):
             'product': product,
             'groups': groups,
             'errors': errors,
-            'session': self.session,
         })
 
 
@@ -235,7 +234,6 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'quote_save_form': quote_save_form,
             'errors': errors,
             'more_prices': more_prices,
-            'session': self.session,
         })
 
     def post(self, request, *args, **kwargs):

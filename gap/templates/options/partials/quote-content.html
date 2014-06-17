@@ -5,6 +5,9 @@
 {% load humanize %}
 
 <div id="getquote_wrap">
+
+<script type="text/javascript" src="{% static 'local/js/quote.js' %}"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
  $( "#getquote #id_quantity" ).change(function() {
@@ -24,12 +27,35 @@ $(document).ready(function(){
   $('#buy_button').click(function(){
       $('#getquote').submit();
   });
-
+  $('#proceed_quantity').click(function(event){
+    event.preventDefault();
+    $.ajax({
+      data: $('form#getquote').serialize(),
+      type: $('form#getquote').attr('method'),
+      url: $('form#getquote').attr('action'),
+      success: function(response) {
+        x = $('<div></div>');
+        x.html(response);
+        res = x.find('#counted_price');
+        $('#calculated_price').html(res);
+        res = x.find('#custom_wrap');
+        $('#wrap_result').html(res);
+        if (!res.html()){
+          res = x.find('#form-errors');
+          $('#form-errors').html(res);
+          $('#wrap_result').html('');
+        }
+        else {
+          $('#wrap_result').html(res);
+          $('#form-errors').html('');
+        }
+      }
+    });
+  });
 
 });
 </script>
-
-<form class="form-horizontal" id="getquote" method="POST" action=".">{% csrf_token %}
+<form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
   <div id="panel-collapse-6" class="panel-collapse collapse in">
     <div class="panel-body">
       <div class="text-right">
@@ -93,7 +119,7 @@ $(document).ready(function(){
                 <span data-type="3" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}"><input type="text" class="form-control" name="quantity" id="id_quantity"></span>
                 {% endwith %}
               {% endif %}
-                <span class="input-group-btn"><button class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
+                <span class="input-group-btn"><button class="btn btn-primary" id="proceed_quantity"><span class="fa fa-angle-right"></span></button></span>
               </div>
             </div>
           </div>
@@ -127,7 +153,12 @@ $(document).ready(function(){
           </div>
       </div>
     </div>
+
+ </form>
+
+  <div id="wrap_result"></div>
   
+  <div id="custom_wrap">
   
       {% if custom_size %}
       <div class="custom_size">
@@ -156,54 +187,16 @@ $(document).ready(function(){
         </ul>
         {% endif %}
       </div>
-    </form>
-
 
   {% if quote.valid %}
   <div class="grid-7 float-left">
     <div class="options-quote">
-      <h2>
-        {{quote.quantity|intcomma  }} {{product}} at {{quote.price|currency}} (exl. tax), with the following options: 
-        
-        {% comment %}
-        {% if prices.matrix_for_pack %}
-          
-          starting from
-          
-          {% if trade_user %}
-            {% with vanilla_price=prices.get_min_tpl_price %}
-              £{{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
-            {% endwith %}
-          {% else %}
-            {% with vanilla_price=prices.get_min_rpl_price %}
-          {{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
-        {% endwith %}
-          {% endif %}
-           each, with following options:
-        {% else %}
-            {{ quote.price|currency}} for {{ quote.quantity }} {{product}},
-            with the following options: 
-        {% endif %}
-        {% endcomment %}
-        </h2>
-      <ul >
-      {% for choice in choices %}
-        <li><p class="medium"><b> <i class="icon-level-up"></i> {{ choice.option }}</b> {{ choice.caption }}</p></li>
-      {% endfor %}
-      </ul>
+      <h2 id="counted_price"> {{quote.price|currency}} </h2>
       {% if custom_size %}
       Custom size is {{ choice_data_custom_size.width }}(mm) x {{ choice_data_custom_size.height }}(mm)
       {% endif %}
-      <p class="medium-large"><i class="icon-warning-sign"></i> <span class="boxed">Price per {{product}} can change with quantity</span></p>
-    </div>
-
-    <div class="options-next">
-      <form id="quote-save" method="POST" action="{%url 'options:quote-save' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
-        <input value="Proceed" type="submit" class="finish button"/>
-        {{ quote_save_form }}
-      </form>
     </div>
   </div>  
   {% endif %} 
-
+</div>
 </div>   
