@@ -27,7 +27,7 @@ a,p,h1,h2,h3,h4,h5,h6 {font-weight: @default-weight;}
 .bold {color: @gray-light; font-weight: bold;}
 h4.underlined {.bold; border-bottom: 1px solid @gray-light; padding-bottom: 10px;}
 
-p.styled {background: url('../images/p-styled.svg') no-repeat 2px 10px; padding-left: 30px;}
+p.styled {background: url('../images/p-styled.png') no-repeat 2px 10px; padding-left: 30px;}
 p.info {font-size: 12px; line-height: 15px;}
 
 .spaced-top {margin-top: 40px;}
@@ -134,6 +134,32 @@ a.panel-heading {text-decoration: none !important; display: block; width: 100%}
    &:hover, &:focus, &:active {
     background-color: #9296A3; color: #fff;
   }
+}
+.tab-pane {padding-top: 20px;}
+
+// Submenues
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+// Responsive utilities
+
+@media (max-width: @screen-phone) {
+    .hidden-phone {display: none !important;}
+}
+@media (min-width: @screen-phone) {
+    .visible-phone {display: none !important;}
 }
 
 // Submenues
