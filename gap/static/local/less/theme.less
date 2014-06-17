@@ -42,10 +42,16 @@ p.info {font-size: 12px; line-height: 15px;}
     float:none;
 }
 
-.navbar-default .navbar-toggle {border: 0; .trans;
-  &:hover, &:active, &:focus {background-color: darken(@btn-primary-bg, 5%);}
+// .navbar-default .navbar-toggle .icon-bar {background-color: #fff; height: 3px;}
+.navbar-brand {padding: 0; height: auto;}
+.navbar-toggle {
+  .trans;
+  margin: 0;
+  font-size: 25px;
+  line-height: 25px;
+  color: @brand-primary;
+  &:hover, &:active, &:focus {background-color: @brand-primary; color: #FFF;}
 }
-.navbar-default .navbar-toggle .icon-bar {background-color: #fff; height: 3px;}
 
 .btn {
   .trans;
@@ -69,24 +75,24 @@ p.info {font-size: 12px; line-height: 15px;}
 .input-group-btn.btn-group-vertical .btn:first-child {border-radius: 0 @border-radius-base 0 0 !important;}
 .input-group-btn.btn-group-vertical .btn:last-child {border-radius: 0 0 @border-radius-base 0 !important;}
 
-.list-unstyled.spaced > li {margin-bottom: 10px;}
+.list-unstyled.spaced > li {margin-bottom: 8px;}
 
 // Panels
-.panel {border: 0; box-shadow: none; margin-bottom: 5px;}
+.panel {border: 0; box-shadow: none; margin-bottom: 15px;}
 .panel-heading {padding: 6px 10px; border-radius: 0; font-size: 14px; font-weight: @default-weight; .box-shadow(none);}
 a.panel-heading {text-decoration: none !important; display: block; width: 100%}
-.panel-body {color: @gray-light; padding: 9px;}
+.panel-body {color: @gray-light; padding: 15px 9px 9px;}
 .panel.bordered .panel-body {
   border-left: 1px solid #9296A3;
   border-right: 1px solid #9296A3;
   border-bottom: 1px solid #9296A3;
 }
 
-.panel-default > .panel-heading + .panel-collapse .panel-body {border: none;}
+.panel-body > p {line-height: 1.6em;}
 
-@media (max-width: @screen-phone) {
-    .hidden-phone {display: none;}
-}
+.panel-body > .list-unstyled > li > a {line-height: 1.8em;}
+
+.panel-default > .panel-heading + .panel-collapse .panel-body {border: none;}
 
 // Forms
 .form-control {
@@ -128,6 +134,31 @@ a.panel-heading {text-decoration: none !important; display: block; width: 100%}
    &:hover, &:focus, &:active {
     background-color: #9296A3; color: #fff;
   }
+}
+
+// Submenues
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+// Responsive utilities
+
+@media (max-width: @screen-phone) {
+    .hidden-phone {display: none !important;}
+}
+@media (min-width: @screen-phone) {
+    .visible-phone {display: none !important;}
 }
 
 

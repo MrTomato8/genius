@@ -82,6 +82,7 @@ class PickOptionsView(OptionsSessionMixin, View):
             'product': product,
             'groups': groups,
             'errors': errors,
+            'session': self.session,
         })
 
     def post(self, request, *args, **kwargs):
@@ -166,7 +167,10 @@ class PickOptionsView(OptionsSessionMixin, View):
                               'Please review your selections.')
 
         else:
-            errors.append('Please review your selections.')
+            #errors.append('Please review your selections.')
+            #try
+            self.session.reset_quantity(1)
+            return HttpResponseRedirect(reverse('options:quote', kwargs=kwargs))
 
         if allvalid:
             self.session.reset_quantity(utils.min_order(product, choices))
@@ -176,6 +180,7 @@ class PickOptionsView(OptionsSessionMixin, View):
             'product': product,
             'groups': groups,
             'errors': errors,
+            'session': self.session,
         })
 
 
@@ -230,6 +235,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'quote_save_form': quote_save_form,
             'errors': errors,
             'more_prices': more_prices,
+            'session': self.session,
         })
 
     def post(self, request, *args, **kwargs):
@@ -301,6 +307,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'quote': quote,
             'choice_data_custom_size': self.session.get_choice_data_custom_size(),
             'quote_save_form': quote_save_form,
+            'session': self.session,
         })
 
 

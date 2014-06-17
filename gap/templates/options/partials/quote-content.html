@@ -3,23 +3,18 @@
 {% load currency_filters %}
 {% load simple_math %}
 {% load humanize %}
+{% load calc_price %}
 
 <div id="getquote_wrap">
 <script type="text/javascript">
 $(document).ready(function(){
- $( "#getquote #id_quantity" ).change(function() {
-    if ($(this).data('type')=='1'){
-      quantity = $(this)[0].value;
-      price=$('li[data-qty="'+quantity+'"]').data('price')+ ' for each';
+  $('#getquote li').click(function(){
+    price = $(this).data('price');
       $('#calculated_price').html(price);
       $('#quantity_'+$(this).data('qty')).prop('checked', true);
-    }
   });
-  $('#getquote li, #getquote span').click(function(){
-    if ($(this).data('type')=='2') price = $(this).data('price');
-    else price = $(this).data('price') + ' for each';
-      $('#calculated_price').html(price);
-      $('#quantity_'+$(this).data('qty')).prop('checked', true);
+  $('#quantity_enter').click(function() {
+
   });
   $('#buy_button').click(function(){
       $('#getquote').submit();
@@ -28,7 +23,7 @@ $(document).ready(function(){
 });
 </script>
 
-<form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
+<form class="form-horizontal" id="getquote" method="POST" action=".">{% csrf_token %}
 <div class="panel panel-default">
 <a data-toggle="collapse" href="#panel-collapse-6" class="panel-heading  collapsed" data-parent="#product-accordion">Quantity (choose quantity or enter your own)</a>
   <div id="panel-collapse-6" class="panel-collapse collapse in">
@@ -37,41 +32,25 @@ $(document).ready(function(){
           <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
       </div>
       <div class="row">
-          {% if prices.discrete_pricing and prices.matrix_for_pack %}
-            {% for qty, price in prices.ordered.iteritems %}
-                <input data-type="1" data-qty="{{qty}}" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}" style="display:none">
-            {% endfor %}
-          {% elif prices.discrete_pricing %}
-          <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <div class="col-md-2 col-sm-3 col-xs-6 text-center">
           <ul class="list-unstyled">
-            {% with prices|length|divide_int_ceil:6 as divi %}
-            {% for qty, price in prices.ordered.iteritems %}
-            <li data-type="2" data-qty="{{qty}}" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}">{{ qty|floatformat }}
-            <input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" style="display:none" />
-            {% if not forloop.counter|mod:divi %}
-            </ul>
-            </div>
-            <div class="col-md-2 col-sm-3 col-xs-6 text-center">
-            <ul class="list-unstyled">
-            {% endif %}
-            {% endfor %}
-            {% endwith %}
-          {% else %}
-            <div class="col-md-2 col-sm-3 col-xs-6 text-center">
-            <ul class="list-unstyled">
-              {% with more_prices|length|divide_int_ceil:6 as divi %}
-              {% for item in more_prices %}
-              <li data-type="2" data-qty="{{item.1}}" data-price="{{item.0|currency}}">{{ item.1|floatformat }}
-              <input type="radio" id="quantity_{{ item.1 }}" name="quantity" value="{{ item.1 }}" style="display:none" />
-              {% if not forloop.counter|mod:divi %}
-              </ul>
-              </div>
-              <div class="col-md-2 col-sm-3 col-xs-6 text-center">
-              <ul class="list-unstyled">
-              {% endif %}
-              {% endfor %}
+          {% for i in '12345' %}
+            {% for j in '12345' %}
+              {% with forloop.parentloop.counter0|multiply:'5'|add:forloop.counter as qty %}
+              <li data-qty="{{qty}}" data-price="">{{ qty|floatformat }}
+              <input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" style="display:none" />    
+              </li>
               {% endwith %}
-          {% endif %}
+              {% if forloop.last %}
+                </ul>
+                </div>
+                <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+                <ul class="list-unstyled">
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -94,7 +73,7 @@ $(document).ready(function(){
                 <span data-type="3" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}"><input type="text" class="form-control" name="quantity" id="id_quantity"></span>
                 {% endwith %}
               {% endif %}
-                <span class="input-group-btn"><button class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
+                <span class="input-group-btn"><button id="quantity_enter" class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
               </div>
             </div>
           </div>
@@ -164,28 +143,28 @@ $(document).ready(function(){
   <div class="grid-7 float-left">
     <div class="options-quote">
       <h2>
-      	{{quote.quantity|intcomma  }} {{product}} at {{quote.price|currency}} (exl. tax), with the following options: 
-      	
-      	{% comment %}
-      	{% if prices.matrix_for_pack %}
-      		
-      		starting from
-      		
-      		{% if trade_user %}
-      			{% with vanilla_price=prices.get_min_tpl_price %}
-      				£{{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
-      			{% endwith %}
-      		{% else %}
-      			{% with vanilla_price=prices.get_min_rpl_price %}
-					{{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
-				{% endwith %}
-      		{% endif %}
-      		 each, with following options:
-      	{% else %}
-      			{{ quote.price|currency}} for {{ quote.quantity }} {{product}},
-      			with the following options: 
-      	{% endif %}
-      	{% endcomment %}
+        {{quote.quantity|intcomma  }} {{product}} at {{quote.price|currency}} (exl. tax), with the following options: 
+        
+        {% comment %}
+        {% if prices.matrix_for_pack %}
+            
+            starting from
+            
+            {% if trade_user %}
+                {% with vanilla_price=prices.get_min_tpl_price %}
+                    £{{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
+                {% endwith %}
+            {% else %}
+                {% with vanilla_price=prices.get_min_rpl_price %}
+                    {{ vanilla_price.price|divide_triple:vanilla_price.items_per_pack }}
+                {% endwith %}
+            {% endif %}
+             each, with following options:
+        {% else %}
+                {{ quote.price|currency}} for {{ quote.quantity }} {{product}},
+                with the following options: 
+        {% endif %}
+        {% endcomment %}
         </h2>
       <ul >
       {% for choice in choices %}

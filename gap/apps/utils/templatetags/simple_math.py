@@ -42,3 +42,7 @@ def divide_int_ceil(value,arg):
 def mod(value,arg):
     """ value % arg"""
     return value%arg
+@register.filter
+def add(value,arg):
+    """ value + arg"""
+    return value+arg

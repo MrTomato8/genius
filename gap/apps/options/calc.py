@@ -247,9 +247,15 @@ class BaseOptionsCalculator:
         
         # Abort if duplicate quantities found in discrete priced product.
         # You have to look for invalid lines in pricelist
-        if (prices.values('quantity').count() >
-                prices.values('quantity').distinct().count()):
-            raise DuplicateQuantities
+
+
+        #UNCOMMENT THIS!!!!
+        #if (prices.values('quantity').count() >
+        #        prices.values('quantity').distinct().count()):
+        #    raise DuplicateQuantities
+        prices = set(prices)
+
+        
         CalcCache.set(self.current_choices, 'prices', prices)
         CalcCache.set(self.current_choices, 'discrete', discrete)
         # Return prices for all found discrete quantities

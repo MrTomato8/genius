@@ -5,51 +5,37 @@
 
 
 <!-- MAIN NAV -->
-        <div class="navbar navbar-default visible-md visible-lg" role="navigation" id="main-nav">
-            <ul class="nav navbar-nav">
-                <li><a href="{% url promotions:home %}">Home</a></li>
+<div class="navbar navbar-default hidden-xs" role="navigation" id="main-nav">
+    <ul class="nav navbar-nav">
+        <li><a href="{% url promotions:home %}">Home</a></li>
+        <li>
+            <a href="#" role="button" data-toggle="dropdown">Products <span class="fa fa-angle-down"></span></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                 <li>
-                    <a href="{% url catalogue:index %}" role="button" data-toggle="dropdown">Products <span class="fa fa-angle-down"></span></a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <li>
-                            <div class="row">
-                            {% if categories %}
-                            <div class="sub-menu column-1">
-                                <div class="arrow-categories"></div>
-                                    <ul>
-                                        {% for category in categories %}
-                                            <div class="col-md-4">
-                                                <h3>{{ category.0.name }}</h3>
-                                                {% if category.1 %}
-                                                    <ul>
-                                                        {% for subcategory in category.1 %}
-                                                            {% if forloop.counter == category.1|length|divide_int:2 and category.1|length > 9 %}
-                                                            <li>
-                                                                <a href="{{ subcategory.0.get_absolute_url }}"> {{ subcategory.0.name }}</a>
-                                                            </li>
-                                                            </ul>
-                                                            <ul>
-                                                            {% else %}
-                                                            <li>
-                                                                <a href="{{ subcategory.0.get_absolute_url }}"> {{ subcategory.0.name }}</a>
-                                                            </li>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </ul>
-                                                {% endif %}
-                                            </div>
-                                        {% endfor %}
-                                    </ul>
-                                  </div>
-                            {% endif%}
+                    <div class="row">
+                        {% if categories %}
+                            {% for category in categories %}
+                            <div class="col-md-4 col-xs-3">
+                            <h3>{{ category.0.name }}</h3>
+                            {% if category.1 %}
+                                <ul>
+                                    {% for subcategory in category.1 %}
+                                        <li>
+                                            <a href="{{ subcategory.0.get_absolute_url }}"> {{ subcategory.0.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                             </div>
-                        </li>
-                    </ul>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </li>
-                <li><a href="/about/">About Us</a></li>
-                <li><a href="/services/">Customer Area</a></li>
-                <li><a href="/corporate-policies/">Service & Help</a></li>
-                <li><a href="/contact/">Contact</a></li>
             </ul>
-        </div>
-
+        </li>
+        <li><a href="/about/">About Us</a></li>
+        <li><a href="/services/">Customer Area</a></li>
+        <li><a href="/corporate-policies/">Service & Help</a></li>
+        <li><a href="/contact/">Contact</a></li>
+    </ul>
+</div>

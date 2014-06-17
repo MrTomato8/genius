@@ -24,7 +24,7 @@
              <!-- Sidebar left -->
             <div class="sidebar-left">
 
-                <div class="panel panel-primary">
+                <div class="panel panel-primary bordered">
                     <a class="panel-heading" data-toggle="collapse" href="#panel-benefits">Our Benifits</a>
                     <div class="panel-body panel-collapse collapse in" id="panel-benefits">
                        <ul class="list-unstyled spaced">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-                <div class="panel panel-primary">
+                <div class="panel panel-primary bordered">
                     <a class="panel-heading" data-toggle="collapse" href="#panel-customer-info">Customer Information</a>
                     <div class="panel-body panel-collapse collapse in" id="panel-customer-info">
                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <div class="panel panel-primary">
+                <div class="panel panel-primary bordered">
                     <a class="panel-heading" data-toggle="collapse" href="#panel-customer-info-2">Customer Information</a>
                     <div class="panel-body panel-collapse collapse in" id="panel-customer-info-2">
                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -62,24 +62,15 @@
              <!-- Main content -->
             <div class="main-content">
 
-               <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="personalize-products-link">
-                                <img src="{% static 'local/images/personalize.png' %}" alt=""> <a href="#">Personalize your favourite products here <i class="fa fa-angle-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Products list -->
                 <div class="container-fluid">
                     <div class="row products-list">
 
                     {% for category in categories %}
                         {% if category.1 %}
-                            {% for subcategory in category.1 %}                        
-                            <div class="col-md-2 col-sm-6 col-xs-6">
+                            {% for subcategory in category.1 %} 
+
+                            <div class="col-md-2 col-sm-4 col-xs-6 prod_wrap hidden-xs">
                                 <article class="product">
                                     <a href="{{ subcategory.0.get_absolute_url }}" class="product-avatar">
                                         <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
@@ -100,6 +91,19 @@
                             {% endfor %}
                         {% endif %}
                     {% endfor %}
+                        <div class="col-md-2 col-sm-4 col-xs-6 visible-phone">
+                            <button id="show_more" class="btn btn-primary btn-block">Show more</button>
+                        </div>
+
+                        <script type="text/javascript">
+                        $('.prod_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
+                        $('#show_more').click(function(){
+                            $('.prod_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
+                            if ($('.prod_wrap.hidden-xs').empty()){
+                                $('#show_more').hide();
+                            }
+                        });
+                        </script>
 
                     </div>
                 </div>
