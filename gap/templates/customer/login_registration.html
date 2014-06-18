@@ -18,30 +18,34 @@
 {% block content %}
 
 <div class="container" id="main-wrapper">
+    <div class="row">
+        <div class="col-md-6">
+            <h4 class="underlined">Personal details</h4>
+                <form id="register_form" action="{{ request.get_full_path }}" method="post" class="form-horizontal">
+                    {% csrf_token %}
+                    {% include "partials/form_field_login.html" with form=registration_form %}
+                    <!--<input type="submit" value="{% trans 'Register' %}" class="button" />-->
+                    <h5 class="bold spaced-top">Further information</h5>
+                    
+                    <p class="styled">Subscribe to newsletter (in our newsletter managment system you can choose which newsletters you want to receive)</p>
 
-        <div class="login-content">
-            <div class="left">
-                <h2>{% trans 'Register' %}</h2>
-                <div class="content">
-                    <form id="register_form" action="{{ request.get_full_path }}" method="post" class="form-stacked">
-                        {% csrf_token %}
-                        {% include "partials/form_fields.html" with form=registration_form %}
-                        <!--<input type="submit" value="{% trans 'Register' %}" class="button" />-->
-                        <button name="registration_submit" type="submit" value="{% trans 'Register' %}" class="button" data-loading-text="Registering...">{% trans 'Register' %}</button>
-                    </form>
-                </div>
+                    <p class="info spaced-top">Your personal data will only be used for processing your orders.<br/>
+                    Further information can be found in our <a href="#" class="primary">data protection declaration</a></p>
+
+                    <a href="#" class="primary">Back</a>
+                    <button name="registration_submit" type="submit" value="{% trans 'Register' %}" class="btn btn-primary pull-right" data-loading-text="Registering...">{% trans 'Register' %}</button>
+                </form>
             </div>
-            <div class="right">
-                <h2>{% trans 'Log In' %}</h2>
-                <form action="{{ request.get_full_path }}" method="post" enctype="multipart/form-data">
+        <div class="col-md-6">
+            <h4 class="underlined">{% trans 'Log In' %}</h2>
+                <form action="{{ request.get_full_path }}" method="post" enctype="multipart/form-data" class="form-horizontal">
                     {% csrf_token %}
                     <div class="content">
-                        <p style="padding-bottom:10px">I am a returning customer</p>
-                        {% include "partials/form_fields.html" with form=login_form %}
+                        {% include "partials/form_field_login.html" with form=login_form %}
                         <p><a href="{% url password-reset %}">{% trans "I've forgotten my password" %}</a></p>
                         <input type="hidden" name="next" value="/">
                         <!--<input type="submit" value="Login" class="button">-->
-                        <button name="login_submit" type="submit" value="{% trans 'Log In' %}" class="button">{% trans 'Log In' %}</button>
+                        <button name="login_submit" type="submit" value="{% trans 'Log In' %}" class="btn btn-primary pull-right">{% trans 'Log In' %}</button>
                     </div>
                 </form>
             </div>
