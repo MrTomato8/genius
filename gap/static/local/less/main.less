@@ -1,3 +1,4 @@
+
 @import "bootstrap.less";
 @import "theme.less";
 @import "retina.less";
@@ -5,6 +6,12 @@
 a, .btn {outline: none !important;}
 
 p {line-height: 2;}
+
+@media (max-width: @screen-sm){
+
+    .popover {max-width: 240px;}
+
+}
 
 // HEADING
 header .navbar-wrap {display: table;  margin: 0 auto;}
@@ -47,7 +54,7 @@ header .navbar-wrap {display: table;  margin: 0 auto;}
 #main-nav {margin-bottom: 5px;}
 #main-nav .navbar-nav > li > a {padding: 19px 35px;}
 #main-nav .dropdown-menu {border: 0; width: 100%; position: absolute; .box-shadow(0 9px 15px -5px rgba(0, 0, 0, 0.176))}
-#main-nav .dropdown-menu .row {padding: 0px 35px 20px; max-width: 1200px; margin: 0 auto;}
+#main-nav .dropdown-menu .row {padding: 0px 35px 20px; margin: 0 auto; max-width:1200px;}
 #main-nav .navbar-nav > li {position: static;}
 #main-nav .dropdown-menu ul {list-style: none; padding-left: 0;}
 #main-nav .dropdown-menu a {
@@ -72,7 +79,7 @@ footer .container {padding: 20px 40px; width: 100%; max-width: 1200px;}
 .sidebar-left {width: 210px;}
 .sidebar-right {width: 360px;}
 
-.download-section {margin-top: 40px;}
+.download-section {margin-top: 40px; margin-bottom: 35px;}
 .download-section a {margin-right: 8px;}
 
 div[class*="sidebar-"] .panel-heading {position: relative;}
@@ -177,7 +184,7 @@ div[class*="sidebar-"] .panel-heading:before {
 #quote-builder .btn {margin-bottom: 15px;}
 #quote-builder .checkout img {margin-bottom: 5px;}
 
-@media (max-width: 700px) {
+@media (max-width: @screen-sm) {
     
     .sidebar-right, {width: 100%;}
 
@@ -309,8 +316,6 @@ span.info img {margin-top: -2px;}
 #modal-login .input-group {width: 100%; position: relative;}
 #modal-login .input-group-addon {width: 36px; background-color: transparent; border: 0; position: absolute; top: 3px; z-index: 100;}
 #modal-login .form-control {border-radius: @border-radius-base; padding-left: 36px;}
-
-// #modal-login .input-group-addon, #modal-login .form-control {background-color: @btn-default-bg; border-color: @btn-default-bg; color: #fff;}
 
 .social-login {color: @gray-light; margin-top: 20px; font-size: 13px;}
 .social-login .fa {color: @brand-primary; font-size: 18px;}

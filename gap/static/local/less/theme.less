@@ -94,6 +94,12 @@ a.panel-heading {text-decoration: none !important; display: block; width: 100%}
 
 .panel-default > .panel-heading + .panel-collapse .panel-body {border: none;}
 
+@media (max-width: @screen-sm) {
+
+  .panel-heading {font-size: @font-size-small;}
+
+}
+
 // Forms
 .form-control {
   border-radius: @border-radius-base; 
@@ -161,5 +167,6 @@ a.panel-heading {text-decoration: none !important; display: block; width: 100%}
 @media (min-width: @screen-phone) {
     .visible-phone {display: none !important;}
 }
+
 
 

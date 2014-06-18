@@ -5931,6 +5931,11 @@ a.panel-heading {
 .panel-default > .panel-heading + .panel-collapse .panel-body {
   border: none;
 }
+@media (max-width: 768px) {
+  .panel-heading {
+    font-size: 12px;
+  }
+}
 .form-control {
   border-radius: 4px;
   border-color: #999999;
@@ -6023,6 +6028,11 @@ a,
 p {
   line-height: 2;
 }
+@media (max-width: 768px) {
+  .popover {
+    max-width: 240px;
+  }
+}
 header .navbar-wrap {
   display: table;
   margin: 0 auto;
@@ -6109,8 +6119,8 @@ header .navbar-wrap {
 }
 #main-nav .dropdown-menu .row {
   padding: 0px 35px 20px;
-  max-width: 1200px;
   margin: 0 auto;
+  max-width: 1200px;
 }
 #main-nav .navbar-nav > li {
   position: static;
@@ -6178,6 +6188,7 @@ footer .container {
 }
 .download-section {
   margin-top: 40px;
+  margin-bottom: 35px;
 }
 .download-section a {
   margin-right: 8px;
@@ -6333,7 +6344,7 @@ div[class*="sidebar-"] .panel-heading:before {
 #quote-builder .checkout img {
   margin-bottom: 5px;
 }
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .sidebar-right {
     width: 100%;
   }
