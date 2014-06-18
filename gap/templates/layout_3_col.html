@@ -34,11 +34,13 @@
 
                 </div>
 
+                <section>
                     <div id="promotions_right">
                         {% for promotion in promotions_right %}
                         {% render_promotion promotion %}
                         {% endfor %}
                     </div>
+                </section>
                     {% block column_right %} 
                     {% endblock %}
                 </aside>

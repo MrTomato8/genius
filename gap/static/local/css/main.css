@@ -6175,7 +6175,9 @@ footer .container {
   margin-left: -15px;
   margin-right: -15px;
 }
-#columns > div {
+#columns > .main-content,
+#columns > .sidebar-left,
+#columns > .sidebar-right {
   display: table-cell;
   vertical-align: top;
   padding: 0 15px;
