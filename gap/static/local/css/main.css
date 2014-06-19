@@ -6645,3 +6645,13 @@ div#modalchangepw {
   -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
+@media (max-width: 480px) {
+  .nav > li > a {
+    padding: 10px 3px;
+    font-size: 11px;
+  }
+  #quote-builder .checkout .list-inline li {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
