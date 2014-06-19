@@ -6,3 +6,5 @@ django-csvimport==1.0
 django-grappelli==2.5.1
 django-oscar-datacash==0.7
 django-oscar-paypal==0.7
+django-markdown==0.6.1
+
