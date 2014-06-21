@@ -14476,3 +14476,235 @@ Traceback (most recent call last):
   File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 426, in render
     raise e
 NoReverseMatch: Reverse for 'quote' with arguments '()' and keyword arguments '{'pk': '', 'product_slug': ''}' not found.
+ERROR 2014-06-20 06:17:15,550 base Internal Server Error: /options/pick/saddle-stitched-booklet_25/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 46, in get
+    product = Product.objects.get(pk=kwargs['pk'])
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/manager.py", line 131, in get
+    return self.get_query_set().get(*args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 366, in get
+    % self.model._meta.object_name)
+DoesNotExist: Product matching query does not exist.
+ERROR 2014-06-20 07:03:28,709 base Internal Server Error: /options/quote/folded-leaflet_152/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    prices = calc.calculate_costs(self.choices, quantity, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 392, in calculate_costs
+    price = prices.get()
+AttributeError: 'set' object has no attribute 'get'
+ERROR 2014-06-20 07:03:28,709 base Internal Server Error: /options/quote/folded-leaflet_152/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    prices = calc.calculate_costs(self.choices, quantity, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 392, in calculate_costs
+    price = prices.get()
+AttributeError: 'set' object has no attribute 'get'
+ERROR 2014-06-20 07:12:18,666 base Internal Server Error: /options/quote/folded-leaflet_152/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    prices = calc.calculate_costs(self.choices, quantity, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 392, in calculate_costs
+    price = prices.get()
+AttributeError: 'set' object has no attribute 'get'
+ERROR 2014-06-20 07:12:19,147 base Internal Server Error: /options/quote/folded-leaflet_152/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    prices = calc.calculate_costs(self.choices, quantity, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 392, in calculate_costs
+    price = prices.get()
+AttributeError: 'set' object has no attribute 'get'
+ERROR 2014-06-20 08:34:31,439 base Internal Server Error: /options/quote/leaflet_150/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    prices = calc.calculate_costs(self.choices, quantity, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 392, in calculate_costs
+    price = prices.get()
+AttributeError: 'set' object has no attribute 'get'
+ERROR 2014-06-20 08:34:31,856 base Internal Server Error: /options/quote/leaflet_150/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    prices = calc.calculate_costs(self.choices, quantity, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 392, in calculate_costs
+    price = prices.get()
+AttributeError: 'set' object has no attribute 'get'
+ERROR 2014-06-20 09:04:49,059 base Internal Server Error: /options/quote/folded-leaflet_152/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    prices = calc.calculate_costs(self.choices, quantity, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 392, in calculate_costs
+    price = prices.get()
+AttributeError: 'set' object has no attribute 'get'
+ERROR 2014-06-20 09:04:49,489 base Internal Server Error: /options/quote/folded-leaflet_152/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 209, in get
+    prices = calc.calculate_costs(self.choices, quantity, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/options/calc.py", line 392, in calculate_costs
+    price = prices.get()
+AttributeError: 'set' object has no attribute 'get'
+ERROR 2014-06-21 03:50:54,009 base Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 101, in render
+    compiled_parent = self.get_parent(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 98, in get_parent
+    return get_template(parent)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 145, in get_template
+    template, origin = find_template(template_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 134, in find_template
+    source, display_name = loader(name, dirs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 42, in __call__
+    return self.load_template(template_name, template_dirs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 48, in load_template
+    template = get_template_from_string(source, origin, template_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 156, in get_template_from_string
+    return Template(source, origin, name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 125, in __init__
+    self.nodelist = compile_string(template_string, origin)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 153, in compile_string
+    return parser.parse()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 267, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 214, in do_extends
+    nodelist = parser.parse()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 267, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 189, in do_block
+    nodelist = parser.parse(('endblock',))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 267, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 262, in do_include
+    isolated_context=isolated_context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 145, in __init__
+    t = get_template(template_path)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 145, in get_template
+    template, origin = find_template(template_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 134, in find_template
+    source, display_name = loader(name, dirs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 42, in __call__
+    return self.load_template(template_name, template_dirs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 48, in load_template
+    template = get_template_from_string(source, origin, template_name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader.py", line 156, in get_template_from_string
+    return Template(source, origin, name)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 125, in __init__
+    self.nodelist = compile_string(template_string, origin)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 153, in compile_string
+    return parser.parse()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 267, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 914, in do_if
+    nodelist = parser.parse(('endif',))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 274, in parse
+    self.unclosed_block_tag(parse_until)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 65, in unclosed_block_tag
+    raise self.source_error(source, msg)
+TemplateSyntaxError: Unclosed tag 'if'. Looking for one of: endif 

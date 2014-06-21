@@ -6046,7 +6046,7 @@ header .navbar-wrap {
 #top-nav .navbar-collapse {
   padding: 0;
 }
-#top-nav .navbar-collapse a {
+#top-nav .navbar-collapse btn a {
   -webkit-transition: all 200ms ease-in-out;
   -moz-transition: all 200ms ease-in-out;
   -o-transition: all 200ms ease-in-out;
@@ -6054,10 +6054,10 @@ header .navbar-wrap {
   transition: all 200ms ease-in-out;
   color: #fff;
 }
-#top-nav .navbar-collapse a:hover,
-#top-nav .navbar-collapse a:active,
-#top-nav .navbar-collapse a:focus,
-#top-nav .navbar-collapse a.active {
+#top-nav .navbar-collapse btn a:hover,
+#top-nav .navbar-collapse btn a:active,
+#top-nav .navbar-collapse btn a:focus,
+#top-nav .navbar-collapse btn a.active {
   background-color: #007695 !important;
 }
 #top-nav .nav .open > a,
