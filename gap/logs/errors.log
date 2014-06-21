@@ -14708,3 +14708,488 @@ Traceback (most recent call last):
   File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 65, in unclosed_block_tag
     raise self.source_error(source, msg)
 TemplateSyntaxError: Unclosed tag 'if'. Looking for one of: endif 
+ERROR 2014-06-21 04:12:06,883 base Internal Server Error: /options/pick/folded-leaflet_152/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/template/defaulttags.py", line 426, in render
+    raise e
+NoReverseMatch: Reverse for 'add-to-basket' with arguments '()' and keyword arguments '{'pk': '', 'product_slug': ''}' not found.
+ERROR 2014-06-21 04:19:12,356 base Internal Server Error: /options/add/folded-leaflet_152/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 407, in post
+    attachments, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 288, in add_dynamic_product
+    value=items_per_pack,
+UnboundLocalError: local variable 'items_per_pack' referenced before assignment
+ERROR 2014-06-21 04:19:12,444 base Internal Server Error: /options/add/folded-leaflet_152/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/session.py", line 92, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 37, in dispatch
+    request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/projects/genius/gap/apps/options/views.py", line 407, in post
+    attachments, choice_data)
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 288, in add_dynamic_product
+    value=items_per_pack,
+UnboundLocalError: local variable 'items_per_pack' referenced before assignment
+ERROR 2014-06-21 04:20:42,588 base Internal Server Error: /basket/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 337, in get
+    return super(BaseModelFormSetView, self).get(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 300, in get
+    return self.render_to_response(self.get_context_data(formset=formset))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 138, in get_context_data
+    self.request.basket.total_incl_tax +
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 317, in total_incl_tax
+    return self._get_total('line_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 332, in _get_total
+    return getattr(self, 'apply_total_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 321, in apply_total_price_incl_tax_and_discounts
+    return self.default_wrapper.get_total_price_incl_tax(self.total_excl_tax)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 305, in total_excl_tax
+    return self._get_total('line_price_excl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 336, in _get_total
+    return super(Basket, self)._get_total(property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 285, in _get_total
+    total += getattr(line, property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 638, in line_price_excl_tax_and_discounts
+    return self.line_price_excl_tax - self._discount * self._tax_ratio
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 634, in line_price_excl_tax
+    return self.quantity * self.unit_price_excl_tax
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 615, in unit_price_excl_tax
+    return self._get_stockrecord_property('price_excl_tax')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 166, in _get_stockrecord_property
+    self._get_unit_price_from_pricelist())
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 116, in _get_unit_price_from_pricelist
+    choices, choice_data = self.get_option_choices()
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 112, in get_option_choices
+    [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1056, in add_filter
+    arg, value = filter_expr
+TypeError: 'NoneType' object is not iterable
+ERROR 2014-06-21 04:20:42,897 base Internal Server Error: /basket/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 337, in get
+    return super(BaseModelFormSetView, self).get(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 300, in get
+    return self.render_to_response(self.get_context_data(formset=formset))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 138, in get_context_data
+    self.request.basket.total_incl_tax +
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 317, in total_incl_tax
+    return self._get_total('line_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 332, in _get_total
+    return getattr(self, 'apply_total_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 321, in apply_total_price_incl_tax_and_discounts
+    return self.default_wrapper.get_total_price_incl_tax(self.total_excl_tax)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 305, in total_excl_tax
+    return self._get_total('line_price_excl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 336, in _get_total
+    return super(Basket, self)._get_total(property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 285, in _get_total
+    total += getattr(line, property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 638, in line_price_excl_tax_and_discounts
+    return self.line_price_excl_tax - self._discount * self._tax_ratio
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 634, in line_price_excl_tax
+    return self.quantity * self.unit_price_excl_tax
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 615, in unit_price_excl_tax
+    return self._get_stockrecord_property('price_excl_tax')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 166, in _get_stockrecord_property
+    self._get_unit_price_from_pricelist())
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 116, in _get_unit_price_from_pricelist
+    choices, choice_data = self.get_option_choices()
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 112, in get_option_choices
+    [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1056, in add_filter
+    arg, value = filter_expr
+TypeError: 'NoneType' object is not iterable
+ERROR 2014-06-21 04:24:31,252 base Internal Server Error: /basket/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 337, in get
+    return super(BaseModelFormSetView, self).get(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 300, in get
+    return self.render_to_response(self.get_context_data(formset=formset))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 138, in get_context_data
+    self.request.basket.total_incl_tax +
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 317, in total_incl_tax
+    return self._get_total('line_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 333, in _get_total
+    return getattr(self, 'apply_total_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 322, in apply_total_price_incl_tax_and_discounts
+    return self.default_wrapper.get_total_price_incl_tax(self.total_excl_tax)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 305, in total_excl_tax
+    return self._get_total('line_price_excl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 337, in _get_total
+    return super(Basket, self)._get_total(property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 285, in _get_total
+    total += getattr(line, property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 638, in line_price_excl_tax_and_discounts
+    return self.line_price_excl_tax - self._discount * self._tax_ratio
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 634, in line_price_excl_tax
+    return self.quantity * self.unit_price_excl_tax
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 615, in unit_price_excl_tax
+    return self._get_stockrecord_property('price_excl_tax')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 167, in _get_stockrecord_property
+    self._get_unit_price_from_pricelist())
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 117, in _get_unit_price_from_pricelist
+    choices, choice_data = self.get_option_choices()
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 113, in get_option_choices
+    [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1056, in add_filter
+    arg, value = filter_expr
+TypeError: 'NoneType' object is not iterable
+ERROR 2014-06-21 04:25:04,847 base Internal Server Error: /basket/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 337, in get
+    return super(BaseModelFormSetView, self).get(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 300, in get
+    return self.render_to_response(self.get_context_data(formset=formset))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 138, in get_context_data
+    self.request.basket.total_incl_tax +
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 317, in total_incl_tax
+    return self._get_total('line_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 333, in _get_total
+    return getattr(self, 'apply_total_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 322, in apply_total_price_incl_tax_and_discounts
+    return self.default_wrapper.get_total_price_incl_tax(self.total_excl_tax)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 305, in total_excl_tax
+    return self._get_total('line_price_excl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 337, in _get_total
+    return super(Basket, self)._get_total(property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 285, in _get_total
+    total += getattr(line, property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 638, in line_price_excl_tax_and_discounts
+    return self.line_price_excl_tax - self._discount * self._tax_ratio
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 634, in line_price_excl_tax
+    return self.quantity * self.unit_price_excl_tax
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 615, in unit_price_excl_tax
+    return self._get_stockrecord_property('price_excl_tax')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 167, in _get_stockrecord_property
+    self._get_unit_price_from_pricelist())
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 117, in _get_unit_price_from_pricelist
+    choices, choice_data = self.get_option_choices()
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 112, in get_option_choices
+    print models.Q(option=attr.option, code=attr.value_code), '\n\n\n'
+UnboundLocalError: local variable 'attr' referenced before assignment
+ERROR 2014-06-21 04:25:27,715 base Internal Server Error: /basket/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 337, in get
+    return super(BaseModelFormSetView, self).get(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 300, in get
+    return self.render_to_response(self.get_context_data(formset=formset))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 138, in get_context_data
+    self.request.basket.total_incl_tax +
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 317, in total_incl_tax
+    return self._get_total('line_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 333, in _get_total
+    return getattr(self, 'apply_total_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 322, in apply_total_price_incl_tax_and_discounts
+    return self.default_wrapper.get_total_price_incl_tax(self.total_excl_tax)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 305, in total_excl_tax
+    return self._get_total('line_price_excl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 337, in _get_total
+    return super(Basket, self)._get_total(property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 285, in _get_total
+    total += getattr(line, property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 638, in line_price_excl_tax_and_discounts
+    return self.line_price_excl_tax - self._discount * self._tax_ratio
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 634, in line_price_excl_tax
+    return self.quantity * self.unit_price_excl_tax
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 615, in unit_price_excl_tax
+    return self._get_stockrecord_property('price_excl_tax')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 167, in _get_stockrecord_property
+    self._get_unit_price_from_pricelist())
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 117, in _get_unit_price_from_pricelist
+    choices, choice_data = self.get_option_choices()
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 113, in get_option_choices
+    [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1056, in add_filter
+    arg, value = filter_expr
+TypeError: 'NoneType' object is not iterable
+ERROR 2014-06-21 04:26:00,849 base Internal Server Error: /basket/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 337, in get
+    return super(BaseModelFormSetView, self).get(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 300, in get
+    return self.render_to_response(self.get_context_data(formset=formset))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 138, in get_context_data
+    self.request.basket.total_incl_tax +
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 317, in total_incl_tax
+    return self._get_total('line_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 333, in _get_total
+    return getattr(self, 'apply_total_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 322, in apply_total_price_incl_tax_and_discounts
+    return self.default_wrapper.get_total_price_incl_tax(self.total_excl_tax)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 305, in total_excl_tax
+    return self._get_total('line_price_excl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 337, in _get_total
+    return super(Basket, self)._get_total(property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 285, in _get_total
+    total += getattr(line, property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 638, in line_price_excl_tax_and_discounts
+    return self.line_price_excl_tax - self._discount * self._tax_ratio
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 634, in line_price_excl_tax
+    return self.quantity * self.unit_price_excl_tax
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 615, in unit_price_excl_tax
+    return self._get_stockrecord_property('price_excl_tax')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 167, in _get_stockrecord_property
+    self._get_unit_price_from_pricelist())
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 117, in _get_unit_price_from_pricelist
+    choices, choice_data = self.get_option_choices()
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 113, in get_option_choices
+    [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1056, in add_filter
+    arg, value = filter_expr
+TypeError: 'NoneType' object is not iterable
+ERROR 2014-06-21 04:26:19,318 base Internal Server Error: /basket/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 337, in get
+    return super(BaseModelFormSetView, self).get(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 300, in get
+    return self.render_to_response(self.get_context_data(formset=formset))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 138, in get_context_data
+    self.request.basket.total_incl_tax +
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 317, in total_incl_tax
+    return self._get_total('line_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 333, in _get_total
+    return getattr(self, 'apply_total_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 322, in apply_total_price_incl_tax_and_discounts
+    return self.default_wrapper.get_total_price_incl_tax(self.total_excl_tax)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 305, in total_excl_tax
+    return self._get_total('line_price_excl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 337, in _get_total
+    return super(Basket, self)._get_total(property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 285, in _get_total
+    total += getattr(line, property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 638, in line_price_excl_tax_and_discounts
+    return self.line_price_excl_tax - self._discount * self._tax_ratio
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 634, in line_price_excl_tax
+    return self.quantity * self.unit_price_excl_tax
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 615, in unit_price_excl_tax
+    return self._get_stockrecord_property('price_excl_tax')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 167, in _get_stockrecord_property
+    self._get_unit_price_from_pricelist())
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 117, in _get_unit_price_from_pricelist
+    choices, choice_data = self.get_option_choices()
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 113, in get_option_choices
+    [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1056, in add_filter
+    arg, value = filter_expr
+TypeError: 'NoneType' object is not iterable
+ERROR 2014-06-21 04:27:02,014 base Internal Server Error: /basket/
+Traceback (most recent call last):
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 337, in get
+    return super(BaseModelFormSetView, self).get(request, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/extra_views/formsets.py", line 300, in get
+    return self.render_to_response(self.get_context_data(formset=formset))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/views.py", line 138, in get_context_data
+    self.request.basket.total_incl_tax +
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 317, in total_incl_tax
+    return self._get_total('line_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 333, in _get_total
+    return getattr(self, 'apply_total_price_incl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 322, in apply_total_price_incl_tax_and_discounts
+    return self.default_wrapper.get_total_price_incl_tax(self.total_excl_tax)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 305, in total_excl_tax
+    return self._get_total('line_price_excl_tax_and_discounts')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 337, in _get_total
+    return super(Basket, self)._get_total(property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 285, in _get_total
+    total += getattr(line, property)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 638, in line_price_excl_tax_and_discounts
+    return self.line_price_excl_tax - self._discount * self._tax_ratio
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 634, in line_price_excl_tax
+    return self.quantity * self.unit_price_excl_tax
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/oscar/apps/basket/abstract_models.py", line 615, in unit_price_excl_tax
+    return self._get_stockrecord_property('price_excl_tax')
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 167, in _get_stockrecord_property
+    self._get_unit_price_from_pricelist())
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 117, in _get_unit_price_from_pricelist
+    choices, choice_data = self.get_option_choices()
+  File "/home/nastya/projects/genius/gap/apps/basket/models.py", line 113, in get_option_choices
+    [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/home/nastya/.virtualenvs/env_genius/local/lib/python2.7/site-packages/django/db/models/sql/query.py", line 1056, in add_filter
+    arg, value = filter_expr
+TypeError: 'NoneType' object is not iterable

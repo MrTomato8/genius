@@ -109,7 +109,9 @@ class Line(AbstractLine):
             except ValueError:
                 data = {}
             choice_data.update({attr.option.code: data})
-        [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
+        # try!!!
+        if query:
+            [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
         return choices, choice_data
 
     def _get_unit_price_from_pricelist(self):
@@ -264,6 +266,8 @@ class Basket(AbstractBasket):
         except PriceNotAvailable:
             price_incl_tax = None
             nr_of_units = quantity
+            # try!!!
+            items_per_pack = 1
         
         defaults = {  
                 'quantity': nr_of_units,

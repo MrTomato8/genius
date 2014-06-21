@@ -25,7 +25,14 @@ $(document).ready(function(){
       $('#quantity_'+$(this).data('qty')).prop('checked', true);
   });
   $('#buy_button').click(function(){
-      $('#getquote').submit();
+    $.ajax({
+      type: 'POST',
+      url: "{%url 'options:add-to-basket' pk=params.pk product_slug=params.product_slug %}",
+      data: { csrfmiddlewaretoken: '{{ csrf_token }}',},
+      success: function(response) {
+        console.log(response);
+      }
+    });
   });
   $('#proceed_quantity').click(function(event){
     event.preventDefault();
