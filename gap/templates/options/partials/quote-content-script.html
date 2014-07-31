@@ -1,0 +1,66 @@
+<script type="text/javascript">
+$(document).ready(function(){
+    var get_quote = {
+        currency : '£',
+        add : function(price, quantity){
+            var price = parseFloat(price).toFixed(2),
+            unit_price = parseFloat(price/quantity).toFixed(3);
+            $('#calculated_price').html(
+                '<p class="small">'
+                + price
+                + this.currency
+                + ' for '
+                + quantity
+                + ' items'
+                + '</p>'
+                + '<p class="small">'
+                + unit_price
+                + this.currency
+                + ' each'
+                + '</p>')
+            $('input#add_quantity').val(quantity)
+            $('html, body').animate({
+                scrollTop: $('.price-table').offset().top
+                }, 500);
+        },
+        txt : function(){
+            var _this=this,
+            inputs=$( "#getquote input[type='text']" );
+            inputs.keyup(function() {
+                var frm=$(this).parents('form'),
+                i=0;
+                while(i<inputs.length){
+                    if($(inputs[i]).val()==false){return null}
+                    i++;
+                    }
+                var val=frm.serialize(),
+                url = frm.find('#id_quantity').data('action');
+                val = val + '&'+$('input[name="csrfmiddlewaretoken"]').serialize()
+                $.ajax({
+                        method:'post',
+                        url:url,
+                        data:val,
+                        success:function(data){
+                            console.log(data)
+                            _this.add(data.price,data.quantity)}
+
+                    })
+            });
+            return this
+        },
+        rdio: function(){
+            var _this =this;
+            $('#getquote li, #getquote span').click(function(){
+                var data = $(this).data()
+                _this.add(data['price'],data['quantity'])
+            });
+            return this
+        },
+        init:function(){
+            this.txt()
+            this.rdio()
+            }
+    };
+    get_quote.init();
+})
+</script>
