@@ -59,9 +59,7 @@ def list(request, slug=None):
                 print e
         return HttpResponse('200')
     if request.method=='GET':
-        prices_all = Price.objects.filter(~Q(state='inactive')).filter(product__slug=slug).prefetch_related('csv')
-        print prices_all
-        print slug
+        prices_all = Price.objects.filter(quantity=1).filter(~Q(state='inactive')).filter(product__slug=slug).prefetch_related('csv')
         paginator = Paginator(prices_all, 20)
 
         page = request.GET.get('page')
@@ -76,7 +74,7 @@ def list(request, slug=None):
         prices = prices_all
         headers = ['Product', 'TPL Price', 'RPL Price', 'Quantity',
                 'Minimum Order', 'Minimal Area','quantity-discount']
-            
+
 
         table = []
         for price in prices:
@@ -96,7 +94,7 @@ def list(request, slug=None):
                 for choice in price.option_choices.filter(option=option):
                     choices.append(choice.caption)
                 choices = ' , '.join(choices)
-                if choices != '':   
+                if choices != '':
                     row.append(choices)
                     if option.name not in headers:
                         headers.append(option.name)

@@ -126,14 +126,14 @@
       }
     }
   };
-  
+
 </script>
 
 <form id="pickoptions" method="POST">
 {% csrf_token %}
   <div class="panel-group" id="product-accordion">
-  {% for group in groups %} 
-   <h3 class="button group_name">{{ group.group.name }}</h3>        
+  {% for group in groups %}
+   <h3 class="button group_name">{{ group.group.name }}</h3>
   {% for picker in group.pickers %}
 
   <div class="panel panel-default {% if forloop.last and forloop.parentloop.last %}last{% endif %}">
@@ -149,7 +149,7 @@
                   <ul class="list-inline">
                     {% for choice in field.field.queryset %}
                       <script type="text/javascript">
-                        
+
                         var choice = new Object();
                         choice.optioncode = "{{ choice.option.code }}";
                         choice.optioncaption = "{{ choice.option.name }}";
@@ -260,8 +260,8 @@ $('.panel-default.last .option-choice .radio-choice').click(function (){
     $('.option-choice .radio-choice:checked').each(function(a,b){
         $('#selected-choices ul').append('<li>' + $(b).closest('li').html()  + '</li>')
     });
-  });  
-  
+  });
+
   $(".radio-choice").click(disableConflictingChoices);
 
   $('input.radio-choice').attr("checked", false);
@@ -274,7 +274,7 @@ $('.panel-default.last .option-choice .radio-choice').click(function (){
 <div id="sidebar-right-responsive"></div>
 
 <div class="tabs-section">
-              <!-- Nav tabs -->                    
+              <!-- Nav tabs -->
               <ul class="nav nav-tabs">
                   <li class="active">
                       <a href="#completion-and-delivery-tab" data-toggle="tab">Completion and delivery</a>
@@ -287,7 +287,7 @@ $('.panel-default.last .option-choice .radio-choice').click(function (){
                   </li>
               </ul>
 
-              <!-- Tab panes -->                    
+              <!-- Tab panes -->
               <div class="tab-content">
                   <div class="tab-pane active" id="completion-and-delivery-tab">
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis, molestias, magni, doloribus, vero ab quas necessitatibus eum asperiores placeat odit facilis mollitia rerum quibusdam deserunt laboriosam error sed eos molestiae?</p>

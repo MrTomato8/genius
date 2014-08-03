@@ -6,204 +6,43 @@
 
 <div id="getquote_wrap">
 
-<script type="text/javascript" src="{% static 'local/js/quote.js' %}"></script>
 
-<script type="text/javascript">
-$(document).ready(function(){
- $( "#getquote #id_quantity" ).change(function() {
-    if ($(this).data('type')=='1'){
-      quantity = $(this)[0].value;
-      price=$('li[data-qty="'+quantity+'"]').data('price')+ ' for each';
-      $('#calculated_price').html(price);
-      $('#quantity_'+$(this).data('qty')).prop('checked', true);
-    }
-  });
-  $('#getquote li, #getquote span').click(function(){
-    if ($(this).data('type')=='2') price = $(this).data('price');
-    else price = $(this).data('price') + ' for each';
-      $('#calculated_price').html(price);
-      $('#quantity_'+$(this).data('qty')).prop('checked', true);
-  });
-  $('#buy_button').click(function(){
-    $.ajax({
-      type: 'POST',
-      url: "{%url 'options:add-to-basket' pk=params.pk product_slug=params.product_slug %}",
-      data: { csrfmiddlewaretoken: '{{ csrf_token }}',},
-      success: function(response) {
-        console.log(response);
-      }
-    });
-  });
-  $('#proceed_quantity').click(function(event){
-    event.preventDefault();
-    $.ajax({
-      data: $('form#getquote').serialize(),
-      type: $('form#getquote').attr('method'),
-      url: $('form#getquote').attr('action'),
-      success: function(response) {
-        x = $('<div></div>');
-        x.html(response);
-        res = x.find('#counted_price');
-        $('#calculated_price').html(res);
-        res = x.find('#custom_wrap');
-        $('#wrap_result').html(res);
-        if (!res.html()){
-          res = x.find('#form-errors');
-          $('#form-errors').html(res);
-          $('#wrap_result').html('');
-        }
-        else {
-          $('#wrap_result').html(res);
-          $('#form-errors').html('');
-        }
-      }
-    });
-  });
-
-});
-</script>
-<form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
-  <div id="panel-collapse-6" class="panel-collapse collapse in">
-    <div class="panel-body">
-      <div class="text-right">
-          <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-      </div>
-      <div class="row">
-          {% if prices.discrete_pricing and prices.matrix_for_pack %}
-            {% for qty, price in prices.ordered.iteritems %}
-                <input data-type="1" data-qty="{{qty}}" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}" style="display:none">
-            {% endfor %}
-          {% elif prices.discrete_pricing %}
-          <div class="col-md-2 col-sm-3 col-xs-6 text-center">
-          <ul class="list-unstyled">
-            {% with prices|length|divide_int_ceil:6 as divi %}
-            {% for qty, price in prices.ordered.iteritems %}
-            <li data-type="2" data-qty="{{qty}}" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}">{{ qty|floatformat }}
-            <input type="radio" id="quantity_{{ qty }}" name="quantity" value="{{ qty }}" style="display:none" />
-            {% if not forloop.counter|mod:divi %}
-            </ul>
-            </div>
-            <div class="col-md-2 col-sm-3 col-xs-6 text-center">
-            <ul class="list-unstyled">
+{% include 'options/partials/quote-content-script.html' %}
+    <form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
+        <div id="panel-collapse-6" class="panel-collapse collapse in">
+            <div class="panel-body">
+            {% if custom_size %}
+            <p>Insert the size in millimeters, please</p>
+                {{custom_size_form}}
             {% endif %}
-            {% endfor %}
-            {% endwith %}
-          {% else %}
-            <div class="col-md-2 col-sm-3 col-xs-6 text-center">
-            <ul class="list-unstyled">
-              {% with more_prices|length|divide_int_ceil:6 as divi %}
-              {% for item in more_prices %}
-              <li data-type="2" data-qty="{{item.1}}" data-price="{{item.0|currency}}">{{ item.1|floatformat }}
-              <input type="radio" id="quantity_{{ item.1 }}" name="quantity" value="{{ item.1 }}" style="display:none" />
-              {% if not forloop.counter|mod:divi %}
-              </ul>
+                {% if prices.discrete_pricing %}
+                    <div class="row">
+                    <ul class="list-unstyled">
+                    {% for qty,price in prices.ordered.iteritems %}
+                        <li class="col-md-2 col-sm-3 col-xs-6 text-center"
+                          data-quantity="{% if prices.matrix_for_pack %}{{price.nr_of_units}}{% else %}{{qty}}{% endif %}"
+                          data-unit_price="{% if trade_user %}{{ price.tpl_unit_price_incl_tax }}{% else %}{{ price.rpl_unit_price_incl_tax }}{% endif %}"
+                          data-price="{% if trade_user %}{{ price.tpl_price_incl_tax }}{% else %}{{ price.rpl_price_incl_tax }}{% endif %}">
+                            {% if prices.matrix_for_pack %} {{price.nr_of_units}}
+                            {% else %} {{ qty|floatformat }}
+                            {% endif %}
+                            <input type="radio" class="form-control" name="quantity"  id="quantity_{{ qty }}" style="display:none">
+                        </li>
+                    {% endfor %}
+                    <ul>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 form-group">
+                            <label class="control-label col-sm-8 col-xs-12">
+                                Choose or enter quantity for each
+                            </label>
+                            <div class="input-group col-sm-4 col-xs-12">
+                                <input data-action="{{action}}" type="text" class="form-control" name="quantity" id="id_quantity">
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
               </div>
-              <div class="col-md-2 col-sm-3 col-xs-6 text-center">
-              <ul class="list-unstyled">
-              {% endif %}
-              {% endfor %}
-              {% endwith %}
-          {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
-
-      <div class="row">
-      <div class="col-md-4">
-        <span class="toggle-live" onclick="$(this).toggleClass('active'); $('#product-quantity-inputs, #product-table-wrap').slideToggle();"> Multi-file discount </span>
-        <span class="info" data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-      </div>
-      <div class="col-md-8">
-          <div class="form-group">
-            <label class="col-sm-8 col-xs-12 control-label">Choose or enter quantity for each</label>
-            <div class="col-sm-4 col-xs-12">
-              <div class="input-group">
-              {% if prices.discrete_pricing and prices.matrix_for_pack %}
-                <input data-type="1" type="text" class="form-control" name="quantity" id="id_quantity">
-              {% else %}
-              {% with prices.values|first as price %}
-                <span data-type="3" data-price="{% if trade_user %}{{ price.tpl_price_incl_tax|currency }}{% else %}{{ price.rpl_price_incl_tax|currency }}{% endif %}"><input type="text" class="form-control" name="quantity" id="id_quantity"></span>
-                {% endwith %}
-              {% endif %}
-                <span class="input-group-btn"><button class="btn btn-primary" id="proceed_quantity"><span class="fa fa-angle-right"></span></button></span>
-              </div>
-            </div>
-          </div>
-          <div id="product-quantity-inputs"  style="display:none;">
-              <div class="form-group">
-                <label class="col-sm-8 col-xs-12 control-label">Number of files</label>
-                <div class="col-sm-4 col-xs-12">
-                  <div class="input-group">
-                    <input type="text" class="form-control" />
-                    <span class="input-group-btn btn-group-vertical">
-                      <button class="btn btn-default"><span class="fa fa-angle-up"></span></button>
-                      <button class="btn btn-default"><span class="fa fa-angle-down"></span></button>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-8 col-xs-12 control-label">Total quantity</label>
-                <div class="col-sm-4 col-xs-12">
-                  <div class="input-group">
-                    <input type="text" class="form-control" />
-                    <span class="input-group-btn"><button class="btn btn-primary"><span class="fa fa-angle-right"></span></button>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-4 col-xs-12 col-sm-offset-8">
-                  <button class="btn btn-primary btn-block">Add <span class="fa fa-angle-down"></button>
-                </div>
-              </div>
-          </div>
-      </div>
-    </div>
-
- </form>
-
-  <div id="wrap_result"></div>
-  
-  <div id="custom_wrap">
-  
-      {% if custom_size %}
-      <div class="custom_size">
-        <h3>Custom Size:</h3>
-        <div class="custom-size-columns">
-          <div>
-            {{ custom_size_form.width.errors }}
-            <label for="width">Width (mm):</label><br />
-            {{ custom_size_form.width }}
-          </div>
-          <div>
-            {{ custom_size_form.height.errors }}
-            <label for="height">Height (mm):</label><br />
-            {{ custom_size_form.height }}
-          </div>
         </div>
-      </div>
-      {% endif %}
-
-      <div id="form-errors" class="quote-errors">
-        {% if errors %}
-        <ul>
-        {% for error in errors %}
-        <li><strong>{{ error }}</strong></li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-      </div>
-
-  {% if quote.valid %}
-  <div class="grid-7 float-left">
-    <div class="options-quote">
-      <h2 id="counted_price"> {{quote.price|currency}} </h2>
-      {% if custom_size %}
-      Custom size is {{ choice_data_custom_size.width }}(mm) x {{ choice_data_custom_size.height }}(mm)
-      {% endif %}
-    </div>
-  </div>  
-  {% endif %} 
+    </form>
 </div>
-</div>   

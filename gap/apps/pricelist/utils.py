@@ -3,7 +3,7 @@ from apps.pricelist.models import Price, CsvRow
 from apps.options.models import OptionChoice
 from django.db import models
 import csv
-from decimal import Decimal, DecimalException
+from decimal import Decimal #, DecimalException
 from django.db import IntegrityError
 from django.template.defaultfilters import slugify
 from django.conf import settings
@@ -76,7 +76,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                 continue
             p_list.append(product)
         qs = qs.filter(product__in=p_list)
-    
+
     qs.update(state=Price.OLD)
     data = {}
     option_cache = {}
@@ -123,14 +123,26 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
             raw_quantity_discount = row.pop('quantity-discount', None)
             quantity_discount = raw_quantity_discount.split(',')
         except:
+            raw_quantity_discount = row.pop('quantity-discount', None)
             quantity_discount = False
             pass
-            
-            
+
+
+
         try:
             data['min_area'] = Decimal(row.pop('min_area', None))
         except:
             data['min_area'] = Decimal(0)
+
+        try:
+            data['min_area'] = Decimal(row.pop('min_length', None))
+        except:
+            data['min_area'] = data['min_area']
+
+        try:
+            data['media_width'] = Decimal(row.pop('media_width', None))
+        except:
+            data['media_width'] = Decimal(1.300)
 
         try:
             data['items_per_pack'] = int(row.pop('items_per_pack', 1))
@@ -162,7 +174,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                             if len(o.name) == 0:
                                 o.name = o.code
                                 o.save()
-                                
+
                         else:
                             try:
                                 o = Option.objects.get(code=slug)
@@ -173,7 +185,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                                 raise OptionError
                         #chache option
                         option_cache[slug]=o
-                        
+
                     slug = slugify(val)
                     try:
                         c = coiches_cache[(slug,o)]
@@ -199,19 +211,18 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                     choices.append(c)
         except OptionError:
             continue
-        
+
         try:
             product.stockrecord
         except ObjectDoesNotExist:
             partner = Partner.objects.all()[0]
-                
+
             sku = crc32(product.get_title())
             StockRecord.objects.create(
                 product = product, partner = partner, partner_sku = sku
                 )
-        
-        #effettuare un for loop e salvare ricursivamente **data
-        #magari creando l'opzione base_price
+
+        #do a for loop and save **data
         if quantity_discount:
             base_tpl_price = data['tpl_price']
             base_rpl_price = data['rpl_price']
@@ -233,16 +244,20 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                         fixed = Decimal(anomaly[1])
                     except:
                         fixed = Decimal(0)
-                    data['quantity'] = int(quantity)
+                    if data['min_area'] != Decimal(0):
+                        data['min_area'] = Decimal(quantity)
+                    else:
+                        data['quantity'] = int(quantity)
                     data['tpl_price'] = base_tpl_price*(1-discount/100)+fixed
                     data['rpl_price'] = base_rpl_price*(1-discount/100)+fixed
-                    
+
                     p = Price(**data)
                     p.csv=csvrow
                     p.save()
                     for choice in choices:
                         p.option_choices.add(choice)
                     p.save()
+                    report.success()
                 except:
                     pass
         else:
@@ -251,7 +266,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
             for choice in choices:
                 p.option_choices.add(choice)
             p.save()
-            
+
         report.success()
     for price in Price.objects.filter(state=Price.OLD):
         try:
@@ -268,5 +283,5 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
     if len(o.name) == 0:
         o.name = o.code
         o.save()
-    
+
     return report

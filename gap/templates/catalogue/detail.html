@@ -38,7 +38,7 @@
       </div>
       {% endfor %}
   {% endwith %}
-  {% endif %} 
+  {% endif %}
 
     <div class="download-section text-center">
       <h4>Download Templates</h4>
@@ -56,14 +56,21 @@
 {% endblock %}
 
 
-{% block column_right %} 
+{% block column_right %}
         <div class="sidebar-right">
 
         <div class="price-table">
                     <h4>Print price is</h4>
                     <h1 id="calculated_price"></h1>
                     <p>including VAT<br/>price does not include delivery</p>
-                    <a href="#" id="buy_button" class="btn btn-info btn-block btn-sm">Buy Now</a>
+                    <form method="post" action="{{save_url}}">{% csrf_token %}
+                        <input type="hidden" name="quantity" id="add_quantity"></input>
+                        <input type="hidden" name="width" id="id_width"></input>
+                        <input type="hidden" name="height" id="id_height"></input>
+                        <button type="submit" id="buy_button" class="btn btn-info btn-block btn-sm">
+                        Buy Now
+                        </button>
+                    </form>
                     <a href="#" class="btn btn-info btn-block btn-sm"><img src="{% static "local/images/quotebuilder.png" %} " alt="">Add to QuoteBuilder</a>
                 </div>
                 <div class="summary" id="selected-choices">
@@ -73,7 +80,7 @@
 
                     </ul>
                 </div>
-        
+
 
         <div class="panel panel-primary bordered" id="quote-builder">
             <div class="panel-heading">
@@ -120,7 +127,7 @@
                <p>click an item to edit</p>
 
             <div class="text-right price"><p>Total Price (inc VAT) <span>{{ product.stockrecord.price_incl_tax|currency }}</span></p></div>
-            
+
             <div class="text-center checkout">
               <a href="#" class="btn btn-primary btn-block">Proceed to Checkout</a>
 

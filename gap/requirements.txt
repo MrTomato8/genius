@@ -7,3 +7,4 @@ django-grappelli==2.4.8
 django-markdown==0.6.1
 django-oscar-datacash==0.7
 django-oscar-paypal==0.7
+simplejson==3.5.3

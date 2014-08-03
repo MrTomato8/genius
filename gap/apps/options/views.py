@@ -5,7 +5,7 @@ from apps.options.models import OptionPickerGroup, ArtworkItem
 from apps.options import utils
 from apps.options.forms import picker_form_factory
 from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm, QuoteSaveForm, QuoteLoadForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from apps.options.session import OptionsSessionMixin
 from apps.options.calc import OptionsCalculator, PriceNotAvailable
 from apps.options.forms import ArtworkDeleteForm, ArtworkUploadForm
@@ -13,7 +13,7 @@ from django.contrib import messages
 from oscar.apps.basket.signals import basket_addition
 from django.template.response import TemplateResponse
 from apps.quotes.models import Quote
-import json
+import simplejson as json
 from django.conf import settings
 from decimal import Decimal
 
@@ -83,6 +83,7 @@ class PickOptionsView(OptionsSessionMixin, View):
             'groups': groups,
             'errors': errors,
             'session': self.session,
+            'save_url':reverse('options:add-to-basket', kwargs=kwargs),
         })
 
     def post(self, request, *args, **kwargs):
@@ -169,7 +170,7 @@ class PickOptionsView(OptionsSessionMixin, View):
         else:
             #errors.append('Please review your selections.')
             #try
-            self.session.reset_quantity(1)
+            self.session.reset_quantity()
             return HttpResponseRedirect(reverse('options:quote', kwargs=kwargs))
 
         if allvalid:
@@ -194,7 +195,6 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
         choice_data = self.session.get_choice_data()
 
         quantity = self.session.get_quantity()
-
         min_order = utils.min_order(self.product, self.choices)
         min_area = utils.min_area(self.product, self.choices)
 
@@ -205,15 +205,15 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
         if min_area > 0:
             errors.append('Minimum custom size area for this '
                           'option set is {0}'.format(min_area))
-
         prices = calc.calculate_costs(self.choices, quantity, choice_data)
-
         more_prices = []
+        '''
         if not prices.discrete_pricing and not prices.matrix_for_pack:
             for i in range(min_order, 26):
                 generate_prices = calc.calculate_costs(self.choices, i, choice_data)
                 more_prices += [generate_prices.get_price_incl_tax(i, request.user),]
             print more_prices
+        '''
 
         calc_form = QuoteCalcForm(data={'quantity': quantity})
 
@@ -221,7 +221,6 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
         custom_size_form = QuoteCustomSizeForm(initial=choice_data_custom_size)
 
         quote_save_form = QuoteSaveForm()
-
         return TemplateResponse(request, self.template_name, {
             'product': self.product,
             'choices': self.choices,
@@ -234,26 +233,24 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             'quote_save_form': quote_save_form,
             'errors': errors,
             'more_prices': more_prices,
+            'action':reverse('options:quote', kwargs=kwargs),
         })
 
     def post(self, request, *args, **kwargs):
         errors = []
 
         min_order = utils.min_order(self.product, self.choices)
-        min_area = utils.min_area(self.product, self.choices)
+        #min_area = utils.min_area(self.product, self.choices)
 
         calc = OptionsCalculator(self.product)
 
         custom_size_form = QuoteCustomSizeForm(request.POST)
         if custom_size_form.is_valid():
-            width = custom_size_form.cleaned_data['width']
-            height = custom_size_form.cleaned_data['height']
-            if min_area > Decimal(width * height) / 1000000:
-                errors.append('Minimum custom size area for this '
-                              'option set is {0}'.format(min_area))
+            width = custom_size_form.cleaned_data['width']/Decimal(1000)
+            height = custom_size_form.cleaned_data['height']/Decimal(1000)
             self.session.set_choice_data_custom_size(
-                {'width': custom_size_form.cleaned_data['width'],
-                 'height': custom_size_form.cleaned_data['height']})
+                {'width': width,
+                 'height': height})
         else:
             self.session.set_choice_data_custom_size({'width': 0, 'height': 0})
 
@@ -269,7 +266,6 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
                               'option set is {0}'.format(min_order))
 
             prices = calc.calculate_costs(self.choices, quantity, choice_data)
-
             try:
                 price, nr_of_units, items_per_pack = prices.get_price_incl_tax(
                     quantity, request.user)
@@ -292,6 +288,10 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
         quote_save_form = QuoteSaveForm()
         if self.request.is_ajax():
             self.template_name = 'options/partials/quote-content.html'
+        if self.request.is_ajax():
+            return HttpResponse(
+                json.dumps(quote, use_decimal=True),
+                mimetype='application/json')
         return TemplateResponse(request, self.template_name, {
             'product': self.product,
             'choices': self.choices,
@@ -393,15 +393,15 @@ class AddToBasketView(OptionsSessionMixin, OptionsContextMixin, View):
     add_signal = basket_addition
 
     def post(self, request, *args, **kwargs):
-
         basket = request.basket
         user = request.user
-        quantity = self.session.get_quantity()
+        quantity = self.request.POST.get('quantity')
         choice_data = self.session.get_choice_data()
         attachments = []
-        for file in ArtworkItem.objects.filter(user=user):
-            if file.available:
-                attachments.append(file)
+        if user.is_authenticated():
+            for file in ArtworkItem.objects.filter(user=user):
+                if file.available:
+                    attachments.append(file)
 
         basket.add_dynamic_product(self.product, quantity, self.choices,
                                    attachments, choice_data)

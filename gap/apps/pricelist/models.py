@@ -15,7 +15,7 @@ class CsvRow(models.Model):
     base_rpl_price = models.DecimalField(
         max_digits=11, decimal_places=3, validators=[MinValueValidator(0)],
         verbose_name='Price for retail customers')
-    
+
     def breaker(self, element):
         quantity, anomaly = element.split('-')
         anomaly = re.findall('\d+\.?\d*',anomaly)
@@ -28,24 +28,24 @@ class CsvRow(models.Model):
         except:
             fixed = Decimal(0)
         return quantity,  discount, fixed
-    
+
     def update_field(self,quantity_discount,*args,**kwargs):
         self.quantity_discount=quantity_discount
         self.save(*args,**kwargs)
         for element in self.quantity_discount.split(','):
-            
+
             try:
                 quantity, discount, fixed = self.breaker(element)
             except:
                 pass
             else:
                 price = self.prices.get(quantity=quantity)
-                
+
                 price.tpl_price = self.base_tpl_price*(1-Decimal(discount)/100)+fixed
                 price.rpl_price = self.base_rpl_price*(1-Decimal(discount)/100)+fixed
                 price.save()
-            
-            
+
+
 
 class Price(models.Model):
     '''
@@ -85,8 +85,13 @@ class Price(models.Model):
         validators=[MinValueValidator(0)], db_index=True)
 
     min_area = models.DecimalField(
-        max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
-        verbose_name='Minimal Area in square meters (for custom sizes)',
+        max_digits=10, decimal_places=3, validators=[MinValueValidator(0)],
+        verbose_name='Minimal length in meters (for custom sizes) prec=1mm',
+        default=0)
+
+    media_width = models.DecimalField(
+        max_digits=5, decimal_places=3, validators=[MinValueValidator(0)],
+        verbose_name='Width of the print media in meters (for custom sizes) prec=1mm',
         default=0)
 
     items_per_pack = models.IntegerField(
@@ -96,7 +101,9 @@ class Price(models.Model):
     option_choices = models.ManyToManyField(
         OptionChoice, related_name='prices', blank=True,
         verbose_name=u'Option Choices')
-
+    @property
+    def min_length(self):
+        return self.min_area
     def __unicode__(self):
         s = '{0}({1}) for {2} items of {3} ({4}). '\
             'Minimum order of {5} items required.'
@@ -121,4 +128,4 @@ class Price(models.Model):
         ordering = ['product', 'quantity']
 
 
-    
+

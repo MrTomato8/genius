@@ -37,62 +37,44 @@ class Line(AbstractLine):
         choices=STOCKRECORD_SOURCE_CHOICES)
 
     # Total items required, nr of stickers or nr of business cards for example
-    # making this field nullable an exception will raise if there are problems 
+    # making this field nullable an exception will raise if there are problems
     items_required = models.PositiveIntegerField(null=True, blank=True)
     real_quantity = models.PositiveIntegerField(null=True, blank=True)
-
     def save(self,*args,**kwargs):
+        if not self.attributes.all().exists():
+            super(Line,self).save(*args,**kwargs)
+            return None
+        # TODO(): a cache variable could be auspicable for performance, skipping all the code bellow
+        choices, choice_data = self.get_option_choices()
+        failed=False
+        calc = OptionsCalculator(self.product)
+        prices = calc.calculate_costs(
+                choices, self.quantity, choice_data
+            )
+        try:
+            price_incl_tax, nr_of_units, items_per_pack = prices.get_unit_price_incl_tax(
+                self.quantity, self.basket.owner
+            )
+        except PriceNotAvailable:
+            # something has gone wrong, we do what has been done in Basket.add_dynamic_product
+            # TODO(): Log
+            nr_of_units = self.quantity
+            price_incl_tax = None
+            failed=True
+        #we crate an option only if PriceNotAvailable was not raised
+        if not failed:
+            # creating an option
+            o = self.itemsperpack
+            ipp, created = self.attributes.get_or_create(option=o)
+            ipp.value=items_per_pack
+            ipp.value_code=items_per_pack,
+            ipp.data =''
+            ipp.save()
+        # now it will redo the cycle
+        self.quantity=nr_of_units
+        self.price_incl_tax = price_incl_tax
         super(Line,self).save(*args,**kwargs)
-        if  self.stockrecord_source == self.OPTIONS_CALCULATOR and self.attributes.all().exists():
-            # TODO(): a cache variable could be auspicable for performance, skipping all the code bellow
-            choices, choice_data = self.get_option_choices()
-            failed=False
-
-            calc = OptionsCalculator(self.product)
-            prices = calc.calculate_costs(
-                    choices, self.items_required, choice_data
-                )
-            try:
-                price_incl_tax, nr_of_units, items_per_pack = prices.get_unit_price_incl_tax(
-                    self.items_required, self.basket.owner
-                )
-            except PriceNotAvailable:
-                # something has gone wrong, we do what has been done in Basket.add_dynamic_product
-                # TODO(): Log
-                nr_of_units = self.quantity
-                price_incl_tax = None
-                failed=True
-            #now we save with the new calculated variables
-            if (
-                (
-                    self.quantity==nr_of_units 
-                    or 
-                    (prices.triple_decimal and self.real_quantity==nr_of_units)
-                ) 
-                and 
-                self.price_incl_tax == price_incl_tax
-                ):
-                pass
-            else:
-                #we crate an option only if PriceNotAvailable was not raised
-                if not failed:
-                    # creating an option
-                    o = self.itemsperpack
-                    ipp, created = self.attributes.get_or_create(option=o)
-                    ipp.value=items_per_pack
-                    ipp.value_code=items_per_pack,
-                    ipp.data =''
-                    ipp.save()
-                # now it will redo the cycle
-                if prices.triple_decimal:
-                    self.quantity = 1
-                    self.real_quantity=nr_of_units
-                else:
-                    self.quantity=nr_of_units
-                    self.real_quantity=None
-                self.price_incl_tax = price_incl_tax
-                self.save()
-            pass
+        pass
     def get_option_choices(self):
         choice_data = {}
         choices = []
@@ -117,14 +99,14 @@ class Line(AbstractLine):
     def _get_unit_price_from_pricelist(self):
         choices, choice_data = self.get_option_choices()
         calc = OptionsCalculator(self.product)
-        prices = calc.calculate_costs(choices, self.items_required, choice_data)
-        return prices.get_unit_price_incl_tax(self.items_required, self.basket.owner)
+        prices = calc.calculate_costs(choices, self.quantity, choice_data)
+        return prices.get_unit_price_incl_tax(self.quantity, self.basket.owner)
 
     def get_warning(self):
         if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
             super(Line, self).get_warning()
         if self.stockrecord_source == self.OPTIONS_CALCULATOR:
-            if self.items_required is None:
+            if self.quantity is None:
                 # In this case there is probably a bug in the code
                 # execution should not continue
                 raise ItemsRequiredException
@@ -158,8 +140,8 @@ class Line(AbstractLine):
         if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
             return super(Line, self)._get_stockrecord_property(property)
         if self.stockrecord_source == self.OPTIONS_CALCULATOR:
-            
-            if self.items_required is None:
+
+            if self.quantity is None:
                 # In this case there is probably a bug in the code
                 # execution should not continue
                 raise ItemsRequiredException
@@ -209,7 +191,7 @@ class LineAttachment(models.Model):
 class Basket(AbstractBasket):
     def add_dynamic_product(self, product, quantity=1, choices=None,
                             attachments=None, choice_data=None):
-
+        print 'cio'
         if choices is None:
             choices = []
 
@@ -247,7 +229,6 @@ class Basket(AbstractBasket):
         calc = OptionsCalculator(product)
 
         prices = calc.calculate_costs(choices, quantity, choice_data)
-
         # line_ref = self._create_line_reference(product, options)
         # if prices.discrete_pricing:
         #     # Put in unique lines, because quantity cannot add up
@@ -268,18 +249,14 @@ class Basket(AbstractBasket):
             nr_of_units = quantity
             # try!!!
             items_per_pack = 1
-        
-        defaults = {  
-                'quantity': nr_of_units,
+
+        defaults = {
+                'quantity': quantity,
                 'items_required': quantity,
                 'price_excl_tax': price_excl_tax,
                 'price_incl_tax': price_incl_tax,
                 'stockrecord_source': Line.OPTIONS_CALCULATOR
             }
-        if prices.triple_decimal:
-            defaults['real_quantity']=nr_of_units
-            defaults['quantity']=1
-        
         line, created = self.lines.get_or_create(
             line_reference=line_ref,
             product=product,

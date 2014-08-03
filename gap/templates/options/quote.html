@@ -21,14 +21,15 @@
 
 {% block content %}
 <div id="quote-content" class="clearfix center-block">
-	{% include 'options/partials/quote-content.html' %}
-	
+
+    {% include 'options/partials/quote-content.html' %}
+
 </div>
 {% endblock %}
 {% block morescripts %}
-	{{block.super}}
-	{% if prices.discrete_pricing and not prices.matrix_for_pack and not costum_size %}
-	<!-- some javascript -->
-	<script type="text/javascript" src="{% static 'local/js/quote.js' %}"></script>
-	{%endif%}
+    {{block.super}}
+    {% if prices.discrete_pricing and not prices.matrix_for_pack and not costum_size %}
+    <!-- some javascript -->
+    <script type="text/javascript" src="{% static 'local/js/quote.js' %}"></script>
+    {%endif%}
 {% endblock %}

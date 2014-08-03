@@ -126,7 +126,7 @@ outline: 0;
 {% block page_title %}
 <section id="page-title-no-border">
 <h1 class="page-header">
-{% trans "Basket" %} 
+{% trans "Basket" %}
 </h1>
 </section>
 {% endblock %}
@@ -148,11 +148,11 @@ outline: 0;
 
 {% endblock content %}
 
-
+{% comment %}
 {% block onbodyload %}
     {# We pass in the URL to send AJAX requests to #}
     var options = {
     'basketURL': '{% url basket:summary %}'
     };
     oscar.basket.init(options);
-{% endblock %}
+{% endblock %} {% endcomment %}

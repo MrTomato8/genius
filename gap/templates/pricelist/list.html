@@ -51,10 +51,11 @@ word-break: break-word;
 </thead>
 <tbody>
 {% for row in table %}
-<tr> 
+<tr>
 {% for column in row %}
     {% if forloop.counter0 == 6 %}
-    <td><input type="text" id="{{row|last}}" name="{{row|last}}" value="{{column}}"  /></td>
+    <td><textarea
+        id="{{row|last}}" name="{{row|last}}" style="height:10em;font-size:1.2em;word-spacing:15px;">{{column}}</textarea></td>
     {% elif forloop.last %}
     {% else %}
     <td>{{ column }}</td>
@@ -73,12 +74,12 @@ word-break: break-word;
 {% endblock dashboard_content %}
 {% block cdn_scripts %}
     {{ block.super }}
-    <!-- Custom Jquery UI, only contains date picker -->    
-        
+    <!-- Custom Jquery UI, only contains date picker -->
+
 {% block extrascripts %}
 {{ block.super }}
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.9.4/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="http://www.kunalbabre.com/projects/table2CSV.js" > </script> 
+    <script type="text/javascript" src="http://www.kunalbabre.com/projects/table2CSV.js" > </script>
     <script type="text/javascript">
         $(document).ready(function() {
             var table = $('#csv_table').DataTable(),
@@ -93,11 +94,11 @@ word-break: break-word;
                 text=text+'</div>'
                 $('.page-header').children('.alert').fadeOut(500,function(){
                     $('.page-header').children('.alert').remove();
-                    
+
                     $('.page-header').append(text);
                 });
-                
-                
+
+
             };
             $('#download').on('click',function(){
                 $('#csv_table').table2CSV();
@@ -110,7 +111,7 @@ word-break: break-word;
                         xhr.setRequestHeader("X-CSRFToken", csrftoken);
                     }
                 });
-                
+
                 $.ajax({
                     type:'POST',
                     dataType:'json',
