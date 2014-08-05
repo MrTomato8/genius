@@ -20,14 +20,11 @@
                     <div class="row">
                     <ul class="list-unstyled">
                     {% for qty,price in prices.ordered.iteritems %}
-                        <li class="col-md-2 col-sm-3 col-xs-6 text-center"
-                          data-quantity="{% if prices.matrix_for_pack %}{{price.nr_of_units}}{% else %}{{qty}}{% endif %}"
-                          data-unit_price="{% if trade_user %}{{ price.tpl_unit_price_incl_tax }}{% else %}{{ price.rpl_unit_price_incl_tax }}{% endif %}"
-                          data-price="{% if trade_user %}{{ price.tpl_price_incl_tax }}{% else %}{{ price.rpl_price_incl_tax }}{% endif %}">
+                        <li class="col-md-2 col-sm-3 col-xs-6 text-center">
                             {% if prices.matrix_for_pack %} {{price.nr_of_units}}
                             {% else %} {{ qty|floatformat }}
                             {% endif %}
-                            <input type="radio" class="form-control" name="quantity"  id="quantity_{{ qty }}" style="display:none">
+                            <input type="radio" class="form-control" name="quantity"  id="quantity_{{ qty }}" value="{% if prices.matrix_for_pack %}{{price.nr_of_units}}{% else %}{{ qty|floatformat }}{% endif %}" style="display:none">
                         </li>
                     {% endfor %}
                     </ul>

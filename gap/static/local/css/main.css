@@ -6622,6 +6622,7 @@ span.info img {
 div#selected-choices input {
   display: none;
 }
+#quantity_picker ul > li.active,
 #quantity_picker ul > li:hover {
   background-color: #009ec8;
   color: #fff;

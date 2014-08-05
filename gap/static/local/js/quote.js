@@ -18,6 +18,32 @@ PPS.quoteContent = {
 PPS.getQuote = {
     currency : '£',
 
+    trySubmitForm: function() {
+        var $form = $('#getquote'),
+            customSizeConversionRatio = parseFloat($form.find('input[name=custom_size_unit]:checked').val()),
+            width = parseFloat($form.find('input[name=width]').val()) * customSizeConversionRatio,
+            height = parseFloat($form.find('input[name=height]').val()) * customSizeConversionRatio,
+            quantity = parseFloat($form.find('input[type=text][name=quantity]').val() || $form.find('input[type=radio][name=quantity]:checked').val()),
+            isCustomSizeFormValid = $form.find('input[name=width]').length ==0 || width != 0 && height != 0 && !isNaN(width) && !isNaN(height),
+            isQuantityFormValid = quantity != 0 && !isNaN(quantity);
+        if (isCustomSizeFormValid && isQuantityFormValid) {
+            $.ajax({
+                    method: 'post',
+                    url: $form.attr('action'),
+                    data:{
+                        'width': width,
+                        'height': height,
+                        'quantity': quantity,
+                        'csrfmiddlewaretoken': $form.find('input[name="csrfmiddlewaretoken"]').val()
+                    },
+                    success:function(data){
+                        console.log(data);
+                        PPS.getQuote.add(data.price,data.quantity)}
+
+                })
+        }
+    },
+
     add : function(price, quantity){
         var price = parseFloat(price).toFixed(2),
         unit_price = parseFloat(price/quantity).toFixed(2);
@@ -32,41 +58,23 @@ PPS.getQuote = {
             scrollTop: $('.price-table').offset().top
             }, 500);
     },
-    txt : function(){
-        var _this=this,
-        inputs=$( "#getquote input[type='text']" );
-        inputs.keyup(function() {
-            var frm=$(this).parents('form'),
-            i=0;
-            while(i<inputs.length){
-                if($(inputs[i]).val()==false){return null}
-                i++;
-                }
-            var val=frm.serialize(),
-            url = frm.find('#id_quantity').data('action');
-            val = val + '&'+$('input[name="csrfmiddlewaretoken"]').serialize()
-            $.ajax({
-                    method:'post',
-                    url:url,
-                    data:val,
-                    success:function(data){
-                        console.log(data)
-                        _this.add(data.price,data.quantity)}
-
-                })
+    init: function(){
+        var $form = $('#getquote');
+        $("#quantity_picker li").on('click', function() {
+            $(this).addClass('active')
+                .find('input').prop('checked', true).end()
+                .siblings('li').removeClass('active');
+            $form.find('input[type=text][name=quantity]').val('');
+            PPS.getQuote.trySubmitForm();
         });
-        return this
-    },
-    rdio: function(){
-        var _this =this;
-        $('#quantity_picker li, #quantity_picker span').click(function(){
-            var data = $(this).data()
-            _this.add(data['price'],data['quantity'])
+        $form.find('input[type=text]').on('keyup', function() {
+            $form.find('input[type=radio][name=quantity]').prop('checked', false).parent('li').removeClass('active');
+            PPS.getQuote.trySubmitForm();
         });
-        return this
-    },
-    init:function(){
-        this.txt()
-        this.rdio()
+        $form.find('input[name=custom_size_unit]').on('change', function() {
+            $selected = $form.find('input[name=custom_size_unit]:checked');
+            $form.find('.js-pickoptions-customsize-units').html($selected.data('abbreviation'));
+            PPS.getQuote.trySubmitForm();
+        })
     }
 };
