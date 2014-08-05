@@ -1,0 +1,48 @@
+{% load static %}
+<div id="custom_size_form" class="panel panel-default measure-panel">
+  <a data-toggle="collapse" href="#panel-collapse-5" class="panel-heading" data-parent="#product-accordion">Custom size</a>
+
+  <div id="panel-collapse-5" class="panel-collapse collapse in" style="height: auto;">
+    <div class="panel-body">
+      <div class="text-right">
+        <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}"></span>
+      </div>
+
+      <ul class="list-unstyled">
+        <li class="text-center">
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default"><input type="radio" name="options" id="option1"> Metres</label>
+            <label class="btn btn-default"><input type="radio" name="options" id="option2"> Centimetres</label>
+            <label class="btn btn-default active"><input type="radio" name="options" id="option3"> Milimetres</label>
+            <label class="btn btn-default"><input type="radio" name="options" id="option3"> Feet</label>
+            <label class="btn btn-default"><input type="radio" name="options" id="option3"> Inches</label>
+          </div>
+        </li>
+        <li class="text-right">
+          <div class="form-horizontal">
+            <ul class="list-inline">
+              <li>
+                <label class="col-sm-6 col-xs-12 control-label">Width</label>
+
+                <div class="input-group col-sm-6 col-xs-12">
+                  <input type="text" name="{{custom_size_form.width.name}}" value="{{custom_size_form.width.value}}" class="form-control">
+                  <span class="input-group-addon addon-primary js-pickoptions-customsize-units">mm</span>
+                  {{custom_size_form.width.errors}}
+                </div>
+              </li>
+              <li>
+                <label class="col-sm-6 col-xs-12 control-label">Height</label>
+
+                <div class="input-group col-sm-6 col-xs-12">
+                  <input type="text" name="{{custom_size_form.height.name}}" value="{{custom_size_form.height.value}}" class="form-control">
+                  <span class="input-group-addon addon-primary js-pickoptions-customsize-units">mm</span>
+                  {{custom_size_form.height.errors}}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

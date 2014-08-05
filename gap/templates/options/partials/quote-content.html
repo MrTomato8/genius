@@ -6,15 +6,16 @@
 
 <div id="getquote_wrap">
 
+<form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
+        {% if custom_size %}
+          {% include 'options/partials/custom_size_form.html' %}
+        {% endif %}
 
-{% include 'options/partials/quote-content-script.html' %}
-    <form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
-        <div id="panel-collapse-6" class="panel-collapse collapse in">
+        <div class="panel panel-default">
+          <a data-toggle="collapse" href="#panel-collapse-6" class="panel-heading  collapsed" data-parent="#product-accordion">Quantity (choose quantity or enter your own)</a>
+        </div>
+        <div id="quantity_picker" class="panel-collapse collapse in">
             <div class="panel-body">
-            {% if custom_size %}
-            <p>Insert the size in millimeters, please</p>
-                {{custom_size_form}}
-            {% endif %}
                 {% if prices.discrete_pricing %}
                     <div class="row">
                     <ul class="list-unstyled">
@@ -29,7 +30,7 @@
                             <input type="radio" class="form-control" name="quantity"  id="quantity_{{ qty }}" style="display:none">
                         </li>
                     {% endfor %}
-                    <ul>
+                    </ul>
                     </div>
                     <div class="row">
                         <div class="col-md-8 form-group">
@@ -45,4 +46,10 @@
               </div>
         </div>
     </form>
+    <script type="text/javascript">
+      $(function() {
+        PPS.quoteContent.init();
+        PPS.getQuote.init();
+      });
+    </script>
 </div>

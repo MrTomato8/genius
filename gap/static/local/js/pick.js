@@ -28,7 +28,7 @@ PPS.pickForm = {
 
         $('.option-choice .radio-choice').click(function () {
             if (calculared) {
-                var quantity = $('#getquote li input:checked').attr('value');
+                var quantity = $('#quantity_picker input:checked').attr('value');
                 $.ajax({
                     data: $('form#pickoptions').serialize(),
                     type: $('form#pickoptions').attr('method'),
@@ -47,7 +47,7 @@ PPS.pickForm = {
                             $('#form-errors').html('');
                         }
                         $('li[data-qty="' + quantity + '"]').trigger("click");
-                    },
+                    }
                 });
             }
             prev = $(this).first().closest('.panel-collapse');
