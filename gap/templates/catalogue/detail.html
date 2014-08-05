@@ -62,7 +62,9 @@
         <div class="price-table">
                     <h4>Print price is</h4>
                     <h1 id="calculated_price"></h1>
-                    <p>including VAT<br/>price does not include delivery</p>
+                    <p>including VAT</p>
+                    <p id="calculated_unit_price"></p>
+                    <p>price does not include delivery</p>
                     <form method="post" action="{{save_url}}">{% csrf_token %}
                         <input type="hidden" name="quantity" id="add_quantity"></input>
                         <input type="hidden" name="width" id="id_width"></input>

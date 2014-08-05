@@ -4,20 +4,13 @@ $(document).ready(function(){
         currency : '£',
         add : function(price, quantity){
             var price = parseFloat(price).toFixed(2),
-            unit_price = parseFloat(price/quantity).toFixed(3);
-            $('#calculated_price').html(
-                '<p class="small">'
-                + price
-                + this.currency
-                + ' for '
-                + quantity
-                + ' items'
-                + '</p>'
-                + '<p class="small">'
-                + unit_price
-                + this.currency
-                + ' each'
-                + '</p>')
+            unit_price = parseFloat(price/quantity).toFixed(2);
+            if (quantity > 1) {
+                $('#calculated_unit_price').html('(Unit price is ' + this.currency + unit_price + ')').show();
+            } else {
+                $('#calculated_unit_price').html('').hide();
+            }
+            $('#calculated_price').html(this.currency + price);
             $('input#add_quantity').val(quantity)
             $('html, body').animate({
                 scrollTop: $('.price-table').offset().top
