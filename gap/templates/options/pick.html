@@ -147,7 +147,7 @@
                 {% if picker.picker.widget == picker.picker.THUMBNAIL %}
                 <div class="option-choice grid-7">
                   <ul class="list-inline">
-                    {% for choice in field.field.queryset.with_related_for_js %}
+                    {% for choice in field.field.queryset %}
                       <script type="text/javascript">
 
                         var choice = new Object();

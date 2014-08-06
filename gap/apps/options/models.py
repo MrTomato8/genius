@@ -16,11 +16,6 @@ class MissingOptionChoiceThumbnail(object):
         self.url = url if url else settings.MISSING_OPTIONCHOICE_THUMB_URL
 
 
-class OptionChoiceManager(models.Manager):
-    def with_related_for_js(self):
-        return self.get_query_set().select_related('option').prefetch_related('conflicts_with')
-
-
 class OptionChoice(models.Model):
     code = models.SlugField('Code', max_length=30)
 
@@ -36,7 +31,6 @@ class OptionChoice(models.Model):
     caption = models.CharField('Caption', max_length=30, blank=True)
     thumbnail = models.ImageField('Thumbnail', upload_to='options', blank=True)
 
-    objects = OptionChoiceManager()
     @staticmethod
     def autocomplete_search_fields():
         return ("code__icontains",)
