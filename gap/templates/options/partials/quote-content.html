@@ -18,8 +18,7 @@
         <div id="quantity_picker" class="panel-collapse collapse in">
             <div class="panel-body">
                 {% if prices.discrete_pricing %}
-                    <div class="row">
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled row">
                     {% for qty,price in prices.ordered.iteritems %}
                         <li class="col-md-2 col-sm-3 col-xs-6 text-center">
                             {% if prices.matrix_for_pack %} {{price.nr_of_units}}
@@ -29,7 +28,6 @@
                         </li>
                     {% endfor %}
                     </ul>
-                    </div>
                     <div class="row">
                         <div class="col-md-4">
                           <span class="toggle-live" id="multifile_toggle"> Multi-file discount </span>
