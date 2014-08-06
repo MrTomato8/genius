@@ -6311,10 +6311,19 @@ div[class*="sidebar-"] .panel-heading:before {
   -o-transform: scale(-1);
   transform: scale(-1);
 }
+.price-table h4 {
+  margin-bottom: 5px;
+  font-weight: normal;
+}
+.price-table h1 {
+  margin: 5px 0;
+  font-weight: bold;
+  font-size: 39px;
+}
 .price-table p {
   color: #FFF;
   line-height: 14px;
-  margin-bottom: 30px;
+  font-weight: normal;
 }
 .price-table .btn {
   margin-bottom: 10px;
@@ -6613,7 +6622,8 @@ span.info img {
 div#selected-choices input {
   display: none;
 }
-#getquote ul > li:hover {
+#quantity_picker ul > li.active,
+#quantity_picker ul > li:hover {
   background-color: #009ec8;
   color: #fff;
 }

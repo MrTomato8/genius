@@ -48,7 +48,7 @@ def trade_user(user):
     except Group.DoesNotExist:
         return False
 
-    return group in user.groups.all()
+    return user is not None and group in user.groups.all()
 
 
 # TODO: these may be optimized

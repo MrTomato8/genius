@@ -1,3 +1,4 @@
+PPS = {}; // namespace for all "Prizmatic Print Solutions" js functions
 $(document).ready(function(){
 
     screen_responsive();
