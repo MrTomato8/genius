@@ -96,6 +96,7 @@ PPS.getQuote = {
         $form.find('input[name=custom_size_unit]').on('change', function() {
             $selected = $form.find('input[name=custom_size_unit]:checked');
             $form.find('.js-pickoptions-customsize-units').html($selected.data('abbreviation'));
+            $form.find('input[name=width],input[name=height]').val('');
             PPS.getQuote.trySubmitForm();
         })
     }
