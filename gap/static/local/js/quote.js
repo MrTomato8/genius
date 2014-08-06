@@ -1,20 +1,3 @@
-PPS.quoteContent = {
-    init: function() {
-        var content = $('#quote-content'),
-        onSuccess = function(html){
-            content.html(html);
-            init();
-        },
-        init = function(){
-            var form = $('#getquote');
-            form.find('input[type=radio]').on('click',function(){
-                var payload = form.serializeArray();
-                $.post(document.URL, payload, onSuccess);
-            });
-        };
-    }
-};
-
 PPS.getQuote = {
     currency : '£',
     $priceLabel: null,
@@ -26,7 +9,7 @@ PPS.getQuote = {
             customSizeConversionRatio = parseFloat($form.find('input[name=custom_size_unit]:checked').val()),
             width = parseFloat($form.find('input[name=width]').val()) * customSizeConversionRatio,
             height = parseFloat($form.find('input[name=height]').val()) * customSizeConversionRatio,
-            quantity = parseFloat($form.find('input[type=text][name=quantity]').val() || $form.find('input[type=radio][name=quantity]:checked').val()),
+            quantity = parseInt($form.find('input[name=quantity]').val() || $form.find('input[name=quantity_radio]:checked').val()),
             isCustomSizeFormValid = $form.find('input[name=width]').length ==0 || width != 0 && height != 0 && !isNaN(width) && !isNaN(height),
             isQuantityFormValid = quantity != 0 && !isNaN(quantity);
         this.clearAjaxFields();
@@ -77,6 +60,8 @@ PPS.getQuote = {
     },
 
     init: function(){
+        PPS.multifileForm.init();
+
         this.$priceLabel = $('#calculated_price');
         this.$unitPriceLabel = $('#calculated_unit_price');
         this.$sizeFormErrorLabel = $('#size_form_error');
@@ -86,11 +71,11 @@ PPS.getQuote = {
             $(this).addClass('active')
                 .find('input').prop('checked', true).end()
                 .siblings('li').removeClass('active');
-            $form.find('input[type=text][name=quantity]').val('');
+            $form.find('input[name=quantity]').val('');
             PPS.getQuote.trySubmitForm();
         });
         $form.find('input[type=text]').on('keyup', function() {
-            $form.find('input[type=radio][name=quantity]').prop('checked', false).parent('li').removeClass('active');
+            $form.find('input[name=quantity_radio]').prop('checked', false).parent('li').removeClass('active');
             PPS.getQuote.trySubmitForm();
         });
         $form.find('input[name=custom_size_unit]').on('change', function() {
@@ -99,5 +84,41 @@ PPS.getQuote = {
             $form.find('input[name=width],input[name=height]').val('');
             PPS.getQuote.trySubmitForm();
         })
+    }
+};
+
+PPS.multifileForm = {
+    init: function() {
+        $('#multifile_toggle').on('click', $.proxy(this.toggleMultifileInputs, this));
+
+        $('#multifile_files_up_button').on('click', $.proxy(this.changeFilesBy, this, +1));
+        $('#multifile_files_down_button').on('click', $.proxy(this.changeFilesBy, this, -1));
+
+        $('input[name=quantity],input[name=files]').on('keyup change', $.proxy(this.calculateTotalQuantity, this));
+    },
+
+    toggleMultifileInputs: function() {
+        var $toggle = $('#multifile_toggle');
+        $toggle.toggleClass('active');
+        $('#multifile_inputs').slideToggle();
+        $('#choose_quantity_label').html($toggle.hasClass('active') ? 'Choose or enter quantity for each' : 'Choose or enter quantity');
+    },
+
+    changeFilesBy: function(delta) {
+        var $input = $('input[name=files]'),
+            current = parseFloat($input.val()) || 0;
+        $input.val(Math.max(1, current + delta));
+        $input.trigger('change');
+        return false;
+    },
+
+    calculateTotalQuantity: function() {
+        var quantity = parseInt($('input[name=quantity]').val()),
+            files = parseInt($('input[name=files]').val()),
+            total_quantity = '';
+        if (quantity && files && !isNaN(quantity) && !isNaN(files)) {
+            total_quantity = Math.max(0, quantity * files);
+        }
+        $('input[name=total_quantity]').val(total_quantity);
     }
 };

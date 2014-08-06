@@ -1,4 +1,5 @@
 {% load url from future %}
+{% load static %}
 {% load staticfiles %}
 {% load currency_filters %}
 {% load simple_math %}
@@ -24,28 +25,54 @@
                             {% if prices.matrix_for_pack %} {{price.nr_of_units}}
                             {% else %} {{ qty|floatformat }}
                             {% endif %}
-                            <input type="radio" class="form-control" name="quantity"  id="quantity_{{ qty }}" value="{% if prices.matrix_for_pack %}{{price.nr_of_units}}{% else %}{{ qty|floatformat }}{% endif %}" style="display:none">
+                            <input type="radio" class="form-control" name="quantity_radio"  id="quantity_{{ qty }}" value="{% if prices.matrix_for_pack %}{{price.nr_of_units}}{% else %}{{ qty|floatformat }}{% endif %}" style="display:none">
                         </li>
                     {% endfor %}
                     </ul>
                     </div>
                     <div class="row">
-                        <div class="col-md-8 form-group">
-                            <label class="control-label col-sm-8 col-xs-12">
-                                Choose or enter quantity for each
-                            </label>
-                            <div class="input-group col-sm-4 col-xs-12">
-                                <input data-action="{{action}}" type="text" class="form-control" name="quantity" id="id_quantity">
+                        <div class="col-md-4">
+                          <span class="toggle-live" id="multifile_toggle"> Multi-file discount </span>
+                          <span class="info" data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title=""><img src="{% static "local/images/infoblue.png" %}"></span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="col-sm-8 col-xs-12 control-label" id="choose_quantity_label">Choose or enter quantity</label>
+                                <div class="col-sm-4 col-xs-12">
+                                    <div class="input-group">
+                                        <input data-action="{{action}}" type="text" class="form-control" name="quantity" id="id_quantity">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="multifile_inputs" style="display:none;">
+                              <div class="form-group">
+                                  <label class="col-sm-8 col-xs-12 control-label">Number of files</label>
+                                  <div class="col-sm-4 col-xs-12">
+                                      <div class="input-group">
+                                          <input type="text" class="form-control" name="files" value="1">
+                                          <span class="input-group-btn btn-group-vertical">
+                                              <button class="btn btn-default" id="multifile_files_up_button"><span class="fa fa-angle-up"></span></button>
+                                              <button class="btn btn-default" id="multifile_files_down_button"><span class="fa fa-angle-down"></span></button>
+                                          </span>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-sm-8 col-xs-12 control-label">Total quantity</label>
+                                  <div class="col-sm-4 col-xs-12">
+                                      <div class="input-group">
+                                          <input type="text" name="total_quantity" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                              </div>
                             </div>
                         </div>
-                    </div>
                 {% endif %}
               </div>
         </div>
     </form>
     <script type="text/javascript">
       $(function() {
-        PPS.quoteContent.init();
         PPS.getQuote.init();
       });
     </script>
