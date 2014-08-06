@@ -18,6 +18,7 @@
         <div id="quantity_picker" class="panel-collapse collapse in">
             <div class="panel-body">
                 {% if prices.discrete_pricing %}
+                    {% if prices|length > 1 %}
                     <ul class="list-unstyled row">
                     {% for qty,price in prices.ordered.iteritems %}
                         <li class="col-md-2 col-sm-3 col-xs-6 text-center">
@@ -28,6 +29,7 @@
                         </li>
                     {% endfor %}
                     </ul>
+                    {% endif %}
                     <div class="row">
                         <div class="col-md-4">
                           <span class="toggle-live" id="multifile_toggle"> Multi-file discount </span>
