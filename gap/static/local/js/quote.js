@@ -9,7 +9,7 @@ PPS.getQuote = {
             customSizeConversionRatio = parseFloat($form.find('input[name=custom_size_unit]:checked').val()),
             width = parseFloat($form.find('input[name=width]').val()) * customSizeConversionRatio,
             height = parseFloat($form.find('input[name=height]').val()) * customSizeConversionRatio,
-            quantity = parseInt($form.find('input[name=quantity]').val() || $form.find('input[name=quantity_radio]:checked').val()),
+            quantity = parseInt($form.find('input[name=quantity]').val()),
             isCustomSizeFormValid = $form.find('input[name=width]').length ==0 || width != 0 && height != 0 && !isNaN(width) && !isNaN(height),
             isQuantityFormValid = quantity != 0 && !isNaN(quantity);
         this.clearAjaxFields();
@@ -59,6 +59,10 @@ PPS.getQuote = {
         }
     },
 
+    toggleQuantityRadio: function($radio, isOn) {
+        $radio.prop('checked', isOn).parent('li').toggleClass('active', isOn);
+    },
+
     init: function(){
         PPS.multifileForm.init();
 
@@ -68,14 +72,16 @@ PPS.getQuote = {
 
         var $form = $('#getquote');
         $("#quantity_picker li").on('click', function() {
-            $(this).addClass('active')
-                .find('input').prop('checked', true).end()
-                .siblings('li').removeClass('active');
-            $form.find('input[name=quantity]').val('');
+            var $radio = $(this).find('input[type=radio]');
+            PPS.getQuote.toggleQuantityRadio($radio, true);
+            $(this).siblings('li').removeClass('active');
+            $form.find('input[name=quantity]').val($radio.val()).trigger('change');
             PPS.getQuote.trySubmitForm();
         });
         $form.find('input[type=text]').on('keyup', function() {
-            $form.find('input[name=quantity_radio]').prop('checked', false).parent('li').removeClass('active');
+            var value = parseInt($(this).val());
+            PPS.getQuote.toggleQuantityRadio($form.find('input[name=quantity_radio]'), false);
+            PPS.getQuote.toggleQuantityRadio($form.find('input[name=quantity_radio][value=' + value + ']'), true);
             PPS.getQuote.trySubmitForm();
         });
         $form.find('input[name=custom_size_unit]').on('change', function() {
