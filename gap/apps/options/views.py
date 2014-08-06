@@ -190,11 +190,13 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
     def get(self, request, *args, **kwargs):
         errors = []
 
-        calc = OptionsCalculator(self.product)
+
 
         choice_data = self.session.get_choice_data()
 
         quantity = self.session.get_quantity()
+        #this should be done in calculate cost!
+        '''
         min_order = utils.min_order(self.product, self.choices)
         min_area = utils.min_area(self.product, self.choices)
 
@@ -205,7 +207,14 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
         if min_area > 0:
             errors.append('Minimum custom size area for this '
                           'option set is {0}'.format(min_area))
-        prices = calc.calculate_costs(self.choices, quantity, choice_data)
+        '''
+
+        try:
+            calc = OptionsCalculator(self.product)
+            prices = calc.calculate_costs(self.choices, quantity, choice_data)
+        except Exception as e:
+            print 'exception'
+            raise e
         more_prices = []
         '''
         if not prices.discrete_pricing and not prices.matrix_for_pack:
@@ -264,8 +273,12 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             if quantity < min_order:
                 errors.append('Minimum order quantity for this '
                               'option set is {0}'.format(min_order))
-
-            prices = calc.calculate_costs(self.choices, quantity, choice_data)
+            try:
+                prices = calc.calculate_costs(self.choices, quantity, choice_data)
+            except Exception as e:
+                #for now only .calc.exceptions.TooSmall
+                #print e
+                return HttpResponse(status_code="406").write(e)
             try:
                 price, nr_of_units, items_per_pack = prices.get_price_incl_tax(
                     quantity, request.user)
