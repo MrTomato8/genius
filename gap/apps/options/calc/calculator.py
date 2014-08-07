@@ -9,11 +9,15 @@ from apps.options import utils
 
 from . import CalculatedPrices
 from .cache import CalcCache
-from .exceptions import NotEnoughArguments,DuplicateQuantities
+from .exceptions import NotEnoughArguments,DuplicateQuantities, TooSmall,TooLow
 
 TWOPLACES = Decimal(10) ** -2
 THREEPLACES=Decimal(10) ** -4
-
+CUSTOM=[
+    False,
+    'linear',
+    'area',
+    ]
 class BaseOptionsCalculator(object):
 
     key = None
@@ -40,7 +44,7 @@ class BaseOptionsCalculator(object):
 
         if 'width' in cargs and 'height' in cargs:
             # calculate area in square metres
-            area = Decimal(cargs['width'] * cargs['height']) / Decimal(1000000)
+            area = Decimal(cargs['width'] * cargs['height'])
 
             result = area
 
@@ -88,17 +92,28 @@ class BaseOptionsCalculator(object):
 
 
     def custom_calc(self, prices, choice_data, quantity=None):
-        try:
-            media_number, items_per_row, row_height = self.get_row(
-                prices[0].media_width, choice_data)
-        except Exception as e:
-            print e
-            return prices, Decimal(1), 2
-        print Decimal(items_per_row)
-        print media_number,row_height,int(ceil(quantity/Decimal(items_per_row)))
-        total_height = media_number*row_height*int(ceil(quantity/Decimal(items_per_row)))
-        price = prices.filter(min_area__lte=total_height).order_by('-min_area')[0]
-        return price, total_height,0
+        if prices[0].min_length!=Decimal(0):
+            try:
+                media_number, items_per_row, row_height = self.get_row(
+                    prices[0].media_width, choice_data)
+            except Exception:
+                return prices, Decimal(1), 2
+            total = media_number*row_height*int(ceil(quantity/Decimal(items_per_row)))
+            try:
+                    price = prices.filter(min_length__lte=total).order_by('-min_area')[0]
+            except:
+                raise TooSmall('too small')
+        else:
+            try:
+                total = self._get_area(choice_data)*quantity
+            except Exception:
+                return prices, Decimal(1), 2
+
+            try:
+                price = prices.filter(min_area__lte=total).order_by('-min_area')[0]
+            except:
+                raise TooSmall('too small')
+        return price, total, 0
 
     def quantity_calc(self, prices, choice_data):
         min_order_max = prices.aggregate(Max('min_order'))['min_order__max']
@@ -133,6 +148,10 @@ class BaseOptionsCalculator(object):
         for choice in choices:prices = prices.filter(option_choices=choice)
         if quantity is not None:
             prices = prices.filter(min_order__lte=quantity)
+            try:
+                prices[0]
+            except:
+                raise TooLow
 
         custom_size = utils.custom_size_chosen(choices)
         distinct = 0

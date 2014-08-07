@@ -86,6 +86,11 @@ class Price(models.Model):
 
     min_area = models.DecimalField(
         max_digits=10, decimal_places=3, validators=[MinValueValidator(0)],
+        verbose_name='Minimal length in square meters (for custom sizes) prec=1mm^2',
+        default=0)
+
+    min_length = models.DecimalField(
+        max_digits=10, decimal_places=3, validators=[MinValueValidator(0)],
         verbose_name='Minimal length in meters (for custom sizes) prec=1mm',
         default=0)
 
@@ -101,9 +106,6 @@ class Price(models.Model):
     option_choices = models.ManyToManyField(
         OptionChoice, related_name='prices', blank=True,
         verbose_name=u'Option Choices')
-    @property
-    def min_length(self):
-        return self.min_area
     def __unicode__(self):
         s = '{0}({1}) for {2} items of {3} ({4}). '\
             'Minimum order of {5} items required.'

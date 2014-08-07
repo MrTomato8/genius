@@ -134,10 +134,13 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
         except:
             data['min_area'] = Decimal(0)
 
-        try:
-            data['min_area'] = Decimal(row.pop('min_length', None))
-        except:
-            data['min_area'] = data['min_area']
+        if data['min_area'] == Decimal(0):
+            try:
+                data['min_length'] = Decimal(row.pop('min_length', None))
+            except:
+                data['min_length'] = Decimal(0)
+        else:
+            data['min_length'] = Decimal(0)
 
         try:
             data['media_width'] = Decimal(row.pop('media_width', None))
