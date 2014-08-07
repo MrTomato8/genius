@@ -108,7 +108,8 @@ class BaseOptionsCalculator(object):
                 total = self._get_area(choice_data)*quantity
             except Exception:
                 return prices, Decimal(1), 2
-
+            if not total:
+                return prices, Decimal(1), 2
             try:
                 price = prices.filter(min_area__lte=total).order_by('-min_area')[0]
             except:

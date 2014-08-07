@@ -249,6 +249,8 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                         fixed = Decimal(0)
                     if data['min_area'] != Decimal(0):
                         data['min_area'] = Decimal(quantity)
+                    elif data['min_length'] != Decimal(0):
+                        data['min_length'] = Decimal(quantity)
                     else:
                         data['quantity'] = int(quantity)
                     data['tpl_price'] = base_tpl_price*(1-discount/100)+fixed
