@@ -51,11 +51,11 @@ PPS.pickForm = {
                 });
             }
             prev = $(this).first().closest('.panel-collapse');
-            prev.collapse('toggle');
+            prev.collapse('toggle').siblings('a.panel-heading').addClass('collapsed');
             next = prev.parent('.panel').next();
             if (next.hasClass('group_name')) next = next.next().children('.panel-collapse');
             else next = next.children('.panel-collapse');
-            next.collapse('show').find('a.panel-heading').removeClass('collapsed');
+            next.collapse('show').siblings('a.panel-heading').removeClass('collapsed');
             $('#selected-choices ul').html('');
             $('.option-choice .radio-choice:checked').each(function (a, b) {
                 $('#selected-choices ul').append('<li>' + $(b).closest('li').html() + '</li>')

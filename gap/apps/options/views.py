@@ -278,7 +278,13 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
             except Exception as e:
                 #for now only .calc.exceptions.TooSmall
                 #print e
-                return HttpResponse(status_code="406").write(e)
+                res = {
+                    'value': False,
+                    'size_form_error': 'Size too small',
+                }
+                return HttpResponse(
+                    json.dumps(res, use_decimal=True),
+                    mimetype='application/json')
             try:
                 price, nr_of_units, items_per_pack = prices.get_price_incl_tax(
                     quantity, request.user)

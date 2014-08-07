@@ -137,7 +137,7 @@
   {% for picker in group.pickers %}
 
   <div class="panel panel-default {% if forloop.last and forloop.parentloop.last %}last{% endif %}">
-          <a data-toggle="collapse" href="#panel-collapse-{{ picker.picker.option.pk }}" class="panel-heading collapsed" data-parent="#product-accordion">{{ picker.picker.option }}</a>
+          <a data-toggle="collapse" href="#panel-collapse-{{ picker.picker.option.pk }}" class="panel-heading {% if not forloop.first or not forloop.parentloop.first %}collapsed{% endif %}" data-parent="#product-accordion">{{ picker.picker.option }}</a>
           <div id="panel-collapse-{{ picker.picker.option.pk }}" class="panel-collapse collapse {% if forloop.first and forloop.parentloop.first %}in{% endif %}">
             <div class="panel-body">
               <div class="text-right">
@@ -186,16 +186,16 @@
   </div>
   {% endfor %}
   {% endfor %}
-  </form>
 
-<div id="modalchangepw">
-  <div class="panel panel-default">
-    <a data-toggle="collapse" href="#panel-collapse-6" class="panel-heading  collapsed" data-parent="#product-accordion">Quantity (choose quantity or enter your own)</a>
-  </div>
-</div>
+    <div id="modalchangepw">
+      <div class="panel panel-default">
+        <a data-toggle="collapse" href="#panel-collapse-6" class="panel-heading  collapsed" data-parent="#product-accordion">Quantity (choose quantity or enter your own)</a>
+      </div>
+    </div>
 
   </div>
-</div>
+</form>
+
 <script type="text/javascript">
   PPS.pickForm.init();
 </script>
