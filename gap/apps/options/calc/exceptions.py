@@ -16,3 +16,9 @@ class PriceNotAvailable(Exception):
 
 class TooLarge(Exception):
     pass
+
+class TooSmall(Exception):
+    pass
+
+class TooLow(Exception):
+    pass
