@@ -6344,6 +6344,10 @@ div[class*="sidebar-"] .panel-heading:before {
 }
 .summary .list-inline > li {
   margin: 0 15px;
+  width: 75px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 #quote-builder .price {
   color: #555555;
