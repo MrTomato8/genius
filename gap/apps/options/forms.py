@@ -19,7 +19,7 @@ def picker_form_factory(product, picker, choices):
         picker.option.code: OptionChoiceField(
             widget=widget,
             empty_label=None,
-            queryset=choices)
+            queryset=list(choices)) # somewhy if we don't prefetch items here, there will be billions additional queries in template
     }
 
     return type(
