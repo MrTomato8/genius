@@ -79,7 +79,7 @@ PPS.getQuote = {
             $form.find('input[name=quantity]').val($radio.val()).trigger('change');
             PPS.getQuote.trySubmitForm();
         });
-        $form.find('input[type=text]').on('keyup', function() {
+        $form.find('input[name=quantity]').on('keyup', function() {
             var value = parseInt($(this).val());
             PPS.getQuote.toggleQuantityRadio($form.find('input[name=quantity_radio]'), false);
             PPS.getQuote.toggleQuantityRadio($form.find('input[name=quantity_radio][value=' + value + ']'), true);
@@ -142,5 +142,6 @@ PPS.multifileForm = {
     updateTotalQuantity: function() {
         var quantity = this.calculateTotalQuantity();
         this.$total_quantity.val(quantity && !isNaN(quantity) ? quantity : '');
+        PPS.getQuote.trySubmitForm();
     }
 };
