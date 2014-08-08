@@ -12,7 +12,10 @@ def available_choices(product, picker):
 
 def available_pickers(product, group):
     poptions = product.options
-    pickers = OptionPicker.objects.filter(group=group).select_related('option')
+    pickers = OptionPicker.objects\
+        .filter(group=group, # next line is just query count optimization, to exclude unavailable pickers at this phase, without checking it has valid choices in available_choice()
+                option__choices__prices__in=product.prices.all())\
+        .distinct().select_related('option')
     if poptions:
         return pickers.filter(option__in=poptions)
     else:
