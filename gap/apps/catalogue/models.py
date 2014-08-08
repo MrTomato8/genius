@@ -6,11 +6,14 @@ from oscar.apps.catalogue.abstract_models import AbstractProduct
 class Category(AbstractCategory):
     @models.permalink
     def get_absolute_url(self):
-        products = Product.objects.filter(categories=self)
-        if products.count() == 1:
+        products_count = getattr(self, 'products_count', None) # populated in my_category_tags
+        if products_count is None:
+            products_count = Product.objects.filter(categories=self).count()
+        if products_count == 1:
+            product = Product.objects.filter(categories=self)[:1].get()
             return ('options:pick', (), {
-                'product_slug': products[0].slug,
-                'pk': products[0].id})
+                'product_slug': product.slug,
+                'pk': product.id})
         return ('catalogue:category', (), {
                 'category_slug': self.slug})
 
