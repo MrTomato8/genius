@@ -116,6 +116,7 @@ PPS.multifileForm = {
         this.$toggle.toggleClass('active');
         $('#multifile_inputs').slideToggle();
         $('#choose_quantity_label').html(this.$toggle.hasClass('active') ? 'Choose or enter quantity for each' : 'Choose or enter quantity');
+        PPS.pickForm.refreshSelectedChoicesList();
     },
 
     changeFilesBy: function(delta) {
@@ -127,9 +128,8 @@ PPS.multifileForm = {
 
     calculateTotalQuantity: function() {
         var quantity = parseInt($('input[name=quantity]').val()),
-            files = parseInt(this.$files.val()),
-            total_quantity = null;
-        if (this.$toggle.is('.active')) {
+            files = parseInt(this.$files.val());
+        if (this.isMultifileEnabled()) {
             if (quantity && files && !isNaN(quantity) && !isNaN(files)) {
                 return Math.max(0, quantity * files);
             }
@@ -143,5 +143,9 @@ PPS.multifileForm = {
         var quantity = this.calculateTotalQuantity();
         this.$total_quantity.val(quantity && !isNaN(quantity) ? quantity : '');
         PPS.getQuote.trySubmitForm();
+    },
+
+    isMultifileEnabled: function() {
+        return this.$toggle.is('.active');
     }
 };
