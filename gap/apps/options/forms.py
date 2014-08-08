@@ -30,6 +30,7 @@ def picker_form_factory(product, picker, choices):
 
 class QuoteCalcForm(forms.Form):
     quantity = forms.IntegerField()
+    number_of_files = forms.IntegerField(min_value=1)
 
 
 class QuoteCustomSizeForm(forms.Form):

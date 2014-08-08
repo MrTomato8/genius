@@ -322,6 +322,7 @@ OPTIONCHOICE_CUSTOMSIZE = ('size', 'custom')
 TRADE_GROUP_NAME = 'Trade'
 MAX_SAVED_QUOTES = 15
 OPTION_ITEMSPERPACK = 'items_per_pack'
+MULTIFILE_PRICE_PER_ADDITIONAL_FILE = 2
 
 # TODO: Modify this
 OSCAR_MISSING_IMAGE_URL = STATIC_URL + 'options/img/missing-choice-thumbnail.png'

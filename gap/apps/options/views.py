@@ -287,7 +287,7 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
                     mimetype='application/json')
             try:
                 price, nr_of_units, items_per_pack = prices.get_price_incl_tax(
-                    quantity, request.user)
+                    quantity, calc_form.cleaned_data['number_of_files'], request.user)
             except PriceNotAvailable:
                 quote = {'valid': False}
             else:

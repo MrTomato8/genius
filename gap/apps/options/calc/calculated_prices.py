@@ -2,6 +2,7 @@
 from decimal import Decimal #, ROUND_UP
 from collections import OrderedDict
 #from math import ceil
+from django.conf import settings
 
 from apps.options import utils
 
@@ -33,7 +34,7 @@ class CalculatedPrices(object):
     def ordered(self):
         return OrderedDict(sorted(self._prices.iteritems(), key=lambda t: t[0]))
 
-    def _get_price_attribute(self, quantity, user, attribute):
+    def _get_price_attribute(self, quantity, number_of_files, user, attribute):
         if utils.trade_user(user):
             prefix = 'tpl_'
         else:
@@ -78,7 +79,7 @@ class CalculatedPrices(object):
         try:
 
             tpl = (
-                prices[prefix + attribute],#*quantity,
+                prices[prefix + attribute] + settings.MULTIFILE_PRICE_PER_ADDITIONAL_FILE * (number_of_files - 1),
                 prices['nr_of_units'],
                 prices['items_per_pack'])
 
@@ -86,11 +87,11 @@ class CalculatedPrices(object):
         except:
             raise PriceNotAvailable
 
-    def get_unit_price_incl_tax(self, quantity, user):
-        return self._get_price_attribute(quantity, user, 'unit_price_incl_tax')
+    def get_unit_price_incl_tax(self, quantity, number_of_files, user):
+        return self._get_price_attribute(quantity, number_of_files, user, 'unit_price_incl_tax')
 
-    def get_price_incl_tax(self, quantity, user):
-        return self._get_price_attribute(quantity, user, 'price_incl_tax')
+    def get_price_incl_tax(self, quantity, number_of_files, user):
+        return self._get_price_attribute(quantity, number_of_files, user, 'price_incl_tax')
 
     def add_price_history(self, tpl_prices, rpl_prices):
         self.vanilla_tpl_prices = tpl_prices

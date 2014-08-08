@@ -15,5 +15,5 @@ def calc_price(context, qty):
     choice_data = session.get_choice_data()
     qty = int(qty)
     prices = calc.calculate_costs(choices, qty, choice_data)
-    price = prices.get_price_incl_tax(qty, request.user)[0]
+    price = prices.get_price_incl_tax(qty, 1, request.user)[0]
     return price
