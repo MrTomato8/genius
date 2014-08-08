@@ -117,6 +117,7 @@ PPS.multifileForm = {
         $('#multifile_inputs').slideToggle();
         $('#choose_quantity_label').html(this.$toggle.hasClass('active') ? 'Choose or enter quantity for each' : 'Choose or enter quantity');
         PPS.pickForm.refreshSelectedChoicesList();
+        PPS.getQuote.trySubmitForm();
     },
 
     changeFilesBy: function(delta) {
