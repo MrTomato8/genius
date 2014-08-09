@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load compress %}
-{% load category_tags %}
+{% load my_category_tags %}
 {% load currency_filters %}
 {% load staticfiles %}
 
 {% block layout %}
-{% category_tree depth=2 as categories %}
+{% my_category_tree depth=2 as categories %}
     <header id="header">
         <!-- TOP NAV -->
         <div class="navbar" id="top-nav">

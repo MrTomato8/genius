@@ -53,7 +53,7 @@ class Line(AbstractLine):
             )
         try:
             price_incl_tax, nr_of_units, items_per_pack = prices.get_unit_price_incl_tax(
-                self.quantity, self.basket.owner
+                self.quantity, self.attachments.count(), self.basket.owner
             )
         except PriceNotAvailable:
             # something has gone wrong, we do what has been done in Basket.add_dynamic_product
@@ -100,7 +100,7 @@ class Line(AbstractLine):
         choices, choice_data = self.get_option_choices()
         calc = OptionsCalculator(self.product)
         prices = calc.calculate_costs(choices, self.quantity, choice_data)
-        return prices.get_unit_price_incl_tax(self.quantity, self.basket.owner)
+        return prices.get_unit_price_incl_tax(self.quantity, self.attachments.count(), self.basket.owner)
 
     def get_warning(self):
         if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
@@ -243,7 +243,7 @@ class Basket(AbstractBasket):
 
         try:
             price_incl_tax, nr_of_units, items_per_pack = (
-                prices.get_unit_price_incl_tax(quantity, self.owner))
+                prices.get_unit_price_incl_tax(quantity, len(attachments), self.owner))
         except PriceNotAvailable:
             price_incl_tax = None
             nr_of_units = quantity

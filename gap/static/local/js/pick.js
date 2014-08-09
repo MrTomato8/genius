@@ -56,14 +56,21 @@ PPS.pickForm = {
             if (next.hasClass('group_name')) next = next.next().children('.panel-collapse');
             else next = next.children('.panel-collapse');
             next.collapse('show').siblings('a.panel-heading').removeClass('collapsed');
-            $('#selected-choices ul').html('');
-            $('.option-choice .radio-choice:checked').each(function (a, b) {
-                $('#selected-choices ul').append('<li>' + $(b).closest('li').html() + '</li>')
-            });
+            PPS.pickForm.refreshSelectedChoicesList()
         });
 
         $(".radio-choice").click(disableConflictingChoices);
 
         $('input.radio-choice').attr("checked", false);
+    },
+
+    refreshSelectedChoicesList: function() {
+        $('#selected-choices ul').html('');
+        $('.option-choice .radio-choice:checked').each(function (a, b) {
+            $('#selected-choices ul').append('<li>' + $(b).closest('li').html() + '</li>')
+        });
+        if (PPS.multifileForm.isMultifileEnabled()) {
+            $('#selected-choices ul').append('<li>multifile<br><img src="' + STATIC_URL + 'options/img/multifile.png" alt="none"><br></li>')
+        }
     }
 };

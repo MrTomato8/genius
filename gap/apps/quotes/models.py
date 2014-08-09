@@ -27,7 +27,7 @@ class Quote(models.Model):
         prices = calc.calculate_costs(
             list(self.choices.all()), self.quantity, json.loads(self.choice_data))
         try:
-            prices.get_price_incl_tax(self.quantity, self.user)
+            prices.get_price_incl_tax(self.quantity, 1, self.user)
         except PriceNotAvailable:
             return False
 
@@ -37,4 +37,4 @@ class Quote(models.Model):
         calc = OptionsCalculator(self.product)
         prices = calc.calculate_costs(
             list(self.choices.all()), self.quantity, json.loads(self.choice_data))
-        return prices.get_price_incl_tax(self.quantity, self.user)
+        return prices.get_price_incl_tax(self.quantity, 1, self.user)

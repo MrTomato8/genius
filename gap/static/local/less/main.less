@@ -183,7 +183,13 @@ div[class*="sidebar-"] .panel-heading:before {
     margin-top: 17px;
 }
 
-.summary .list-inline > li {margin: 0 15px;}
+.summary .list-inline > li {
+    margin: 0 15px;
+    width:75px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
 #quote-builder .price {color: @gray;}
 #quote-builder .btn {margin-bottom: 15px;}
 #quote-builder .checkout img {margin-bottom: 5px;}

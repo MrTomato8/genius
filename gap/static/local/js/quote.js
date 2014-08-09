@@ -9,9 +9,9 @@ PPS.getQuote = {
             customSizeConversionRatio = parseFloat($form.find('input[name=custom_size_unit]:checked').val()),
             width = parseFloat($form.find('input[name=width]').val()) * customSizeConversionRatio,
             height = parseFloat($form.find('input[name=height]').val()) * customSizeConversionRatio,
-            quantity = parseInt($form.find('input[name=quantity]').val()),
+            quantity = PPS.multifileForm.calculateTotalQuantity(),
             isCustomSizeFormValid = $form.find('input[name=width]').length ==0 || width != 0 && height != 0 && !isNaN(width) && !isNaN(height),
-            isQuantityFormValid = quantity != 0 && !isNaN(quantity);
+            isQuantityFormValid = quantity && !isNaN(quantity);
         this.clearAjaxFields();
         if (isCustomSizeFormValid && isQuantityFormValid) {
             $.ajax({
@@ -21,6 +21,7 @@ PPS.getQuote = {
                         'width': width,
                         'height': height,
                         'quantity': quantity,
+                        'number_of_files': PPS.multifileForm.$files.val(),
                         'csrfmiddlewaretoken': $form.find('input[name="csrfmiddlewaretoken"]').val()
                     },
                     success:function(data){
@@ -78,7 +79,7 @@ PPS.getQuote = {
             $form.find('input[name=quantity]').val($radio.val()).trigger('change');
             PPS.getQuote.trySubmitForm();
         });
-        $form.find('input[type=text]').on('keyup', function() {
+        $form.find('input[name=quantity]').on('keyup', function() {
             var value = parseInt($(this).val());
             PPS.getQuote.toggleQuantityRadio($form.find('input[name=quantity_radio]'), false);
             PPS.getQuote.toggleQuantityRadio($form.find('input[name=quantity_radio][value=' + value + ']'), true);
@@ -94,37 +95,58 @@ PPS.getQuote = {
 };
 
 PPS.multifileForm = {
+    $files: null,
+    $total_quantity: null,
+    $toggle: null,
+
     init: function() {
-        $('#multifile_toggle').on('click', $.proxy(this.toggleMultifileInputs, this));
+        this.$files = $('input[name=number_of_files]');
+        this.$total_quantity = $('input[name=total_quantity]');
+        this.$toggle = $('#multifile_toggle');
+
+        this.$toggle.on('click', $.proxy(this.toggleMultifileInputs, this));
 
         $('#multifile_files_up_button').on('click', $.proxy(this.changeFilesBy, this, +1));
         $('#multifile_files_down_button').on('click', $.proxy(this.changeFilesBy, this, -1));
 
-        $('input[name=quantity],input[name=files]').on('keyup change', $.proxy(this.calculateTotalQuantity, this));
+        this.$files.add($('input[name=quantity]')).on('keyup change', $.proxy(this.updateTotalQuantity, this));
     },
 
     toggleMultifileInputs: function() {
-        var $toggle = $('#multifile_toggle');
-        $toggle.toggleClass('active');
+        this.$toggle.toggleClass('active');
         $('#multifile_inputs').slideToggle();
-        $('#choose_quantity_label').html($toggle.hasClass('active') ? 'Choose or enter quantity for each' : 'Choose or enter quantity');
+        $('#choose_quantity_label').html(this.$toggle.hasClass('active') ? 'Choose or enter quantity for each' : 'Choose or enter quantity');
+        PPS.pickForm.refreshSelectedChoicesList();
+        PPS.getQuote.trySubmitForm();
     },
 
     changeFilesBy: function(delta) {
-        var $input = $('input[name=files]'),
-            current = parseFloat($input.val()) || 0;
-        $input.val(Math.max(1, current + delta));
-        $input.trigger('change');
+        var current = parseFloat(this.$files.val()) || 0;
+        this.$files.val(Math.max(1, current + delta));
+        this.$files.trigger('change');
         return false;
     },
 
     calculateTotalQuantity: function() {
         var quantity = parseInt($('input[name=quantity]').val()),
-            files = parseInt($('input[name=files]').val()),
-            total_quantity = '';
-        if (quantity && files && !isNaN(quantity) && !isNaN(files)) {
-            total_quantity = Math.max(0, quantity * files);
+            files = parseInt(this.$files.val());
+        if (this.isMultifileEnabled()) {
+            if (quantity && files && !isNaN(quantity) && !isNaN(files)) {
+                return Math.max(0, quantity * files);
+            }
+        } else {
+            return quantity;
         }
-        $('input[name=total_quantity]').val(total_quantity);
+        return NaN;
+    },
+
+    updateTotalQuantity: function() {
+        var quantity = this.calculateTotalQuantity();
+        this.$total_quantity.val(quantity && !isNaN(quantity) ? quantity : '');
+        PPS.getQuote.trySubmitForm();
+    },
+
+    isMultifileEnabled: function() {
+        return this.$toggle.is('.active');
     }
 };
