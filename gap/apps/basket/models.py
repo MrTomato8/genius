@@ -22,6 +22,7 @@ Option = models.get_model('catalogue', 'Option')
 
 class Line(AbstractLine):
     itemsperpack = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
+    #TODO: prefetch attachments
     objects = LineManager()
     PRODUCT_STOCKRECORD, OPTIONS_CALCULATOR = (
         'stockrecord', 'optionscalc')
