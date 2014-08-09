@@ -127,7 +127,10 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
             quantity_discount = False
             pass
 
-
+        try:
+            options_cost = Decimal(row.pop('options_cost', 0))
+        except:
+            options_cost = Decimal(0)
 
         try:
             data['min_area'] = Decimal(row.pop('min_area', None))
@@ -246,7 +249,7 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                     try:
                         fixed = Decimal(anomaly[1])
                     except:
-                        fixed = Decimal(0)
+                        fixed = options_cost
                     if data['min_area'] != Decimal(0):
                         data['min_area'] = Decimal(quantity)
                     elif data['min_length'] != Decimal(0):
