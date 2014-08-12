@@ -326,5 +326,7 @@ MULTIFILE_PRICE_PER_ADDITIONAL_FILE = 2
 
 # TODO: Modify this
 OSCAR_MISSING_IMAGE_URL = STATIC_URL + 'options/img/missing-choice-thumbnail.png'
+DATACASH_CURRENCY = 'GBP'
+OSCAR_CURRENCY_LOCALE ='en_GB'
 
 from local_settings import *
