@@ -95,9 +95,9 @@ PPS.getQuote = {
 };
 
 PPS.multifileForm = {
-    $files: null,
-    $total_quantity: null,
-    $toggle: null,
+    $files: $(),
+    $total_quantity: $(),
+    $toggle: $(),
 
     init: function() {
         this.$files = $('input[name=number_of_files]');
