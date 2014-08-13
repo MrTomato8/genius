@@ -135,7 +135,7 @@ INSTALLED_APPS = [
 #    'admin_tools.theming',
 #    'admin_tools.menu',
 #    'admin_tools.dashboard',
-    'grappelli',
+#    'grappelli',
     'django.contrib.humanize',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -221,7 +221,7 @@ LOGGING = {
             'formatter': 'verbose'
         },
     },
-    
+
     'loggers': {
         'django.request': {
             'handlers': ['mail_admins', 'error_file'],
