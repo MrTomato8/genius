@@ -135,7 +135,7 @@ INSTALLED_APPS = [
 #    'admin_tools.theming',
 #    'admin_tools.menu',
 #    'admin_tools.dashboard',
-#    'grappelli',
+    'grappelli',
     'django.contrib.humanize',
     'django.contrib.auth',
     'django.contrib.contenttypes',
