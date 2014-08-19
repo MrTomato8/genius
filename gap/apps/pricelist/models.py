@@ -2,7 +2,10 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from apps.options.models import OptionChoice
 import re
+from django.core.urlresolvers import reverse_lazy
+from django.conf import settings
 from decimal import Decimal
+import csv
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
 
@@ -129,5 +132,17 @@ class Price(models.Model):
     class Meta:
         ordering = ['product', 'quantity']
 
+class CSV(models.Model):
+    def upload_to(self, filename):
+        return settings.MEDIA_ROOT+'/csv/'+filename
 
+    name = models.CharField(max_length=150, db_index=True)
+    csv_file= models.FileField(upload_to=upload_to)
+
+    def get_absolute_url(self):
+        return reverse_lazy('csvupdate', kwargs={'pk':self.pk})
+
+    def rows(self):
+        for row in csv.reader(self.csv_file):
+            yield row
 
