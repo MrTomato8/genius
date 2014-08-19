@@ -81,9 +81,14 @@
                 </div>
 
 
-{% if request.basket.all_lines_with_dead|length %}
   {% include "catalogue/partials/quotebuilder.html" %}
-{% endif %}
+          <div class="download-section visible-sm visible-xs text-center">
+            <h4>Download Templates</h4>
+            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons.png" %} " alt=""></a>
+            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons1.png" %} " alt=""></a>
+            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons2.png" %} " alt=""></a>
+            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons3.png" %} " alt=""></a>
+          </div>
         </div>
 {% endblock %}
 

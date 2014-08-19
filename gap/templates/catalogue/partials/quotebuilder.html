@@ -7,6 +7,7 @@
               <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblank.png" %} " /></span>
             </div>
             <div class="panel-body">
+{% if basket.all_lines_with_dead|length %}
                <table class="table table-hover">
                 <thead>
                   <tr>
@@ -78,12 +79,6 @@
                                 </li>
                             </ul>
                       </div>
+{% endif %}
                   </div>
                 </div>
-          <div class="download-section visible-sm visible-xs text-center">
-          <h4>Download Templates</h4>
-            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons.png" %} " alt=""></a>
-            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons1.png" %} " alt=""></a>
-            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons2.png" %} " alt=""></a>
-            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons3.png" %} " alt=""></a>
-        </div>
