@@ -1,8 +1,10 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
+
+from apps.pricelist.views import CSVUpdate,CSVList
 
 urlpatterns = patterns(
     'apps.pricelist.views',
     (r'^import', 'import_pricelist'),
-    (r'^list/(?P<slug>\S+)', 'list'),
-    (r'^list', 'list'),
+    url(r'^list/(?P<pk>\S+)', CSVUpdate.as_view(),name='csvupdate'),
+    (r'^list', CSVList.as_view()),
 )

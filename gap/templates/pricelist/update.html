@@ -1,0 +1,93 @@
+{% extends 'dashboard/layout.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block extrastyles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-handsontable/0.10.2/jquery.handsontable.full.min.css"/>
+<style>
+#csv_spreadsheet{
+    margin-bottom:20px;
+    }
+</style>
+{% endblock %}
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url dashboard:index %}">{% trans "Dashboard" %}</a>
+        <span class="divider">/</span>
+    </li>
+    <li>{% trans "Pricelist" %}
+    <span class="divider">/</span>
+    </li>
+    <li class="active">{{csv.name}}</li>
+</ul>
+{% endblock %}
+
+{% block header %}
+<div class="page-header action">
+    <h1>{% trans "Pricelist for " %} {{csv.name}}</h1>
+    <div class="alert hidden"></div>
+</div>
+{% endblock header %}
+
+{% block dashboard_content %}
+    <div id="csv_spreadsheet">
+    </div>
+    <button class="btn btn-action" name="save">{% trans "save" %}</button>
+    <a class="btn btn-action" href="{{csv.csv_file.path}}" download>
+        {% trans "download" %}
+    </a>
+    {% csrf_token %}
+{% endblock %}
+
+{% block extrascripts %}
+{{ block.super }}
+<script>
+try{IMIP}catch(e){IMIP={dashboard:{}}}
+IMIP.dashboard.csvupdate={
+    cdn:"//cdnjs.cloudflare.com/ajax/libs/jquery-handsontable/0.10.2/jquery.handsontable.full.min.js",
+    data:[
+        {% for row in csv.rows %}
+            {{row|safe }}{% if not forlopp.last %},{% endif %}
+        {%endfor%}
+        ],
+    save:function(){
+        var data={
+            data:JSON.stringify(
+                $("#csv_spreadsheet").data('handsontable').getData()),
+            csrfmiddlewaretoken:$('input[name="csrfmiddlewaretoken"]').val()
+        }
+
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            data: data,
+            complete: function (data) {
+              console.log(data);
+        }
+      });
+    },
+    spreadsheet:function(){
+        var _this = this;
+        $("#csv_spreadsheet").handsontable({
+              data: _this.data,
+              startRows: 5,
+              startCols: 5,
+              colHeaders: true,
+              minSpareRows: 1
+          })
+        $("#csv_spreadsheet")
+            .parent()
+            .find('button[name="save"]')
+            .click(function(){
+                _this.save();
+            })
+    },
+    init:function(){
+        var _this = this;
+        $.getScript(_this.cdn, _this.spreadsheet.bind(_this))
+        }
+}
+IMIP.dashboard.csvupdate.init()
+</script>
+{% endblock %}

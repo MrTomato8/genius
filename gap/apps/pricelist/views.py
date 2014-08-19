@@ -8,8 +8,11 @@ from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
 from oscar.views.decorators import staff_member_required
-from .models import CsvRow
-
+from .models import CsvRow,CSV
+from django.views.generic import ListView
+from django.views.generic.edit import UpdateView
+import json
+import csv
 Option = models.get_model('catalogue', 'Option')
 ProductClass = models.get_model('catalogue', 'ProductClass')
 
@@ -17,14 +20,16 @@ ProductClass = models.get_model('catalogue', 'ProductClass')
 def import_pricelist(request):
     if request.method == 'POST':
         form = PricelistUploadForm(request.POST, request.FILES)
-
         if form.is_valid():
             report = import_csv(
                 request.FILES['csvfile'],
                 form.cleaned_data['create_options'],
                 form.cleaned_data['create_choices'],
                 form.cleaned_data['chirurgical'])
-
+            filename=request.FILES['csvfile'].name
+            CSV.objects.create(
+                name=filename,
+                csv_file=request.FILES['csvfile'])
             if report.skipped_total == 0:
                 return HttpResponseRedirect(reverse('apps.pricelist.views.list'))
             else:
@@ -38,16 +43,46 @@ def import_pricelist(request):
         'title': 'Pricelist Import from CSV',
     })
 
+class CSVList(ListView):
+    model = CSV
+    template_name = 'pricelist/categories.html'
+    context_object_name = 'files'
+    def dispatch(self,*args,**kwargs):
+        return super(CSVList, self).dispatch(*args,**kwargs)
+
+class CSVUpdate(UpdateView):
+    model = CSV
+    template_name = 'pricelist/update.html'
+    context_object_name = 'csv'
+    def post(self,request, pk,*args,**kwargs):
+
+        if not request.is_ajax():
+            return None
+        csv_obj=CSV.objects.get(pk=pk)
+        csv_file = file(csv_obj.csv_file.path,mode='w')
+        try:
+            csv_writer=csv.writer(csv_file)
+            for row in json.loads(request.POST['data']):
+                csv_writer.writerow(row)
+        finally:
+            csv_file.close()
+        csv_file = file(csv_obj.csv_file.path)
+        try:
+            import_csv(csv_file)
+        finally:
+            csv_file.close()
+        return HttpResponse(mimetype='text',content="ok")
+
 @staff_member_required
 def list(request, slug=None):
     if slug is None:
-        dict= {}
+        dikt= {}
         for klass in ProductClass.objects.all().prefetch_related('product_set'):
-            dict[klass.name]=[]
+            dikt[klass.name]=[]
             for product in klass.product_set.all():
-                dict[klass.name].append((product.title,product.slug))
+                dikt[klass.name].append((product.title,product.slug))
         return render(request, 'pricelist/categories.html', {
-            'classes':dict,
+            'classes':dikt,
             'title': 'Products',
         })
     if request.method=='POST':
