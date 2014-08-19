@@ -12,7 +12,6 @@
                   <tr>
                     <th>DEL</th>
                     <th>Live</th>
-                    <th>Qty</th>
                     <th>Brief Description</th>
                     <th>Price</th>
                   </tr>
@@ -38,7 +37,6 @@
                         {% endif %}
                       </form>
                     </td>
-                    <td>{{ line.quantity }} <a href="#"><img alt="" src="{% static "local/images/arrow.png" %} "></a></td>
                     <td><p>{{ line.product_and_options_description }}</p></td>
                     <td>{{ line.total_price_incl_tax|currency }}</td>
                   </tr>
