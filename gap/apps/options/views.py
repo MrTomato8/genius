@@ -414,7 +414,7 @@ class AddToBasketView(OptionsSessionMixin, OptionsContextMixin, View):
     def post(self, request, *args, **kwargs):
         basket = request.basket
         user = request.user
-        quantity = self.request.POST.get('quantity')
+        quantity = self.session.get_quantity()
         choice_data = self.session.get_choice_data()
         attachments = []
         if user.is_authenticated():
