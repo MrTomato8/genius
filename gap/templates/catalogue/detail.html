@@ -81,7 +81,7 @@
                 </div>
 
 
-{% if request.basket.all_lines|length %}
+{% if request.basket.all_lines_with_dead|length %}
   {% include "catalogue/partials/quotebuilder.html" %}
 {% endif %}
         </div>

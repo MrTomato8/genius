@@ -23,3 +23,18 @@ class RemoveItemView(View):
         except Line.DoesNotExist:
             messages.add_message(request, messages.ERROR, 'Product not found in basket')
         return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))
+
+
+class ToggleItemLiveView(View):
+    def post(self, request, line_id):
+        try:
+            line = Line.objects.get(pk=line_id)
+            line.is_dead = not line.is_dead
+            line.save()
+            msg = 'Toggled product on'
+            if line.is_dead:
+                msg = 'Toggled product off'
+            messages.add_message(request, messages.SUCCESS, msg)
+        except Line.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Product not found in basket')
+        return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))

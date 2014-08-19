@@ -18,7 +18,7 @@
                   </tr>
                 </thead>
                 <tbody>
-  {% for line in basket.all_lines %}
+  {% for line in basket.all_lines_with_dead %}
                   <tr>
                     <td>
                       <form method="POST" action="{% url basket:items-remove line.pk %}">
@@ -27,7 +27,17 @@
                         <input type="image" src="{% static "local/images/delete.png" %} " alt="x" />
                       </form>
                     </td>
-                    <td><a href="#"><img src="{% static "local/images/live.png" %} " alt=""></a></td>
+                    <td>
+                      <form method="POST" action="{% url basket:items-toggle-live line.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+                        {% if line.is_dead %}
+                          <input type="image" src="{% static "local/images/notlive.png" %}" alt="|" />
+                        {% else %}
+                          <input type="image" src="{% static "local/images/live.png" %}" alt="-" />
+                        {% endif %}
+                      </form>
+                    </td>
                     <td>{{ line.quantity }} <a href="#"><img alt="" src="{% static "local/images/arrow.png" %} "></a></td>
                     <td><p>{{ line.product_and_options_description }}</p></td>
                     <td>{{ line.total_price_incl_tax|currency }}</td>

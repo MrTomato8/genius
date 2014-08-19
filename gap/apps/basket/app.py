@@ -8,6 +8,7 @@ from apps.basket import views
 class BasketApplication(CoreBasketApplication):
     summary_view = views.BasketView
     remove_item_view = views.RemoveItemView
+    toggle_item_live_view = views.ToggleItemLiveView
 
     def get_urls(self):
         urlpatterns = patterns('',
@@ -15,6 +16,8 @@ class BasketApplication(CoreBasketApplication):
             url(r'^add/$', self.add_view.as_view(), name='add'),
             url(r'^lines/(?P<line_id>\d+)/remove/$', self.remove_item_view.as_view(),
                 name='items-remove'),
+            url(r'^lines/(?P<line_id>\d+)/toggle_live/$', self.toggle_item_live_view.as_view(),
+                name='items-toggle-live'),
             url(r'^vouchers/add/$', self.add_voucher_view.as_view(),
                 name='vouchers-add'),
             url(r'^vouchers/(?P<pk>\d+)/remove/$',

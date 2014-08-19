@@ -40,6 +40,7 @@ class Line(AbstractLine):
     # making this field nullable an exception will raise if there are problems
     items_required = models.PositiveIntegerField(null=True, blank=True)
     real_quantity = models.PositiveIntegerField(null=True, blank=True)
+    is_dead = models.BooleanField(blank=True, default=False)
     def save(self,*args,**kwargs):
         if not self.attributes.all().exists():
             super(Line,self).save(*args,**kwargs)
@@ -292,6 +293,12 @@ class Basket(AbstractBasket):
         self.reset_offer_applications()
 
     add_dynamic_product.alters_data = True
+
+    def all_lines(self):
+        return super(Basket, self).all_lines().exclude(is_dead=True)
+
+    def all_lines_with_dead(self):
+        return super(Basket, self).all_lines()
 
     @property
     def default_wrapper(self):
