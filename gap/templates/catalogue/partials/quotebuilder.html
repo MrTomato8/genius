@@ -20,7 +20,13 @@
                 <tbody>
   {% for line in basket.all_lines %}
                   <tr>
-                    <td><a href="#"><img src="{% static "local/images/delete.png" %} " alt=""></a></td>
+                    <td>
+                      <form method="POST" action="{% url basket:items-remove line.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+                        <input type="image" src="{% static "local/images/delete.png" %} " alt="x" />
+                      </form>
+                    </td>
                     <td><a href="#"><img src="{% static "local/images/live.png" %} " alt=""></a></td>
                     <td>{{ line.quantity }} <a href="#"><img alt="" src="{% static "local/images/arrow.png" %} "></a></td>
                     <td><p>{{ line.product_and_options_description }}</p></td>
