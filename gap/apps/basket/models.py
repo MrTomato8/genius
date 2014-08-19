@@ -152,6 +152,12 @@ class Line(AbstractLine):
                 return Decimal('0.00')
             return self._get_stockrecord_choices_property(property, unit_price)
 
+    def total_price_incl_tax(self):
+        return self.unit_price_incl_tax * self.quantity
+
+    def product_and_options_description(self):
+        return ', '.join([self.product.title] + [attribute.value for attribute in self.attributes.all()])
+
     def get_memory_stockrecord(self, price_excl_tax):
         sr = getattr(self, 'memory_stockrecord', None)
         if sr is None:

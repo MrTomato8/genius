@@ -426,10 +426,12 @@ class AddToBasketView(OptionsSessionMixin, OptionsContextMixin, View):
                                    attachments, choice_data)
         msg = '{0} added successfully'.format(self.product.get_title())
         messages.add_message(request, messages.SUCCESS, msg)
+        self.session.reset_quantity()
+        self.session.reset_choice_data()
 
         self.add_signal.send(sender=self, product=self.product, user=user)
 
-        return HttpResponseRedirect(reverse('basket:summary'))
+        return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))
 
 
 class UploadView(OptionsSessionMixin, OptionsContextMixin, View):
