@@ -60,8 +60,7 @@ PPS.pickForm = {
         });
 
         $(".radio-choice").click(disableConflictingChoices);
-
-        $('input.radio-choice').attr("checked", false);
+        this.refreshSelectedChoicesList();
     },
 
     refreshSelectedChoicesList: function() {

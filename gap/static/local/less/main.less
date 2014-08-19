@@ -191,7 +191,14 @@ div[class*="sidebar-"] .panel-heading:before {
     white-space:nowrap;
 }
 #quote-builder .price {color: @gray;}
-#quote-builder .btn {margin-bottom: 15px;}
+#quote-builder .btn.btn-submit {margin-bottom: 15px;}
+#quote-builder .btn.btn-edit {
+    padding: 0;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#quote-builder .checkout img {margin-bottom: 5px;}
 #quote-builder .checkout img {margin-bottom: 5px;}
 
 @media (max-width: @screen-sm) {

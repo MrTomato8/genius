@@ -21,7 +21,7 @@
   {% for line in basket.all_lines_with_dead %}
                   <tr>
                     <td>
-                      <form method="POST" action="{% url basket:items-remove line.pk %}">
+                      <form method="POST" action="{% url basket:items-remove line.pk %}" class="js-quotebuilder-remove-form">
                         {% csrf_token %}
                         <input type="hidden" name="next" value="{{ request.get_full_path }}" />
                         <input type="image" src="{% static "local/images/delete.png" %} " alt="x" />
@@ -38,7 +38,12 @@
                         {% endif %}
                       </form>
                     </td>
-                    <td><p>{{ line.product_and_options_description }}</p></td>
+                    <td>
+                      <form method="POST" action="{% url options:line-edit line.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link btn-edit">{{ line.product_and_options_description }}</button>
+                      </form>
+                    </td>
                     <td>{{ line.total_price_incl_tax|currency }}</td>
                   </tr>
   {% endfor %}
@@ -50,7 +55,7 @@
             <div class="text-right price"><p>Total Price (inc VAT) <span>{{ basket.apply_total_price_incl_tax_and_discounts|currency }}</span></p></div>
 
             <div class="text-center checkout">
-              <a href="{% url basket:summary %}" class="btn btn-primary btn-block">Proceed to Checkout</a>
+              <a href="{% url basket:summary %}" class="btn btn-primary btn-block btn-submit">Proceed to Checkout</a>
 
               <ul class="list-inline">
                 <li>
@@ -82,3 +87,8 @@
 {% endif %}
                   </div>
                 </div>
+<script type="text/javascript">
+  $(function() {
+    PPS.quotebuilder.init();
+  });
+</script>

@@ -396,6 +396,24 @@ class QuoteLoadView(OptionsSessionMixin, View):
                                 'pk': kwargs['pk']}))
 
 
+class LineEditView(OptionsSessionMixin, View):
+    def post(self, request, line_id):
+        line = Line.objects.select_related('product').get(pk=line_id)
+        choices, choices_data = line.get_option_choices()
+        choice_dict = {}
+        for choice in choices:
+            choice_dict[choice.option.code] = choice.pk
+
+        self.session.reset_product(line.product)
+        self.session.reset_choices(choice_dict)
+        self.session.reset_quantity(line.quantity)
+        self.session.reset_choice_data(choices_data)
+        return HttpResponseRedirect(
+            reverse('options:pick',
+                    kwargs={'product_slug': line.product.slug,
+                            'pk': line.product.pk}))
+
+
 class ArtworkDeleteView(View):
     def post(self, request, *args, **kwargs):
         form = ArtworkDeleteForm(request.POST)
