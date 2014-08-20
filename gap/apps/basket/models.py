@@ -5,7 +5,7 @@ from oscar.apps.basket.abstract_models import (
 
 from apps.options.models import OptionChoice, ArtworkItem
 from apps.options.calc import OptionsCalculator, PriceNotAvailable
-import json
+import simplejson as json
 from decimal import Decimal
 from oscar.templatetags.currency_filters import currency
 from django.utils.translation import ugettext as _
@@ -88,7 +88,7 @@ class Line(AbstractLine):
             else:
                 query = models.Q(option=attr.option, code=attr.value_code)|query
             try:
-                data = json.loads(attr.data)
+                data = json.loads(attr.data, use_decimal=True)
             except ValueError:
                 data = {}
             choice_data.update({attr.option.code: data})
@@ -281,7 +281,7 @@ class Basket(AbstractBasket):
                 line.attributes.create(option=option_dict['option'],
                                        value=option_dict['value'],
                                        value_code=option_dict['value_code'],
-                                       data=json.dumps(option_dict['data']))
+                                       data=json.dumps(option_dict['data'], use_decimal=True))
         else:
             line.quantity += nr_of_units
             line.items_required += quantity
