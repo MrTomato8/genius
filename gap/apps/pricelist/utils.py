@@ -247,9 +247,10 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                     except:
                         discount = Decimal(0)
                     try:
-                        fixed = Decimal(anomaly[1])
+                        fixed_discount = Decimal(anomaly[1])
                     except:
-                        fixed = options_cost
+                        fixed_discount=Decimal(0)
+                    fixed = options_cost*(1-fixed_discount/100)
                     if data['min_area'] != Decimal(0):
                         data['min_area'] = Decimal(quantity)
                     elif data['min_length'] != Decimal(0):
