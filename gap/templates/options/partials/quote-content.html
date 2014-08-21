@@ -17,8 +17,7 @@
         </div>
         <div id="quantity_picker" class="panel-collapse collapse in">
             <div class="panel-body">
-                {% if prices.discrete_pricing %}
-                    {% if prices|length > 1 %}
+                    {% if prices.discrete_pricing and prices|length > 1 %}
                     <ul class="list-unstyled row">
                     {% for qty,price in prices.ordered.iteritems %}
                         <li class="col-md-2 col-sm-3 col-xs-6 text-center">
@@ -67,7 +66,6 @@
                               </div>
                             </div>
                         </div>
-                {% endif %}
               </div>
         </div>
         </div>
