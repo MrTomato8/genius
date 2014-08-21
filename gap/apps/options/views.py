@@ -482,6 +482,7 @@ class AddToBasketView(OptionsSessionMixin, OptionsContextMixin, View):
             msg = '{0} added successfully'.format(self.product.get_title())
         messages.add_message(request, messages.SUCCESS, msg)
         self.session.reset_quantity()
+        self.session.reset_choices()
         self.session.reset_choice_data()
         self.session.reset_line()
 
