@@ -38,12 +38,7 @@
                         {% endif %}
                       </form>
                     </td>
-                    <td>
-                      <form method="POST" action="{% url options:line-edit line.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-link btn-edit">{{ line.product_and_options_description }}</button>
-                      </form>
-                    </td>
+                    <td class="td-link-edit"><a href="{% url options:line-edit line.product.slug line.product.pk line.pk %}">{{ line.product_and_options_description }}</a></td>
                     <td>{{ line.total_price_incl_tax|currency }}</td>
                   </tr>
   {% endfor %}

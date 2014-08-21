@@ -33,7 +33,7 @@ class BaseOptionsApplication(Application):
             self.artwork_delete_view.as_view(), name='upload-artwork-delete'),
             url(r'^add/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
             self.add_to_basket_view.as_view(), name='add-to-basket'),
-                url(r'^line/(?P<line_id>\d+)/edit/$', self.line_edit_view.as_view(), name='line-edit'),
+                url(r'^edit/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/(?P<line_id>\d+)/$', self.line_edit_view.as_view(), name='line-edit'),
         )
 
         return self.post_process_urls(urlpatterns)

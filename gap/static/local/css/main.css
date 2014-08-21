@@ -6355,11 +6355,11 @@ div[class*="sidebar-"] .panel-heading:before {
 #quote-builder .btn.btn-submit {
   margin-bottom: 15px;
 }
-#quote-builder .btn.btn-edit {
-  padding: 0;
+#quote-builder .td-link-edit {
   max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 #quote-builder .checkout img {
   margin-bottom: 5px;

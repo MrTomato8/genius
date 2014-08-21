@@ -1,5 +1,6 @@
 {% extends 'layout_3_col.html' %}
 {% load url from future %}
+{% load currency_filters %}
 {% load history_tags %}
 {% load reviews_tags %}
 {% load staticfiles %}
@@ -60,10 +61,17 @@
 
         <div class="price-table">
                     <h4>Print price is</h4>
-                    <h1 id="calculated_price"></h1>
+                    <h1 id="calculated_price">{% if line_being_edited %}{{ line_being_edited.total_price_incl_tax|currency }}{% endif %}</h1>
                     <p>including VAT</p>
-                    <p id="calculated_unit_price"></p>
+                    <p id="calculated_unit_price">{% if line_being_edited.quantity > 1 %}(Unit price is {{ line_being_edited.unit_price_incl_tax|currency }}){% endif %}</p>
                     <p>price does not include delivery</p>
+                  {% if line_being_edited %}
+                    <form method="POST" action="{{ save_url }}">
+                      {% csrf_token %}
+                      <input type="hidden" name="next" value="{% url 'options:pick' pk=product.pk product_slug=product.slug %}" />
+                      <button type="submit" id="buy_button" class="btn btn-info btn-block btn-sm">Save changes</button>
+                    </form>
+                  {% else %}
                     <form method="post" action="{{save_url}}">{% csrf_token %}
                         <button type="submit" id="buy_button" class="btn btn-info btn-block btn-sm">Buy Now</button>
                     </form>
@@ -72,6 +80,7 @@
                       <input type="hidden" name="next" value="{{ request.get_full_path }}" />
                       <button type="submit" class="btn btn-info btn-block btn-sm"><img src="{% static "local/images/quotebuilder.png" %} " alt="">Add to QuoteBuilder</button>
                     </form>
+                  {% endif %}
                 </div>
                 <div class="summary" id="selected-choices">
                     <h4>Summary <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}"  /></span></h4>

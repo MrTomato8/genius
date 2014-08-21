@@ -37,7 +37,40 @@ class OptionsContextMixin(object):
             request, *args, **kwargs)
 
 
-class PickOptionsView(OptionsSessionMixin, View):
+class PricesMixin(object):
+    def get_prices_context(self, product, choices, quantity, choice_data):
+        try:
+            calc = OptionsCalculator(product)
+            prices = calc.calculate_costs(choices, quantity, choice_data)
+        except Exception as e:
+            print 'exception'
+            raise e
+        more_prices = []
+        '''
+        if not prices.discrete_pricing and not prices.matrix_for_pack:
+            for i in range(min_order, 26):
+                generate_prices = calc.calculate_costs(self.choices, i, choice_data)
+                more_prices += [generate_prices.get_price_incl_tax(i, request.user),]
+            print more_prices
+        '''
+        return {
+            'prices': prices,
+            'more_prices': more_prices,
+            'quantity': quantity,
+        }
+
+
+class CustomSizeFormMixin(object):
+    def get_custom_size_context(self, session, choices):
+        choice_data_custom_size = session.get_choice_data_custom_size()
+        custom_size_form = QuoteCustomSizeForm(initial=choice_data_custom_size)
+        return {
+            'custom_size_form': custom_size_form,
+            'custom_size': utils.custom_size_chosen(choices),
+        }
+
+
+class PickOptionsView(OptionsSessionMixin, PricesMixin, CustomSizeFormMixin, View):
     template_name = 'options/pick.html'
 
     def get(self, request, *args, **kwargs):
@@ -45,6 +78,7 @@ class PickOptionsView(OptionsSessionMixin, View):
 
         product = Product.objects.get(pk=kwargs['pk'])
 
+        self.session.reset_line()
         if not self.session.valid(product):
             self.session.reset_product(product)
             self.session.reset_choices()
@@ -78,13 +112,16 @@ class PickOptionsView(OptionsSessionMixin, View):
             if pickers:
                 groups.append({'group': group, 'pickers': pickers})
 
-        return TemplateResponse(request, self.template_name, {
+        context = kwargs.get('context', {})
+        context.update({
             'product': product,
             'groups': groups,
             'errors': errors,
             'session': self.session,
-            'save_url':reverse('options:add-to-basket', kwargs=kwargs),
+            'save_url': reverse('options:add-to-basket', kwargs={'pk': product.pk, 'product_slug': product.slug}),
         })
+        context.update(self.get_custom_size_context(self.session, self.session.get_choices()))
+        return TemplateResponse(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         errors = []
@@ -171,11 +208,11 @@ class PickOptionsView(OptionsSessionMixin, View):
             #errors.append('Please review your selections.')
             #try
             self.session.reset_quantity()
-            return HttpResponseRedirect(reverse('options:quote', kwargs=kwargs))
+            return HttpResponseRedirect(reverse('options:quote', kwargs={'pk': product.pk, 'product_slug': product.slug}))
 
         if allvalid:
             self.session.reset_quantity(utils.min_order(product, choices))
-            return HttpResponseRedirect(reverse('options:quote', kwargs=kwargs))
+            return HttpResponseRedirect(reverse('options:quote', kwargs={'pk': product.pk, 'product_slug': product.slug}))
 
         return TemplateResponse(request, self.template_name, {
             'product': product,
@@ -184,7 +221,7 @@ class PickOptionsView(OptionsSessionMixin, View):
         })
 
 
-class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
+class QuoteView(OptionsSessionMixin, OptionsContextMixin, PricesMixin, CustomSizeFormMixin, View):
     template_name = 'options/quote.html'
 
     def get(self, request, *args, **kwargs):
@@ -209,41 +246,22 @@ class QuoteView(OptionsSessionMixin, OptionsContextMixin, View):
                           'option set is {0}'.format(min_area))
         '''
 
-        try:
-            calc = OptionsCalculator(self.product)
-            prices = calc.calculate_costs(self.choices, quantity, choice_data)
-        except Exception as e:
-            print 'exception'
-            raise e
-        more_prices = []
-        '''
-        if not prices.discrete_pricing and not prices.matrix_for_pack:
-            for i in range(min_order, 26):
-                generate_prices = calc.calculate_costs(self.choices, i, choice_data)
-                more_prices += [generate_prices.get_price_incl_tax(i, request.user),]
-            print more_prices
-        '''
-
         calc_form = QuoteCalcForm(data={'quantity': quantity})
 
-        choice_data_custom_size = self.session.get_choice_data_custom_size()
-        custom_size_form = QuoteCustomSizeForm(initial=choice_data_custom_size)
-
         quote_save_form = QuoteSaveForm()
-        return TemplateResponse(request, self.template_name, {
+        context = {
             'product': self.product,
             'choices': self.choices,
             'params': kwargs,
             'calc_form': calc_form,
-            'custom_size_form': custom_size_form,
-            'custom_size': utils.custom_size_chosen(self.choices),
-            'prices': prices,
             'trade_user': utils.trade_user(request.user),
             'quote_save_form': quote_save_form,
             'errors': errors,
-            'more_prices': more_prices,
             'action':reverse('options:quote', kwargs=kwargs),
-        })
+        }
+        context.update(self.get_prices_context(self.product, self.choices, quantity, choice_data))
+        context.update(self.get_custom_size_context(self.session, self.choices))
+        return TemplateResponse(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         errors = []
@@ -396,22 +414,34 @@ class QuoteLoadView(OptionsSessionMixin, View):
                                 'pk': kwargs['pk']}))
 
 
-class LineEditView(OptionsSessionMixin, View):
-    def post(self, request, line_id):
-        line = Line.objects.select_related('product').get(pk=line_id)
+class LineEditView(PickOptionsView):
+    def get(self, request, *args, **kwargs):
+        try:
+            line = Line.objects.select_related('product').get(pk=kwargs.get('line_id'))
+        except Line.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Product not found in basket')
+            return HttpResponseRedirect(reverse('catalogue:index'))
+        product = line.product
         choices, choices_data = line.get_option_choices()
         choice_dict = {}
         for choice in choices:
             choice_dict[choice.option.code] = choice.pk
 
-        self.session.reset_product(line.product)
+        self.session.reset_product(product)
         self.session.reset_choices(choice_dict)
         self.session.reset_quantity(line.quantity)
         self.session.reset_choice_data(choices_data)
-        return HttpResponseRedirect(
-            reverse('options:pick',
-                    kwargs={'product_slug': line.product.slug,
-                            'pk': line.product.pk}))
+
+        context = self.get_prices_context(product, self.session.get_choices(),
+                                          line.quantity, self.session.get_choice_data())
+        context.update({'line_being_edited': line})
+        try:
+            return super(LineEditView, self).get(request, *args, context=context, **kwargs)
+        finally:
+            # Line will be reset in PickOptionsView.get (so when user navigates to product via catalogues,
+            # line_id is reset)
+            # so we set line_id after PickOptionsView.get is called
+            self.session.reset_line(line.pk)
 
 
 class ArtworkDeleteView(View):
@@ -442,10 +472,18 @@ class AddToBasketView(OptionsSessionMixin, OptionsContextMixin, View):
 
         basket.add_dynamic_product(self.product, quantity, self.choices,
                                    attachments, choice_data)
-        msg = '{0} added successfully'.format(self.product.get_title())
+        if self.session.get_line_id():
+            msg = '{0} changed successfully'.format(self.product.get_title())
+            try:
+                Line.objects.get(pk=self.session.get_line_id()).delete()
+            except Line.DoesNotExist:
+                pass
+        else:
+            msg = '{0} added successfully'.format(self.product.get_title())
         messages.add_message(request, messages.SUCCESS, msg)
         self.session.reset_quantity()
         self.session.reset_choice_data()
+        self.session.reset_line()
 
         self.add_signal.send(sender=self, product=self.product, user=user)
 
