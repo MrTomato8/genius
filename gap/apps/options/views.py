@@ -130,7 +130,6 @@ class PickOptionsView(OptionsSessionMixin, PricesMixin, CustomSizeFormMixin, Vie
 
         self.session.reset_product(product)
         self.session.reset_choices()
-        self.session.reset_quantity()
         self.session.reset_choice_data()
 
         allvalid = True
@@ -207,11 +206,12 @@ class PickOptionsView(OptionsSessionMixin, PricesMixin, CustomSizeFormMixin, Vie
         else:
             #errors.append('Please review your selections.')
             #try
-            self.session.reset_quantity()
             return HttpResponseRedirect(reverse('options:quote', kwargs={'pk': product.pk, 'product_slug': product.slug}))
 
         if allvalid:
-            self.session.reset_quantity(utils.min_order(product, choices))
+            min_order = utils.min_order(product, choices)
+            if self.session.get_quantity() < min_order:
+                self.session.reset_quantity(min_order)
             return HttpResponseRedirect(reverse('options:quote', kwargs={'pk': product.pk, 'product_slug': product.slug}))
 
         return TemplateResponse(request, self.template_name, {
