@@ -26,7 +26,7 @@
     <form action="." method="post" class="basket_summary" id="basket_formset">{% csrf_token %}
         {{ formset.management_form }}
 
-    <table id="basket-table">
+    <table id="basket-table" class="table">
             <thead class="basket_table-header" >
                     {% block basket_form_headers %}
                     <tr>
@@ -102,6 +102,42 @@
                     {% endwith %}
                     {% endfor %}
 
+            {% for line in basket.dead_lines %}
+              <tr class="table-row-variant danger">
+                <td>{{ line.quantity }}</td>
+                <td>
+                  <a href="{{ line.product.get_absolute_url }}"><b>{{ line.product.get_title }}</b></a>
+                  <ul>
+                  {% with  line.attributes.all as attributes %}
+                    {% for attribute in attributes %}
+                      {% if attribute.option.name == 'items_per_pack' %}
+                      {% else %}
+                        <li>{{ attribute.option.name }}: {{attribute.value}}</li>
+                      {% endif %}
+                    {% endfor %}
+                  {% endwith %}
+                  </ul>
+                </td>
+                <td>{{ line.unit_price_excl_tax }}</td>
+                <td>
+                  {% with line.unit_tax|multiply:line.quantity as vat %}
+                    {% if not vat or vat == 0 %}
+                            n/d
+                    {% else %}
+                            {{vat|currency}}
+                    {% endif %}
+                  {% endwith %}
+                </td>
+                <td>{{ line.unit_price_incl_tax|multiply:line.quantity|currency }}</td>
+                <td>
+                  <form method="POST" action="{% url basket:items-toggle-live line.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+                    <input type="submit" class="btn btn-success" value="Toggle item on" />
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
 
             </tbody>
 
