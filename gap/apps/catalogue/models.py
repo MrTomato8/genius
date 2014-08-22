@@ -4,6 +4,7 @@ from oscar.apps.catalogue.abstract_models import AbstractProduct
 
 
 class Category(AbstractCategory):
+    #Todo: add a manager to prefetch subcategories
     @models.permalink
     def get_absolute_url(self):
         products_count = getattr(self, 'products_count', None) # populated in my_category_tags
