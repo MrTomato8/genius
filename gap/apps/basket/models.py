@@ -21,7 +21,6 @@ from .managers import LineManager
 Option = models.get_model('catalogue', 'Option')
 
 class Line(AbstractLine):
-    itemsperpack = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
     objects = LineManager()
     PRODUCT_STOCKRECORD, OPTIONS_CALCULATOR = (
         'stockrecord', 'optionscalc')
@@ -41,6 +40,10 @@ class Line(AbstractLine):
     items_required = models.PositiveIntegerField(null=True, blank=True)
     real_quantity = models.PositiveIntegerField(null=True, blank=True)
     is_dead = models.BooleanField(blank=True, default=False)
+    @staticmethod
+    def itemsperpack():
+        return Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
+
     def save(self,*args,**kwargs):
         if not self.attributes.all().exists():
             super(Line,self).save(*args,**kwargs)
@@ -65,7 +68,7 @@ class Line(AbstractLine):
         #we crate an option only if PriceNotAvailable was not raised
         if not failed:
             # creating an option
-            o = self.itemsperpack
+            o = self.itemsperpack()
             ipp, created = self.attributes.get_or_create(option=o)
             ipp.value=items_per_pack
             ipp.value_code=items_per_pack,
@@ -80,7 +83,7 @@ class Line(AbstractLine):
         choice_data = {}
         choices = []
         query = None
-        for attr in self.attributes.exclude(option=self.itemsperpack).prefetch_related('option'):
+        for attr in self.attributes.exclude(option=self.itemsperpack()).prefetch_related('option'):
             # May be a lot of exceptions here, but it will mean problems in
             # another parts of the code or hacking attempt.
             if query is None:
