@@ -160,7 +160,11 @@ class Line(AbstractLine):
         return self.unit_price_incl_tax * self.quantity
 
     def product_and_options_description(self):
-        return ', '.join([self.product.title] + [attribute.value for attribute in self.attributes.all()])
+        attributes = self.attributes \
+            .exclude(option__short_description_weight=0) \
+            .order_by('-option__short_description_weight')
+        values = [attribute.value for attribute in attributes]
+        return ', '.join([self.product.short_title or self.product.title] + values)
 
     def get_memory_stockrecord(self, price_excl_tax):
         sr = getattr(self, 'memory_stockrecord', None)
