@@ -77,7 +77,8 @@ class CalculatedPrices(object):
             raise PriceNotAvailable, 'quantity %s not found'%quantity
 
         try:
-
+            # sometimes number of files can be zero (is line has no attachments yet, for example)
+            number_of_files = number_of_files or 1
             tpl = (
                 prices[prefix + attribute] + settings.MULTIFILE_PRICE_PER_ADDITIONAL_FILE * (number_of_files - 1),
                 prices['nr_of_units'],
