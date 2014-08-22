@@ -31,10 +31,6 @@ class ToggleItemLiveView(View):
             line = Line.objects.get(pk=line_id)
             line.is_dead = not line.is_dead
             line.save()
-            msg = 'Toggled product on'
-            if line.is_dead:
-                msg = 'Toggled product off'
-            messages.add_message(request, messages.SUCCESS, msg)
         except Line.DoesNotExist:
             messages.add_message(request, messages.ERROR, 'Product not found in basket')
         return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))
