@@ -97,7 +97,7 @@ class Line(AbstractLine):
             choice_data.update({attr.option.code: data})
         # try!!!
         if query:
-            [choices.append(x) for x in OptionChoice.objects.filter(query).iterator()]
+            [choices.append(x) for x in OptionChoice.objects.filter(query).select_related('option').iterator()]
         return choices, choice_data
 
     def _get_unit_price_from_pricelist(self):
