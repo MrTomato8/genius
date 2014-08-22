@@ -2,6 +2,7 @@
 {% load thumbnail %}
 {% load currency_filters %}
 {% load simple_math %}
+{% load static %}
 
 
 {% if basket_warnings %}
@@ -89,7 +90,7 @@
                                     {% if product.prices.count > 0 %}
                                   <a class="btn btn-small span1" href="{% url options:pick pk=product.pk product_slug=product.slug %}" class="button button-green">Duplicate</a>
                                     {% endif %}
-                                     <a class="btn btn-danger btn-small span1" href="#" data-id="{{ forloop.counter0 }}" data-behaviours="remove" class="inline">{% trans "Remove" %}</a>
+                                    <a class="js-remove-item" href="{% url basket:items-remove form.instance.pk %}?next={{ request.get_full_path|urlencode }}"><img src="{% static "local/images/delete.png" %}"></a>
                                     <div style="display:none" hidden="true" aria-hidden="true">
                             {{ form.save_for_later }}
                             {{ form.DELETE }}
@@ -130,11 +131,8 @@
                 </td>
                 <td>{{ line.unit_price_incl_tax|multiply:line.quantity|currency }}</td>
                 <td>
-                  <form method="POST" action="{% url basket:items-toggle-live line.pk %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                    <input type="submit" class="btn btn-success" value="Toggle item on" />
-                  </form>
+                  <a class="js-remove-item" href="{% url basket:items-remove line.pk %}?next={{ request.get_full_path|urlencode }}"><img src="{% static "local/images/delete.png" %}"></a>
+                  <a class="js-toggle-item-on" href="{% url basket:items-toggle-live line.pk %}?next={{ request.get_full_path|urlencode }}"><img src="{% static "local/images/notlive.png" %}" alt="|" /></a>
                 </td>
               </tr>
             {% endfor %}
@@ -180,3 +178,9 @@
     <p><a href="/" class="btn btn-primary">{% trans "Continue shopping" %}</a></p>
     {% endblock %}
 {% endif %}
+
+<script type="text/javascript">
+  $(function() {
+    PPS.basket.init();
+  });
+</script>
