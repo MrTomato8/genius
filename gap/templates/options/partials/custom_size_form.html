@@ -1,4 +1,5 @@
 {% load static %}
+{% load simple_math %}
 <div id="custom_size_form" class="panel panel-default measure-panel">
   <a data-toggle="collapse" href="#panel-collapse-5" class="panel-heading" data-parent="#product-accordion">Custom size</a>
 
@@ -25,7 +26,7 @@
                 <label class="col-sm-6 col-xs-12 control-label">Width</label>
 
                 <div class="input-group col-sm-6 col-xs-12">
-                  <input type="text" name="{{custom_size_form.width.name}}" value="{{custom_size_form.width.value}}" class="form-control">
+                  <input type="text" name="{{custom_size_form.width.name}}" value="{{custom_size_form.width.value|multiply:1000|floatformat}}" class="form-control">
                   <span class="input-group-addon addon-primary js-pickoptions-customsize-units">mm</span>
                   {{custom_size_form.width.errors}}
                 </div>
@@ -34,7 +35,7 @@
                 <label class="col-sm-6 col-xs-12 control-label">Height</label>
 
                 <div class="input-group col-sm-6 col-xs-12">
-                  <input type="text" name="{{custom_size_form.height.name}}" value="{{custom_size_form.height.value}}" class="form-control">
+                  <input type="text" name="{{custom_size_form.height.name}}" value="{{custom_size_form.height.value|multiply:1000|floatformat}}" class="form-control">
                   <span class="input-group-addon addon-primary js-pickoptions-customsize-units">mm</span>
                   {{custom_size_form.height.errors}}
                 </div>

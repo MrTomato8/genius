@@ -43,6 +43,9 @@ class OptionsSession(object):
             choice_data = self.DEFAULT_CHOICE_DATA
         self.set('choice_data', choice_data)
 
+    def reset_line(self, line_id=None):
+        self.set('line_id', line_id)
+
     def update_choice_data(self, data):
         if 'choice_data' in self.request.session[self.SESSION_KEY]:
             choice_data = self.request.session[self.SESSION_KEY]['choice_data']
@@ -81,6 +84,9 @@ class OptionsSession(object):
             return 0
         except TypeError:
             return 0
+
+    def get_line_id(self):
+        return self.get('line_id')
 
 
 class OptionsSessionMixin(object):

@@ -129,9 +129,9 @@
 
 </script>
 
+  <div class="panel-group" id="product-accordion">
 <form id="pickoptions" method="POST">
 {% csrf_token %}
-  <div class="panel-group" id="product-accordion">
   {% for group in groups %}
    <h3 class="button group_name">{{ group.group.name }}</h3>
   {% for picker in group.pickers %}
@@ -186,18 +186,24 @@
   </div>
   {% endfor %}
   {% endfor %}
+</form>
 
     <div id="modalchangepw">
+    {% if prices %}
+      {% include 'options/partials/quote-content.html' %}
+    {% else %}
       <div class="panel panel-default">
         <a data-toggle="collapse" href="#panel-collapse-6" class="panel-heading  collapsed" data-parent="#product-accordion">Quantity (choose quantity or enter your own)</a>
       </div>
+    {% endif %}
     </div>
 
   </div>
-</form>
 
 <script type="text/javascript">
-  PPS.pickForm.init();
+  $(function() {
+    PPS.pickForm.init();
+  });
 </script>
 </div>
 </div>

@@ -7,7 +7,7 @@
 
 <div id="getquote_wrap">
 
-<form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=params.pk product_slug=params.product_slug %}">{% csrf_token %}
+<form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=product.pk product_slug=product.slug %}">{% csrf_token %}
         {% if custom_size %}
           {% include 'options/partials/custom_size_form.html' %}
         {% endif %}
@@ -17,8 +17,7 @@
         </div>
         <div id="quantity_picker" class="panel-collapse collapse in">
             <div class="panel-body">
-                {% if prices.discrete_pricing %}
-                    {% if prices|length > 1 %}
+                    {% if prices.discrete_pricing and prices|length > 1 %}
                     <ul class="list-unstyled row">
                     {% for qty,price in prices.ordered.iteritems %}
                         <li class="col-md-2 col-sm-3 col-xs-6 text-center">
@@ -40,7 +39,7 @@
                                 <label class="col-sm-8 col-xs-12 control-label" id="choose_quantity_label">Choose or enter quantity</label>
                                 <div class="col-sm-4 col-xs-12">
                                     <div class="input-group">
-                                        <input data-action="{{action}}" type="text" class="form-control" name="quantity" id="id_quantity">
+                                        <input data-action="{{action}}" type="text" class="form-control" name="quantity" id="id_quantity" value="{{ quantity }}">
                                     </div>
                                 </div>
                             </div>
@@ -67,8 +66,8 @@
                               </div>
                             </div>
                         </div>
-                {% endif %}
               </div>
+        </div>
         </div>
     </form>
     <script type="text/javascript">
