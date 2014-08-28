@@ -1,8 +1,25 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db import models
-from apps.options.models import OptionPicker, OptionChoice
+from apps.options.models import OptionPicker, OptionChoice,Option
 
+class Utils(object):
+    costum_size=None
+    def __init__(self):
+        cooption, cchoice = settings.OPTIONCHOICE_CUSTOMSIZE
+        try:
+            self.costum_size = OptionChoice.objects.get(
+                option__code=cooption, code=cchoice)
+        except:
+            option, _ = Option.objects.get_or_create(code=cooption)
+            self.costum_size = OptionChoice.objects.create(code=cchoice,option=option)
+
+    def custom_size_chosen(self,choices):
+        return self.costum_size in choices
+utils = Utils()
+
+def custom_size_chosen(choices):
+    return utils.custom_size_chosen(choices)
 
 def available_choices(product, picker):
     return OptionChoice.objects.filter(
@@ -22,15 +39,7 @@ def available_pickers(product, group):
         return pickers
 
 
-def custom_size_chosen(choices):
-    cooption, cchoice = settings.OPTIONCHOICE_CUSTOMSIZE
-    try:
-        custom_size_choice = OptionChoice.objects.get(
-            option__code=cooption, code=cchoice)
-    except OptionChoice.DoesNotExist:
-        return False
-    else:
-        return custom_size_choice in choices
+
 
 def custom_size_option_name():
     return settings.OPTIONCHOICE_CUSTOMSIZE[0]

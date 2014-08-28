@@ -30,10 +30,7 @@ def import_pricelist(request):
             CSV.objects.create(
                 name=filename,
                 csv_file=request.FILES['csvfile'])
-            if report.skipped_total == 0:
-                return HttpResponseRedirect(reverse('apps.pricelist.views.list'))
-            else:
-                return render(request, 'pricelist/importerrors.html',
+            return render(request, 'pricelist/importerrors.html',
                               {'report': report})
     else:
         form = PricelistUploadForm()

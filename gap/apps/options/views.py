@@ -1,13 +1,14 @@
-from django.views.generic import View
+from decimal import Decimal
+from django.views.generic import View,TemplateView
 from django.db import models, DatabaseError
 from django.core.urlresolvers import reverse
-from apps.options.models import OptionPickerGroup, ArtworkItem
+from apps.options.models import OptionPickerGroup, ArtworkItem, OptionChoice
 from apps.options import utils
 from apps.options.forms import picker_form_factory
 from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm, QuoteSaveForm, QuoteLoadForm
 from django.http import HttpResponseRedirect, HttpResponse
 from apps.options.session import OptionsSessionMixin
-from apps.options.calc import OptionsCalculator, PriceNotAvailable
+from apps.options.calc import OptionsCalculator
 from apps.options.forms import ArtworkDeleteForm, ArtworkUploadForm
 from django.contrib import messages
 from oscar.apps.basket.signals import basket_addition
@@ -15,8 +16,7 @@ from django.template.response import TemplateResponse
 from apps.quotes.models import Quote
 import simplejson as json
 from django.conf import settings
-from decimal import Decimal
-
+from django.http import QueryDict
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
 Price = models.get_model('pricelist', 'Price')
@@ -46,13 +46,6 @@ class PricesMixin(object):
             print 'exception'
             raise e
         more_prices = []
-        '''
-        if not prices.discrete_pricing and not prices.matrix_for_pack:
-            for i in range(min_order, 26):
-                generate_prices = calc.calculate_costs(self.choices, i, choice_data)
-                more_prices += [generate_prices.get_price_incl_tax(i, request.user),]
-            print more_prices
-        '''
         return {
             'prices': prices,
             'more_prices': more_prices,
@@ -61,6 +54,9 @@ class PricesMixin(object):
 
 
 class CustomSizeFormMixin(object):
+
+    product=None
+
     def get_custom_size_context(self, session, choices):
         choice_data_custom_size = session.get_choice_data_custom_size()
         custom_size_form = QuoteCustomSizeForm(initial=choice_data_custom_size)
@@ -69,282 +65,294 @@ class CustomSizeFormMixin(object):
             'custom_size': utils.custom_size_chosen(choices),
         }
 
+class OptionPickerMixin(object):
+    redirect_url = ''
+    template_name =''
+    ajax_template_name=''
+    choices = []
+    groups = None
+    product = None
+    pickers = {}
 
-class PickOptionsView(OptionsSessionMixin, PricesMixin, CustomSizeFormMixin, View):
+    def urlencode(self):
+        return self.request.GET.urlencode()
+
+    def get_template_names(self):
+        attr = 'template_name'
+        if self.request.is_ajax():
+            attr= 'ajax_'+attr
+        return [getattr(self,attr)]
+
+    def _get_redirect_url(self):
+        return self.redirect_url
+
+    def get_redirect_url(self):
+        return self._redirect_url() + '?' +self.urlencode()
+
+    def get_querydict(self):
+        return self.request.GET.copy()
+
+    def dispatch(self,request,*args,**kwargs):
+
+        self.request = request
+        self.GET=self.get_querydict()
+        self.get_choices(request)
+
+        return super(OptionPickerMixin,self).dispatch(request,*args,**kwargs)
+
+    def get_choices(self,request):
+        choices = OptionChoice.objects.filter(pk__in =[pk for code,pk in self.GET.items()])
+        self.choices = choices
+
+    def ajax_request(self):
+        return self.ajax_template_name
+
+    def get_context_data(self,**kwargs):
+        ctx=super(OptionPickerMixin,self).get_context_data(**kwargs)
+        self.load_pickers()
+        ctx.update(self.pickers)
+        ctx['get']=self.urlencode()
+        return ctx
+
+    def get_product(self):
+        if self.product: return self.product
+        product = Product.objects
+        product.prefetch_related('prices')
+        product.prefetch_related('prices__options')
+        product.prefetch_related('prices__options__option')
+        product.prefetch_related('prices__discounts')
+        self.product = product.get(pk=self.kwargs['pk'])
+        return self.product
+
+    def get_groups(self):
+        #Turn it in an iterator if you're doing this once
+        if self.groups:return self.groups
+        self.get_product()
+        groups =OptionPickerGroup.objects.all()
+        groups =groups.prefetch_related('pickers')
+        groups = groups.select_related('pickers__option')
+        groups = groups.prefetch_related('pickers__option__choices')
+        groups = groups.prefetch_related('pickers__option__choices__conflicts_with')
+        self.groups = groups
+        return self.groups
+
+    def load_pickers(self):
+        if self.pickers: return bool(self.pickers['errors'])
+        codes =[choice.pk for choice in self.choices]
+        self.get_product()
+        groups = []
+        errors = []
+        for group in self.get_groups():
+            pickers = []
+            for picker in group.pickers.all().filter(option__choices__in=self.product.prices.all()[0].options.all()).distinct():
+                try:
+                    choices_pk=OptionChoice.objects.filter(prices__in=self.product.prices.all())
+                except:
+                    continue
+                choices = picker.option.choices.all().filter(pk__in=choices_pk).prefetch_related('option')
+
+                OptionPickerForm = picker_form_factory(
+                    self.product,
+                    picker,
+                    choices
+                    )
+                pass
+
+                code = picker.option.pk
+                selected = code in codes
+
+                if selected:
+                    conflict = self.choices & choices.conflicts_with.all()
+                    if conflict:
+                        sel = OptionChoice.objects.get(pk=code)
+                        conf = OptionChoice.objects.get(list(conflict)[0])
+                        error = '%s conflict with %s conflicts' %(sel,conf)
+                        errors.append(error)
+                        OptionPickerForm()
+                    else:
+                        option_form = OptionPickerForm(
+                            initial={code: code})
+                else:
+                    option_form = OptionPickerForm()
+                    if self.choices:
+                        option_form.choice_errors.append('Please select item')
+                pickers.append(
+                        {'picker': picker,
+                         'form': option_form})
+            if pickers:
+                groups.append({'group': group, 'pickers': pickers})
+        self.pickers = {
+            'product': self.product,
+            'groups': groups,
+            'errors': errors,
+            'save_url': reverse('options:add-to-basket',
+            kwargs={'pk': self.product.pk, 'product_slug': self.product.slug}),
+        }
+
+        return bool(errors)
+
+class QuantityCalcMixin(OptionPickerMixin):
+    price = None
+    quantity = 0
+    quantity_form = None
+    calculator = None
+    DATA = {}
+    template_name=''
+    quantity_template_name=''
+
+    def get_querydict(self):
+        GET = self.request.GET.copy()
+        DATA=QueryDict('',mutable=True)
+        DATA.__setitem__('width',Decimal(GET.pop('width',[0])[0]))
+        DATA.__setitem__('height',Decimal(GET.pop('height',[0])[0]))
+        DATA.__setitem__('quantity',Decimal(GET.pop('quantity',[0])[0]))
+        DATA.__setitem__('number_of_files',int(GET.pop('number_of_files',[0])[0]))
+        GET.pop('csrfmiddlewaretoken',None)
+        self.DATA=DATA
+        return GET
+
+    def is_custom_size_context(self):
+        return utils.custom_size_chosen(self.choices)
+
+    def get_custom_size_context(self):
+        if not self.is_custom_size_context():
+            return {'custom_size_form':False, 'custom_size':False}
+        width = self.DATA.get('width',0)
+        height = self.DATA.get('height',0)
+        form = QuoteCustomSizeForm(initial={'width':width,'height':height})
+        return {'custom_size_form':form, 'custom_size':True}
+
+    def get_calculator(self):
+        if self.calculator: return self.calculator
+        self.get_product()
+        data = self.DATA
+        self.calculator = OptionsCalculator(self.product,self.choices,data)
+        return self.calculator
+
+    def get_quantity(self):
+        self.quantity = self.quantity or self.DATA.get('quantity',0)
+        return self.quantity
+
+    def check_quantity(self):
+        quantity = self.get_quantity()
+        calculator = self.get_calculator()
+        return calculator.check_quantity(quantity)
+
+    def get_quantity_form(self):
+        if self.quantity_form: return self.quantity_form
+        quantity = self.get_quantity()
+        self.quantity_form = QuoteCalcForm(data={'quantity': quantity})
+        return self.quantity_form
+
+    def get_context_data(self,**kwargs):
+        ctx=super(QuantityCalcMixin,self).get_context_data(**kwargs)
+        quote_save_form = QuoteSaveForm()
+        self.get_quantity_form()
+
+        ctx.update({
+            'calc_form': self.quantity_form,
+            'quote_save_form': quote_save_form,
+            'choices':self.choices
+            })
+        ctx.update(self.get_custom_size_context())
+        return ctx
+
+    def quantity_form_is_valid(self):
+        self.get_quantity_form()
+        return self.check_quantity() and self.quantity_form.is_valid()
+
+    def get_price(self):
+        if self.price: return self.price
+        calculator = self.get_calculator()
+        self.price = calculator.price
+        return self.price
+
+    def get_discount(self):
+        calculator = self.get_calculator()
+        self.get_quantity()
+        self.get_price()
+        if not self.quantity_form_is_valid():
+            return False
+        return calculator.get_discount(self.quantity).discount
+
+    def get_discounts(self):
+        self.get_price()
+        return self.price.discounts.all()
+
+
+class PickOptionsView(OptionPickerMixin, TemplateView):
     template_name = 'options/pick.html'
 
-    def get(self, request, *args, **kwargs):
-        errors = []
+    def _redirect_url(self):
+        return reverse('options:quantity',
+                kwargs={'pk': self.product.pk, 'product_slug': self.product.slug})
 
-        product = Product.objects.get(pk=kwargs['pk'])
+    def get_context_data(self,**kwargs):
 
-        self.session.reset_line()
-        if not self.session.valid(product):
-            self.session.reset_product(product)
-            self.session.reset_choices()
-            self.session.reset_quantity()
-            self.session.reset_choice_data()
+        ctx = super(PickOptionsView,self).get_context_data(**kwargs)
+        ctx['pick_action']=self.get_redirect_url()
+        return ctx
 
-        groups = []
-        for group in OptionPickerGroup.objects.all():
+    def get(self, *args,**kwargs):
+        pickers_error = self.load_pickers()
+        if pickers_error or not self.choices:
+            return super(PickOptionsView,self).get(*args,**kwargs)
+        return HttpResponseRedirect(self.get_redirect_url())
 
-            pickers = []
-            for picker in utils.available_pickers(product, group):
+class QuantityView(QuantityCalcMixin,TemplateView):
+    template_name = 'options/pick.html'
+    ajax_template_name ='options/partials/quote-content.html'
+    def _redirect_url(self):
+        return reverse('options:quote',
+                kwargs={'pk': self.product.pk, 'product_slug': self.product.slug})
 
-                a_choices = utils.available_choices(product, picker)
-                if a_choices:
-                    OptionPickerForm = picker_form_factory(product,
-                                                           picker,
-                                                           a_choices)
-                    code = picker.option.code
-                    s_choices = self.session.get('choices', {})
+    def get_pick_url(self):
+        return reverse('options:pick',
+                kwargs={
+                    'pk': self.product.pk,
+                    'product_slug': self.product.slug})+self.urlencode()
 
-                    if s_choices.get(code, None) is not None:
-                        opform = OptionPickerForm(
-                            data={code: s_choices[code]})
-                    else:
-                        opform = OptionPickerForm()
+    def get_context_data(self,**kwargs):
+        ctx = super(QuantityView,self).get_context_data(**kwargs)
+        ctx['prices'] = self.get_discounts()
+        ctx['quantity_action'] =self.get_redirect_url()
+        return ctx
 
-                    pickers.append(
-                        {'picker': picker,
-                         'form': opform})
+    def get(self, *args,**kwargs):
+        pickers_error = self.load_pickers()
+        if pickers_error or not self.choices:
+            return HttpResponseRedirect(self.get_pick_url())
+        return super(QuantityView,self).get(*args,**kwargs)
 
-            if pickers:
-                groups.append({'group': group, 'pickers': pickers})
+class QuoteView(QuantityView, TemplateView):
+    template_name = 'options/pick.html'
 
-        context = kwargs.get('context', {})
-        context.update({
-            'product': product,
-            'groups': groups,
-            'errors': errors,
-            'session': self.session,
-            'save_url': reverse('options:add-to-basket', kwargs={'pk': product.pk, 'product_slug': product.slug}),
-        })
-        context.update(self.get_custom_size_context(self.session, self.session.get_choices()))
-        return TemplateResponse(request, self.template_name, context)
+    def get_quantity_url(self):
+        reverse('options:quantity',
+                kwargs={
+                    'pk': self.product.pk,
+                    'product_slug': self.product.slug})+self.urlencode()
+    def get_context_data(self,**kwargs):
+        ctx=super(QuoteView,self).get_context_data(**kwargs)
+        calculator = self.get_calculator()
 
-    def post(self, request, *args, **kwargs):
-        errors = []
+        ctx['price']=calculator.total_price(self.get_quantity(),self.request.user)
+        ctx['price_per_unit']= calculator.price_per_unit(self.get_quantity(),self.request.user)
+        ctx['quantity']=self.get_quantity()
+        return ctx
 
-        product = Product.objects.get(pk=kwargs['pk'])
-
-        self.session.reset_product(product)
-        self.session.reset_choices()
-        self.session.reset_choice_data()
-
-        allvalid = True
-
-        groups = []
-        # Cache collected OptionChoice objects for quantity field pre-fill
-        choices = []
-
-        for group in OptionPickerGroup.objects.all():
-
-            pickers = []
-            for picker in utils.available_pickers(product, group):
-
-                a_choices = utils.available_choices(product, picker)
-                if a_choices:
-                    OptionPickerForm = picker_form_factory(product,
-                                                           picker,
-                                                           a_choices)
-                    code = picker.option.code
-                    s_choices = self.session.get('choices', {})
-
-                    opform = OptionPickerForm(request.POST)
-                    allvalid = allvalid and opform.is_valid()
-                    if opform.is_valid():
-                        s_choices[code] = opform.cleaned_data[code].pk
-                        choices.append(opform.cleaned_data[code])
-                        self.session.set('choices', s_choices)
-                    else:
-                        if opform.data.get(code, None) is None:
-                            opform.choice_errors.append(
-                                'Please select item')
-
-                    pickers.append(
-                        {'picker': picker,
-                         'form': opform})
-
-            if pickers:
-                groups.append({'group': group, 'pickers': pickers})
-
-        # Check if there are any conflicting selections
-        if allvalid:
-
-            # Gather all choices in one set
-            allchoices = set()
-            for group in groups:
-                for picker in group['pickers']:
-                    code = picker['picker'].option.code
-                    allchoices.add(
-                        picker['form'].cleaned_data[code])
-
-            # Walk again to find conflicts
-            for group in groups:
-                for picker in group['pickers']:
-
-                    code = picker['picker'].option.code
-                    choice = picker['form'].cleaned_data[code]
-
-                    # Filter by intersection
-                    conflicts = allchoices & set(choice.conflicts_with.all())
-
-                    if conflicts:
-                        allvalid = False
-
-                    for conflict in conflicts:
-                        emsg = '{0} is not available with {1}'.format(
-                            choice.caption, conflict)
-                        picker['form'].choice_errors.append(emsg)
-
-            # If validity was reset there must be conflicting choices
-            if not allvalid:
-                errors.append('There are some conflicting choices. '
-                              'Please review your selections.')
-
-        else:
-            #errors.append('Please review your selections.')
-            #try
-            return HttpResponseRedirect(reverse('options:quote', kwargs={'pk': product.pk, 'product_slug': product.slug}))
-
-        if allvalid:
-            min_order = utils.min_order(product, choices)
-            if self.session.get_quantity() < min_order:
-                self.session.reset_quantity(min_order)
-            return HttpResponseRedirect(reverse('options:quote', kwargs={'pk': product.pk, 'product_slug': product.slug}))
-
-        return TemplateResponse(request, self.template_name, {
-            'product': product,
-            'groups': groups,
-            'errors': errors,
-        })
-
-
-class QuoteView(OptionsSessionMixin, OptionsContextMixin, PricesMixin, CustomSizeFormMixin, View):
-    template_name = 'options/quote.html'
-
-    def get(self, request, *args, **kwargs):
-        errors = []
-
-
-
-        choice_data = self.session.get_choice_data()
-
-        quantity = self.session.get_quantity()
-        #this should be done in calculate cost!
-        '''
-        min_order = utils.min_order(self.product, self.choices)
-        min_area = utils.min_area(self.product, self.choices)
-
-        if min_order > quantity:
-            errors.append('Minimum order quantity for this '
-                          'option set is {0}'.format(min_order))
-
-        if min_area > 0:
-            errors.append('Minimum custom size area for this '
-                          'option set is {0}'.format(min_area))
-        '''
-
-        calc_form = QuoteCalcForm(data={'quantity': quantity})
-
-        quote_save_form = QuoteSaveForm()
-        context = {
-            'product': self.product,
-            'choices': self.choices,
-            'params': kwargs,
-            'calc_form': calc_form,
-            'trade_user': utils.trade_user(request.user),
-            'quote_save_form': quote_save_form,
-            'errors': errors,
-            'action':reverse('options:quote', kwargs=kwargs),
-        }
-        context.update(self.get_prices_context(self.product, self.choices, quantity, choice_data))
-        context.update(self.get_custom_size_context(self.session, self.choices))
-        return TemplateResponse(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        errors = []
-
-        min_order = utils.min_order(self.product, self.choices)
-        #min_area = utils.min_area(self.product, self.choices)
-
-        calc = OptionsCalculator(self.product)
-
-        custom_size_form = QuoteCustomSizeForm(request.POST)
-        if custom_size_form.is_valid():
-            width = custom_size_form.cleaned_data['width']/Decimal(1000)
-            height = custom_size_form.cleaned_data['height']/Decimal(1000)
-            self.session.set_choice_data_custom_size(
-                {'width': width,
-                 'height': height})
-        else:
-            self.session.set_choice_data_custom_size({'width': 0, 'height': 0})
-
-        choice_data = self.session.get_choice_data()
-
-        calc_form = QuoteCalcForm(request.POST)
-        if calc_form.is_valid():
-            self.session.set('quantity', calc_form.cleaned_data['quantity'])
-
-            quantity = calc_form.cleaned_data['quantity']
-            if quantity < min_order:
-                errors.append('Minimum order quantity for this '
-                              'option set is {0}'.format(min_order))
-            try:
-                prices = calc.calculate_costs(self.choices, quantity, choice_data)
-            except Exception as e:
-                #for now only .calc.exceptions.TooSmall
-                #print e
-                res = {
-                    'value': False,
-                    'size_form_error': 'Size too small',
-                }
-                return HttpResponse(
-                    json.dumps(res, use_decimal=True),
-                    mimetype='application/json')
-            try:
-                price, nr_of_units, items_per_pack = prices.get_price_incl_tax(
-                    quantity, calc_form.cleaned_data['number_of_files'], request.user)
-            except PriceNotAvailable:
-                quote = {'valid': False}
-            else:
-                quote = {'valid': True}
-                quote['price'] = price
-                quote['nr_of_units'] = nr_of_units
-                quote['items_per_pack'] = items_per_pack
-                quote['quantity'] = quantity
-
-        else:
-            prices = calc.calculate_costs(self.choices, None, choice_data)
-            quote = {'valid': False}
-
-        if len(prices) == 0:
-            errors.append('No prices found')
-
-        quote_save_form = QuoteSaveForm()
+    def get(self,*args,**kwargs):
         if self.request.is_ajax():
-            self.template_name = 'options/partials/quote-content.html'
-        if self.request.is_ajax():
-            return HttpResponse(
-                json.dumps(quote, use_decimal=True),
-                mimetype='application/json')
-        return TemplateResponse(request, self.template_name, {
-            'product': self.product,
-            'choices': self.choices,
-            'params': kwargs,
-            'calc_form': calc_form,
-            'custom_size_form': custom_size_form,
-            'custom_size': utils.custom_size_chosen(self.choices),
-            'prices': prices,
-            'errors': errors,
-            'trade_user': utils.trade_user(request.user),
-            'quote': quote,
-            'choice_data_custom_size': self.session.get_choice_data_custom_size(),
-            'quote_save_form': quote_save_form,
-            'session': self.session,
-        })
-
+            calculator = self.get_calculator()
+            self.get_quantity()
+            ctx={}
+            ctx['total_price']=calculator.total_price(self.quantity,self.request.user)
+            ctx['unit_price']= calculator.price_per_unit(self.quantity,self.request.user)
+            ctx['quantity']=self.get_quantity()
+            ctx['valid']=calculator.check_quantity(self.quantity)
+            ctx['get']=self.request.GET
+            return HttpResponse(json.dumps(ctx),content_type='text/json')
+        return super(QuoteView,self).get(*args,**kwargs)
 
 class QuoteSaveView(OptionsSessionMixin, OptionsContextMixin, View):
     def post(self, request, *args, **kwargs):
@@ -446,6 +454,7 @@ class LineEditView(PickOptionsView):
 
 class ArtworkDeleteView(View):
     def post(self, request, *args, **kwargs):
+
         form = ArtworkDeleteForm(request.POST)
         if form.is_valid():
             ArtworkItem.objects.filter(
@@ -456,35 +465,29 @@ class ArtworkDeleteView(View):
                             'pk': kwargs['pk']}))
 
 
-class AddToBasketView(OptionsSessionMixin, OptionsContextMixin, View):
+class AddToBasketView(QuantityCalcMixin, View):
     add_signal = basket_addition
 
     def post(self, request, *args, **kwargs):
         basket = request.basket
         user = request.user
-        quantity = self.session.get_quantity()
-        choice_data = self.session.get_choice_data()
+        quantity = self.get_quantity()
+        choices = self.choices
+        width=self.DATA['width']
+        height=self.DATA['height']
         attachments = []
         if user.is_authenticated():
             for file in ArtworkItem.objects.filter(user=user):
                 if file.available:
                     attachments.append(file)
 
-        basket.add_dynamic_product(self.product, quantity, self.choices,
-                                   attachments, choice_data)
-        if self.session.get_line_id():
-            msg = '{0} changed successfully'.format(self.product.get_title())
-            try:
-                Line.objects.get(pk=self.session.get_line_id()).delete()
-            except Line.DoesNotExist:
-                pass
-        else:
-            msg = '{0} added successfully'.format(self.product.get_title())
-        messages.add_message(request, messages.SUCCESS, msg)
-        self.session.reset_quantity()
-        self.session.reset_choices()
-        self.session.reset_choice_data()
-        self.session.reset_line()
+        basket.add_product(
+            product=self.get_product(),
+            quantity=quantity,
+            choices=choices,
+            height=height,
+            width=width,
+            attachments=attachments)
 
         self.add_signal.send(sender=self, product=self.product, user=user)
 
@@ -534,3 +537,4 @@ class UploadView(OptionsSessionMixin, OptionsContextMixin, View):
             'uploadform': uploadform,
             'choice_data_custom_size': self.session.get_choice_data_custom_size(),
         })
+

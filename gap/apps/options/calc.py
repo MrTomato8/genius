@@ -60,7 +60,7 @@ class CalculatedPrices:
         sheet_type = False
         selected_quantity = 0
         found = False
-        
+
         if self.matrix_for_pack:
             for key in self._prices:
                 price = self._prices[key]
@@ -70,7 +70,7 @@ class CalculatedPrices:
                     break
                 elif key > selected_quantity and key < nr_of_items:
                     selected_quantity = key
-            
+
             #units_multiplier= Decimal(nr_of_items)
             #price_multiplier = Decimal(ceil(nr_of_items/Decimal(selected_quantity)))
         elif self.discrete_pricing:
@@ -91,7 +91,7 @@ class CalculatedPrices:
             prices = self._prices[quantity]
         except:
             raise PriceNotAvailable, 'quantity %s not found'%quantity
-        
+
         if self.triple_decimal and self.matrix_for_pack:
             #this has sense since quantity will be set to 1
             price_multiplier = nr_of_items
@@ -104,22 +104,22 @@ class CalculatedPrices:
                 prices[prefix + attribute]*price_multiplier,
                 prices['nr_of_units']*units_multiplier,
                 prices['items_per_pack'])
-            
+
             return tuple
         except:
             raise PriceNotAvailable
-            
+
     def get_unit_price_incl_tax(self, quantity, user):
         return self._get_price_attribute(quantity, user, 'unit_price_incl_tax')
 
     def get_price_incl_tax(self, quantity, user):
         return self._get_price_attribute(quantity, user, 'price_incl_tax')
-    
+
     def add_price_history(self, tpl_prices, rpl_prices):
         self.vanilla_tpl_prices = tpl_prices
         self.vanilla_rpl_prices = rpl_prices
         pass
-    
+
     def get_min_rpl_price(self):
         selected = None
         for price in self.vanilla_rpl_prices:
@@ -130,17 +130,17 @@ class CalculatedPrices:
                     price = selected
                 elif price[0]==selected[0] and price[1]>selected[1]:
                     price = selected
-                pass                
+                pass
         dict = {'price':selected[0], 'items_per_pack':selected[1]}
         return dict
-    
+
     def get_min_tpl_price(self):
         selected = None
         for price in self.vanilla_tpl_prices:
             if selected is None:
                 selected = price
             else:
-                
+
                 if price[0] and price[0]<selected[0]:
                     price = selected
                 elif price[0]==selected[0] and price[1]>selected[1]:
@@ -165,7 +165,7 @@ class CalcCache(object):
         cls.create(p)
         cls.dict[p][key]= value
         return cls.dict[p][key]
-    
+
     @classmethod
     def get_or_set(cls, p, key, default = None):
         cls.create(p)
@@ -180,7 +180,7 @@ class BaseOptionsCalculator:
         self.product = product
         self.quantize = TWOPLACES
         self.current_coiches = None
-        
+
     def _get_area(self, choice_data):
 
         result = 0
@@ -209,7 +209,7 @@ class BaseOptionsCalculator:
         Picks Price objects which statisfy given quantity
         and choice selections
         '''
-        
+
         self.current_choices = zlib.crc32(str(choices)+str(choice_data)+str(quantity))
         prices = CalcCache.get_or_set(self.current_choices, 'prices', False)
         if prices:
@@ -217,7 +217,7 @@ class BaseOptionsCalculator:
         prices = self.product.prices.all()
 
         custom_size = utils.custom_size_chosen(choices)
-        
+
         if quantity is not None:
             prices = prices.filter(min_order__lte=quantity)
 
@@ -227,7 +227,7 @@ class BaseOptionsCalculator:
         # Keep prices for selected options only
         for choice in choices:
             prices = prices.filter(option_choices=choice)
-            
+
         discrete = prices.values('quantity').distinct().count() > 1
         # There may be several minimal areas matched, lets get closest one
         min_area_max = prices.aggregate(Max('min_area'))['min_area__max']
@@ -244,7 +244,7 @@ class BaseOptionsCalculator:
 
         min_order_max = prices.aggregate(Max('min_order'))['min_order__max']
         prices = prices.filter(min_order=min_order_max)
-        
+
         # Abort if duplicate quantities found in discrete priced product.
         # You have to look for invalid lines in pricelist
 
@@ -255,7 +255,7 @@ class BaseOptionsCalculator:
         #    raise DuplicateQuantities
         prices = set(prices)
 
-        
+
         CalcCache.set(self.current_choices, 'prices', prices)
         CalcCache.set(self.current_choices, 'discrete', discrete)
         # Return prices for all found discrete quantities
@@ -266,7 +266,7 @@ class BaseOptionsCalculator:
         size_chosen = CalcCache.get(self.current_choices, 'custom_size', None)
         if size_chosen is None:
             CalcCache.set(self.current_choices, 'custom_size', utils.custom_size_chosen(choices))
-            size_chosen = CalcCache.get(self.current_choices, 'custom_size', None)           
+            size_chosen = CalcCache.get(self.current_choices, 'custom_size', None)
         if size_chosen:
             area = self._get_area(choice_data)
             CalcCache.set(self.current_choices, 'area',area)
@@ -287,7 +287,7 @@ class BaseOptionsCalculator:
 
     def _total(self, price, quantity):
         return (price * quantity).quantize(self.quantize, ROUND_HALF_UP)
-        
+
     def _unit(self, price, quantity):
         return (price / quantity).quantize(self.quantize, ROUND_HALF_UP)
 
@@ -299,7 +299,7 @@ class BaseOptionsCalculator:
         height arguments into account. Width and height units are millimeters
         and price value is per square metre for this case.
         '''
-        
+
         # Totals (price*quantity) are recalculated to make price
         # consistent with basket's price calculation. Basket stores only
         # unit prices with 2 decimal places, so on the calculation one cent may be
@@ -311,18 +311,18 @@ class BaseOptionsCalculator:
             return result
         result = CalculatedPrices()
         matrix_for_pack = False
-        
+
         if choice_data is None:
             choice_data = {}
 
         if quantity == 0:
             quantity = None
-            
+
         prices, discrete = self.pick_prices(choices, choice_data, quantity)
         # vanilla price history
         rpl_price_history = []
         tpl_price_history = []
-        
+
         # Discrete pricing scheme
         if discrete:
             result.discrete_pricing = True
@@ -330,7 +330,7 @@ class BaseOptionsCalculator:
                 if price.quantity<price.items_per_pack:
                     matrix_for_pack = result.matrix_for_pack = True
                 if ( not result.triple_decimal and
-                    price.rpl_price.quantize(THREEPLACES) != price.rpl_price.quantize(TWOPLACES) 
+                    price.rpl_price.quantize(THREEPLACES) != price.rpl_price.quantize(TWOPLACES)
                     or
                     price.tpl_price.quantize(THREEPLACES) != price.tpl_price.quantize(TWOPLACES)
                     ):
@@ -341,12 +341,12 @@ class BaseOptionsCalculator:
             for price in prices:
                 rpl_price_history.append((price.rpl_price, price.items_per_pack))
                 tpl_price_history.append((price.tpl_price, price.items_per_pack))
-                
+
                 rpl_price = self._apply_choice_data(
                     price.rpl_price, choices, choice_data)
                 tpl_price = self._apply_choice_data(
                     price.tpl_price, choices, choice_data)
-                
+
                 items_per_pack = price.items_per_pack
                 if not matrix_for_pack and quantity is not None:
                     nr_of_units = self._calc_units(
@@ -359,13 +359,13 @@ class BaseOptionsCalculator:
                 if matrix_for_pack:
                     if rpl_price*price.quantity < price.min_rpl_price:
                         rpl_price = price.min_rpl_price
-    
+
                     if tpl_price*price.quantity < price.min_tpl_price:
                         tpl_price = price.min_tpl_price
-                else:    
+                else:
                     if rpl_price*nr_of_units < price.min_rpl_price:
                         rpl_price = price.min_rpl_price
-    
+
                     if tpl_price*nr_of_units < price.min_tpl_price:
                         tpl_price = price.min_tpl_price
                 rpl_unit_price = self._unit(rpl_price, nr_of_units)
@@ -373,7 +373,7 @@ class BaseOptionsCalculator:
 
                 price_data = {}
 
-                
+
                 price_data['items_per_pack'] = items_per_pack
 
                 price_data['rpl_price_incl_tax'] = self._total(
@@ -394,10 +394,10 @@ class BaseOptionsCalculator:
                 return result
 
             if quantity is not None:
-                
+
                 rpl_price_history.append((price.rpl_price, price.items_per_pack))
                 tpl_price_history.append((price.tpl_price, price.items_per_pack))
-                
+
                 rpl_price = self._apply_choice_data(
                     price.rpl_price, choices, choice_data)
                 tpl_price = self._apply_choice_data(
@@ -406,7 +406,7 @@ class BaseOptionsCalculator:
                 items_per_pack = price.items_per_pack
                 nr_of_units = self._calc_units(
                     items_per_pack, price.quantity)
-                
+
                 nr_of_units_required = self._calc_units(
                     items_per_pack, quantity)
                 rpl_unit_price = self._unit(rpl_price, nr_of_units)
