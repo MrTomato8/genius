@@ -14,7 +14,7 @@
         {% if user.is_staff %}
             <li><a href="{% url dashboard:index %}" >{% trans "DASHBOARD" %}</a></li>
         {% endif %}
-        <li class="hidden-xs"><a href="{% url basket:summary %}" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> BASKET 
+        <li class="hidden-xs"><a href="{% url basket:summary %}" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Proceed to checkout
         {% if request.basket.num_lines > 0 %}
             <span class="rnd-btn">{{ basket.total_incl_tax|currency }} <strong>{{ request.basket.num_lines }} ITEMS</strong></span>
         {% endif %}
@@ -22,7 +22,7 @@
         <li><a href="{% url customer:logout %}" class="btn btn-primary">{% trans "LOGOUT" %}</a></li>
     {% else %}
         <li class="hidden-xs"><a href="" class="btn btn-primary" data-toggle="modal" data-target="#modal-login"><i class="fa fa-user"></i>{% trans " LOGIN" %}</a></li>
-        <li class="hidden-xs"><a href="{% url basket:summary %}" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> BASKET 
+        <li class="hidden-xs"><a href="{% url basket:summary %}" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Proceed to checkout
         {% if request.basket.num_lines > 0 %}
             <span class="rnd-btn">{{ basket.total_incl_tax|currency }} <strong>{{ request.basket.num_lines }} ITEMS</strong></span>
         {% endif %}

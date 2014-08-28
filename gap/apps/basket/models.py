@@ -167,6 +167,9 @@ class Basket(AbstractBasket):
     def all_lines_with_dead(self):
         return super(Basket, self).all_lines()
 
+    def dead_lines(self):
+        return super(Basket, self).all_lines().filter(is_dead=True)
+
     @property
     def default_wrapper(self):
         wr = getattr(self, "_default_wrapper", None)
