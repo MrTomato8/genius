@@ -46,7 +46,7 @@ PPS.getQuote = {
         unit_price = parseFloat(unit_price).toFixed(2),
         form = this.$priceLabel.parent().find('form'),
         action = form.attr('action');
-        action = action +'?'+ $.param(get);
+        action = action.substring(0, action.indexOf('?')); +'?'+ $.param(get);
         form.attr('action',action);
         if (quantity > 1) {
             this.$unitPriceLabel.html('(Unit price is ' + this.currency + unit_price + ')').show();
@@ -76,10 +76,10 @@ PPS.getQuote = {
 
         var $form = $('#getquote');
         $("#quantity_picker li").on('click', function() {
-            var $radio = $(this).find('input[type=radio]');
-            PPS.getQuote.toggleQuantityRadio($radio, true);
             $(this).siblings('li').removeClass('active');
-            $form.find('input[name=quantity]').val($radio.val()).trigger('change');
+            console.log(this)
+            console.log($(this).data())
+            $form.find('input[name=quantity]').val($(this).data('quantity')).trigger('change');
             PPS.getQuote.trySubmitForm();
         });
         $form.find('input[name=quantity]').on('keyup', function() {

@@ -1,7 +1,6 @@
 PPS.pickForm = {
     init: function() {
         $('#pickoptions .panel-default .radio-choice').click(function () {
-            console.log('wat');
             if ($('#pickoptions .panel-default:not(:has(.radio-choice:checked))').length) {
                 // Not all options selected
                 return;

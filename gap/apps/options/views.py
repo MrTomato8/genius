@@ -345,8 +345,9 @@ class QuoteView(QuantityView, TemplateView):
     def get_context_data(self,**kwargs):
         ctx=super(QuoteView,self).get_context_data(**kwargs)
         calculator = self.get_calculator()
-        ctx['get']=self.request.GET or '&'.join(
-            [choice.option.code+'='+str(choice.pk) for choice in self.choices])
+        ctx['get']=self.request.GET or \
+            '&'.join([choice.option.code+'='+str(choice.pk) for choice in self.choices])\
+            +'&'+ self.DATA.urlencode()
         ctx['valid']=calculator.check_quantity(self.quantity)
         ctx['price']=calculator.total_price(self.get_quantity(),self.request.user)
         ctx['total_price']=calculator.total_price(self.quantity,self.request.user)

@@ -19,7 +19,7 @@
             <div class="panel-body">
                 <ul class="list-unstyled row">
                     {% for price in prices reversed %}
-                    <li class="col-md-2 col-sm-3 col-xs-6 text-center">
+                    <li class="col-md-2 col-sm-3 col-xs-6 text-center" data-quantity={{price.quantity}}>
                         {{price.quantity}}
                     </li>
                     {%endfor%}
