@@ -5,9 +5,25 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from datacash.facade import Facade
 
+from django.contrib.auth import login
 from oscar.apps.checkout import views
 from oscar.apps.payment.forms import BankcardForm
 from oscar.apps.payment.models import SourceType, Source
+
+class IndexView(views.IndexView):
+    #this should eliminate the anonymous checkout feature
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return self.get_success_response()
+        return super(views.IndexView, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        if form.is_guest_checkout():
+            http.HttpResponseRedirect(reverse('customer:register'))
+        else:
+            user = form.get_user()
+            login(self.request, user)
+        return self.get_success_response()
 
 
 # Customise the core PaymentDetailsView to integrate Datacash

@@ -134,9 +134,7 @@ class BaseOptionsCalculator(object):
             quantity = self.calculate_custom(quantity)
         try:
             discount = self.price.discounts.filter(quantity__lte=quantity)[0].discount
-            print discount
             self.discount[quantity] = discount
-            print self.dicount[quantity]
             return discount
         except:
             return False
