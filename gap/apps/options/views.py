@@ -167,8 +167,11 @@ class QuantityCalcMixin(OptionPickerMixin):
     def get_querydict(self):
         GET = self.request.GET.copy()
         DATA=QueryDict('',mutable=True)
-        DATA.__setitem__('width',Decimal(GET.pop('width',[0])[0]))
-        DATA.__setitem__('height',Decimal(GET.pop('height',[0])[0]))
+        #Decimal(1000) is needed since the lengths are stored in meters but send in mm
+        DATA.__setitem__('width',
+            Decimal(GET.pop('width',[0])[0])/Decimal(1000))
+        DATA.__setitem__('height',
+            Decimal(GET.pop('height',[0])[0])/Decimal(1000))
         DATA.__setitem__('quantity',Decimal(GET.pop('quantity',[0])[0]))
         DATA.__setitem__('number_of_files',int(GET.pop('number_of_files',[0])[0]))
         GET.pop('csrfmiddlewaretoken',None)
