@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from apps.pricelist.models import Price, CsvRow
+from apps.pricelist.models import Price, Discount
 from apps.options.models import OptionChoice
 from django.db import models
 import csv
@@ -113,11 +113,6 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
             data['min_rpl_price'] = Decimal(0)
 
 
-        try:
-            data['quantity'] = Decimal(row.pop('quantity', None))
-        except:
-            report.skip('quantity', 'bad value', original_row)
-            continue
         # quantity-discount
         try:
             raw_quantity_discount = row.pop('quantity-discount', None)
@@ -150,10 +145,12 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
         except:
             data['media_width'] = Decimal(1.300)
 
+        row.pop('quantity', None)
+
         try:
-            data['items_per_pack'] = int(row.pop('items_per_pack', 1))
+            items_per_pack = int(row.pop('items_per_pack', 1))
         except ValueError:
-            data['items_per_pack'] = 1
+            items_per_pack = 1
 
         try:
             data['min_order'] = Decimal(row.pop('min_order', None))
@@ -228,16 +225,11 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                 product = product, partner = partner, partner_sku = sku
                 )
 
-        #do a for loop and save **data
+        #quantity-discount
+        price = Price.objects.create(**data)
+        for choice in choices:
+            price.option_choices.add(choice)
         if quantity_discount:
-            base_tpl_price = data['tpl_price']
-            base_rpl_price = data['rpl_price']
-            csvrow = CsvRow(
-                quantity_discount=','.join(quantity_discount),
-                base_tpl_price=base_tpl_price,
-                base_rpl_price=base_rpl_price
-                )
-            csvrow.save()
             for element in quantity_discount:
                 try:
                     quantity, anomaly = element.split('-')
@@ -246,6 +238,10 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                         discount = Decimal(anomaly[0])
                     except:
                         discount = Decimal(0)
+<<<<<<< HEAD
+                    quantity=Decimal(quantity)*items_per_pack
+                    Discount.objects.create(price=price,discount=discount,quantity =quantity )
+=======
                     try:
                         fixed_discount = Decimal(anomaly[1])
                     except:
@@ -267,14 +263,9 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                         p.option_choices.add(choice)
                     p.save()
                     report.success()
+>>>>>>> origin/new_design
                 except:
                     pass
-        else:
-            p = Price(**data)
-            p.save()
-            for choice in choices:
-                p.option_choices.add(choice)
-            p.save()
 
         report.success()
     for price in Price.objects.filter(state=Price.OLD):

@@ -10,7 +10,7 @@ from decimal import Decimal
 from oscar.templatetags.currency_filters import currency
 from django.utils.translation import ugettext as _
 from apps.options import utils
-from apps.partner.models import StockRecordForChoices
+from django.conf import settings
 from apps.globals.models import get_tax_percent
 from apps.partner.wrappers import DefaultWrapper
 import uuid
@@ -18,87 +18,53 @@ from django.conf import settings
 from apps.basket.exceptions import ItemsRequiredException
 from .managers import LineManager
 
+
 Option = models.get_model('catalogue', 'Option')
 
 class Line(AbstractLine):
     objects = LineManager()
-    PRODUCT_STOCKRECORD, OPTIONS_CALCULATOR = (
-        'stockrecord', 'optionscalc')
-    STOCKRECORD_SOURCE_CHOICES = (
-        (PRODUCT_STOCKRECORD, 'Product stockrecord'),
-        (OPTIONS_CALCULATOR, 'Options calculator'))
 
-    # Selector used in overriden _get_stockrecord_property
-    # For classic products use PRODUCT_STOCKRECORD
-    # For dynamically priced products use OPTIONS_CALCULATOR
-    stockrecord_source = models.CharField(
-        'Stockrecord source', max_length=30, default=PRODUCT_STOCKRECORD,
-        choices=STOCKRECORD_SOURCE_CHOICES)
+    #width and height for custom size, in mm
+    width=models.PositiveIntegerField(default=0)
+    height=models.PositiveIntegerField(default=0)
 
-    # Total items required, nr of stickers or nr of business cards for example
-    # making this field nullable an exception will raise if there are problems
-    items_required = models.PositiveIntegerField(null=True, blank=True)
-    real_quantity = models.PositiveIntegerField(null=True, blank=True)
+    #choices store all the data in price
+    choices = models.ManyToManyField(OptionChoice, related_name='lines+')
+
+    #By Vlad usefull to do something with quotebuilder
     is_dead = models.BooleanField(blank=True, default=False)
-    @staticmethod
-    def itemsperpack():
-        return Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
+
+    calculator_data = {}
+    calculator = None
+
+    @property
+    def number_of_files(self):
+        return self.attachments.all().count()
 
     def save(self,*args,**kwargs):
-        if not self.attributes.all().exists():
-            super(Line,self).save(*args,**kwargs)
-            return None
-        # TODO(): a cache variable could be auspicable for performance, skipping all the code bellow
-        choices, choice_data = self.get_option_choices()
-        failed=False
-        calc = OptionsCalculator(self.product)
-        prices = calc.calculate_costs(
-                choices, self.quantity, choice_data
-            )
-        try:
-            price_incl_tax, nr_of_units, items_per_pack = prices.get_unit_price_incl_tax(
-                self.quantity, self.attachments.count(), self.basket.owner
-            )
-        except PriceNotAvailable:
-            # something has gone wrong, we do what has been done in Basket.add_dynamic_product
-            # TODO(): Log
-            nr_of_units = self.quantity
-            price_incl_tax = None
-            failed=True
-        #we crate an option only if PriceNotAvailable was not raised
-        if not failed:
-            # creating an option
-            o = self.itemsperpack()
-            ipp, created = self.attributes.get_or_create(option=o)
-            ipp.value=items_per_pack
-            ipp.value_code=items_per_pack,
-            ipp.data =''
-            ipp.save()
-        # now it will redo the cycle
-        self.quantity=nr_of_units
-        self.price_incl_tax = price_incl_tax
         super(Line,self).save(*args,**kwargs)
-        pass
+
     def get_option_choices(self):
-        choice_data = {}
-        choices = []
-        query = None
-        for attr in self.attributes.exclude(option=self.itemsperpack()).prefetch_related('option'):
-            # May be a lot of exceptions here, but it will mean problems in
-            # another parts of the code or hacking attempt.
-            if query is None:
-                query = models.Q(option=attr.option, code=attr.value_code)
-            else:
-                query = models.Q(option=attr.option, code=attr.value_code)|query
-            try:
-                data = json.loads(attr.data, use_decimal=True)
-            except ValueError:
-                data = {}
-            choice_data.update({attr.option.code: data})
-        # try!!!
-        if query:
-            [choices.append(x) for x in OptionChoice.objects.filter(query).select_related('option').iterator()]
-        return choices, choice_data
+        return self.choices.all()
+
+    def get_data(self):
+        if self.calculator_data: return self.calculator_data
+        data = {}
+        data['width']=self.width
+        data['height']=self.height
+        data['quantity']=self.quantity
+        data['number_of_files']=self.number_of_files
+        self.calculator_data=data
+        return data
+
+    def get_calculator(self):
+        if self.calculator: return self.calculator
+        calculator=OptionsCalculator(
+            self.product,
+            self.get_option_choices(),
+            self.get_data())
+        self.calculator= calculator
+        return calculator
 
     def _get_unit_price_from_pricelist(self):
         choices, choice_data = self.get_option_choices()
@@ -107,81 +73,36 @@ class Line(AbstractLine):
         return prices.get_unit_price_incl_tax(self.quantity, self.attachments.count(), self.basket.owner)
 
     def get_warning(self):
-        if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
-            super(Line, self).get_warning()
-        if self.stockrecord_source == self.OPTIONS_CALCULATOR:
-            if self.quantity is None:
-                # In this case there is probably a bug in the code
-                # execution should not continue
-                raise ItemsRequiredException
-            if not self.price_incl_tax:
-                return
-            try:
-                current_price_incl_tax, nr_of_units, items_per_pack = (
-                    self._get_unit_price_from_pricelist())
-            except PriceNotAvailable:
-                msg = u"'%(product)s' is no longer available"
-                return _(msg) % {'product': self.product.get_title()}
-            else:
-                if current_price_incl_tax > self.price_incl_tax:
-                    msg = ("The price of '%(product)s' has increased from "
-                           "%(old_price)s to %(new_price)s since you added it "
-                           "to your basket")
-                    return _(msg) % {
-                        'product': self.product.get_title(),
-                        'old_price': currency(self.price_incl_tax),
-                        'new_price': currency(current_price_incl_tax)}
-                if current_price_incl_tax < self.price_incl_tax:
-                    msg = ("The price of '%(product)s' has decreased from "
-                           "%(old_price)s to %(new_price)s since you added it "
-                           "to your basket")
-                    return _(msg) % {
-                        'product': self.product.get_title(),
-                        'old_price': currency(self.price_incl_tax),
-                        'new_price': currency(current_price_incl_tax)}
-
-    def _get_stockrecord_property(self, property):
-        if self.stockrecord_source == self.PRODUCT_STOCKRECORD:
-            return super(Line, self)._get_stockrecord_property(property)
-        if self.stockrecord_source == self.OPTIONS_CALCULATOR:
-
-            if self.quantity is None:
-                # In this case there is probably a bug in the code
-                # execution should not continue
-                raise ItemsRequiredException
-            try:
-                unit_price, nr_of_units, items_per_pack = (
-                    self._get_unit_price_from_pricelist())
-            except PriceNotAvailable:
-                return Decimal('0.00')
-            return self._get_stockrecord_choices_property(property, unit_price)
-
-    def total_price_incl_tax(self):
-        return self.unit_price_incl_tax * self.quantity
+        return
 
     def product_and_options_description(self):
-        attributes = self.attributes \
-            .exclude(option__short_description_weight=0) \
-            .order_by('-option__short_description_weight')
-        values = [attribute.value for attribute in attributes]
+        attributes = self.choices.all()
+        values = [attribute.code for attribute in attributes]
         return ', '.join([self.product.short_title or self.product.title] + values)
 
-    def get_memory_stockrecord(self, price_excl_tax):
-        sr = getattr(self, 'memory_stockrecord', None)
-        if sr is None:
-            sr = StockRecordForChoices(price_excl_tax)
-            setattr(self, 'memory_stockrecord', sr)
-        else:
-            sr.price_excl_tax = price_excl_tax
-        return sr
+    def get_taxes(self):
+        return settings.TAX
 
+    @property
+    def unit_price_excl_tax(self):
+        calculator = self.get_calculator()
 
-    def _get_stockrecord_choices_property(self, property, price_excl_tax):
-        stockrecord = self.get_memory_stockrecord(price_excl_tax)
-        attr = getattr(stockrecord, property, None)
-        if attr is None:
-            return price_excl_tax
-        return attr
+        price = calculator.price_per_unit(self.quantity,self.basket.owner)
+        discount = calculator.get_discount(self.quantity)
+        self.discount(discount,self.quantity)
+        return price
+
+    @property
+    def unit_tax(self):
+        """Return tax of a unit"""
+        if not self._charge_tax:
+            return Decimal('0.00')
+        return self.unit_price_excl_tax*self.get_taxes()
+
+    @property
+    def unit_price_incl_tax(self):
+         return self.line_price_excl_tax+self.unit_tax
+
 
 
 class LineAttribute(AbstractLineAttribute):
@@ -203,109 +124,51 @@ class LineAttachment(models.Model):
 
 
 class Basket(AbstractBasket):
-    def add_dynamic_product(self, product, quantity=1, choices=None,
-                            attachments=None, choice_data=None):
-        print 'cio'
-        if choices is None:
-            choices = []
+    def add_product(
+            self, product, quantity=1, choices=None,
+        width=0, height=0, attachments = None):
 
-        if choice_data is None:
-            choice_data = {}
+        if attachments is None: attachments= []
+        if choices is None:options = []
 
-        if not self.id:
-            self.save()
+        # Line reference is used to distinguish between variations of the same
+        # product (eg T-shirts with different personalisations)
+        line_ref = self._create_line_reference(product, choices)
 
-        options = []
+        # Determine price to store (if one exists).  It is only stored for
+        # audit and sometimes caching.
+        price_excl_tax, price_incl_tax = None, None
 
-        for choice in choices:
-            try:
-                # choice_data example: {'size':{'width':1, 'height':1}}
-                data = choice_data[choice.option.code]
-            except KeyError:
-                data = {}
 
-            if (choice.option.code == utils.custom_size_option_name() and
-                    choice.code == utils.custom_size_option_value()):
 
-                value_data = ','.join(
-                    '{0}: {1}'.format(k, v) for k, v in data.iteritems())
-                value = '{0} ({1})'.format(choice.caption, value_data)
-            else:
-                value = choice.caption
-
-            options.append({'option': choice.option,
-                            'value': value,
-                            'value_code': choice.code,
-                            'data': data})
-
-        price_excl_tax = None
-
-        calc = OptionsCalculator(product)
-
-        prices = calc.calculate_costs(choices, quantity, choice_data)
-        # line_ref = self._create_line_reference(product, options)
-        # if prices.discrete_pricing:
-        #     # Put in unique lines, because quantity cannot add up
-        #     # with discrete pricing
-        #     line_ref = '_'.join([str(quantity), line_ref])
-
-        # Each addition gets it's own line because:
-        #   1. discrete priced quantities do no add up
-        #   2. even if option choices are exactly the same - it may be different
-        #      order with different artwork
-        line_ref = uuid.uuid1().hex
-
-        try:
-            price_incl_tax, nr_of_units, items_per_pack = (
-                prices.get_unit_price_incl_tax(quantity, len(attachments), self.owner))
-        except PriceNotAvailable:
-            price_incl_tax = None
-            nr_of_units = quantity
-            # try!!!
-            items_per_pack = 1
-
-        defaults = {
-                'quantity': quantity,
-                'items_required': quantity,
-                'price_excl_tax': price_excl_tax,
-                'price_incl_tax': price_incl_tax,
-                'stockrecord_source': Line.OPTIONS_CALCULATOR
-            }
         line, created = self.lines.get_or_create(
             line_reference=line_ref,
             product=product,
-            defaults=defaults)
-        if created:
-            # Do not use get_or_create here - it is not thread safe, and may cause
-            # problems. Just ensure needed option exist before going production.
-            o = Option.objects.get(code=settings.OPTION_ITEMSPERPACK)
-            line.attributes.create(option=o,
-                                   value=items_per_pack,
-                                   value_code=items_per_pack,
-                                   data='')
+            defaults={
+                'quantity': quantity,
+                'price_excl_tax': price_excl_tax,
+                'price_incl_tax': price_incl_tax})
+        for option in choices:
+                line.choices.add(option)
 
-            for option_dict in options:
-                line.attributes.create(option=option_dict['option'],
-                                       value=option_dict['value'],
-                                       value_code=option_dict['value_code'],
-                                       data=json.dumps(option_dict['data'], use_decimal=True))
-        else:
-            line.quantity += nr_of_units
-            line.items_required += quantity
+        if not created:
+            line.quantity += quantity
             line.save()
 
-        for attachment in attachments:
-            line.attachments.create(artwork_item=attachment)
-
+        line.price_excl_tax = line.unit_price_excl_tax
+        line.price_incl_tax = line.unit_price_incl_tax
+        line.save()
         self.reset_offer_applications()
 
-    add_dynamic_product.alters_data = True
 
     def all_lines(self):
         return super(Basket, self).all_lines().exclude(is_dead=True)
 
     def all_lines_with_dead(self):
         return super(Basket, self).all_lines()
+
+    def dead_lines(self):
+        return super(Basket, self).all_lines().filter(is_dead=True)
 
     @property
     def default_wrapper(self):

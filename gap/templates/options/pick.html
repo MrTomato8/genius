@@ -130,8 +130,8 @@
 </script>
 
   <div class="panel-group" id="product-accordion">
-<form id="pickoptions" method="POST">
-{% csrf_token %}
+<form id="pickoptions" method="GET">
+
   {% for group in groups %}
    <h3 class="button group_name">{{ group.group.name }}</h3>
   {% for picker in group.pickers %}

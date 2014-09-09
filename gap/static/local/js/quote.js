@@ -15,19 +15,18 @@ PPS.getQuote = {
         this.clearAjaxFields();
         if (isCustomSizeFormValid && isQuantityFormValid) {
             $.ajax({
-                    method: 'post',
+                    method: $form.attr('method'),
                     url: $form.attr('action'),
                     data:{
                         'width': width,
                         'height': height,
                         'quantity': quantity,
                         'number_of_files': PPS.multifileForm.$files.val(),
-                        'csrfmiddlewaretoken': $form.find('input[name="csrfmiddlewaretoken"]').val()
                     },
                     success:function(data){
                         console.log(data);
                         if (data.valid) {
-                            PPS.getQuote.add(data.price,data.quantity)
+                            PPS.getQuote.add(data.total_price, data.unit_price,data.quantity, data.get)
                         } else {
                             PPS.getQuote.handleAjaxError(data);
                         }
@@ -42,9 +41,13 @@ PPS.getQuote = {
         this.$sizeFormErrorLabel.html('');
     },
 
-    add : function(price, quantity){
-        var price = parseFloat(price).toFixed(2),
-        unit_price = parseFloat(price/quantity).toFixed(2);
+    add : function(total_price, unit_price, quantity,get){
+        var price = parseFloat(total_price).toFixed(2),
+        unit_price = parseFloat(unit_price).toFixed(2),
+        form = this.$priceLabel.parent().find('form'),
+        action = form.attr('action');
+        action = action.substring(0, action.indexOf('?')); +'?'+ $.param(get);
+        form.attr('action',action);
         if (quantity > 1) {
             this.$unitPriceLabel.html('(Unit price is ' + this.currency + unit_price + ')').show();
         }
@@ -73,10 +76,10 @@ PPS.getQuote = {
 
         var $form = $('#getquote');
         $("#quantity_picker li").on('click', function() {
-            var $radio = $(this).find('input[type=radio]');
-            PPS.getQuote.toggleQuantityRadio($radio, true);
             $(this).siblings('li').removeClass('active');
-            $form.find('input[name=quantity]').val($radio.val()).trigger('change');
+            console.log(this)
+            console.log($(this).data())
+            $form.find('input[name=quantity]').val($(this).data('quantity')).trigger('change');
             PPS.getQuote.trySubmitForm();
         });
         $form.find('input[name=quantity]').on('keyup', function() {

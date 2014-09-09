@@ -6,5 +6,5 @@ urlpatterns = patterns(
     'apps.pricelist.views',
     (r'^import', 'import_pricelist'),
     url(r'^list/(?P<pk>\S+)', CSVUpdate.as_view(),name='csvupdate'),
-    (r'^list', CSVList.as_view()),
+    url(r'^list', CSVList.as_view(),name='csvview'),
 )

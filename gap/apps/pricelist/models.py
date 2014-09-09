@@ -6,6 +6,9 @@ from django.core.urlresolvers import reverse_lazy
 from django.conf import settings
 from decimal import Decimal
 import csv
+
+from .managers import PricelistManager
+
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
 
@@ -81,9 +84,6 @@ class Price(models.Model):
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0)],
         verbose_name='Minimal price for retail customers', default=0)
 
-    quantity = models.IntegerField(
-        validators=[MinValueValidator(0)], db_index=True)
-
     min_order = models.IntegerField(
         validators=[MinValueValidator(0)], db_index=True)
 
@@ -108,9 +108,12 @@ class Price(models.Model):
 
     option_choices = models.ManyToManyField(
         OptionChoice, related_name='prices', blank=True,
-        verbose_name=u'Option Choices')
+        verbose_name=u'Option Choices', db_index= True)
+
+    objects=PricelistManager()
+
     def __unicode__(self):
-        s = '{0}({1}) for {2} items of {3} ({4}). '\
+        s = '{0}({1}) {3} ({4}). '\
             'Minimum order of {5} items required.'
 
         choices = []
@@ -120,7 +123,7 @@ class Price(models.Model):
         return s.format(
             str(self.rpl_price),
             str(self.tpl_price),
-            str(self.quantity),
+            '',
             str(self.product),
             ','.join(choices),
             str(self.min_order))
@@ -129,15 +132,19 @@ class Price(models.Model):
     def options(self):
         return self.option_choices.all()
 
+class Discount(models.Model):
+    quantity=models.IntegerField()
+    discount=models.DecimalField(max_digits=4, decimal_places=2)
+    price = models.ForeignKey(Price, related_name="discounts")
     class Meta:
-        ordering = ['product', 'quantity']
+        ordering = ['-quantity']
 
 class CSV(models.Model):
     def upload_to(self, filename):
         return settings.MEDIA_ROOT+'/csv/'+filename
 
     name = models.CharField(max_length=150, db_index=True)
-    csv_file= models.FileField(upload_to=upload_to)
+    csv_file= models.FileField(max_length=500, upload_to=upload_to)
 
     def get_absolute_url(self):
         return reverse_lazy('csvupdate', kwargs={'pk':self.pk})

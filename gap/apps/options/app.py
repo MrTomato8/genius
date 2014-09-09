@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 class BaseOptionsApplication(Application):
     name = 'options'
     pick_view = views.PickOptionsView
+    quantity_view = views.QuantityView
     quote_view = views.QuoteView
     upload_view = views.UploadView
     artwork_delete_view = views.ArtworkDeleteView
@@ -21,6 +22,8 @@ class BaseOptionsApplication(Application):
         urlpatterns += patterns(
             '', url(r'^pick/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
             self.pick_view.as_view(), name='pick'),
+            url(r'^quantity/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
+            self.quantity_view.as_view(), name='quantity'),
             url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
             self.quote_view.as_view(), name='quote'),
             url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/save/$',

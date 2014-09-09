@@ -3,7 +3,7 @@ class OptionsCalculatorError(Exception):
     pass
 
 
-class DuplicateQuantities(OptionsCalculatorError):
+class DuplicateCSV(OptionsCalculatorError):
     pass
 
 

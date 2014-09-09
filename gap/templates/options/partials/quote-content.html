@@ -7,7 +7,7 @@
 
 <div id="getquote_wrap">
 
-<form class="form-horizontal" id="getquote" method="POST" action="{%url 'options:quote' pk=product.pk product_slug=product.slug %}">{% csrf_token %}
+<form class="form-horizontal" id="getquote" method="GET" action="{%url 'options:quote' pk=product.pk product_slug=product.slug %}?{{get}}">{% csrf_token %}
         {% if custom_size %}
           {% include 'options/partials/custom_size_form.html' %}
         {% endif %}
@@ -17,18 +17,13 @@
         </div>
         <div id="quantity_picker" class="panel-collapse collapse in">
             <div class="panel-body">
-                    {% if prices.discrete_pricing and prices|length > 1 %}
-                    <ul class="list-unstyled row">
-                    {% for qty,price in prices.ordered.iteritems %}
-                        <li class="col-md-2 col-sm-3 col-xs-6 text-center">
-                            {% if prices.matrix_for_pack %} {{price.nr_of_units}}
-                            {% else %} {{ qty|floatformat }}
-                            {% endif %}
-                            <input type="radio" class="form-control" name="quantity_radio"  id="quantity_{{ qty }}" value="{% if prices.matrix_for_pack %}{{price.nr_of_units}}{% else %}{{ qty|floatformat }}{% endif %}" style="display:none">
-                        </li>
-                    {% endfor %}
-                    </ul>
-                    {% endif %}
+                <ul class="list-unstyled row">
+                    {% for price in prices reversed %}
+                    <li class="col-md-2 col-sm-3 col-xs-6 text-center" data-quantity={{price.quantity}}>
+                        {{price.quantity}}
+                    </li>
+                    {%endfor%}
+                </ul>
                     <div class="row">
                         <div class="col-md-4">
                           <span class="toggle-live" id="multifile_toggle"> Multi-file discount </span>
