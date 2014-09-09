@@ -238,32 +238,8 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                         discount = Decimal(anomaly[0])
                     except:
                         discount = Decimal(0)
-<<<<<<< HEAD
                     quantity=Decimal(quantity)*items_per_pack
                     Discount.objects.create(price=price,discount=discount,quantity =quantity )
-=======
-                    try:
-                        fixed_discount = Decimal(anomaly[1])
-                    except:
-                        fixed_discount=Decimal(0)
-                    fixed = options_cost*(1-fixed_discount/100)
-                    if data['min_area'] != Decimal(0):
-                        data['min_area'] = Decimal(quantity)
-                    elif data['min_length'] != Decimal(0):
-                        data['min_length'] = Decimal(quantity)
-                    else:
-                        data['quantity'] = int(quantity)
-                    data['tpl_price'] = base_tpl_price*(1-discount/100)+fixed
-                    data['rpl_price'] = base_rpl_price*(1-discount/100)+fixed
-
-                    p = Price(**data)
-                    p.csv=csvrow
-                    p.save()
-                    for choice in choices:
-                        p.option_choices.add(choice)
-                    p.save()
-                    report.success()
->>>>>>> origin/new_design
                 except:
                     pass
 
