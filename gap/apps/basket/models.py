@@ -67,10 +67,7 @@ class Line(AbstractLine):
         return calculator
 
     def _get_unit_price_from_pricelist(self):
-        choices, choice_data = self.get_option_choices()
-        calc = OptionsCalculator(self.product)
-        prices = calc.calculate_costs(choices, self.quantity, choice_data)
-        return prices.get_unit_price_incl_tax(self.quantity, self.attachments.count(), self.basket.owner)
+       return self.unit_price_excl_tax()
 
     def get_warning(self):
         return
@@ -87,8 +84,8 @@ class Line(AbstractLine):
     def unit_price_excl_tax(self):
         calculator = self.get_calculator()
 
-        price = calculator.price_per_unit(self.quantity,self.basket.owner)
-        discount = calculator.get_discount(self.quantity)
+        price = calculator.price_per_unit(self.basket.owner)
+        discount = calculator.get_discount()
         self.discount(discount,self.quantity)
         return price
 
