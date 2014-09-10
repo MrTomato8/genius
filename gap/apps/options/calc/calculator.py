@@ -17,13 +17,15 @@ class BaseOptionsCalculator(object):
     total = {}
     custom = False
     price = None
-
+    discount = None
+    total = None
     def __init__(self, product,choices,data):
         self.product = product
         self.choices = choices
         self.data=data
         self.pick_price()
         self.custom = self.size_is_custom()
+        self.quantity = self.data.get('quantity',None)
 
     def size_is_custom(self):
         return utils.custom_size_chosen(self.choices)
@@ -76,11 +78,10 @@ class BaseOptionsCalculator(object):
 
 
 
-    def calculate_custom(self,quantity):
+    def calculate_custom(self):
 
-        total = self.total.get(quantity, None)
-        if total:
-            return total
+        if self.total:
+            return self.total
 
         #exception = TooSmall('too small, increase the number of items or their area')
 
@@ -91,17 +92,17 @@ class BaseOptionsCalculator(object):
                 return NotEnoughArguments(
                 'choice_data argument does not contain {0} key'.format(
                     utils.custom_size_option_name()))
-            total = row_area/ceil(quantity/Decimal(items_per_row))
+            total = row_area/ceil(self.quantity/Decimal(items_per_row))
 
             if self.price.min_length > total:
                 return False
         else:
-            total = self.get_area()*quantity
+            total = self.get_area()*self.quantity
 
             if self.price.min_area>total:
                 return False
 
-        self.total[quantity]=total
+        self.total=total
         return total
 
 
@@ -120,20 +121,21 @@ class BaseOptionsCalculator(object):
         price = prices[0]
         self.price = price
 
-    def get_custom_anomaly(self,quantity):
+    def get_custom_anomaly(self):
         if self.custom:
-            return self.calculate_custom(quantity)
+            return self.calculate_custom()
         return False
-    discount ={}
 
-    def get_discount(self,quantity):
-        if self.discount.get(quantity,False):
-            return self.discount.get(quantity)
+    def get_discount(self):
+        if self.discount:
+            return self.discount
         if self.custom:
-            quantity = self.calculate_custom(quantity)
+            quantity = self.calculate_custom()
+        else:
+            quantity = self.quantity
         try:
             discount = self.price.discounts.filter(quantity__lte=quantity)[0].discount
-            self.discount[quantity] = discount
+            self.discount = discount
             return discount
         except:
             return False
@@ -142,15 +144,16 @@ class BaseOptionsCalculator(object):
         if user is None:return False
         return user.groups.all().filter(name=settings.TRADE_GROUP_NAME).exists()
 
-    def check_quantity(self,quantity):
+    def check_quantity(self):
         price = self.price
         if self.custom:
-            if not bool(self.calculate_custom(quantity)):return False
-        elif price.min_order>quantity:
+            if not bool(self.calculate_custom()):return False
+        elif price.min_order>self.quantity:
             return False
-        if not self.get_discount(quantity):return False
+        if self.get_discount() is False:return False
 
         return True
+
     def unit_price_without_discount(self,user):
         return self.is_tpl(user) and self.price.tpl_price or self.price.rpl_price
 
@@ -158,26 +161,33 @@ class BaseOptionsCalculator(object):
         number_of_files=self.data['number_of_files']
         return settings.MULTIFILE_PRICE_PER_ADDITIONAL_FILE * (number_of_files) or 1
 
-    def price_per_unit(self,quantity,user):
+    def price_per_unit(self,user):
         '''
             price per unit with discount
         '''
-        discount = self.get_discount(quantity)
+        discount = self.get_discount()
 
-        if not discount:
+        if discount is False:
             return False
 
         price = self.unit_price_without_discount(user)
 
         return price*(100-discount)/Decimal(100)+self.multifile_price()
 
-    def total_price(self,quantity,user):
+    def total_price(self,user):
         '''
             total price with discount
         '''
+        price_per_unit= self.price_per_unit(user)
+
+        if not price_per_unit:return False
+
         if self.custom:
-            quantity = self.calculate_custom(quantity)
-        return self.price_per_unit(quantity,user)*Decimal(quantity)
+            quantity = self.calculate_custom()
+        else:
+            quantity = self.quantity
+
+        return price_per_unit*Decimal(quantity)
 
 
 

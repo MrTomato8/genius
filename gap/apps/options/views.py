@@ -201,9 +201,8 @@ class QuantityCalcMixin(OptionPickerMixin):
         return self.quantity
 
     def check_quantity(self):
-        quantity = self.get_quantity()
         calculator = self.get_calculator()
-        return calculator.check_quantity(quantity)
+        return calculator.check_quantity()
 
     def get_quantity_form(self):
         if self.quantity_form: return self.quantity_form
@@ -240,7 +239,7 @@ class QuantityCalcMixin(OptionPickerMixin):
         self.get_price()
         if not self.quantity_form_is_valid():
             return False
-        return calculator.get_discount(self.quantity).discount
+        return calculator.get_discount().discount
 
     def get_discounts(self):
         self.get_price()
@@ -351,10 +350,10 @@ class QuoteView(QuantityView, TemplateView):
         ctx['get']=self.request.GET or \
             '&'.join([choice.option.code+'='+str(choice.pk) for choice in self.choices])\
             +'&'+ self.DATA.urlencode()
-        ctx['valid']=calculator.check_quantity(self.quantity)
-        ctx['price']=calculator.total_price(self.get_quantity(),self.request.user)
-        ctx['total_price']=calculator.total_price(self.quantity,self.request.user)
-        ctx['unit_price']= calculator.price_per_unit(self.quantity,self.request.user)
+        ctx['valid']=calculator.check_quantity()
+        ctx['price']=calculator.total_price(self.request.user)
+        ctx['total_price']=calculator.total_price(self.request.user)
+        ctx['unit_price']= calculator.price_per_unit(self.request.user)
         ctx['quantity']=self.get_quantity()
         return ctx
 
@@ -369,10 +368,10 @@ class QuoteView(QuantityView, TemplateView):
             action+="?"
             action+=self.request.GET.urlencode()
             ctx={}
-            ctx['total_price']=calculator.total_price(self.quantity,self.request.user)
-            ctx['unit_price']= calculator.price_per_unit(self.quantity,self.request.user)
+            ctx['total_price']=calculator.total_price(self.request.user)
+            ctx['unit_price']= calculator.price_per_unit(self.request.user)
             ctx['quantity']=self.get_quantity()
-            ctx['valid']=calculator.check_quantity(self.quantity)
+            ctx['valid']=calculator.check_quantity()
             ctx['get']=self.request.GET
             ctx['action']=action
             return HttpResponse(json.dumps(ctx),content_type='text/json')
