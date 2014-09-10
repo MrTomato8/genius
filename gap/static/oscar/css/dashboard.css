@@ -1676,8 +1676,9 @@ body {
   border: none;
 }
 .navbar-accounts .navbar-inner .brand {
-  background: url("../img/ui/dashboard/logo_oscar.png") no-repeat scroll 0 0 transparent;
-  text-indent: -9999px;
+  background: url("/static/local/images/personalize.png") no-repeat transparent;
+  color:#EC7301;
+  text-indent: 2em;
   display: block;
   width: 60px;
   height: 38px;
