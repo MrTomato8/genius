@@ -362,12 +362,19 @@ class QuoteView(QuantityView, TemplateView):
         if self.request.is_ajax():
             calculator = self.get_calculator()
             self.get_quantity()
+            action=reverse('options:add-to-basket',kwargs={
+                'pk': self.product.pk,
+                'product_slug': self.product.slug
+                })
+            action+="?"
+            action+=self.request.GET.urlencode()
             ctx={}
             ctx['total_price']=calculator.total_price(self.quantity,self.request.user)
             ctx['unit_price']= calculator.price_per_unit(self.quantity,self.request.user)
             ctx['quantity']=self.get_quantity()
             ctx['valid']=calculator.check_quantity(self.quantity)
             ctx['get']=self.request.GET
+            ctx['action']=action
             return HttpResponse(json.dumps(ctx),content_type='text/json')
         return super(QuoteView,self).get(*args,**kwargs)
 
@@ -376,6 +383,7 @@ class AddToBasketView(QuantityCalcMixin, View):
 
     def post(self, request, *args, **kwargs):
         basket = request.basket
+        if not request.basket.pk:basket.save()
         user = request.user
         quantity = self.get_quantity()
         choices = self.choices
