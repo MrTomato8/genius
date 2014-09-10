@@ -110,6 +110,7 @@ MIDDLEWARE_CLASSES = (
 
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'oscar.apps.basket.middleware.BasketMiddleware',
+#    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'geniusautoparts.urls'
@@ -161,6 +162,8 @@ INSTALLED_APPS = [
     'apps.globals',
     'apps.adminx',
     'django_markdown',
+#    'django_extensions',
+#    'debug_toolbar',
 ]
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
     ['apps.catalogue','apps.order', 'apps.basket', 'apps.partner', 'apps.dashboard',])
@@ -328,5 +331,9 @@ MULTIFILE_PRICE_PER_ADDITIONAL_FILE = 2
 OSCAR_MISSING_IMAGE_URL = STATIC_URL + 'options/img/missing-choice-thumbnail.png'
 DATACASH_CURRENCY = 'GBP'
 OSCAR_CURRENCY_LOCALE ='en_GB'
+
+from decimal import Decimal
+
+TAX =Decimal(0.20)
 
 from local_settings import *
