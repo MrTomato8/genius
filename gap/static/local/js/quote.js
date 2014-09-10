@@ -24,7 +24,9 @@ PPS.getQuote = {
                         'number_of_files': PPS.multifileForm.$files.val(),
                     },
                     success:function(data){
+                        console.log(data)
                         if (data.valid) {
+
                             PPS.getQuote.add(data.total_price, data.unit_price,data.quantity, data.get, data.action)
                         } else {
                             PPS.getQuote.handleAjaxError(data);
@@ -45,8 +47,6 @@ PPS.getQuote = {
         unit_price = parseFloat(unit_price).toFixed(2),
         form = $('#calculated_price').parent().find('form');
         form.attr('action',action);
-        console.log(action)
-        console.log(form)
         form.attr('action',action);
         if (quantity > 1) {
             $('#calculated_unit_price').html('(Unit price is ' + this.currency + unit_price + ')').show();

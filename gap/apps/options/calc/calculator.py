@@ -30,9 +30,8 @@ class BaseOptionsCalculator(object):
 
     def get_custom_vars(self):
         try:
-            cargs = self.data.get(utils.custom_size_option_name())
-            width=Decimal(cargs['width'])
-            height=Decimal(cargs['height'])
+            width=Decimal(self.data.get('width'))/1000
+            height=Decimal(self.data.get('height'))/1000
         except KeyError:
             raise NotEnoughArguments(
                 'custom size argument does not contain {0} key'.format(
@@ -80,8 +79,8 @@ class BaseOptionsCalculator(object):
     def calculate_custom(self,quantity):
 
         total = self.total.get(quantity, None)
-        if self.total:
-            return self.total
+        if total:
+            return total
 
         #exception = TooSmall('too small, increase the number of items or their area')
 
@@ -126,10 +125,10 @@ class BaseOptionsCalculator(object):
             return self.calculate_custom(quantity)
         return False
     discount ={}
+
     def get_discount(self,quantity):
         if self.discount.get(quantity,False):
             return self.discount.get(quantity)
-        self.check_quantity(quantity)
         if self.custom:
             quantity = self.calculate_custom(quantity)
         try:
@@ -138,16 +137,19 @@ class BaseOptionsCalculator(object):
             return discount
         except:
             return False
+
     def is_tpl(self,user):
         if user is None:return False
         return user.groups.all().filter(name=settings.TRADE_GROUP_NAME).exists()
 
     def check_quantity(self,quantity):
-        if self.custom:
-            return self.calculate_custom(quantity)
         price = self.price
-        if price.min_order>quantity:
+        if self.custom:
+            if not bool(self.calculate_custom(quantity)):return False
+        elif price.min_order>quantity:
             return False
+        if not self.get_discount(quantity):return False
+
         return True
     def unit_price_without_discount(self,user):
         return self.is_tpl(user) and self.price.tpl_price or self.price.rpl_price
@@ -161,15 +163,20 @@ class BaseOptionsCalculator(object):
             price per unit with discount
         '''
         discount = self.get_discount(quantity)
+
         if not discount:
             return False
+
         price = self.unit_price_without_discount(user)
+
         return price*(100-discount)/Decimal(100)+self.multifile_price()
 
     def total_price(self,quantity,user):
         '''
             total price with discount
         '''
+        if self.custom:
+            quantity = self.calculate_custom(quantity)
         return self.price_per_unit(quantity,user)*Decimal(quantity)
 
 
