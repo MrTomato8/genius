@@ -1,8 +1,8 @@
 PPS.getQuote = {
     currency : '£',
-    $priceLabel: null,
-    $unitPriceLabel: null,
-    $sizeFormErrorLabel: null,
+    $priceLabel: $('#calculated_price'),
+    $unitPriceLabel: $('#calculated_unit_price'),
+    $sizeFormErrorLabel: $('#size_form_error'),
 
     trySubmitForm: function() {
         var $form = $('#getquote'),
@@ -24,9 +24,8 @@ PPS.getQuote = {
                         'number_of_files': PPS.multifileForm.$files.val(),
                     },
                     success:function(data){
-                        console.log(data);
                         if (data.valid) {
-                            PPS.getQuote.add(data.total_price, data.unit_price,data.quantity, data.get)
+                            PPS.getQuote.add(data.total_price, data.unit_price,data.quantity, data.get, data.action)
                         } else {
                             PPS.getQuote.handleAjaxError(data);
                         }
@@ -41,17 +40,15 @@ PPS.getQuote = {
         this.$sizeFormErrorLabel.html('');
     },
 
-    add : function(total_price, unit_price, quantity,get){
+    add : function(total_price, unit_price, quantity,get,action){
         var price = parseFloat(total_price).toFixed(2),
         unit_price = parseFloat(unit_price).toFixed(2),
-        form = this.$priceLabel.parent().find('form'),
-        action = form.attr('action');
-        action = action.substring(0, action.indexOf('?')); +'?'+ $.param(get);
+        form = $('#calculated_price').parent().find('form');
         form.attr('action',action);
         if (quantity > 1) {
-            this.$unitPriceLabel.html('(Unit price is ' + this.currency + unit_price + ')').show();
+            $('#calculated_unit_price').html('(Unit price is ' + this.currency + unit_price + ')').show();
         }
-        this.$priceLabel.html(this.currency + price);
+        $('#calculated_price').html(this.currency + price);
         $('html, body').animate({
             scrollTop: $('.price-table').offset().top
         }, 500);
@@ -70,15 +67,13 @@ PPS.getQuote = {
     init: function(){
         PPS.multifileForm.init();
 
-        this.$priceLabel = $('#calculated_price');
-        this.$unitPriceLabel = $('#calculated_unit_price');
+        this.$priceLabel =$('#calculated_price');
+        this.$unitPriceLabel =$('#calculated_unit_price');
         this.$sizeFormErrorLabel = $('#size_form_error');
 
         var $form = $('#getquote');
         $("#quantity_picker li").on('click', function() {
             $(this).siblings('li').removeClass('active');
-            console.log(this)
-            console.log($(this).data())
             $form.find('input[name=quantity]').val($(this).data('quantity')).trigger('change');
             PPS.getQuote.trySubmitForm();
         });

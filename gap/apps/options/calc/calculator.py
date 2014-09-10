@@ -139,8 +139,8 @@ class BaseOptionsCalculator(object):
         except:
             return False
     def is_tpl(self,user):
-        queryset = user.groups.all().filter(name=settings.TRADE_GROUP_NAME)
-        return user is not None and queryset.exists()
+        if user is None:return False
+        return user.groups.all().filter(name=settings.TRADE_GROUP_NAME).exists()
 
     def check_quantity(self,quantity):
         if self.custom:
