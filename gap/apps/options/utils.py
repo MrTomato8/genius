@@ -2,7 +2,8 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db import models
 from apps.options.models import OptionPicker, OptionChoice,Option
-
+from django.db.utils import DatabaseError
+from django.core.exceptions import ObjectDoesNotExist
 class Utils(object):
     costum_size=None
     def __init__(self):
@@ -11,9 +12,11 @@ class Utils(object):
             self.costum_size = OptionChoice.objects.get(
                 option__code=cooption, code=cchoice)
         except:
-            option, _ = Option.objects.get_or_create(code=cooption)
-            self.costum_size = OptionChoice.objects.create(code=cchoice,option=option)
-
+            try:
+                option, _ = Option.objects.get_or_create(code=cooption)
+                self.costum_size = OptionChoice.objects.create(code=cchoice,option=option)
+            except DatabaseError:
+                return None
     def custom_size_chosen(self,choices):
         return self.costum_size in choices
 utils = Utils()
