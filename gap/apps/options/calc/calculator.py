@@ -25,7 +25,7 @@ class BaseOptionsCalculator(object):
         self.data=data
         self.pick_price()
         self.custom = self.size_is_custom()
-        self.quantity = self.data.get('quantity',None)
+        self.quantity = Decimal(self.data.get('quantity',None))
 
     def size_is_custom(self):
         return utils.custom_size_chosen(self.choices)
@@ -140,7 +140,7 @@ class BaseOptionsCalculator(object):
         except:
             return False
 
-    def is_tpl(self,user):
+    def is_tpl(self,user=None):
         if user is None:return False
         return user.groups.all().filter(name=settings.TRADE_GROUP_NAME).exists()
 
@@ -159,7 +159,8 @@ class BaseOptionsCalculator(object):
 
     def multifile_price(self):
         number_of_files=self.data['number_of_files']
-        return settings.MULTIFILE_PRICE_PER_ADDITIONAL_FILE * (number_of_files) or 1
+        if number_of_files<=1: return 0
+        return settings.MULTIFILE_PRICE_PER_ADDITIONAL_FILE * (number_of_files)
 
     def price_per_unit(self,user):
         '''
