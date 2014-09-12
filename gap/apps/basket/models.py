@@ -79,14 +79,17 @@ class Line(AbstractLine):
 
     def get_taxes(self):
         return settings.TAX
-
+    _unit_price_excl_tax=None
     @property
     def unit_price_excl_tax(self):
-        calculator = self.get_calculator()
+        if self._unit_price_excl_tax: return self._unit_price_excl_tax
 
+        calculator = self.get_calculator()
         price = calculator.price_per_unit(self.basket.owner)
         discount = calculator.get_discount()
         self.discount(discount,self.quantity)
+
+        self._unit_price_excl_tax=price
         return price
 
     @property
@@ -98,7 +101,7 @@ class Line(AbstractLine):
 
     @property
     def unit_price_incl_tax(self):
-         return self.line_price_excl_tax+self.unit_tax
+         return self.unit_price_excl_tax+self.unit_tax
 
 
 

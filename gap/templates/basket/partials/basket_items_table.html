@@ -51,10 +51,10 @@
                                 </ul>
                         </td>
                         <td>
-                                {{ form.instance.unit_price_excl_tax|multiply:form.quantity.value|currency }}
+                                {{ form.instance.line_price_excl_tax|currency }}
                         </td>
                         <td>
-                                {% with form.instance.unit_tax|multiply:form.quantity.value as vat %}
+                                {% with form.instance.line_tax as vat %}
                                         {% if not vat or vat == 0 %}
                                                 n/d
                                         {% else %}
@@ -63,7 +63,7 @@
                                 {% endwith %}
                         </td>
                         <td>
-                                {{ form.instance.unit_price_incl_tax|multiply:form.quantity.value|currency }}
+                                {{ form.instance.line_price_incl_tax|currency }}
                         </td>
                         <td class="centered">
                                 {% if product.prices.count > 0 %}
