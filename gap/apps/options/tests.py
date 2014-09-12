@@ -63,18 +63,45 @@ class CalculatorTest(TestCase):
 
     def test_calculator_for_custom_area(self):
         #calculator accepts width and height in mm
+        # pass on command line but not on test, strange really
         data={
-            "quantity":"20",
+            "quantity":20,
             "number_of_files":1,
-            "width":"1000","height":"800"}
+            "width":"1000","height":"800"
+            }
         qs = OptionChoice.objects.filter(code="custom")
         assert(qs.count()==1)
-        calculator=OptionsCalculator(self.product,qs,data)
-        area=D("1")*D("0.8")*D(20)
-        print calculator.total_price(self.user)
-        print area*D(1)*D("0.9")
 
-        assert(calculator.total_price(self.user)==area*D(1)*D("0.9"))
+        product,_=Product.objects.get_or_create(title="coca cola")
+        calculator=OptionsCalculator(product,qs,data)
+        calculator.custom=True #little hack
+        area=D("1")*D("0.8")*D("20")
+        if not calculator.total_price(None)==area*D(1)*D("0.9"):
+            error=[
+                calculator.total_price(self.user),
+                area*D(1)*D("0.9"),
+                calculator.calculate_custom(),
+                area,
+                calculator.quantity,
+                D(20),
+                calculator.price_per_unit(None),
+                D("0.9"),
+                calculator.discount,
+                D(10),
+                calculator.multifile_price(),
+                D(0),
+                calculator.unit_price_without_discount(None),
+                D("1"),
+            ]
+            txt="\nprice: \t {0} \t {1} \n"
+            txt+="area: \t {2} \t {3} \n"
+            txt+="quantity: \t {4} \t {5} \n"
+            txt+="price per unit: \t {6} \t {7} \n"
+            txt+="discount: \t {8} \t {9} \n"
+            txt+="multi file: \t {10} \t {11} \n"
+            txt+="rpl: \t {12} \t {13} \n"
+            raise AssertionError(txt.format(*error))
+
 
     def test_calculator(self):
         data={
@@ -84,8 +111,12 @@ class CalculatorTest(TestCase):
         qs = OptionChoice.objects.filter(code="big")
         assert(qs.count()==1)
         calculator=OptionsCalculator(self.product,qs,data)
-        assert(calculator.total_price(self.user)==D(20)*D("0.9")*D("1.2"))
-
+        if not calculator.total_price(self.user)==D(20)*D("0.9")*D("1.2"):
+            error=[
+                calculator.total_price(self.user),
+                D(20)*D("0.9")*D("1.2")
+            ]
+            raise AssertionError("{0} \n {1}".format(error))
 
 
 
