@@ -1,30 +1,40 @@
+import simplejson as json
 from decimal import Decimal
+from smtplib import SMTPException
 
-from django.views.generic import View,TemplateView
+from django.views.generic import View, TemplateView
 from django.db import models
-from django.core.urlresolvers import reverse,Resolver404
+from django.core.urlresolvers import reverse, Resolver404
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib import messages
+from django.http import QueryDict
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.template.loader import render_to_string
+
+from oscar.apps.basket.signals import basket_addition
 from django.conf import settings
 
 from apps.options.models import OptionPickerGroup, ArtworkItem, OptionChoice
 from apps.options import utils
 from apps.options.forms import picker_form_factory
 from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm, QuoteSaveForm
-from django.http import HttpResponseRedirect, HttpResponse
 from apps.options.session import OptionsSessionMixin
 from apps.options.calc import OptionsCalculator
-from django.contrib import messages
-from oscar.apps.basket.signals import basket_addition
-import simplejson as json
-from django.http import QueryDict
+from apps.quotes.models import Quote
+
+
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
 Price = models.get_model('pricelist', 'Price')
 Line = models.get_model('basket', 'Line')
+Basket = models.get_model('basket', 'Basket')
+
 
 class OptionPickerMixin(object):
     redirect_url = ''
-    template_name =''
-    ajax_template_name=''
+    template_name = ''
+    ajax_template_name = ''
     choices = None
     groups = None
     product = None
@@ -433,6 +443,7 @@ class LineEditView(LineMixin,QuoteView, TemplateView):
         self.line.quantity==self.data['quantity']
         self.line.save()
 
+
 # files upload is yet to develop
 class UploadView(View):
     pass
@@ -444,11 +455,64 @@ class UploadView(View):
     we do not need any get params at this point
 '''
 
+
 class ArtworkDeleteView(View):
     pass
 
-#don't really know what Quote Save and Load Views are for
+
+class QuoteEmailView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        data = {}
+        quote_id = Quote.save_quote(request.user.id)
+        if quote_id:
+            quote = Quote.objects.get(pk=quote_id)
+            c = Context({'quote': quote})
+
+            subject = render_to_string(
+                'options/emails/commtype_your_quote_subject.txt', c)
+            text_content = render_to_string(
+                'options/emails/commtype_your_quote_body.txt', c)
+            html_content = render_to_string(
+                'options/emails/commtype_your_quote_body.html', c)
+
+            email = EmailMultiAlternatives(subject, text_content, to=[request.user.email])
+            email.attach_alternative(html_content, "text/html")
+
+            try:
+                email.send()
+            except SMTPException:
+                data['message'] = "Error while sending e-mail"
+                data['success'] = False
+                return HttpResponse(data, mimetype="application/json")
+
+            data['message'] = "Email sent successfully"
+            data['success'] = True
+
+        else:
+
+            data['message'] = "Error occured during quote saving"
+            data['success'] = False
+
+        return HttpResponse(json.dumps(data), mimetype="application/json")
+
+
 class QuoteSaveView(View):
+
+    def get(self, request, *args, **kwargs):
+        data = {}
+        if Quote.save_quote(request.user.id):
+            data['message'] = "Your quote is successfully saved."
+            data['success'] = True
+        else:
+            data['message'] = "This quote already exists."
+            data['success'] = False
+
+        return HttpResponse(json.dumps(data), mimetype="application/json")
+
+
+class QuotePrintView(View):
     pass
 
 

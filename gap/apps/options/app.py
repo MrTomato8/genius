@@ -15,27 +15,33 @@ class BaseOptionsApplication(Application):
     add_to_basket_view = views.AddToBasketView
     quote_save_view = views.QuoteSaveView
     quote_load_view = views.QuoteLoadView
+    quote_email_view = views.QuoteEmailView
+    quote_print_view = views.QuotePrintView
     line_edit_view = views.LineEditView
 
     def get_urls(self):
         urlpatterns = super(BaseOptionsApplication, self).get_urls()
         urlpatterns += patterns(
             '', url(r'^pick/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
-            self.pick_view.as_view(), name='pick'),
-            url(r'^quantity/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
-            self.quantity_view.as_view(), name='quantity'),
-            url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
-            self.quote_view.as_view(), name='quote'),
-            url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/save/$',
-            self.quote_save_view.as_view(), name='quote-save'),
-            url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/load/$',
-            self.quote_load_view.as_view(), name='quote-load'),
-            url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
-            self.upload_view.as_view(), name='upload'),
-            url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/delete/(?P<file_id>\d+)$',
-            self.artwork_delete_view.as_view(), name='upload-artwork-delete'),
-            url(r'^add/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
-            self.add_to_basket_view.as_view(), name='add-to-basket'),
+                    self.pick_view.as_view(), name='pick'),
+                url(r'^quantity/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
+                    self.quantity_view.as_view(), name='quantity'),
+                url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
+                    self.quote_view.as_view(), name='quote'),
+                url(r'^quote/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/load/$',
+                    self.quote_load_view.as_view(), name='quote-load'),
+                url(r'^quote/save/$',
+                    self.quote_save_view.as_view(), name='quote-save'),
+                url(r'^quote/send/$',
+                    self.quote_email_view.as_view(), name='quote-email'),
+                url(r'^quote/print/$',
+                    self.quote_print_view.as_view(), name='quote-print'),
+                url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
+                    self.upload_view.as_view(), name='upload'),
+                url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/delete/(?P<file_id>\d+)$',
+                    self.artwork_delete_view.as_view(), name='upload-artwork-delete'),
+                url(r'^add/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
+                    self.add_to_basket_view.as_view(), name='add-to-basket'),
                 url(r'^edit/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/(?P<line_id>\d+)/$', self.line_edit_view.as_view(), name='line-edit'),
         )
 
