@@ -1,0 +1,46 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans with name=site.name %}
+<strong>Email Quote</strong>
+<br/><br/>
+Below is an email copy of your quote.
+<br/><br/>
+{% endblocktrans %}
+
+	<strong>Ref number</strong>: #{{ quote.reference_number }}
+	<br/>
+	<strong>Quote expiry date</strong>: {{ quote.date_expired }}
+	<br/>
+	<strong>Total Cost</strong>: £{{ total_cost }}
+	<br/>
+	VAT and delivery not included.
+	<br/><br/>
+
+	Quote:
+	<br/>
+	{% for quoteline in quote.quoteline_set.all %}
+		<br/>
+		<strong>Product</strong>: {{ quoteline.product }}
+		<br/>
+		{% for option in quoteline.choices.all %}
+			{{ option }}
+			<br/>
+		{% endfor %}
+		<strong>Quantity</strong>: {{ quoteline.quantity }}
+		<br/>
+		<strong>Cost</strong>: {{ quoteline.price_incl_tax }}
+		<br/>
+	{% endfor %}
+	<br/>
+
+{% trans "Thanks for using our site!" %}
+<br/>
+{% blocktrans with name=site.name %}The Prizmatic team{% endblocktrans %}
+
+{% endautoescape %}
+
+
+
+
+
+
