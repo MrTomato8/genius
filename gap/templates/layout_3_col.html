@@ -13,27 +13,30 @@
         {% endblock %}
 
         {% include "partials/alert_messages.html" %}
-        <div id="columns">
-            <section>
-                <div id="promotions_left">
-                    {% for promotion in promotions_left %}
-                        {% render_promotion promotion %}
-                    {% endfor %}
-                </div>
-            </section>
+        <div id="columns" class="row">
+            <div class="col-lg-2">
+                <section>
+                    <div id="promotions_left">
+                        {% for promotion in promotions_left %}
+                            {% render_promotion promotion %}
+                        {% endfor %}
+                    </div>
+                </section>
                 {% block column_left %}{% endblock %}
-                <div class="main-content">
+            </div>
+
+            <div class="main-content col-lg-7">
 
                 <div id="promotions">
                     {% for promotion in promotions_page %}
                         {% render_promotion promotion %}
                     {% endfor %}
                 </div>
-                
+
                 {% block content %}{% endblock %}
 
-                </div>
-
+            </div>
+            <div class="col-lg-3">
                 <section>
                     <div id="promotions_right">
                         {% for promotion in promotions_right %}
@@ -41,9 +44,8 @@
                         {% endfor %}
                     </div>
                 </section>
-                    {% block column_right %} 
-                    {% endblock %}
-                </aside>
+                {% block column_right %}{% endblock %}
+            </div>
         </div>
-    </div><!-- /container-fluid -->
+    </div><!-- /container -->
 {% endblock %}
