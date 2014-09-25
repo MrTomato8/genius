@@ -1,10 +1,14 @@
-{% extends "layout.html" %}
+{% extends "layout_2_col.html" %}
 
 {% load currency_filters %}
 {% load i18n %}
 
 {% block headertext %}
-{% blocktrans with number=order.number %}Order #{{ number }}{% endblocktrans %}
+    {% blocktrans with number=order.number %}Order #{{ number }}{% endblocktrans %}
+{% endblock %}
+
+{% block column_left %}
+    {% include "partials/nav_profile.html" with order_history="active" %}
 {% endblock %}
 
 {% block content %}
@@ -36,7 +40,7 @@
         <th>{% trans 'Shipping notes' %}</th>
         <td>{{ shipping_address.notes }}</td>
     </tr>
-    {% endif %} 
+    {% endif %}
 </table>
 
 <div class="sub-header">

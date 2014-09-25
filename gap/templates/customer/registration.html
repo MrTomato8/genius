@@ -17,8 +17,8 @@
 
 {% block content %}
 
-<div class="row-fluid">
-    <div class="span6 register_form">
+<div class="row">
+    <div class="col-md-6 register_form">
         <form id="register_form" action="{{ request.get_full_path }}" method="post" class="form-stacked">
             <h2>{% trans 'Register' %}</h2>
             {% csrf_token %}
@@ -26,6 +26,6 @@
             <button name="registration_submit" type="submit" value="Register" class="btn btn-primary btn-large js-disable-on-click" data-loading-text="{%trans 'Registering...' %}">{% trans 'Register' %}</button>
         </form>
     </div>
-</div>    
+</div>
 
 {% endblock content %}

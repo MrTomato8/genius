@@ -63,21 +63,27 @@
     	<div class="container" id="main-wrapper">
             <div class="page_inner">
                 {% block page_title %}
-                <section id="page-title">
-                    {% block breadcrumbs %}{% endblock %}
-                    {% block header %}
-                    <h1>{% block headertext %}{% endblock %}</h1>
-                    {% endblock %}
-                </section>
+                    <section id="page-title">
+                        {% block breadcrumbs %}{% endblock %}
+
+                        {% block header %}
+                            <h1>{% block headertext %}{% endblock %}</h1>
+                        {% endblock %}
+                    </section>
                 {% endblock %}
+
                 {% block alert_messages %}
-                {% include "partials/alert_messages.html" %}
+                    {% include "partials/alert_messages.html" %}
                 {% endblock %}
+
                 {% block subnavigation %}{% endblock %}
+
                 <section id="content" class="set-size clearfix">
                     {% block subheader %}{% endblock subheader %}
                     {# Div exists for AJAX updates to entire content section #}
-                    <div id="content_inner">{% block content %}{% endblock %}</div>
+                    <div id="content_inner">
+                        {% block content %}{% endblock %}
+                    </div>
                 </section>
             </div>
         </div>

@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout_2_col.html" %}
 {% load currency_filters %}
 {% load i18n %}
 
@@ -6,28 +6,18 @@
 
 {% block breadcrumbs %}
 <ul class="breadcrumb">
-    <li>
-        <a href="{% url promotions:home %}">{% trans 'Home' %}</a>
-        <span class="divider">/</span>
-    </li>
-    <li>
-        <a href="{% url customer:summary %}">{% trans 'Account' %}</a>
-        <span class="divider">/</span>
-    </li>
+    <li><a href="{% url promotions:home %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url customer:summary %}">{% trans 'Account' %}</a></li>
     <li class="active">{% trans 'Order history' %}</li>
 </ul>
 {% endblock %}
 
 {% block title %}
-{% trans 'Order history' %} | {{ block.super }}
+    {% trans 'Order history' %} | {{ block.super }}
 {% endblock %}
 
 {% block headertext %}
-{% trans 'Account' %}
-{% endblock %}
-
-{% block subnavigation %}
-    {% include "partials/nav_profile.html" with order_history="active" %}
+    {% trans 'Account' %}
 {% endblock %}
 
 {% block subheader %}
@@ -36,8 +26,11 @@
 </div>
 {% endblock subheader %}
 
-{% block content %}
+{% block column_left %}
+    {% include "partials/nav_profile.html" with order_history="active" %}
+{% endblock %}
 
+{% block content %}
 <h3>{% trans 'Search in orders' %}</h3>
 <form action="." method="get">
     {% include "partials/form_fields.html" with form=form %}
@@ -72,7 +65,7 @@
     {% endfor %}
 </table>
 {% else %}
-<p>{% trans 'No orders found' %}</p>
+    <p>{% trans 'No orders found' %}</p>
 {% endif %}
 
 {% include "partials/pagination.html" %}
