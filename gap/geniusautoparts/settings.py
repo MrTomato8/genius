@@ -148,6 +148,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     # 'django.contrib.admindocs',
     #'gap',
+    'widget_tweaks',
     'geniusautoparts',
     'accounts',
     'csvimport',
