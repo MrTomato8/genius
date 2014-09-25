@@ -24,7 +24,7 @@ main content area to split it into a sidebar and a content block
             {# Render promotions at the top of the left-hand sidebar #}
             <div class="col-lg-2">
 
-                <section>
+                <section class="example-promotion">
                     <div id="promotions_left">
                         {% for promotion in promotions_left %}
                             {% render_promotion promotion %}
@@ -38,7 +38,7 @@ main content area to split it into a sidebar and a content block
 
             <div class="col-lg-10">
 
-                <div id="promotions">
+                <div class="example-promotion" id="promotions">
                     {% for promotion in promotions_page %}
                         {% render_promotion promotion %}
                     {% endfor %}
