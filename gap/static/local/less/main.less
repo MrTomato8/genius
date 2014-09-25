@@ -195,27 +195,37 @@ div[class*="sidebar-"] .panel-heading:before {
 #quote-builder .checkout img {margin-bottom: 5px;}
 #quote-builder .checkout img {margin-bottom: 5px;}
 
-@media (max-width: @screen-sm) {
-
-    .sidebar-right, {width: 100%;}
-
-}
-@media (max-width: @screen-phone) {
-
-    .sidebar-left, {width: 100%;}
-
-}
-
 // FOOTER
 
-footer {background-color: #373D48; color: #898989; padding: 25px 0; margin-top: 20px;}
-footer ul {list-style: none; padding-left: 0;}
-footer a {color: #898989;
-    &:hover, &:focus, &:active {color: #898989;}
+footer {
+    background-color: #373D48;
+    color: #898989;
+    padding: 25px 0;
+    margin-top: 20px;
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    a {
+        color: #898989;
+        &:hover, &:focus, &:active {
+            color: #898989;
+        }
+    }
+    .info,
+    h3 {
+        color: #fff;
+        &:hover, &:focus, &:active {color: #fff;}
+    }
+    @media (max-width: @screen-sm-max) {
+        .row-divider {
+            .clearfix;
+        }
+    }
 }
-footer .info, footer h3 {color: #fff;
-    &:hover, &:focus, &:active {color: #fff;}
-}
+
+
 
 // Producs list
 
