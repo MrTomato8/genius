@@ -1,89 +1,96 @@
 {% load static %}
 {% load currency_filters %}
-        <div class="panel panel-primary bordered" id="quote-builder">
-            <div class="panel-heading">
-              <span class="pull-left"><img src="{% static "local/images/quote.png" %} " /></span>
-              Quotebuilder
-              <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblank.png" %} " /></span>
-            </div>
-            <div class="panel-body">
-{% if basket.all_lines_with_dead|length %}
-               <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>DEL</th>
-                    <th>Live</th>
-                    <th>Brief Description</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-  {% for line in basket.all_lines_with_dead %}
-                  <tr>
-                    <td>
-                      <form method="POST" action="{% url basket:items-remove line.pk %}" class="js-quotebuilder-remove-form">
-                        {% csrf_token %}
-                        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                        <input type="image" src="{% static "local/images/delete.png" %} " alt="x" />
-                      </form>
-                    </td>
-                    <td>
-                      <form method="POST" action="{% url basket:items-toggle-live line.pk %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                        {% if line.is_dead %}
-                          <input type="image" src="{% static "local/images/notlive.png" %}" alt="|" />
-                        {% else %}
-                          <input type="image" src="{% static "local/images/live.png" %}" alt="-" />
-                        {% endif %}
-                      </form>
-                    </td>
-                    <td class="td-link-edit"><a href="{% url options:line-edit line.product.slug line.product.pk line.pk %}">{{ line.product_and_options_description }}</a></td>
-                    <td>{{ line.total_price_incl_tax|currency }}</td>
-                  </tr>
-  {% endfor %}
-                </tbody>
-               </table>
 
-               <p>click an item to edit</p>
 
-            <div class="text-right price"><p>Total Price (inc VAT) <span>{{ basket.apply_total_price_incl_tax_and_discounts|currency }}</span></p></div>
+<div class="panel panel-primary bordered" id="quote-builder">
+  <div class="panel-heading">
+    <span class="pull-left"><img src="{% static "local/images/quote.png" %} "/></span>
+    Quotebuilder
+    <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+          data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+            src="{% static "local/images/infoblank.png" %} "/></span>
+  </div>
+  <div class="panel-body">
+    {% if basket.all_lines_with_dead|length %}
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>DEL</th>
+          <th>Live</th>
+          <th>Brief Description</th>
+          <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for line in basket.all_lines_with_dead %}
+          <tr>
+            <td>
+              <form method="POST" action="{% url basket:items-remove line.pk %}" class="js-quotebuilder-remove-form">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}"/>
+                <input type="image" src="{% static "local/images/delete.png" %} " alt="x"/>
+              </form>
+            </td>
+            <td>
+              <form method="POST" action="{% url basket:items-toggle-live line.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}"/>
+                {% if line.is_dead %}
+                  <input type="image" src="{% static "local/images/notlive.png" %}" alt="|"/>
+                {% else %}
+                  <input type="image" src="{% static "local/images/live.png" %}" alt="-"/>
+                {% endif %}
+              </form>
+            </td>
+            <td class="td-link-edit"><a
+                    href="{% url options:line-edit line.product.slug line.product.pk line.pk %}">{{ line.product_and_options_description }}</a>
+            </td>
+            <td>{{ line.total_price_incl_tax|currency }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
 
-            <div class="text-center checkout">
-              <a href="{% url basket:summary %}" class="btn btn-primary btn-block btn-submit">Proceed to Checkout</a>
+      <p>click an item to edit</p>
 
-              <ul class="list-inline">
-                <li>
-                                  <a href="#">
-                                      <div><img src="{% static "local/images/bespoke.png" %} " alt=""></div>
-                                      Bespoke<br/> Quote
-                                  </a>
-                                </li>
-                <li>
-                                  <a href="#">
-                                      <div><img src="{% static "local/images/print.png" %} " alt=""></div>
-                                      Print<br/> Quote
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                      <div><img src="{% static "local/images/save-btn.png" %} " alt=""></div>
-                                      Save<br/> Quote
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                      <div><img src="{% static "local/images/mail.png" %} " alt=""></div>
-                                      Email<br/> Quote
-                                  </a>
-                                </li>
-                            </ul>
-                      </div>
-{% endif %}
-                  </div>
-                </div>
+      <div class="text-right price"><p>Total Price (inc VAT)
+        <span>{{ basket.apply_total_price_incl_tax_and_discounts|currency }}</span></p></div>
+
+      <div class="text-center checkout">
+        <a href="{% url basket:summary %}" class="btn btn-primary btn-block btn-submit">Proceed to Checkout</a>
+
+        <ul class="list-inline">
+          <li>
+            <a href="#">
+              <div><img src="{% static "local/images/bespoke.png" %} " alt=""></div>
+              Bespoke<br/> Quote
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <div><img src="{% static "local/images/print.png" %} " alt=""></div>
+              Print<br/> Quote
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <div><img src="{% static "local/images/save-btn.png" %} " alt=""></div>
+              Save<br/> Quote
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <div><img src="{% static "local/images/mail.png" %} " alt=""></div>
+              Email<br/> Quote
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</div>
 <script type="text/javascript">
-  $(function() {
+  $(function () {
     PPS.quotebuilder.init();
   });
 </script>

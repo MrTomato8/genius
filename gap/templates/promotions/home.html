@@ -63,48 +63,46 @@
             <div class="main-content col-lg-9">
 
                 <!-- Products list -->
-                <div class="container">
-                    <div class="row products-list">
+                <div class="row products-list">
 
-                    {% for category in categories %}
-                        {% if category.1 %}
-                            {% for subcategory in category.1 %}
+                {% for category in categories %}
+                    {% if category.1 %}
+                        {% for subcategory in category.1 %}
 
-                            <div class="col-md-2 col-sm-4 col-xs-6 prod_wrap hidden-xs">
+                        <div class="col-md-2 col-sm-4 col-xs-6 prod_wrap hidden-xs">
 
-                                <article class="product">
-                                    <a href="{{ subcategory.0.get_absolute_url }}" class="product-avatar">
-                                        <span class="info" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-                                        <img src="{% static 'local/images/info.png' %}" />
-                                        </span>
-                                        {% if subcategory.0.image %}
-                                        <img alt="" src="{{ subcategory.0.image.url }}"/>
-                                        {% else %}
-                                        <img alt="" src="{% static 'local/images/product-img.jpg' %}"/>
-                                        {% endif %}
-                                    </a>
+                            <article class="product">
+                                <a href="{{ subcategory.0.get_absolute_url }}" class="product-avatar">
+                                    <span class="info" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+                                    <img src="{% static 'local/images/info.png' %}" />
+                                    </span>
+                                    {% if subcategory.0.image %}
+                                    <img alt="" src="{{ subcategory.0.image.url }}"/>
+                                    {% else %}
+                                    <img alt="" src="{% static 'local/images/product-img.jpg' %}"/>
+                                    {% endif %}
+                                </a>
 
-                                    <a href="{{ subcategory.0.get_absolute_url }}" class="product-name">{{ subcategory.0.name }}</a>
-                                </article>
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                        <div class="col-md-2 col-sm-4 col-xs-6 visible-phone">
-                            <button id="show_more" class="btn btn-primary btn-block">Show more</button>
+                                <a href="{{ subcategory.0.get_absolute_url }}" class="product-name">{{ subcategory.0.name }}</a>
+                            </article>
                         </div>
-
-                        <script type="text/javascript">
-                        $('.prod_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
-                        $('#show_more').click(function(){
-                            $('.prod_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
-                            if ($('.prod_wrap.hidden-xs').empty()){
-                                $('#show_more').hide();
-                            }
-                        });
-                        </script>
-
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                    <div class="visible-phone">
+                        <button id="show_more" class="btn btn-primary btn-block">Show more</button>
                     </div>
+
+                    <script type="text/javascript">
+                    $('.prod_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
+                    $('#show_more').click(function(){
+                        $('.prod_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
+                        if ($('.prod_wrap.hidden-xs').empty()){
+                            $('#show_more').hide();
+                        }
+                    });
+                    </script>
+
                 </div>
             </div>
         </div>
