@@ -8,56 +8,57 @@
 {% my_category_tree depth=2 as categories %}
     <header id="header">
         <!-- TOP NAV -->
-        <div class="navbar" id="top-nav">
-            <div class="navbar-header">
-                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-                    <span class="fa fa-reorder"></span>
-                </button>
-                {% include "partials/brand.html" %}
-            </div>
+        <nav id="top-nav" class="navbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                        <span class="fa fa-reorder"></span>
+                    </button>
+                    {% include "partials/brand.html" %}
+                </div>
 
-            <div class="navbar-collapse navbar-responsive-collapse collapse">
-                <ul class="nav navbar-nav visible-xs">
-                    <li><a href="#">Home</a></li>
-                    <li>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Products <span class="fa fa-angle-right"></span></a>
-                        {% if categories %}
-                        <ul class="dropdown-menu">
-                            {% for category in categories %}
-                            <li class="dropdown-submenu">
-                                <a href="#">{{ category.0.name }} <span class="fa fa-angle-right"></span></a>
-                                {% if category.1 %}
-                                <ul class="dropdown-menu">
-                                    {% for subcategory in category.1 %}
-                                    <li><a href="{{ subcategory.0.get_absolute_url }}"> {{ subcategory.0.name }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                                {% endif %}
-                            </li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </li>
-                    <li><a href="#modal-login" data-toggle="modal"><i class="fa fa-user"></i> Login</a></li>
-                    <li><a href="#"><i class="fa fa-shopping-cart"></i> Proceed to checkout</a></li>
-                </ul>
+                <div class="navbar-collapse navbar-responsive-collapse collapse">
+                    <ul class="nav navbar-nav visible-xs">
+                        <li><a href="#">Home</a></li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Products <span class="fa fa-angle-right"></span></a>
+                            {% if categories %}
+                            <ul class="dropdown-menu">
+                                {% for category in categories %}
+                                <li class="dropdown-submenu">
+                                    <a href="#">{{ category.0.name }} <span class="fa fa-angle-right"></span></a>
+                                    {% if category.1 %}
+                                    <ul class="dropdown-menu">
+                                        {% for subcategory in category.1 %}
+                                        <li><a href="{{ subcategory.0.get_absolute_url }}"> {{ subcategory.0.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </li>
+                        <li><a href="#modal-login" data-toggle="modal"><i class="fa fa-user"></i> Login</a></li>
+                        <li><a href="#"><i class="fa fa-shopping-cart"></i> Proceed to checkout</a></li>
+                    </ul>
 
-                <ul class="list-inline hidden-xs pull-right">
-                    <li>Phone: <b>1-800-424-1324</b></li>
-                    {% include "partials/nav_accounts.html" %}
-                </ul>
-            </div>
-        </div>
-        
-        {% block navigation %}
-            {% include "partials/nav_primary.html" %}
-        {% endblock %}
-        
-        
+                    <ul class="list-inline hidden-xs pull-right">
+                        <li>Phone: <b>1-800-424-1324</b></li>
+                        {% include "partials/nav_accounts.html" %}
+                    </ul>
+                </div>
+            </nav>
+
+            {% block navigation %}
+                {% include "partials/nav_primary.html" %}
+            {% endblock %}
+
+        </div><!-- /container-fluid -->
     </header><!-- /header -->
 
     {# Main content of page - other layout templates may override this block #}
-    
+
         {% block content_wrapper %}
     	<div class="container" id="main-wrapper">
             <div class="page_inner">
