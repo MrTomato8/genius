@@ -10,14 +10,8 @@
 
 {% block breadcrumbs %}
 <ul class="breadcrumb">
-	<li>
-	<a href="{% url promotions:home %}">{% trans "Home" %}</a>
-	<span class="divider">/</span>
-	</li>
-	<li>
-	{% trans "Search" %}
-	<span class="divider">/</span>
-	</li>
+	<li><a href="{% url promotions:home %}">{% trans "Home" %}</a></li>
+	<li>{% trans "Search" %}</li>
 	<li class="active">{% blocktrans with q=query%}"{{ q }}"{% endblocktrans %}</li>
 </ul>
 {% endblock %}

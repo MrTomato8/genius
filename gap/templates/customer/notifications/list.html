@@ -7,14 +7,8 @@
 
 {% block breadcrumbs %}
 <ul class="breadcrumb">
-    <li>
-        <a href="{% url promotions:home %}">{% trans 'Home' %}</a>
-        <span class="divider">/</span>
-    </li>
-    <li>
-        <a href="{% url customer:summary %}">{% trans 'Account' %}</a>
-        <span class="divider">/</span>
-    </li>
+    <li><a href="{% url promotions:home %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url customer:summary %}">{% trans 'Account' %}</a></li>
 	<li class="active">{{ title }}</li>
 </ul>
 {% endblock %}
@@ -40,7 +34,7 @@
 		{% for notification in notifications %}
 		<tr>
 			<td>
-				<input type="checkbox" name="selected_notification" 
+				<input type="checkbox" name="selected_notification"
 				value="{{ notification.id }}"/>
 			</td>
 			<td>
@@ -52,7 +46,7 @@
 			</td>
 			<td>
 				{{ notification.subject|safe }} <br/>
-				<em>{{ notification.date_sent }}</em> 
+				<em>{{ notification.date_sent }}</em>
 			</td>
 			<td>
 				{% if list_type == 'inbox' %}
@@ -64,7 +58,7 @@
 		{% endfor %}
 		</tbody>
 	</table>
-	{% trans "With selected items:" %} 
+	{% trans "With selected items:" %}
 	{% if list_type == 'inbox' %}
 	<button type="submit" class="btn btn-success" name="action" value="archive">{% trans "Archive" %}</button>
 	{% endif %}
