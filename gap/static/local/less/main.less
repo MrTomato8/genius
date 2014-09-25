@@ -17,7 +17,6 @@ p {line-height: 2;}
 
 // CONTENT
 #main-wrapper {padding-top: 20px; padding-bottom: 20px;}
-footer .container {padding: 20px 40px;}
 
 .download-section {margin-top: 40px; margin-bottom: 35px;}
 .download-section a {margin-right: 8px;}
@@ -139,35 +138,7 @@ div[class*="sidebar-"] .panel-heading:before {
 #quote-builder .checkout img {margin-bottom: 5px;}
 #quote-builder .checkout img {margin-bottom: 5px;}
 
-// FOOTER
-
-footer {
-    background-color: #373D48;
-    color: #898989;
-    padding: 25px 0;
-    margin-top: 20px;
-
-    ul {
-        list-style: none;
-        padding-left: 0;
-    }
-    a {
-        color: #898989;
-        &:hover, &:focus, &:active {
-            color: #898989;
-        }
-    }
-    .info,
-    h3 {
-        color: #fff;
-        &:hover, &:focus, &:active {color: #fff;}
-    }
-    @media (max-width: @screen-sm-max) {
-        .row-divider {
-            .clearfix;
-        }
-    }
-}
+@import 'partials/_footer.less';
 
 
 
