@@ -4,260 +4,279 @@
 
 {% block content %}
   <section class="set-size clearfix">
-    <div class="col-lg-12">
+  <div class="col-lg-12">
 
-      <div id="title-target" class="center-block clearfix">
-      </div>
+  <div id="title-target" class="center-block clearfix">
+  </div>
 
-      <div class="clearfix stepy-centering">
-      <form id="order-form" method="POST" action="{% url 'product_options' product.id %}">
-          {{ formset.management_form }}
-          {% csrf_token %}
-          <fieldset title="1. Product options">
-            <legend></legend>
-			<div class="col-lg-8 float-left">
-            {% for form in formset %}
-              {% if form.instance.attribute.code in step1_codes %}
-                <h3>{{ form.instance.attribute }}</h3>
-                <div class="clearfix product-options">
-                  {{ form.id }}
-                  {{ form.value_multi_option }}
-                </div>
-              {% endif %}
-            {% endfor %}
-			</div>
-			<div class="product-preview col-lg-3 float-right clearfix">
-			<div class="clearfix centered title-selection">
-				<div class="button button-blue">Your selections</div>
-				</div>
-			</div>
-          </fieldset>
-
-          <fieldset title="2. Pick your paper">
-            <legend></legend>
-			<div class="grid-8 float-left">
-            {% for form in formset %}
-              {% if form.instance.attribute.code in step2_codes %}
-                <h3>{{ form.instance.attribute }}</h3>
-                <div class="clearfix product-options">
-                  {{ form.id }}
-                  {{ form.value_multi_option }}
-                </div>
-              {% endif %}
-            {% endfor %}
-			</div>
-			<div class="product-preview col-lg-3 float-right clearfix">
-			<div class="clearfix centered title-selection">
-				<div class="button button-blue">Your selections</div>
-				</div>
-			</div>
-          </fieldset>
-
-          <fieldset title="3. Get a quote">
-            <legend></legend>
-			<div class="grid-12 float-left">
-			   <div id="select-selection" class="grid-4 stage-3 float-left clearfix" style="padding:0 10px 0 0;">
-					<div class="clearfix centered title-selection">
-						<div class="button button-blue">Your Custom Selection</div>
-					</div>
-					<div class="product-preview stage-three grid-4 float-left">
-					</div>
-			  </div>
-			  <div id="select-quantity" class="grid-7 clearfix float-left">
-				<div class="clearfix centered grid-7 title-selection">
-					<div class="button button-blue">&nbsp;&nbsp;&nbsp;Select Your Quantity</div>
-				</div>
-			  <div class="stage-three grid-7 float-left">
-              <table class="table quote-table grid-3 float-left">
-
-                <thead>
-                  <tr class="noborder">
-                    <th>Quantity</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>250</td>
-                    <td>
-                      <div class="right-col">£15.00 <input type="radio" name="quantity" value="selected" checked class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>500</td>
-                    <td>
-                      <div class="right-col">£22.79  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>1000</td>
-                    <td>
-                      <div class="right-col">£41.85  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2000</td>
-                    <td>
-                      <div class="right-col">£77.56  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>3000</td>
-                    <td>
-                      <div class="right-col">£111.69  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>4000</td>
-                    <td>
-                      <div class="right-col">£146.34  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-				  <tr>
-                    <td>5000</td>
-                    <td>
-                      <div class="right-col">£246.34  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-			  <table class="table quote-table table-side grid-3 float-right">
-
-                <thead>
-                  <tr class="noborder">
-                    <th>Quantity</th>
-                    <th>Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>6000</td>
-                    <td>
-                      <div class="right-col">£15.00 <input type="radio" name="quantity" value="selected" checked class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>7000</td>
-                    <td>
-                      <div class="right-col">£22.79  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>8000</td>
-                    <td>
-                      <div class="right-col">£41.85  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>9000</td>
-                    <td>
-                      <div class="right-col">£77.56  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>10000</td>
-                    <td>
-                      <div class="right-col">£111.69  <input type="radio" name="quantity" value="selected" class="quantity-selected"></div>
-                    </td>
-                  </tr>
-				  <tr>
-				  <td>&nbsp;</td>
-				  </tr>
-				  <tr>
-				  <td>&nbsp;</td>
-				  </tr>
-                </tbody>
-              </table>
-
-				<div class="clearfix centered grid-7 float-left" style="padding: 0 0;">
-					<div class="special-price">Quantities above ten thousand. Please call us now on +44 1273782120 for a special price.</div>
-				</div>
-				</div>
-			  </div>
-			  </div>
-              <div class="grid-9 float-left">
-                <h2>Custom size</h2><br />
-                <p>Please enter the size you require<label class="grid-2" for="id_width">Width <input type="text" name="width" value="0" id="id_width">mm</label>&nbsp;<label for="id_height">Height <input type="text" name="height" value="0" id="id_height">mm</label></p>
-                <br>
-                <br>
-                <h3>How many do you need?</h3><br />
-				<p>Quantity <label for="id_quantity"><input type="text" name="quantity" value="1" id="id_quantity"></label>&nbsp;&nbsp;<a href="#" class="button">Calculate</a>
-				<br>
-                <br>
-				<div class="price-product-options">
-					<label for="id_unit_cost">Unit cost: <span id="unit_cost">£&nbsp;100.00</span></label></br>
-					<label for="id_cost"><span class="price-new">Cost: <span id="cost_product">£&nbsp;100.00</span></span></label>
-				</div>
-				<br>
-				<h3>Enter your job reference here</h3><br>
-				<input type="text" name="jobref" value="" id="id_jobref">
-                <br>
-                <br>
-              </div>
-
-
-
-          </fieldset>
-
-          <input value="Add To Basket" type="submit" class="finish button"/>
-      </form>
-      </div>
-
-
-
+  <div class="clearfix stepy-centering">
+  <form id="order-form" method="POST" action="{% url 'product_options' product.id %}">
+  {{ formset.management_form }}
+  {% csrf_token %}
+  <fieldset title="1. Product options">
+    <legend></legend>
+    <div class="col-lg-8 col-md-8 float-left">
+      {% for form in formset %}
+        {% if form.instance.attribute.code in step1_codes %}
+          <h3>{{ form.instance.attribute }}</h3>
+          <div class="clearfix product-options">
+            {{ form.id }}
+            {{ form.value_multi_option }}
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
+    <div class="product-preview col-lg-4 col-md-4 float-right clearfix">
+      <div class="clearfix centered title-selection">
+        <div class="button button-blue">Your selections</div>
+      </div>
     </div>
+  </fieldset>
+
+  <fieldset title="2. Pick your paper">
+    <legend></legend>
+    <div class="col-md-8 float-left">
+      {% for form in formset %}
+        {% if form.instance.attribute.code in step2_codes %}
+          <h3>{{ form.instance.attribute }}</h3>
+          <div class="clearfix product-options">
+            {{ form.id }}
+            {{ form.value_multi_option }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="product-preview col-md-4 float-right clearfix">
+      <div class="clearfix centered title-selection">
+        <div class="button button-blue">Your selections</div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset title="3. Get a quote">
+    <legend></legend>
+    <div class="grid-12 float-left">
+      <div id="select-selection" class="grid-4 stage-3 float-left clearfix" style="padding:0 10px 0 0;">
+        <div class="clearfix centered title-selection">
+          <div class="button button-blue">Your Custom Selection</div>
+        </div>
+        <div class="product-preview stage-three grid-4 float-left">
+        </div>
+      </div>
+      <div id="select-quantity" class="grid-7 clearfix float-left">
+        <div class="clearfix centered grid-7 title-selection">
+          <div class="button button-blue">&nbsp;&nbsp;&nbsp;Select Your Quantity</div>
+        </div>
+        <div class="stage-three grid-7 float-left">
+          <table class="table quote-table grid-3 float-left">
+
+            <thead>
+            <tr class="noborder">
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>250</td>
+              <td>
+                <div class="right-col">£15.00 <input type="radio" name="quantity" value="selected" checked
+                                                     class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>500</td>
+              <td>
+                <div class="right-col">£22.79 <input type="radio" name="quantity" value="selected"
+                                                     class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>1000</td>
+              <td>
+                <div class="right-col">£41.85 <input type="radio" name="quantity" value="selected"
+                                                     class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>2000</td>
+              <td>
+                <div class="right-col">£77.56 <input type="radio" name="quantity" value="selected"
+                                                     class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>3000</td>
+              <td>
+                <div class="right-col">£111.69 <input type="radio" name="quantity" value="selected"
+                                                      class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>4000</td>
+              <td>
+                <div class="right-col">£146.34 <input type="radio" name="quantity" value="selected"
+                                                      class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>5000</td>
+              <td>
+                <div class="right-col">£246.34 <input type="radio" name="quantity" value="selected"
+                                                      class="quantity-selected"></div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <table class="table quote-table table-side grid-3 float-right">
+
+            <thead>
+            <tr class="noborder">
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>6000</td>
+              <td>
+                <div class="right-col">£15.00 <input type="radio" name="quantity" value="selected" checked
+                                                     class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>7000</td>
+              <td>
+                <div class="right-col">£22.79 <input type="radio" name="quantity" value="selected"
+                                                     class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>8000</td>
+              <td>
+                <div class="right-col">£41.85 <input type="radio" name="quantity" value="selected"
+                                                     class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>9000</td>
+              <td>
+                <div class="right-col">£77.56 <input type="radio" name="quantity" value="selected"
+                                                     class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>10000</td>
+              <td>
+                <div class="right-col">£111.69 <input type="radio" name="quantity" value="selected"
+                                                      class="quantity-selected"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div class="clearfix centered grid-7 float-left" style="padding: 0 0;">
+            <div class="special-price">Quantities above ten thousand. Please call us now on +44 1273782120 for a
+              special price.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-9 float-left">
+      <h2>Custom size</h2><br/>
+
+      <p>Please enter the size you require<label class="grid-2" for="id_width">Width <input type="text" name="width"
+                                                                                            value="0"
+                                                                                            id="id_width">mm</label>&nbsp;<label
+              for="id_height">Height <input type="text" name="height" value="0" id="id_height">mm</label></p>
+      <br>
+      <br>
+
+      <h3>How many do you need?</h3><br/>
+
+      <p>Quantity <label for="id_quantity"><input type="text" name="quantity" value="1" id="id_quantity"></label>&nbsp;&nbsp;<a
+              href="#" class="button">Calculate</a>
+        <br>
+        <br>
+
+      <div class="price-product-options">
+        <label for="id_unit_cost">Unit cost: <span id="unit_cost">£&nbsp;100.00</span></label></br>
+        <label for="id_cost"><span class="price-new">Cost: <span
+                id="cost_product">£&nbsp;100.00</span></span></label>
+      </div>
+      <br>
+
+      <h3>Enter your job reference here</h3><br>
+      <input type="text" name="jobref" value="" id="id_jobref">
+      <br>
+      <br>
+    </div>
+
+
+  </fieldset>
+
+  <input value="Add To Basket" type="submit" class="finish button"/>
+  </form>
+  </div>
+  </div>
 
 
   </section>
 
   <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function () {
       $('#order-form').stepy({
-        legend:false,
+        legend: false,
         titleTarget: '#title-target',
         description: false,
-        next: function(index) {
+        next: function (index) {
           var step = this.children('fieldset').eq(index - 2),
-              isValid = $(step).find('input').valid();
+                  isValid = $(step).find('input').valid();
           return isValid;
         },
         validate: true
       });
 
-    	$('.product-options input:radio').change(function(event){
-    		// first check a preview object with this attribute
-    		var attribute = $(this).attr('name');
+      $('.product-options input:radio').change(function (event) {
+        // first check a preview object with this attribute
+        var attribute = $(this).attr('name');
         var label = $(this).parent();
-    		var preview = $('#preview-'+attribute);
-    		var options_div = $(this).parents('.product-options');
-    		var h3 = options_div.prev('h3');
-        if(!preview.length) {
-    			preview = $('<div id="preview-' + attribute + '" class="attribute-options"></div>').appendTo('.product-preview');
+        var preview = $('#preview-' + attribute);
+        var options_div = $(this).parents('.product-options');
+        var h3 = options_div.prev('h3');
+        if (!preview.length) {
+          preview = $('<div id="preview-' + attribute + '" class="attribute-options"></div>').appendTo('.product-preview');
         }
-    		preview.html( '<h3>' + h3.html() + '</h3>' + label.html() );
-    	});
+        preview.html('<h3>' + h3.html() + '</h3>' + label.html());
+      });
 
       $('#order-form').validate({
-        errorPlacement: function(error, element) {
+        errorPlacement: function (error, element) {
 
           $(element).parents('.product-options').prepend(error);
         },
         rules: {
-          'form-0-value_multi_option':		'required',
-          'form-1-value_multi_option':		'required',
-          'form-2-value_multi_option':		'required',
-          'form-3-value_multi_option':		'required',
-          'form-4-value_multi_option':		'required',
-          'form-5-value_multi_option':		'required',
+          'form-0-value_multi_option': 'required',
+          'form-1-value_multi_option': 'required',
+          'form-2-value_multi_option': 'required',
+          'form-3-value_multi_option': 'required',
+          'form-4-value_multi_option': 'required',
+          'form-5-value_multi_option': 'required',
         },
         messages: {
-          'form-0-value_multi_option':		{ required:  'Checked field is required!' },
-          'form-1-value_multi_option':		{ required:  'Checked field is required!' },
-          'form-2-value_multi_option':		{ required:  'Checked field is required!' },
-          'form-3-value_multi_option':		{ required:  'Checked field is required!' },
-          'form-4-value_multi_option':		{ required:  'Checked field is required!' },
-          'form-5-value_multi_option':		{ required:  'Checked field is required!' },
+          'form-0-value_multi_option': { required: 'Checked field is required!' },
+          'form-1-value_multi_option': { required: 'Checked field is required!' },
+          'form-2-value_multi_option': { required: 'Checked field is required!' },
+          'form-3-value_multi_option': { required: 'Checked field is required!' },
+          'form-4-value_multi_option': { required: 'Checked field is required!' },
+          'form-5-value_multi_option': { required: 'Checked field is required!' },
         }
       });
 
