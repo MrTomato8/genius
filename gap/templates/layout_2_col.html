@@ -22,7 +22,7 @@ main content area to split it into a sidebar and a content block
         {% include "partials/alert_messages.html" %}
         <div class="row">
             {# Render promotions at the top of the left-hand sidebar #}
-            <div class="col-lg-2">
+            <div class="col-lg-2 col-md-3">
 
                 <section class="example-promotion">
                     <div id="promotions_left">
@@ -36,7 +36,7 @@ main content area to split it into a sidebar and a content block
 
             </div>
 
-            <div class="col-lg-10">
+            <div class="col-lg-10 col-md-9">
 
                 <div class="example-promotion" id="promotions">
                     {% for promotion in promotions_page %}

@@ -3,7 +3,6 @@
 {% load staticfiles %}
 
 {% block content %}
-  <div class="container-fluid">
   <div class="row">
   <div class="flexslider">
     <ul class="slides">
@@ -261,126 +260,129 @@
       <!-- Tab panes -->
       <div class="tab-content">
         <div class="tab-pane active" id="completion-and-delivery-tab">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis, molestias, magni, doloribus, vero
-            ab
-            quas necessitatibus eum asperiores placeat odit facilis mollitia rerum quibusdam deserunt laboriosam error
-            sed
-            eos molestiae?</p>
+          <div class="tab-wrapper">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis, molestias, magni, doloribus,
+              veroabquas necessitatibus eum asperiores placeat odit facilis mollitia rerum quibusdam deserunt laboriosam
+              errorsedeos molestiae?</p>
+          </div>
         </div>
         <div class="tab-pane" id="services-tab">
-          <form action="#" class="form-horizontal">
-            <div class="form-group">
-              <label class="col-md-4 control-label">Artwork check</label>
+          <div class="tab-wrapper">
+            <form action="#" class="form-horizontal">
+              <div class="form-group">
+                <label class="col-md-4 control-label">Artwork check</label>
 
-              <div class="col-md-8 info-in">
-                <select name="customer-type" class="form-control">
-                  <option value="">Standard artwork check (free)</option>
-                </select>
+                <div class="col-md-8 info-in">
+                  <select name="customer-type" class="form-control">
+                    <option value="">Standard artwork check (free)</option>
+                  </select>
               <span class="info" data-container="body" data-toggle="popover" data-placement="left"
                     data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
                       src="{% static "local/images/infoblue.png" %}"/></span>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="col-md-4 control-label">Proof</label>
+              <div class="form-group">
+                <label class="col-md-4 control-label">Proof</label>
 
-              <div class="col-md-8 info-in">
-                <select name="customer-type" class="form-control">
-                  <option value="">Without proof</option>
-                </select>
+                <div class="col-md-8 info-in">
+                  <select name="customer-type" class="form-control">
+                    <option value="">Without proof</option>
+                  </select>
               <span class="info" data-container="body" data-toggle="popover" data-placement="left"
                     data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
                       src="{% static "local/images/infoblue.png" %}"/></span>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="col-md-4 control-label">Voucher copy</label>
+              <div class="form-group">
+                <label class="col-md-4 control-label">Voucher copy</label>
 
-              <div class="col-md-8 info-in">
-                <select name="customer-type" class="form-control">
-                  <option value="">No voucher copy</option>
-                </select>
+                <div class="col-md-8 info-in">
+                  <select name="customer-type" class="form-control">
+                    <option value="">No voucher copy</option>
+                  </select>
               <span class="info" data-container="body" data-toggle="popover" data-placement="left"
                     data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
                       src="{% static "local/images/infoblue.png" %}"/></span>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="col-md-4 control-label">Vat</label>
+              <div class="form-group">
+                <label class="col-md-4 control-label">Vat</label>
 
-              <div class="col-md-8 info-in">
-                <select name="customer-type" class="form-control">
-                  <option value="">20% (standard rated)</option>
-                </select>
+                <div class="col-md-8 info-in">
+                  <select name="customer-type" class="form-control">
+                    <option value="">20% (standard rated)</option>
+                  </select>
               <span class="info" data-container="body" data-toggle="popover" data-placement="left"
                     data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
                       src="{% static "local/images/infoblue.png" %}"/></span>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="col-md-4 control-label">CO2 balance</label>
+              <div class="form-group">
+                <label class="col-md-4 control-label">CO2 balance</label>
 
-              <div class="col-md-8 info-in">
-                <select name="customer-type" class="form-control">
-                  <option value="">without CO2 balance</option>
-                </select>
+                <div class="col-md-8 info-in">
+                  <select name="customer-type" class="form-control">
+                    <option value="">without CO2 balance</option>
+                  </select>
               <span class="info" data-container="body" data-toggle="popover" data-placement="left"
                     data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
                       src="{% static "local/images/infoblue.png" %}"/></span>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="col-md-4 control-label">Sponsoring</label>
+              <div class="form-group">
+                <label class="col-md-4 control-label">Sponsoring</label>
 
-              <div class="col-md-8 info-in">
-                <select name="customer-type" class="form-control">
-                  <option value="">without sponsoring</option>
-                </select>
+                <div class="col-md-8 info-in">
+                  <select name="customer-type" class="form-control">
+                    <option value="">without sponsoring</option>
+                  </select>
               <span class="info" data-container="body" data-toggle="popover" data-placement="left"
                     data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
                       src="{% static "local/images/infoblue.png" %}"/></span>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="col-md-4 control-label">Sender address</label>
+              <div class="form-group">
+                <label class="col-md-4 control-label">Sender address</label>
 
-              <div class="col-md-8 info-in">
-                <select name="customer-type" class="form-control">
-                  <option value="">sender: SAXOPRINT</option>
-                </select>
+                <div class="col-md-8 info-in">
+                  <select name="customer-type" class="form-control">
+                    <option value="">sender: SAXOPRINT</option>
+                  </select>
               <span class="info" data-container="body" data-toggle="popover" data-placement="left"
                     data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
                       src="{% static "local/images/infoblue.png" %}"/></span>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="col-md-4 control-label">Delivery splitting</label>
+              <div class="form-group">
+                <label class="col-md-4 control-label">Delivery splitting</label>
 
-              <div class="col-md-8 info-in">
-                <select name="customer-type" class="form-control">
-                  <option value="">delivery to 1 address (incl.)</option>
-                </select>
+                <div class="col-md-8 info-in">
+                  <select name="customer-type" class="form-control">
+                    <option value="">delivery to 1 address (incl.)</option>
+                  </select>
               <span class="info" data-container="body" data-toggle="popover" data-placement="left"
                     data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
                       src="{% static "local/images/infoblue.png" %}"/></span>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
         <div class="tab-pane" id="third-tab">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis maxime incidunt sed asperiores
-            cupiditate quibusdam facere minima porro voluptatem vitae. Odit, aliquid laborum porro rerum iusto dolore
-            doloribus sint facere.</p>
+          <div class="tab-wrapper">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis maxime incidunt sed asperiores
+              cupiditate quibusdam facere minima porro voluptatem vitae. Odit, aliquid laborum porro rerum iusto dolore
+              doloribus sint facere.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 {% endblock %}
