@@ -3,4 +3,3 @@
 *.pyc
 .ropeproject
 apps/static/
-logs/

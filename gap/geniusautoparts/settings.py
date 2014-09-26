@@ -236,7 +236,7 @@ LOGGING = {
     }
 }
 
-LOG_ROOT = rel('..', 'logs')
+LOG_ROOT = rel('..', '..', 'logs')
 
 OSCAR_SHOP_NAME = 'Genius'
 OSCAR_SHOP_TAGLINE = 'Test Shop'

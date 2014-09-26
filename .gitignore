@@ -1,5 +1,6 @@
 *.pyc
-venv
-db/*
-node_modules
-gap/static/local/css/main.css
+/venv/
+/db/*
+/logs/
+/node_modules/
+/gap/static/local/css/main.css
