@@ -16,7 +16,7 @@ $(document).ready(function(){
 
     $('.navbar-toggle').click(function(){
 
-        $('#top-nav .navbar-responsive-collapse .dropdown-toggle.active, #top-nav .navbar-responsive-collapse dropdown-submenu > a').removeClass('active');
+        $('#top-nav .navbar-responsive-collapse .dropdown-toggle.active, #top-nav .navbar-responsive-collapse .dropdown-submenu > a').removeClass('active');
 
     });
 
