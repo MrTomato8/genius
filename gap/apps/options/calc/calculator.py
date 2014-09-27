@@ -173,7 +173,7 @@ class BaseOptionsCalculator(object):
 
         price = self.unit_price_without_discount(user)
 
-        return price*(100-discount)/Decimal(100)+self.multifile_price()
+        return price*(100-discount)/Decimal(100)
 
     def total_price(self,user):
         '''
