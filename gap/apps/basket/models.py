@@ -80,6 +80,7 @@ class Line(AbstractLine):
     def get_taxes(self):
         return settings.TAX
     _unit_price_excl_tax=None
+    
     @property
     def unit_price_excl_tax(self):
         if self._unit_price_excl_tax: return self._unit_price_excl_tax
@@ -91,6 +92,14 @@ class Line(AbstractLine):
 
         self._unit_price_excl_tax=price
         return price
+        
+    def get_muliline_price_excl_tax(self):
+        calc=selfget_calculator()
+        return calc.multifile_price()
+        
+    def get_muliline_price_incl_tax(self):
+        return self.get_muliline_price_excl_tax()*self.get_taxes()
+
 
     @property
     def unit_tax(self):
