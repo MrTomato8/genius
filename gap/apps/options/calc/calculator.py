@@ -189,7 +189,7 @@ class BaseOptionsCalculator(object):
         else:
             quantity = self.quantity
 
-        return price_per_unit*Decimal(quantity)
+        return price_per_unit*Decimal(quantity)+self.multifile_price()
 
 
 
