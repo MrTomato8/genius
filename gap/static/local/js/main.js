@@ -20,7 +20,7 @@ $(document).ready(function () {
 
     });
 
-    $('.dropdown-submenu a').click(function () {
+    $('.dropdown-submenu > a').click(function () {
 
         $(this).parent().find('.dropdown-menu').slideToggle();
 
