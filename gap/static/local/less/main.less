@@ -165,20 +165,26 @@ div[class*="sidebar-"] .panel-heading:before {
 .products-list .product-name {width: 100%; font-size: 16px;}
 .products-list .product > .info {display: none;}
 
-@media (min-width: @screen-desktop) {
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
 
     // 4 Columns for desktops
     .products-list .col-md-2 {
       width: 25%;
+      &:nth-child(4n+1) {
+        clear: left !important;
+      }
     }
 
 }
 
-@media (min-width: @screen-lg-desktop) {
+@media (min-width: @screen-lg) {
 
   // 5 Columns for large desktops
   .products-list .col-lg-2 {
     width: 20%;
+    &:nth-child(5n+1) {
+      clear: left !important;
+    }
   }
 
 }
