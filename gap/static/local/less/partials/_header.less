@@ -1,95 +1,118 @@
 // HEADING
 header .navbar-wrap {
-    display: table;
-    margin: 0 auto;
+  display: table;
+  margin: 0 auto;
 }
 
 #top-nav {
-    padding: 20px 10px 15px;
-    margin-bottom: 0;
+  padding: 20px 10px 15px;
+  margin-bottom: 0;
 
-    .navbar-collapse {
-        padding: 0;
+  .navbar-collapse {
+    padding: 0;
 
-        .btn a {
-            .trans;
-            color: #fff;
-            &:hover, &:active, &:focus, &.active {
-                background-color: darken(@brand-primary, 10%) !important;
-            }
-        }
+    .btn a {
+      .trans;
+      color: #fff;
+      &:hover, &:active, &:focus, &.active {
+        background-color: darken(@brand-primary, 10%) !important;
+      }
     }
-    .nav .open {
-        & > a,
-        & > a:hover,
-        & > a.active {
-            background-color: darken(@brand-primary, 10%) !important;
-        }
+  }
+  .nav .open {
+    & > a,
+    & > a:hover,
+    & > a.active {
+      background-color: darken(@brand-primary, 10%) !important;
     }
-    .navbar-default .navbar-toggle {
-        border: 0;
-        .trans;
-        &:hover, &:active {
-            background: darken(@btn-primary-bg, 5%) !important;
-        }
+  }
+  .navbar-default .navbar-toggle {
+    border: 0;
+    .trans;
+    &:hover, &:active {
+      background: darken(@btn-primary-bg, 5%) !important;
     }
-    .ul.pull-right a .fa {
-        margin-left: 10px;
-        .trans;
-    }
-    .navbar-nav a:active > .fa,
-    .navbar-nav a.active > .fa {
-        .rotate(90deg);
-    }
-    .list-inline.pull-right li {
-        padding-right: 0;
-    }
+  }
+  .ul.pull-right a .fa {
+    margin-left: 10px;
+    .trans;
+  }
+  .navbar-nav a:active > .fa,
+  .navbar-nav a.active > .fa {
+    .rotate(90deg);
+  }
+  .list-inline.pull-right li {
+    padding-right: 0;
+  }
 }
-
-@media (max-width: @screen-xs-max){
-
-    #top-nav .navbar-collapse {
-        margin: 15px 0 0 -25px;
-        background-color: @brand-primary;
-        padding: 10px 0;
-        position: absolute;
-        z-index: 80;
-        width: 100%
-    }
-
-}
-
 
 #main-nav {
-    margin-bottom: 0;
+  margin-bottom: 0;
 
-    .navbar-nav > li > a {padding: 19px 35px;}
-    .navbar-nav > li {position: static;}
-    .navbar-nav > li:hover > a {color: @gray; background-color: #fff; .trans;}
-    .navbar-nav li:hover > ul.dropdown-menu {display: block;}
+  .navbar-nav > li > a {
+    padding: 19px 35px;
+  }
+  .navbar-nav > li {
+    position: static;
+  }
+  .navbar-nav > li:hover > a {
+    color: @gray;
+    background-color: #fff;
+    .trans;
+  }
+  .navbar-nav li:hover > ul.dropdown-menu {
+    display: block;
+  }
 
-    .dropdown-menu {border: 0; width: 100%; position: absolute; .box-shadow(0 9px 15px -5px rgba(0, 0, 0, 0.176))}
-    .dropdown-menu .row {padding: 0px 35px 20px; margin: 0;}
+  .dropdown-menu {
+    border: 0;
+    width: 100%;
+    position: absolute;
+    .box-shadow(0 9px 15px -5px rgba(0, 0, 0, 0.176))
+  }
+  .dropdown-menu .row {
+    padding: 0px 35px 20px;
+    margin: 0;
+  }
 
-    .dropdown-menu ul {list-style: none; padding-left: 0;}
-    .dropdown-menu a {
-        font-size: 14px;
-        color: @gray;
-        text-decoration: none;
-        line-height: 24px;
-        display: block;
-        padding-left: 10px;
-        line-height: 2.2em;
+  .dropdown-menu ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .dropdown-menu a {
+    font-size: 14px;
+    color: @gray;
+    text-decoration: none;
+    line-height: 24px;
+    display: block;
+    padding-left: 10px;
 
-        &:hover {
-            background-color: @brand-primary;
-            color: #fff;
-        }
+    &:hover {
+      background-color: @brand-primary;
+      color: #fff;
     }
+  }
 }
 
-@media (max-width: @screen-md){
+@media (max-width: @screen-xs-max) {
 
-    #main-nav .navbar-nav > li > a {padding-left: 25px; padding-right: 25px;}
+  #top-nav .navbar-collapse {
+    margin: 15px 0 0 -25px;
+    background-color: @brand-primary;
+    padding: 10px 0;
+    position: absolute;
+    z-index: 80;
+    width: 100%
+  }
 
 }
+
+@media (max-width: @screen-md-max) {
+
+  #main-nav .navbar-nav > li > a {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+}
+
