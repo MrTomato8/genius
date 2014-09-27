@@ -159,7 +159,8 @@ class BaseOptionsCalculator(object):
 
     def multifile_price(self):
         number_of_files=self.data['number_of_files']
-        if number_of_files<=1: return 0
+        if number_of_files<=0: return 0
+        number_of_files-=1
         return settings.MULTIFILE_PRICE_PER_ADDITIONAL_FILE * (number_of_files)
 
     def price_per_unit(self,user):
