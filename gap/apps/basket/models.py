@@ -104,7 +104,20 @@ class Line(AbstractLine):
     def get_muliline_price_incl_tax(self):
         return self.get_muliline_price_excl_tax()+self.get_muliline_price_tax()
 
+    @property
+    def line_price_excl_tax(self):
+        """Return line price excluding tax"""
+        return self.quantity * self.unit_price_excl_tax+self.get_muliline_price_excl_tax()
 
+    @property
+    def line_tax(self):
+        """Return line tax"""
+        return self.quantity * self.unit_tax + self.get_muliline_price_tax()
+
+    @property
+    def line_price_incl_tax(self):
+        """Return line price including tax"""
+        return self.quantity * self.unit_price_incl_tax+self.get_muliline_price_incl_tax()
 
     @property
     def unit_tax(self):
