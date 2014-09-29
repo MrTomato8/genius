@@ -37,3 +37,8 @@
 	```
 	grunt build
 	```
+
+### How to deploy
+
+1. Change your credentails in `.shipit`
+2. Run `shipit` (by default using `shipit deploy`)
