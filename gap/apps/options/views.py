@@ -1,6 +1,9 @@
 import simplejson as json
 from decimal import Decimal
 from smtplib import SMTPException
+import cStringIO as StringIO
+import ho.pisa as pisa
+from cgi import escape
 
 from django.views.generic import View, TemplateView
 from django.db import models
@@ -10,7 +13,7 @@ from django.contrib import messages
 from django.http import QueryDict
 from django.core.mail import EmailMultiAlternatives
 from django.template import Context
-from django.template.loader import render_to_string
+from django.template.loader import render_to_string, get_template
 
 from oscar.apps.basket.signals import basket_addition
 from django.conf import settings
@@ -22,7 +25,6 @@ from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm, QuoteSaveForm
 from apps.options.session import OptionsSessionMixin
 from apps.options.calc import OptionsCalculator
 from apps.quotes.models import Quote
-
 
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
@@ -62,7 +64,7 @@ class OptionPickerMixin(object):
         self.kwargs =  kwargs
         self.request = request
         self.GET=self.get_querydict()
-        self.get_choices(request)
+        self.get_choices()
 
         return super(OptionPickerMixin,self).dispatch(request,*args,**kwargs)
 
@@ -465,9 +467,8 @@ class QuoteEmailView(View):
     def get(self, request, *args, **kwargs):
 
         data = {}
-        quote_id = Quote.save_quote(request.user.id)
-        if quote_id:
-            quote = Quote.objects.get(pk=quote_id)
+        quote, is_new = Quote.get_or_create(request.user.id)
+        if quote:
             c = Context({'quote': quote})
 
             subject = render_to_string(
@@ -483,16 +484,15 @@ class QuoteEmailView(View):
             try:
                 email.send()
             except SMTPException:
-                data['message'] = "Error while sending e-mail"
+                data['message'] = "Error occured during e-mail sending"
                 data['success'] = False
-                return HttpResponse(data, mimetype="application/json")
+
+                return HttpResponse(json.dumps(data), mimetype="application/json")
 
             data['message'] = "Email sent successfully"
             data['success'] = True
-
         else:
-
-            data['message'] = "Error occured during quote saving"
+            data['message'] = "Error occured."
             data['success'] = False
 
         return HttpResponse(json.dumps(data), mimetype="application/json")
@@ -502,18 +502,59 @@ class QuoteSaveView(View):
 
     def get(self, request, *args, **kwargs):
         data = {}
-        if Quote.save_quote(request.user.id):
-            data['message'] = "Your quote is successfully saved."
-            data['success'] = True
+
+        quote, is_new = Quote.get_or_create(request.user.id)
+
+        if quote:
+            if is_new:
+                data['message'] = "Your quote is successfully saved."
+                data['success'] = True
+            else:
+                data['message'] = "This quote is already saved."
+                data['success'] = False
         else:
-            data['message'] = "This quote already exists."
+            data['message'] = "Error occured."
             data['success'] = False
 
         return HttpResponse(json.dumps(data), mimetype="application/json")
 
 
 class QuotePrintView(View):
-    pass
+
+    def get(self, request, *args, **kwargs):
+
+        quote, is_new = Quote.get_or_create(request.user.id)
+        if quote:
+            return self.render_to_pdf('quotes/quote_pdf.html', {
+                'pagesize': 'A4',
+                'quote': quote,
+            })
+        else:
+            data = {}
+            data['message'] = "Error occured."
+            data['success'] = False
+
+            return HttpResponse(json.dumps(data), mimetype="application/json")
+
+    def render_to_pdf(self, template_src, context_dict):
+
+        quote_id = str(context_dict['quote'].reference_number)
+        template = get_template(template_src)
+        context = Context(context_dict)
+        html = template.render(context)
+        result = StringIO.StringIO()
+
+        pdf = pisa.pisaDocument(
+            StringIO.StringIO(html.encode("ISO-8859-1")), result)
+
+        if not pdf.err:
+            response = HttpResponse(
+                result.getvalue(), mimetype='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename={0}'.format("quote_" + quote_id  + ".pdf")
+
+            return response
+
+        return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 
 
 class QuoteLoadView(OptionsSessionMixin, View):
