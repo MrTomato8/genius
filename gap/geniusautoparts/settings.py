@@ -312,7 +312,7 @@ OSCAR_DASHBOARD_NAVIGATION += [
             },
             {
                 'label': 'List',
-                'url_name': 'apps.pricelist.views.list',
+                'url_name': 'csvview',
             },
 
          ]

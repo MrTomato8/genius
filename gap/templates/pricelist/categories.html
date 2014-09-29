@@ -30,29 +30,24 @@
 
 {% block dashboard_content %}
 <div id="accordion">
-   {% for class, products in classes.items  %}
-        <h3>{{class}}</h3>
-        <div>
-        <ul>
-        {%for product in products %}
+        {%for file in files %}
             <li>
-                <a href="list/{{product.1}}">{{product.0}}</a>
+                <a href="{{file.get_absolute_url}}">{{file.name}}</a>
             </li>
         {% endfor%}
         </ul>
         </div>
-        
-   {% endfor %}
+
 </div>
 {% endblock dashboard_content %}
 {% block cdn_scripts %}
     {{ block.super }}
-    <!-- Custom Jquery UI, only contains date picker -->    
-        
+    <!-- Custom Jquery UI, only contains date picker -->
+
 {% block extrascripts %}
 {{ block.super }}
     <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.9.4/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="http://www.kunalbabre.com/projects/table2CSV.js" > </script> 
+    <script type="text/javascript" src="http://www.kunalbabre.com/projects/table2CSV.js" > </script>
     <script type="text/javascript">
     </script>
 {% endblock %}
