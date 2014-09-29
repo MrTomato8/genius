@@ -1,5 +1,5 @@
-host='dev' # Replace with your ssh credentails, example username@dev.server.com (should be allowed without password)
-path='sites/genius' # Replace with your path to root dir of project
+host='dev'
+path='sites/genius'
 
 [deploy]
 git pull

@@ -40,5 +40,5 @@
 
 ### How to deploy
 
-1. Change your credentails in `.shipit`
+1. Change `host` and `path` in `.shipit`
 2. Run `shipit` (by default using `shipit deploy`)
