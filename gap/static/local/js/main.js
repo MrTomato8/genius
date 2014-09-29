@@ -75,12 +75,14 @@ function screen_responsive() {
         }
 
     } else {
-
-        $('.sidebar-product-actions').affix({
-            offset: {
-                top: 220
-            }
-        });
+        setTimeout(function () {
+            $('.sidebar-product-actions').affix({
+                offset: {
+                    top: 220,
+                    bottom: 334
+                }
+            })
+        }, 1000);
 
         if ($('#sidebar-right-responsive').length) {
 

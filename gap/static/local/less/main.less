@@ -29,6 +29,9 @@
 @navbar-default-link-active-bg: #fff;
 @modal-inner-padding: 20px;
 
+body {
+  position: relative;
+}
 a, .btn {
   outline: none !important;
 }
@@ -186,6 +189,11 @@ div[class*="sidebar-"] .panel-heading:before {
     &.affix {
       position: fixed;
       top: 20px;
+    }
+    &.affix-bottom {
+      position: absolute;
+      top: auto;
+      bottom: 334;
     }
   }
   @media (min-width: @screen-lg) {
