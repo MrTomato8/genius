@@ -22,7 +22,7 @@ class OptionPickerMixin(object):
     redirect_url = ''
     template_name =''
     ajax_template_name=''
-    choices = []
+    choices = None
     groups = None
     product = None
     pickers = {}
@@ -54,8 +54,10 @@ class OptionPickerMixin(object):
         return super(OptionPickerMixin,self).dispatch(request,*args,**kwargs)
 
     def get_choices(self,request):
+        if self.choices: return self.choices
         choices = OptionChoice.objects.filter(pk__in =[pk for code,pk in self.GET.items()])
         self.choices = choices
+        return self.choices
 
     def ajax_request(self):
         return self.ajax_template_name
@@ -119,7 +121,7 @@ class OptionPickerMixin(object):
 
                 code = picker.option.pk
                 selected = False
-                for choice in choices:
+                for choice in self.get_choices():
                     if code==choice.option.pk:
                         selected=True
                         break
