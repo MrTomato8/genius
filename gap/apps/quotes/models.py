@@ -34,14 +34,20 @@ class Quote(models.Model):
 
     @classmethod
     @transaction.commit_on_success
-    def save_quote(cls, user_id):
+    def get_or_create(cls, user_id):
         """
             Takes current basket content and saves all information as a quote
         """
         lines = cls.get_basket_lines(user_id)
+        quote_id = cls.quote_exists(user_id, lines)
 
-        if not cls.quote_exists(user_id, lines):
-
+        if quote_id:
+            is_new = False
+            try:
+                quote = Quote.objects.get(id=quote_id)
+            except Quote.DoesNotExist:
+                quote = False
+        else:
             quote = cls()
             quote.user_id = user_id
             quote.save()
@@ -72,11 +78,9 @@ class Quote(models.Model):
 
             quote.total_price = total_price
             quote.save()
+            is_new = True
 
-            return quote.id
-
-        else:
-            return False
+        return (quote, is_new)
 
     @staticmethod
     def get_price(line, user_id):
@@ -97,7 +101,7 @@ class Quote(models.Model):
             basket = Basket.objects.get(owner_id=user_id)
         except Basket.DoesNotExist:
             return False
-        return basket.all_lines()  # TODO: handle is_dead flag
+        return basket.all_lines()
 
     @classmethod
     def quote_exists(cls, user_id, lines):
@@ -106,37 +110,34 @@ class Quote(models.Model):
             is already saved.
         """
 
-        return False # for now, until further development milestones and querybuilder behavior become clear
-
         if lines:
 
-            # TODO - possible optimization?
-            line_choices = dict()
+            line_choices = []
             for line in lines:
-                line_choices[line.id] = dict(
-                    (choice.option, choice.code) for choice in line.choices.all())
+                line_choices.append(dict(
+                    (choice.option.id, choice.id) for choice in line.choices.all()))
 
-            existing_user_quotes = Quote.objects.filter(user_id=user_id)
+            existing_quote_id = False
 
-            saved_quote_id = False
-            for quote in existing_user_quotes:
+            for quote in Quote.objects.filter(user_id=user_id):
+
                 if len(lines) != quote.quoteline_set.count():
                     continue
                 else:
-                    quote_choices = dict()
+                    quote_choices = []
                     for quoteline in quote.quoteline_set.all():
-                        quote_choices = dict(
-                            (choice.option, choice.code) for choice in quoteline.choices.all())
+                        quote_choices.append(dict(
+                            (choice.option.id, choice.id) for choice in quoteline.choices.all()))
 
-                        for line_choice in line_choices:
-                            shared_choices = set(line_choices.items()) & set(quote_choices.items())
-                            if len(shared_choices) == len(lines):
-                                saved_quote_id = quote.id
+                    for line_choice in line_choices:
+                        if not line_choice in quote_choices:
+                            break
+                        existing_quote_id = quote.id
 
-                    if saved_quote_id:
+                    if existing_quote_id:
                         break
 
-            return saved_quote_id
+            return existing_quote_id
 
         return False
 
@@ -150,18 +151,6 @@ class Quote(models.Model):
         self.reference_number = random_number
 
         super(Quote, self).save()
-
-    # TODO: check when price can be invalid
-    # def is_valid(self):
-    #     calc = OptionsCalculator(self.product)
-    #     prices = calc.calculate_costs(
-    #         list(self.choices.all()), self.quantity, json.loads(self.choice_data))
-    #     try:
-    #         prices.get_price_incl_tax(self.quantity, 1, self.user)
-    #     except PriceNotAvailable:
-    #         return False
-
-    #     return True
 
 
 class QuoteLine(models.Model):
