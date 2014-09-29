@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>My Title</title>
+        <style type="text/css">
+            @page {
+                size: {{ pagesize }};
+                margin: 1cm;
+                @frame footer {
+                    -pdf-frame-content: footerContent;
+                    bottom: 0cm;
+                    margin-left: 9cm;
+                    margin-right: 9cm;
+                    height: 1cm;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <strong>Ref number</strong>: #{{ quote.reference_number }}
+            <br/>
+            <strong>Quote expiry date</strong>: {{ quote.date_expired }}
+            <br/>
+            <strong>Total Cost</strong>: £{{ total_cost }}
+            <br/>
+            VAT and delivery not included.
+            <br/><br/>
+
+            Quote:
+            <br/>
+            {% for quoteline in quote.quoteline_set.all %}
+                <br/>
+                <strong>Product</strong>: {{ quoteline.product }}
+                <br/>
+                {% for option in quoteline.choices.all %}
+                    {{ option }}
+                    <br/>
+                {% endfor %}
+                <strong>Quantity</strong>: {{ quoteline.quantity }}
+                <br/>
+                <strong>Cost</strong>: {{ quoteline.price_incl_tax }}
+                <br/>
+            {% endfor %}
+            <br/>
+        </div>
+
+        <div id="footerContent">
+            {%block page_foot%}
+                Page <pdf:pagenumber>
+            {%endblock%}
+        </div>
+
+        <div>
+            Thanks for using our site!
+            <br/>
+            The Prizmatic team
+        </div>
+    </body>
+</html>
