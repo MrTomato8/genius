@@ -53,7 +53,7 @@ class OptionPickerMixin(object):
 
         return super(OptionPickerMixin,self).dispatch(request,*args,**kwargs)
 
-    def get_choices(self,request):
+    def get_choices(self):
         if self.choices: return self.choices
         choices = OptionChoice.objects.filter(pk__in =[pk for code,pk in self.GET.items()])
         self.choices = choices
