@@ -176,6 +176,11 @@ class BaseOptionsCalculator(object):
 
         return price*(100-discount)/Decimal(100)
 
+    def min_price(self,user):
+        if self.is_tpl(user):
+            return self.price.min_tpl_price
+        return self.price.min_rpl_price
+
     def total_price(self,user):
         '''
             total price with discount
@@ -189,7 +194,11 @@ class BaseOptionsCalculator(object):
         else:
             quantity = self.quantity
 
-        return price_per_unit*Decimal(quantity)+self.multifile_price()
+        total_price= price_per_unit*Decimal(quantity)
+        min_price=self.min_price(user)
+        if total_price<min_price:
+            return min_price
+        return total_price
 
 
 
