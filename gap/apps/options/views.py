@@ -120,7 +120,7 @@ class OptionPickerMixin(object):
 
                 code = picker.option.pk
                 selected = False
-                for choice in self.choices:
+                for choice in self.get_choices():
                     if code==choice.option.pk:
                         selected=True
                         break
