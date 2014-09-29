@@ -163,7 +163,7 @@ class BaseOptionsCalculator(object):
         number_of_files-=1
         return settings.MULTIFILE_PRICE_PER_ADDITIONAL_FILE * (number_of_files)
 
-    def price_per_unit(self,user):
+    def _price_per_unit(self,user):
         '''
             price per unit with discount
         '''
@@ -175,7 +175,10 @@ class BaseOptionsCalculator(object):
         price = self.unit_price_without_discount(user)
 
         return price*(100-discount)/Decimal(100)
-
+        
+    def price_per_unit(self,user):
+        return self.total_price(user)/self.quantity
+        
     def min_price(self,user):
         if self.is_tpl(user):
             return self.price.min_tpl_price
@@ -185,7 +188,7 @@ class BaseOptionsCalculator(object):
         '''
             total price with discount
         '''
-        price_per_unit= self.price_per_unit(user)
+        price_per_unit= self._price_per_unit(user)
 
         if not price_per_unit:return False
 
