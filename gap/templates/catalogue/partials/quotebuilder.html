@@ -61,10 +61,15 @@
                               </a>
                             </li>
                             <li>
-                              <a id="print_quote" href="javascript:void(0);">
+                              <a id="print_quote" href="/options/quote/print/">
                                   <div><img src="{% static "local/images/print.png" %} " alt=""></div>
                                   Print<br/> Quote
                               </a>
+                              {% if user.is_authenticated %}
+                                <input type="hidden" name="can_download" value="1" />
+                              {% else %}
+                                <input type="hidden" name="can_download" value="0" />
+                              {% endif %}
                             </li>
                             <li>
                               <a id="save_quote" href="javascript:void(0);">

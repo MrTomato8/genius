@@ -4,15 +4,26 @@ PPS.quotebuilder = {
             return confirm('Remove product?');
         });
 
+        $('#print_quote').on('click', function(e) {
+            if ($('input[name=can_download]').val() != '1') // show modal login popup if not authorized
+            {
+                $('#modal-login').modal('toggle');
+                e.preventDefault();
+            }
+        });
+
         $('#save_quote').on('click', function(e) {
             e.preventDefault();
 
             $.ajax({
                 url: '/options/quote/save/',
-                success: function (response) {
-                    $('#quote-builder > div.panel-body').html('');
-                    alert(response.message);
-                }
+                dataType : 'json',
+            })
+            .done(function(response){
+                alert(response.message);
+            })
+            .fail(function(response){
+                $('#modal-login').modal('toggle');
             });
         });
 
@@ -21,10 +32,13 @@ PPS.quotebuilder = {
 
             $.ajax({
                 url: '/options/quote/send/',
-                success: function (response) {
-                    $('#quote-builder > div.panel-body').html('');
-                    alert(response.message);
-                }
+                dataType : 'json',
+            })
+            .done(function(response){
+                alert(response.message);
+            })
+            .fail(function(response){
+                $('#modal-login').modal('toggle');
             });
         });
     }
