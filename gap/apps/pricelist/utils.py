@@ -116,6 +116,8 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
         # quantity-discount
         try:
             raw_quantity_discount = row.pop('quantity-discount', None)
+            if not raw_quantity_discount:
+                raw_quantity_discount = row.pop('quantity_discount', None)
             quantity_discount = raw_quantity_discount.split(',')
         except:
             raw_quantity_discount = row.pop('quantity-discount', None)
