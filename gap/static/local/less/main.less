@@ -328,11 +328,31 @@ div[class*="sidebar-"] .panel-heading:before {
   display: none;
 }
 
+@media (min-width: @screen-xs-min) and (max-width: @screen-xs-max) {
+
+  .products-list .product_wrap {
+    &:nth-child(2n+1) {
+      clear: left !important;
+    }
+  }
+
+}
+
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+
+  // 3 Columns for tablets
+  .products-list .col-sm-4 {
+    &:nth-child(3n+1) {
+      clear: left !important;
+    }
+  }
+
+}
+
 @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
 
   // 4 Columns for desktops
-  .products-list .col-md-2 {
-    width: 25%;
+  .products-list .col-md-3 {
     &:nth-child(4n+1) {
       clear: left !important;
     }
