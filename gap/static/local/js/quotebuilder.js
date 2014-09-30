@@ -47,11 +47,6 @@ PPS.quotebuilder = {
             $('#modal-bespoke').modal('toggle');
         });
 
-        $('#bespoke_send').on('click', function(e) {
-            e.preventDefault();
-            $('#bespoke_form').submit();
-        });
-
         $("#bespoke_form").validate({
             rules: {
                 'quote-name': "required",
@@ -69,24 +64,20 @@ PPS.quotebuilder = {
                 'quote-text': "Please enter text"
             },
             submitHandler: function(form) {
-                form.submit();
+                form = $(form);
+                $.ajax({
+                    url: form.attr("action"),
+                    type: 'POST',
+                    data: form.serialize(),
+                    dataType : 'json',
+                })
+                .always(function(response){
+                    $('#modal-bespoke').modal('toggle');
+                    alert(response.message);
+                });
+
+                return false;
             }
-        });
-
-        $("body").on("submit", "#bespoke_form", function(e){
-            e.preventDefault();
-
-            var form = $(e.target);
-            $.ajax({
-                url: form.attr("action"),
-                type: 'POST',
-                data: form.serialize(),
-                dataType : 'json',
-            })
-            .always(function(response){
-                $('#modal-bespoke').modal('toggle');
-                alert(response.message);
-            });
         });
     }
 };
