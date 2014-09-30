@@ -1,0 +1,33 @@
+// FOOTER
+
+footer {
+    background-color: #373D48;
+    color: #898989;
+    padding: 25px 0;
+    margin-top: 20px;
+
+    .container {
+        padding: 20px 40px;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+    }
+    a {
+        color: #898989;
+        &:hover, &:focus, &:active {
+            color: #898989;
+        }
+    }
+    .info,
+    h3 {
+        color: #fff;
+        &:hover, &:focus, &:active {color: #fff;}
+    }
+    @media (max-width: @screen-sm-max) {
+        .row-divider {
+            .clearfix;
+        }
+    }
+}

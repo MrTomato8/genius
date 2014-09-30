@@ -1,33 +1,33 @@
 PPS = {}; // namespace for all "Prizmatic Print Solutions" js functions
-$(document).ready(function(){
+$(document).ready(function () {
 
     screen_responsive();
 
-    $('[data-toggle="popover"]').mouseenter(function(){
+    $('[data-toggle="popover"]').mouseenter(function () {
 
         $(this).popover('show');
 
-    }).mouseleave(function(){
+    }).mouseleave(function () {
 
         $(this).popover('hide');
 
     });
 
 
-    $('.navbar-toggle').click(function(){
+    $('.navbar-toggle').click(function () {
 
-        $('#top-nav .navbar-responsive-collapse .dropdown-toggle.active, #top-nav .navbar-responsive-collapse dropdown-submenu > a').removeClass('active');
+        $('#top-nav .navbar-responsive-collapse .dropdown-toggle.active, #top-nav .navbar-responsive-collapse .dropdown-submenu > a').removeClass('active');
 
     });
 
-    $('.dropdown-submenu a').click(function(){
+    $('.dropdown-submenu > a').click(function () {
 
         $(this).parent().find('.dropdown-menu').slideToggle();
 
         return false;
 
     });
-    $('#top-nav .dropdown-toggle, #top-nav .dropdown-submenu > a').click(function(){
+    $('#top-nav .dropdown-toggle, #top-nav .dropdown-submenu > a').click(function () {
 
         $(this).toggleClass('active');
 
@@ -36,65 +36,74 @@ $(document).ready(function(){
 
 });
 
-$(window).on('resize', function(){
+$(window).on('resize', function () {
 
     screen_responsive();
-    
+
 });
 
-function screen_responsive(){
+function screen_responsive() {
 
     var screen_width = $(window).width();
 
-    if(screen_width <= 480){
+    if (screen_width <= 480) {
 
-        if($('#sidebar-left-responsive').length){
+        if ($('#sidebar-left-responsive').length) {
 
             $('#sidebar-left-responsive').append($('.sidebar-left'));
-            
+
         }
 
-    }else{
-        
-        if($('#sidebar-left-responsive').length){
+    } else {
+
+        if ($('#sidebar-left-responsive').length) {
 
             $('#columns').prepend($('.sidebar-left'));
-                
+
         }
-        
+
     }
 
-    if(screen_width <= 768){
+    if (screen_width <= 768) {
 
-        if($('#sidebar-right-responsive').length){
-            
+        $('.sidebar-product-actions').removeClass('affix').removeClass('affix-top');
+
+        if ($('#sidebar-right-responsive').length) {
+
             $('#sidebar-right-responsive').append($('.sidebar-right'));
-            
+
         }
 
-    }else{
+    } else {
+        setTimeout(function () {
+            $('.sidebar-product-actions').affix({
+                offset: {
+                    top: 220,
+                    bottom: 334
+                }
+            })
+        }, 1000);
 
+        if ($('#sidebar-right-responsive').length) {
 
-        if($('#sidebar-right-responsive').length){
+            $('.sidebar-right-wrapper').append($('.sidebar-right'));
 
-            $('#columns').append($('.sidebar-right'));
-                
         }
 
     }
-    
+
 }
 
 /*FlexSlider Script
------------------------------ */
+ ----------------------------- */
 function flex_slider() {
-    jQuery(window).load(function() {
+    jQuery(window).load(function () {
         jQuery('.flexslider').flexslider({
             animation: "fade",
             startAt: 0,
             slideshow: true,
             slideshowSpeed: 7000,
-            start: function(slider) {
+            start: function (slider) {
                 jQuery('body').removeClass('loading');
             }
         });

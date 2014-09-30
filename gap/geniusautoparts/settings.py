@@ -7,7 +7,8 @@ from accounts import TEMPLATE_DIR as ACCOUNTS_TEMPLATE_DIR
 from oscar import get_core_apps, OSCAR_MAIN_TEMPLATE_DIR
 from oscar.defaults import *
 
-location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', x)
+def rel(*x):
+    return os.path.join(os.path.abspath(os.path.dirname(os.path.realpath(__file__))), *x)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -51,7 +52,7 @@ USE_TZ = True
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = location('static')
+MEDIA_ROOT = rel('..', 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -59,7 +60,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    location('static'),
+    rel('..', 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -119,7 +120,7 @@ ROOT_URLCONF = 'geniusautoparts.urls'
 WSGI_APPLICATION = 'geniusautoparts.wsgi.application'
 
 TEMPLATE_DIRS = (
-    location('templates'),
+    rel('..', 'templates'),
     #os.path.join(OSCAR_PARENT_TEMPLATE_DIR, 'templates'),
     OSCAR_MAIN_TEMPLATE_DIR,
     ACCOUNTS_TEMPLATE_DIR,
@@ -148,6 +149,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     # 'django.contrib.admindocs',
     #'gap',
+    'widget_tweaks',
     'geniusautoparts',
     'accounts',
     'csvimport',
@@ -233,7 +235,8 @@ LOGGING = {
         },
     }
 }
-LOG_ROOT = location('logs')
+
+LOG_ROOT = rel('..', '..', 'logs')
 
 OSCAR_SHOP_NAME = 'Genius'
 OSCAR_SHOP_TAGLINE = 'Test Shop'

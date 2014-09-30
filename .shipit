@@ -1,0 +1,7 @@
+host='dev'
+path='sites/genius'
+
+[deploy]
+git pull
+npm install
+grunt build

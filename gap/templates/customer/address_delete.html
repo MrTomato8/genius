@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout_2_col.html" %}
 {% load currency_filters %}
 {% load i18n %}
 
@@ -20,9 +20,13 @@
     <h2>{% trans 'Delete address?' %}</h2>
 <div>
 {% endblock %}
+
+{% block column_left %}
+    {% include "partials/nav_profile.html" with address_book="active" %}
+{% endblock %}
+
 {% block content %}
-{% include "partials/nav_profile.html" with address_book="active" %}
-<div class="grid-9 float-left" style="padding-top:39px !important; padding-left:10px;">
+<div>
     <form action="." method="post">
         {% csrf_token %}
         <p>{% trans 'Are you sure you want to delete this address?' %}</p>

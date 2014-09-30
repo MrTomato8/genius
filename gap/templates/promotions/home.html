@@ -5,7 +5,7 @@
 {% load content_blocks %}
 
 {% block navigation %}
-    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+  {% include "partials/nav_primary.html" with expand_dropdown=1 %}
 {% endblock %}
 
 {% block header %}{% endblock %}
@@ -14,104 +14,121 @@
 {% endblock %}
 
 {% block content %}
-{% include "partials/banners.html"%}
+  {% include "partials/banners.html" %}
 
-    {% for promotion in promotions_page %}
-        {% render_promotion promotion %}
-    {% endfor %}
-<div class="container" id="main-wrapper">
-        <div id="columns">
-             <!-- Sidebar left -->
-            <div class="sidebar-left">
+  {% for promotion in promotions_page %}
+    {% render_promotion promotion %}
+  {% endfor %}
+  <div class="container" id="main-wrapper">
+    <div id="columns" class="row">
+      <!-- Sidebar left -->
+      <div class="sidebar-left col-lg-3 col-md-3">
 
-                <div class="panel panel-primary bordered">
-                    <a class="panel-heading" data-toggle="collapse" href="#panel-benefits">Our Benifits</a>
-                    <div class="panel-body panel-collapse collapse in" id="panel-benefits">
-                       <ul class="list-unstyled spaced">
-                            {% show_content_block 'test' %}
-                            <li>0% VAT selectable on flyers, folded leaflets and brochures</li>
-                            <li>Acceptance of print data by 5pm</li>
-                            <li>Personal contact person</li>
-                            <li>Delivery included</li>
-                            <li>Standard artwork check included</li>
-                            <li>Print samples free of charge</li>
-                            <li>Reseller benefits</li>
-                            <li>Environmentally conscious printing</li>
-                        </ul>
-                    </div>
-                </div>
+        <div class="panel panel-primary bordered">
+          <a class="panel-heading" data-toggle="collapse" href="#panel-benefits">Our Benifits</a>
 
-                <div class="panel panel-primary bordered">
-                    <a class="panel-heading" data-toggle="collapse" href="#panel-customer-info">Customer Information</a>
-                    <div class="panel-body panel-collapse collapse in" id="panel-customer-info">
-                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
-                        <div class="text-right"><a href="#">Read More <i class="fa fa-angle-right"></i></a></div>
-                    </div>
-                </div>
-
-                <div class="panel panel-primary bordered">
-                    <a class="panel-heading" data-toggle="collapse" href="#panel-customer-info-2">Customer Information</a>
-                    <div class="panel-body panel-collapse collapse in" id="panel-customer-info-2">
-                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
-                        <div class="text-right"><a href="#">Read More <i class="fa fa-angle-right"></i></a></div>
-                    </div>
-                </div>
-
-            </div>
-
-             <!-- Main content -->
-            <div class="main-content">
-
-                <!-- Products list -->
-                <div class="container-fluid">
-                    <div class="row products-list">
-
-                    {% for category in categories %}
-                        {% if category.1 %}
-                            {% for subcategory in category.1 %} 
-
-                            <div class="col-md-2 col-sm-4 col-xs-6 prod_wrap hidden-xs">
-
-                                <article class="product">
-                                    <a href="{{ subcategory.0.get_absolute_url }}" class="product-avatar">
-                                        <span class="info" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-                                        <img src="{% static 'local/images/info.png' %}" />
-                                        </span>
-                                        {% if subcategory.0.image %}
-                                        <img alt="" src="{{ subcategory.0.image.url }}"/>
-                                        {% else %}
-                                        <img alt="" src="{% static 'local/images/product-img.jpg' %}"/>
-                                        {% endif %}
-                                    </a>
-
-                                    <a href="{{ subcategory.0.get_absolute_url }}" class="product-name">{{ subcategory.0.name }}</a>
-                                </article>
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                        <div class="col-md-2 col-sm-4 col-xs-6 visible-phone">
-                            <button id="show_more" class="btn btn-primary btn-block">Show more</button>
-                        </div>
-
-                        <script type="text/javascript">
-                        $('.prod_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
-                        $('#show_more').click(function(){
-                            $('.prod_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
-                            if ($('.prod_wrap.hidden-xs').empty()){
-                                $('#show_more').hide();
-                            }
-                        });
-                        </script>
-
-                    </div>
-                </div>
-            </div>
+          <div class="panel-body panel-collapse collapse in" id="panel-benefits">
+            <ul class="list-unstyled spaced">
+              {% show_content_block 'test' %}
+              <li>0% VAT selectable on flyers, folded leaflets and brochures</li>
+              <li>Acceptance of print data by 5pm</li>
+              <li>Personal contact person</li>
+              <li>Delivery included</li>
+              <li>Standard artwork check included</li>
+              <li>Print samples free of charge</li>
+              <li>Reseller benefits</li>
+              <li>Environmentally conscious printing</li>
+            </ul>
+          </div>
         </div>
-        
-        <div id="sidebar-left-responsive"></div>
 
+        <div class="panel panel-primary bordered">
+          <a class="panel-heading" data-toggle="collapse" href="#panel-customer-info">Customer Information</a>
+
+          <div class="panel-body panel-collapse collapse in" id="panel-customer-info">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore.</p>
+
+            <div class="text-right"><a href="#">Read More <i class="fa fa-angle-right"></i></a></div>
+          </div>
+        </div>
+
+        <div class="panel panel-primary bordered">
+          <a class="panel-heading" data-toggle="collapse" href="#panel-customer-info-2">Customer Information</a>
+
+          <div class="panel-body panel-collapse collapse in" id="panel-customer-info-2">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore.</p>
+
+            <div class="text-right"><a href="#">Read More <i class="fa fa-angle-right"></i></a></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Main content -->
+      <div class="main-content col-lg-9 col-md-9">
+
+        <!-- Products list -->
+        <div class="row products-list">
+
+          {% for category in categories %}
+            {% if category.1 %}
+              {% for subcategory in category.1 %}
+
+                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 product_wrap hidden-xs">
+
+                  <article class="product">
+                    <a href="{{ subcategory.0.get_absolute_url }}" class="product-avatar">
+                                    <span class="info" data-container="body" data-toggle="popover" data-placement="top"
+                                          data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+                                    <img src="{% static 'local/images/info.png' %}"/>
+                                    </span>
+                      {% if subcategory.0.image %}
+                        <img alt="" src="{{ subcategory.0.image.url }}"/>
+                      {% else %}
+                        <img alt="" src="{% static 'local/images/product-img.jpg' %}"/>
+                      {% endif %}
+                    </a>
+
+                    <a href="{{ subcategory.0.get_absolute_url }}" class="product-name">{{ subcategory.0.name }}</a>
+                  </article>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="show-more-button visible-phone">
+          <button id="show_more" class="btn btn-primary btn-block">Show more</button>
+        </div>
+
+        <script type="text/javascript">
+          $('.product_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
+          $('#show_more').click(function () {
+            $('.product_wrap.hidden-xs:lt(5)').removeClass('hidden-xs');
+            if ($('.product_wrap.hidden-xs').empty()) {
+              $('#show_more').hide();
+            }
+          });
+        </script>
+      </div>
+
+      <div id="sidebar-left-responsive"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
         <h3>Text Headline</h3>
-        <p>This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non mauris vitae erat consequat auctor eu in elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris in erat justo. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
-</div>
+
+        <p>This is Photoshop's version of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin,
+          lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
+          nibh vulputate cursus a sit amet mauris. Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a
+          ornare odio. Sed non mauris vitae erat consequat auctor eu in elit. Class aptent taciti sociosqu ad litora
+          torquent per conubia nostra, per inceptos himenaeos. Mauris in erat justo. Nullam ac urna eu felis dapibus
+          condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc.
+          Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque.
+          Suspendisse in orci enim.</p>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

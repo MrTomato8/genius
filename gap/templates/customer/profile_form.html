@@ -13,23 +13,26 @@
     <h2>{% trans 'Edit profile' %}</h2>
 <div>
 {% endblock %}
+
 {% block column_left %}
-{% include "partials/nav_profile.html" with profile="active" %}
+    {% include "partials/nav_profile.html" with profile="active" %}
 {% endblock %}
 
 {% block content %}
 <div class="main-content">
-<div class="container-fluid">
-    <form id="profile_form" action="." method="post" class="form-horizontal">
-    	{% csrf_token %}
-        <div class="form-group">
-    	{% include 'partials/form_fields.html' with form=form %}
+    <div class="row">
+        <div class="col-md-6">
+            <form id="profile_form" action="." method="post" role="form">
+                {% csrf_token %}
+                <div class="form-group">
+                {% include 'partials/form_fields.html' with form=form %}
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+                    {% trans 'or' %} <a href="{% url customer:summary %}">{% trans 'cancel' %}</a>.
+                </div>
+            </form>
         </div>
-    	<div class="form-actions">
-    		<button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
-    		{% trans 'or' %} <a href="{% url customer:summary %}">{% trans 'cancel' %}</a>.
-    	</div>
-    </form>
-</div>
+    </div>
 </div>
 {% endblock content %}

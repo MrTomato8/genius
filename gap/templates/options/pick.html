@@ -1,320 +1,387 @@
 {% extends 'catalogue/detail.html' %}
+
 {% load staticfiles %}
+
 {% block content %}
-<div class="container-fluid">
-  <div class="row">
   <div class="flexslider">
     <ul class="slides">
-         <li>
-            <article>
-                <div class="media">
-                  <div class="visible-xs">
-                    <h3 class="media-heading text-center">{{ product.title }}</h3>
-                    <h4 class="text-center">Prices from £15 for 600 flyers</h4>
-                    <a href="#">
-                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
-                    </a>
-                    <div class="media-body">
-                      <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
-                      <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    </div>
-                  </div>
+      <li>
+        <article>
+          <div class="media">
+            <div class="visible-xs">
+              <h3 class="media-heading text-center">{{ product.title }}</h3>
+              <h4 class="text-center">Prices from £15 for 600 flyers</h4>
+              <a href="#">
+                <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+              </a>
 
-                  <div class="hidden-xs">
-                    <a class="pull-left" href="#">
-                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
-                    </a>
-                    <div class="media-body">
-                      <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
-                      <h4>Prices from £15 for 600 flyers</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    </div>
-                  </div>
-                </div>
-            </article>
-        </li>
-       <li>
-                <article>
-                <div class="media">
-                  <div class="visible-xs">
-                    <h3 class="media-heading text-center">{{ product.title }}</h3>
-                    <h4 class="text-center">{{ product.title }}</h4>
-                    <a href="#">
-                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
-                    </a>
-                    <div class="media-body">
-                      <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
-                      <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    </div>
-                  </div>
+              <div class="media-body">
+                <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
+                <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
 
-              <div class="hidden-xs">
-                    <a class="pull-left" href="#">
-                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
-                    </a>
-                    <div class="media-body">
-                      <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
-                      <h4>Prices from £15 for 600 flyers</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    </div>
-                  </div>
-                </div>
-            </article>
-        </li>
-               <li>
-                <article>
-                <div class="media">
-                  <div class="visible-xs">
-                    <h3 class="media-heading text-center">{{ product.title }}</h3>
-                    <h4 class="text-center">{{ product.title }}</h4>
-                    <a href="#">
-                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
-                    </a>
-                    <div class="media-body">
-                      <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
-                      <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    </div>
-                  </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                  labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                  esse cillum dolore eu fugiat nulla pariatur.</p>
+              </div>
+            </div>
 
-              <div class="hidden-xs">
-                    <a class="pull-left" href="#">
-                      <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
-                    </a>
-                    <div class="media-body">
-                      <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
-                      <h4>Prices from £15 for 600 flyers</h4>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    </div>
-                  </div>
-                </div>
-            </article>
-        </li>
+            <div class="hidden-xs">
+              <a class="pull-left" href="#">
+                <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+              </a>
+
+              <div class="media-body">
+                <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
+                <h4>Prices from £15 for 600 flyers</h4>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                  labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                  esse cillum dolore eu fugiat nulla pariatur.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>
+      <li>
+        <article>
+          <div class="media">
+            <div class="visible-xs">
+              <h3 class="media-heading text-center">{{ product.title }}</h3>
+              <h4 class="text-center">{{ product.title }}</h4>
+              <a href="#">
+                <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+              </a>
+
+              <div class="media-body">
+                <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
+                <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                  labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                  esse cillum dolore eu fugiat nulla pariatur.</p>
+              </div>
+            </div>
+
+            <div class="hidden-xs">
+              <a class="pull-left" href="#">
+                <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+              </a>
+
+              <div class="media-body">
+                <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
+                <h4>Prices from £15 for 600 flyers</h4>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                  labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                  esse cillum dolore eu fugiat nulla pariatur.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>
+      <li>
+        <article>
+          <div class="media">
+            <div class="visible-xs">
+              <h3 class="media-heading text-center">{{ product.title }}</h3>
+              <h4 class="text-center">{{ product.title }}</h4>
+              <a href="#">
+                <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+              </a>
+
+              <div class="media-body">
+                <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
+                <h4 class="hidden-xs">Prices from £15 for 600 flyers</h4>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                  labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                  esse cillum dolore eu fugiat nulla pariatur.</p>
+              </div>
+            </div>
+
+            <div class="hidden-xs">
+              <a class="pull-left" href="#">
+                <img class="media-object" src="{% static "local/images/product.jpg" %}" alt="Image">
+              </a>
+
+              <div class="media-body">
+                <h3 class="media-heading hidden-xs">{{ product.title }}</h3>
+                <h4>Prices from £15 for 600 flyers</h4>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                  labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                  esse cillum dolore eu fugiat nulla pariatur.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </li>
     </ul>
-</div>
+  </div>
 
-<div class="clearfix"></div>
+  <div class="clearfix"></div>
 
+  <div id="title-target" class="center-block clearfix"></div>
 
-
-<div id="title-target" class="center-block clearfix"></div>
-
-<div class="clearfix stepy-centering">
-
-<div id="form-errors" class="grid-7 float-left option-choice-errors">
-{% if errors %}
-<ul>
-{% for error in errors %}
-<li><strong>{{ error }}</strong></li>
-{% endfor %}
-</ul>
-{% endif %}
-</div>
-
-<script>
-  AllChoices = new Object ();
-  var disableConflictingChoices =function()
-  {
-    choice_value = $(this).val()*1;
-    conflicts = AllChoices[choice_value].conflicts_with;
-    $(":input:disabled").removeAttr("disabled");
-    if (conflicts.length > 0) {
-      for (var i = 0; i < conflicts.length; i++) {
-        $(":input[value='" + conflicts[i] + "']").attr('disabled', true);
-      }
-    }
-  };
-
-</script>
-
-  <div class="panel-group" id="product-accordion">
-<form id="pickoptions" method="GET">
-
-  {% for group in groups %}
-   <h3 class="button group_name">{{ group.group.name }}</h3>
-  {% for picker in group.pickers %}
-
-  <div class="panel panel-default {% if forloop.last and forloop.parentloop.last %}last{% endif %}">
-          <a data-toggle="collapse" href="#panel-collapse-{{ picker.picker.option.pk }}" class="panel-heading {% if not forloop.first or not forloop.parentloop.first %}collapsed{% endif %}" data-parent="#product-accordion">{{ picker.picker.option }}</a>
-          <div id="panel-collapse-{{ picker.picker.option.pk }}" class="panel-collapse collapse {% if forloop.first and forloop.parentloop.first %}in{% endif %}">
-            <div class="panel-body">
-              <div class="text-right">
-                <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-              </div>
-              {% for field in picker.form.visible_fields %}
-                {% if picker.picker.widget == picker.picker.THUMBNAIL %}
-                <div class="option-choice grid-7">
-                  <ul class="list-inline">
-                    {% for choice in field.field.queryset %}
-                      <script type="text/javascript">
-
-                        var choice = new Object();
-                        choice.optioncode = "{{ choice.option.code }}";
-                        choice.optioncaption = "{{ choice.option.name }}";
-                        choice.code = "{{ choice.code }}";
-                        choice.caption = "{{ choice.caption }}";
-                        choice.conflicts_with = new Array();
-                        {% for conflicting_choice in choice.conflicts_with.all %}
-                        choice.conflicts_with.push({{ conflicting_choice.pk }});
-                        {% endfor %}
-                        AllChoices[{{ choice.pk }}] = choice;
-                      </script>
-                      <li>
-                          {{ choice.caption }}<br />
-                          <label for="{{ field.name }}_{{ choice.pk }}">
-                          <img src="{{ choice.get_thumbnail.url }}" alt="{{ choice.caption }}"/><br />
-                          <input class="radio-choice" type="radio" name="{{ field.name }}" value="{{ choice.pk }}"
-                            {% ifequal field.data|slugify choice.pk|slugify %}
-                               checked="checked"
-                            {% endifequal %} id ="{{ field.name }}_{{ choice.pk }}"/>
-                           </label>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                </div>
-                {% endif %}
-                {% if picker.picker.widget == picker.picker.DROPDOWN %}
-                <div class="option-choice">
-                  {{ field }}
-                </div>
-                {% endif %}
+  <div class="clearfix stepy-centering">
+    <div id="form-errors" class="col-lg-7 float-left option-choice-errors">
+      {% if errors %}
+        <ul>
+          {% for error in errors %}
+            <li><strong>{{ error }}</strong></li>
           {% endfor %}
-        </div>
-    </div>
-  </div>
-  {% endfor %}
-  {% endfor %}
-</form>
-
-    <div id="modalchangepw">
-    {% if prices %}
-      {% include 'options/partials/quote-content.html' %}
-    {% else %}
-      <div class="panel panel-default">
-        <a data-toggle="collapse" href="#panel-collapse-6" class="panel-heading  collapsed" data-parent="#product-accordion">Quantity (choose quantity or enter your own)</a>
-      </div>
-    {% endif %}
+        </ul>
+      {% endif %}
     </div>
 
-  </div>
+    <script>
+      AllChoices = new Object();
+      var disableConflictingChoices = function () {
+        choice_value = $(this).val() * 1;
+        conflicts = AllChoices[choice_value].conflicts_with;
+        $(":input:disabled").removeAttr("disabled");
+        if (conflicts.length > 0) {
+          for (var i = 0; i < conflicts.length; i++) {
+            $(":input[value='" + conflicts[i] + "']").attr('disabled', true);
+          }
+        }
+      };
+    </script>
 
-<script type="text/javascript">
-  $(function() {
-    PPS.pickForm.init();
-  });
-</script>
-</div>
-</div>
+    <div class="panel-group" id="product-accordion">
+      <form id="pickoptions" method="GET">
 
-<div id="sidebar-right-responsive"></div>
+        {% for group in groups %}
+          <h3 class="button group_name">{{ group.group.name }}</h3>
+          {% for picker in group.pickers %}
 
-<div class="tabs-section">
-              <!-- Nav tabs -->
-              <ul class="nav nav-tabs">
-                  <li class="active">
-                      <a href="#completion-and-delivery-tab" data-toggle="tab">Completion and delivery</a>
-                  </li>
-                  <li>
-                      <a href="#services-tab" data-toggle="tab">Services</a>
-                  </li>
-                  <li>
-                      <a href="#third-tab" data-toggle="tab">Tab Name</a>
-                  </li>
-              </ul>
+            <div class="panel panel-default {% if forloop.last and forloop.parentloop.last %}last{% endif %}">
+              <a data-toggle="collapse" href="#panel-collapse-{{ picker.picker.option.pk }}"
+                 class="panel-heading {% if not forloop.first or not forloop.parentloop.first %}collapsed{% endif %}"
+                 data-parent="#product-accordion">{{ picker.picker.option }}</a>
 
-              <!-- Tab panes -->
-              <div class="tab-content">
-                  <div class="tab-pane active" id="completion-and-delivery-tab">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis, molestias, magni, doloribus, vero ab quas necessitatibus eum asperiores placeat odit facilis mollitia rerum quibusdam deserunt laboriosam error sed eos molestiae?</p>
+              <div id="panel-collapse-{{ picker.picker.option.pk }}"
+                   class="panel-collapse collapse {% if forloop.first and forloop.parentloop.first %}in{% endif %}">
+                <div class="panel-body">
+                  <div class="text-right">
+                      <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                            data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                              src="{% static "local/images/infoblue.png" %}"/></span>
                   </div>
-                  <div class="tab-pane" id="services-tab">
-                      <form action="#" class="form-horizontal">
-                        <div class="form-group">
-          <label class="col-md-4 control-label">Artwork check</label>
-          <div class="col-md-8 info-in">
-            <select name="customer-type" class="form-control">
-              <option value="">Standard artwork check (free)</option>
-            </select>
-            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-          </div>
-        </div>
+                  {% for field in picker.form.visible_fields %}
+                    {% if picker.picker.widget == picker.picker.THUMBNAIL %}
+                      <div class="option-choice grid-7">
+                        <ul class="list-inline">
+                          {% for choice in field.field.queryset %}
+                            <script type="text/javascript">
 
-        <div class="form-group">
-          <label class="col-md-4 control-label">Proof</label>
-          <div class="col-md-8 info-in">
-            <select name="customer-type" class="form-control">
-              <option value="">Without proof</option>
-            </select>
-            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-md-4 control-label">Voucher copy</label>
-          <div class="col-md-8 info-in">
-            <select name="customer-type" class="form-control">
-              <option value="">No voucher copy</option>
-            </select>
-            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-md-4 control-label">Vat</label>
-          <div class="col-md-8 info-in">
-            <select name="customer-type" class="form-control">
-              <option value="">20% (standard rated)</option>
-            </select>
-            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-md-4 control-label">CO2 balance</label>
-          <div class="col-md-8 info-in">
-            <select name="customer-type" class="form-control">
-              <option value="">without CO2 balance</option>
-            </select>
-            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-md-4 control-label">Sponsoring</label>
-          <div class="col-md-8 info-in">
-            <select name="customer-type" class="form-control">
-              <option value="">without sponsoring</option>
-            </select>
-            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-md-4 control-label">Sender address</label>
-          <div class="col-md-8 info-in">
-            <select name="customer-type" class="form-control">
-              <option value="">sender: SAXOPRINT</option>
-            </select>
-            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-md-4 control-label">Delivery splitting</label>
-          <div class="col-md-8 info-in">
-            <select name="customer-type" class="form-control">
-              <option value="">delivery to 1 address (incl.)</option>
-            </select>
-            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}" /></span>
-          </div>
-        </div>
-                      </form>
-                  </div>
-                  <div class="tab-pane" id="third-tab">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis maxime incidunt sed asperiores cupiditate quibusdam facere minima porro voluptatem vitae. Odit, aliquid laborum porro rerum iusto dolore doloribus sint facere.</p>
-                  </div>
+                              var choice = new Object();
+                              choice.optioncode = "{{ choice.option.code }}";
+                              choice.optioncaption = "{{ choice.option.name }}";
+                              choice.code = "{{ choice.code }}";
+                              choice.caption = "{{ choice.caption }}";
+                              choice.conflicts_with = new Array();
+                              {% for conflicting_choice in choice.conflicts_with.all %}
+                                choice.conflicts_with.push({{ conflicting_choice.pk }});
+                              {% endfor %}
+                              AllChoices[{{ choice.pk }}] = choice;
+                            </script>
+                            <li>
+                              {{ choice.caption }}<br/>
+                              <label for="{{ field.name }}_{{ choice.pk }}">
+                                <img src="{{ choice.get_thumbnail.url }}" alt="{{ choice.caption }}"/><br/>
+                                <input class="radio-choice" type="radio" name="{{ field.name }}"
+                                       value="{{ choice.pk }}"
+                                        {% ifequal field.data|slugify choice.pk|slugify %}
+                                       checked="checked"
+                                        {% endifequal %} id="{{ field.name }}_{{ choice.pk }}"/>
+                              </label>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    {% endif %}
+                    {% if picker.picker.widget == picker.picker.DROPDOWN %}
+                      <div class="option-choice">
+                        {{ field }}
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
               </div>
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </form>
+
+      <div id="modalchangepw">
+        {% if prices %}
+          {% include 'options/partials/quote-content.html' %}
+        {% else %}
+          <div class="panel panel-default">
+            <a data-toggle="collapse" href="#panel-collapse-6" class="panel-heading  collapsed"
+               data-parent="#product-accordion">Quantity (choose quantity or enter your own)</a>
           </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <script type="text/javascript">
+      $(function () {
+        PPS.pickForm.init();
+      });
+    </script>
+  </div>
+
+  <div id="sidebar-right-responsive"></div>
+
+
+  <div class="tabs-section">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#completion-and-delivery-tab" data-toggle="tab">Completion and delivery</a>
+      </li>
+      <li>
+        <a href="#services-tab" data-toggle="tab">Services</a>
+      </li>
+      <li>
+        <a href="#third-tab" data-toggle="tab">Tab Name</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="completion-and-delivery-tab">
+        <div class="tab-wrapper">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis, molestias, magni, doloribus,
+            veroabquas necessitatibus eum asperiores placeat odit facilis mollitia rerum quibusdam deserunt laboriosam
+            errorsedeos molestiae?</p>
+        </div>
+      </div>
+      <div class="tab-pane" id="services-tab">
+        <div class="tab-wrapper">
+          <form action="#" class="form-horizontal">
+            <div class="form-group">
+              <label class="col-md-4 control-label">Artwork check</label>
+
+              <div class="col-md-8 info-in">
+                <select name="customer-type" class="form-control">
+                  <option value="">Standard artwork check (free)</option>
+                </select>
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                      src="{% static "local/images/infoblue.png" %}"/></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-4 control-label">Proof</label>
+
+              <div class="col-md-8 info-in">
+                <select name="customer-type" class="form-control">
+                  <option value="">Without proof</option>
+                </select>
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                      src="{% static "local/images/infoblue.png" %}"/></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-4 control-label">Voucher copy</label>
+
+              <div class="col-md-8 info-in">
+                <select name="customer-type" class="form-control">
+                  <option value="">No voucher copy</option>
+                </select>
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                      src="{% static "local/images/infoblue.png" %}"/></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-4 control-label">Vat</label>
+
+              <div class="col-md-8 info-in">
+                <select name="customer-type" class="form-control">
+                  <option value="">20% (standard rated)</option>
+                </select>
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                      src="{% static "local/images/infoblue.png" %}"/></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-4 control-label">CO2 balance</label>
+
+              <div class="col-md-8 info-in">
+                <select name="customer-type" class="form-control">
+                  <option value="">without CO2 balance</option>
+                </select>
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                      src="{% static "local/images/infoblue.png" %}"/></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-4 control-label">Sponsoring</label>
+
+              <div class="col-md-8 info-in">
+                <select name="customer-type" class="form-control">
+                  <option value="">without sponsoring</option>
+                </select>
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                      src="{% static "local/images/infoblue.png" %}"/></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-4 control-label">Sender address</label>
+
+              <div class="col-md-8 info-in">
+                <select name="customer-type" class="form-control">
+                  <option value="">sender: SAXOPRINT</option>
+                </select>
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                      src="{% static "local/images/infoblue.png" %}"/></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-4 control-label">Delivery splitting</label>
+
+              <div class="col-md-8 info-in">
+                <select name="customer-type" class="form-control">
+                  <option value="">delivery to 1 address (incl.)</option>
+                </select>
+              <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                      src="{% static "local/images/infoblue.png" %}"/></span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="tab-pane" id="third-tab">
+        <div class="tab-wrapper">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis maxime incidunt sed asperiores
+            cupiditate quibusdam facere minima porro voluptatem vitae. Odit, aliquid laborum porro rerum iusto dolore
+            doloribus sint facere.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

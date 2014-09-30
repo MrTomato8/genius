@@ -4,5 +4,3 @@
 .ropeproject
 local_settings.py
 apps/static/
-/static/
-logs/

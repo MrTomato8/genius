@@ -1,4 +1,5 @@
 {% extends 'layout_3_col.html' %}
+
 {% load url from future %}
 {% load currency_filters %}
 {% load history_tags %}
@@ -8,96 +9,107 @@
 {% load i18n %}
 
 {% block title %}
-    {{ product.title }} | {{ block.super }}
+  {{ product.title }} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
-<div class="set-size-grid">
+  <div class="set-size-grid">
     <a href="/">{% trans 'Home' %}</a>
     <span class="divider">/</span>
     <a href="#">{{ product.title }}</a>
-<div>
+  </div>
 {% endblock %}
 
 {% block column_left %}
-<div class="sidebar-left hidden-sm hidden-xs">
-  {% if categories %}
-  {% with category as main_category %}
-      {% for category in categories %}
-      <div class="panel panel-primary">
-          <a class="panel-heading" data-toggle="collapse" href="#panel-category-{{ category.0.pk }}">{{ category.0.name }}</a>
-          {% if category.1 %}
-          <div class="panel-body panel-collapse collapse in" id="panel-category-{{ category.0.pk }}">
-             <ul class="list-unstyled">
+  <div class="sidebar-left hidden-sm hidden-xs">
+    {% if categories %}
+      {% with category as main_category %}
+        {% for category in categories %}
+          <div class="panel panel-primary">
+            <a class="panel-heading" data-toggle="collapse"
+               href="#panel-category-{{ category.0.pk }}">{{ category.0.name }}</a>
+            {% if category.1 %}
+              <div class="panel-body panel-collapse collapse in" id="panel-category-{{ category.0.pk }}">
+                <ul class="list-unstyled">
                   {% for subcategory in category.1 %}
-                  <li><a href="{{ subcategory.0.get_absolute_url }}" >{{ subcategory.0.name }}</a></li>
+                    <li><a href="{{ subcategory.0.get_absolute_url }}">{{ subcategory.0.name }}</a></li>
                   {% endfor %}
-              </ul>
+                </ul>
+              </div>
+            {% endif %}
           </div>
-          {% endif %}
-      </div>
-      {% endfor %}
-  {% endwith %}
-  {% endif %}
+        {% endfor %}
+      {% endwith %}
+    {% endif %}
 
     <div class="download-section text-center">
       <h4>Download Templates</h4>
-        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons.png" %} " alt=""></a>
-        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons1.png" %} " alt=""></a>
-        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons2.png" %} " alt=""></a>
-        <a href="#" class="download_temps"><img src="{% static "local/images/download-icons3.png" %} " alt=""></a>
+      <a href="#" class="download_temps"><img src="{% static "local/images/download-icons.png" %} " alt=""></a>
+      <a href="#" class="download_temps"><img src="{% static "local/images/download-icons1.png" %} " alt=""></a>
+      <a href="#" class="download_temps"><img src="{% static "local/images/download-icons2.png" %} " alt=""></a>
+      <a href="#" class="download_temps"><img src="{% static "local/images/download-icons3.png" %} " alt=""></a>
     </div>
 
   </div>
 {% endblock %}
 
-{% block content %}
-
-{% endblock %}
-
+{% block content %}{% endblock %}
 
 {% block column_right %}
-        <div class="sidebar-right">
+  <div class="sidebar-right sidebar-product-actions">
 
-        <div class="price-table">
-                    <h4>Print price is</h4>
-                    <h1 id="calculated_price">{% if line_being_edited %}{{ line_being_edited.total_price_incl_tax|currency }}{% endif %}</h1>
-                    <p>including VAT</p>
-                    <p id="calculated_unit_price">{% if line_being_edited.quantity > 1 %}(Unit price is {{ line_being_edited.unit_price_incl_tax|currency }}){% endif %}</p>
-                    <p>price does not include delivery</p>
-                  {% if line_being_edited %}
-                    <form method="POST" action="{{ save_url }}">
-                      {% csrf_token %}
-                      <input type="hidden" name="next" value="{% url 'options:pick' pk=product.pk product_slug=product.slug %}" />
-                      <button type="submit" id="buy_button" class="btn btn-info btn-block btn-sm">Save changes</button>
-                    </form>
-                  {% else %}
-                    <form method="post" action="{{save_url}}">{% csrf_token %}
-                        <button type="submit" id="buy_button" class="btn btn-info btn-block btn-sm">Buy Now</button>
-                    </form>
-                    <form method="post" action="{{ save_url }}">
-                      {% csrf_token %}
-                      <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-                      <button type="submit" class="btn btn-info btn-block btn-sm"><img src="{% static "local/images/quotebuilder.png" %} " alt="">Add to QuoteBuilder</button>
-                    </form>
-                  {% endif %}
-                </div>
-                <div class="summary" id="selected-choices">
-                    <h4>Summary <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static "local/images/infoblue.png" %}"  /></span></h4>
-                    <ul class="list-inline">
+    <div class="price-table">
+      <h4>Print price is</h4>
 
-                    </ul>
-                </div>
+      <h1 id="calculated_price">
+        {% if line_being_edited %}
+          {{ line_being_edited.total_price_incl_tax|currency }}
+        {% endif %}
+      </h1>
 
+      <p>including VAT</p>
 
-  {% include "catalogue/partials/quotebuilder.html" %}
-          <div class="download-section visible-sm visible-xs text-center">
-            <h4>Download Templates</h4>
-            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons.png" %} " alt=""></a>
-            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons1.png" %} " alt=""></a>
-            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons2.png" %} " alt=""></a>
-            <a href="#" class="download_temps"><img src="{% static "local/images/download-icons3.png" %} " alt=""></a>
-          </div>
-        </div>
+      <p id="calculated_unit_price">{% if line_being_edited.quantity > 1 %}(Unit price is
+        {{ line_being_edited.unit_price_incl_tax|currency }}){% endif %}</p>
+
+      <p>price does not include delivery</p>
+      {% if line_being_edited %}
+        <form method="POST" action="{{ save_url }}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{% url 'options:pick' pk=product.pk product_slug=product.slug %}"/>
+          <button type="submit" id="buy_button" class="btn btn-info btn-block btn-sm">Save changes</button>
+        </form>
+      {% else %}
+        <form method="post" action="{{ save_url }}">{% csrf_token %}
+          <button type="submit" id="buy_button" class="btn btn-info btn-block btn-sm">Buy Now</button>
+        </form>
+        <form method="post" action="{{ save_url }}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}"/>
+          <button type="submit" class="btn btn-info btn-block btn-sm"><img
+                  src="{% static "local/images/quotebuilder.png" %} " alt="">Add to QuoteBuilder
+          </button>
+        </form>
+      {% endif %}
+    </div>
+
+    <div class="summary" id="selected-choices">
+      <h4>Summary <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                        data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+              src="{% static "local/images/infoblue.png" %}"/></span></h4>
+      <ul class="list-inline">
+
+      </ul>
+    </div>
+
+    {% include "catalogue/partials/quotebuilder.html" %}
+
+    <div class="download-section visible-sm visible-xs text-center">
+      <h4>Download Templates</h4>
+      <a href="#" class="download_temps"><img src="{% static "local/images/download-icons.png" %} " alt=""></a>
+      <a href="#" class="download_temps"><img src="{% static "local/images/download-icons1.png" %} " alt=""></a>
+      <a href="#" class="download_temps"><img src="{% static "local/images/download-icons2.png" %} " alt=""></a>
+      <a href="#" class="download_temps"><img src="{% static "local/images/download-icons3.png" %} " alt=""></a>
+    </div>
+  </div>
 {% endblock %}
-
