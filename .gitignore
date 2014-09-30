@@ -1,6 +1,6 @@
 *.pyc
 /venv/
-/db/*
+/db/*.db
 /logs/
 /node_modules/
 /gap/static/local/css/main.css
