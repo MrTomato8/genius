@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title text-center">Login to yout account</h4>
+                <h4 class="modal-title text-center">Login to your account</h4>
             </div>
             <div class="modal-body text-center">
                 <form action="/accounts/login/" method="post" enctype="multipart/form-data" class="form-horizontal">
@@ -20,7 +20,7 @@
                             <input type="password" class="form-control" name="login-password" id="id_login-password" placeholder="Password" />
                         </div>
                     </div>
-                        
+
                     <a href="{% url password-reset %}" class="v-margin" data-target="#modal-password-forgot">Password forgotten?</a>
 
                     <button  name="login_submit" type="submit" class="btn btn-primary btn-block v-margin">LOGIN</button>
@@ -31,6 +31,8 @@
                         <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                         <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
                     </ul>
+
+                    <input type="hidden" name="next" value="{% firstof request.path '/' %}" />
 
                     <p class="v-margin">Don't have an account? <a href="{% url customer:login %}" class="primary">Sign up now</a></p>
                 </form>

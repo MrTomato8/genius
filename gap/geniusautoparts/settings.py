@@ -13,9 +13,9 @@ def rel(*x):
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-
+# This should be valid e-mail address if admin wants to receive e-mails from customers
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Administrator', 'admin_test@example.com'),
 )
 
 MANAGERS = ADMINS
@@ -167,8 +167,16 @@ INSTALLED_APPS = [
 #    'django_extensions',
 #    'debug_toolbar',
 ]
-INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
-    ['apps.catalogue','apps.order', 'apps.basket', 'apps.partner', 'apps.dashboard',])
+
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps([
+    'apps.catalogue',
+    'apps.order',
+    'apps.basket',
+    'apps.partner',
+    'apps.dashboard',
+    'apps.customer',
+    ])
+
 
 MARKDOWN_EDITOR_SKIN = 'simple'
 OSCAR_CURRENCY_FORMAT = u'¤#,##0.00'
@@ -183,8 +191,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = '/tmp/app-messages' # change this to a proper location
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_FILE_PATH = '/tmp/app-messages' # change this to a proper location
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -337,7 +345,7 @@ OSCAR_CURRENCY_LOCALE ='en_GB'
 
 from decimal import Decimal
 
-TAX =Decimal(0.20)
+TAX = Decimal(0.20)
 
 try:
     from local_settings import *

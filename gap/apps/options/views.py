@@ -1,30 +1,43 @@
+import simplejson as json
 from decimal import Decimal
+from smtplib import SMTPException
+import cStringIO as StringIO
+import ho.pisa as pisa
+from cgi import escape
 
-from django.views.generic import View,TemplateView
+from django.conf import settings
+from django.views.generic import View, TemplateView
 from django.db import models
-from django.core.urlresolvers import reverse,Resolver404
+from django.core.urlresolvers import reverse, Resolver404
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib import messages
+from django.http import QueryDict
+from django.core.mail import EmailMultiAlternatives
+from django.template import Context
+from django.template.loader import render_to_string, get_template
+
+from oscar.apps.basket.signals import basket_addition
 from django.conf import settings
 
 from apps.options.models import OptionPickerGroup, ArtworkItem, OptionChoice
 from apps.options import utils
 from apps.options.forms import picker_form_factory
 from apps.options.forms import QuoteCalcForm, QuoteCustomSizeForm, QuoteSaveForm
-from django.http import HttpResponseRedirect, HttpResponse
 from apps.options.session import OptionsSessionMixin
 from apps.options.calc import OptionsCalculator
-from django.contrib import messages
-from oscar.apps.basket.signals import basket_addition
-import simplejson as json
-from django.http import QueryDict
+from apps.quotes.models import Quote
+
 Product = models.get_model('catalogue', 'Product')
 Option = models.get_model('catalogue', 'Option')
 Price = models.get_model('pricelist', 'Price')
 Line = models.get_model('basket', 'Line')
+Basket = models.get_model('basket', 'Basket')
+
 
 class OptionPickerMixin(object):
     redirect_url = ''
-    template_name =''
-    ajax_template_name=''
+    template_name = ''
+    ajax_template_name = ''
     choices = None
     groups = None
     product = None
@@ -433,6 +446,7 @@ class LineEditView(LineMixin,QuoteView, TemplateView):
         self.line.quantity==self.data['quantity']
         self.line.save()
 
+
 # files upload is yet to develop
 class UploadView(View):
     pass
@@ -444,12 +458,167 @@ class UploadView(View):
     we do not need any get params at this point
 '''
 
+
 class ArtworkDeleteView(View):
     pass
 
-#don't really know what Quote Save and Load Views are for
+
+class QuoteEmailView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        data = {}
+        quote, is_new = Quote.get_or_create(request.user.id)
+        if quote:
+            c = Context({'quote': quote})
+
+            subject = render_to_string(
+                'options/emails/commtype_your_quote_subject.txt', c)
+            text_content = render_to_string(
+                'options/emails/commtype_your_quote_body.txt', c)
+            html_content = render_to_string(
+                'options/emails/commtype_your_quote_body.html', c)
+
+            email = EmailMultiAlternatives(subject, text_content, to=[request.user.email])
+            email.attach_alternative(html_content, "text/html")
+
+            try:
+                email.send()
+            except SMTPException:
+                data['message'] = "Error occured during e-mail sending"
+                data['success'] = False
+
+                return HttpResponse(json.dumps(data), mimetype="application/json")
+
+            data['message'] = "Email sent successfully"
+            data['success'] = True
+        else:
+            data['message'] = "Error occured."
+            data['success'] = False
+
+        return HttpResponse(json.dumps(data), mimetype="application/json")
+
+
 class QuoteSaveView(View):
-    pass
+
+    def get(self, request, *args, **kwargs):
+        data = {}
+
+        quote, is_new = Quote.get_or_create(request.user.id)
+
+        if quote:
+            if is_new:
+                data['message'] = "Your quote is successfully saved."
+                data['success'] = True
+            else:
+                data['message'] = "This quote is already saved."
+                data['success'] = False
+        else:
+            data['message'] = "Error occured."
+            data['success'] = False
+
+        return HttpResponse(json.dumps(data), mimetype="application/json")
+
+
+class QuotePrintView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        quote, is_new = Quote.get_or_create(request.user.id)
+        if quote:
+            return self.render_to_pdf('quotes/quote_pdf.html', {
+                'pagesize': 'A4',
+                'quote': quote,
+            })
+        else:
+            data = {}
+            data['message'] = "Error occured."
+            data['success'] = False
+
+            return HttpResponse(json.dumps(data), mimetype="application/json")
+
+    def render_to_pdf(self, template_src, context_dict):
+
+        quote_id = str(context_dict['quote'].reference_number)
+        template = get_template(template_src)
+        context = Context(context_dict)
+        html = template.render(context)
+        result = StringIO.StringIO()
+
+        pdf = pisa.pisaDocument(
+            StringIO.StringIO(html.encode("ISO-8859-1")), result)
+
+        if not pdf.err:
+            response = HttpResponse(
+                result.getvalue(), mimetype='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename={0}'.format("quote_" + quote_id  + ".pdf")
+
+            return response
+
+        return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+
+
+class QuoteBespokeView(View):
+
+    def post(self, request, *args, **kwargs):
+
+        data = {}
+
+        if self.is_valid(request):
+
+            post_data = {
+                'name': request.POST['quote-name'],
+                'email': request.POST['quote-email'],
+                'phone': request.POST['quote-phone'],
+                'text': request.POST['quote-text']
+            }
+
+            c = Context(post_data)
+
+            subject = render_to_string(
+                'options/emails/commtype_bespoke_quote_subject.txt', c)
+            text_content = render_to_string(
+                'options/emails/commtype_bespoke_quote_body.txt', c)
+            html_content = render_to_string(
+                'options/emails/commtype_bespoke_quote_body.html', c)
+
+            email = EmailMultiAlternatives(
+                subject, text_content, to=[settings.ADMINS[0][1]])
+            email.attach_alternative(html_content, "text/html")
+
+            try:
+                email.send()
+            except SMTPException:
+                data['message'] = "Error occured during e-mail sending."
+                data['success'] = False
+            else:
+                data['message'] = "Thank you for your enquiry. We'll contact you soon."
+                data['success'] = True
+        else:
+            data['message'] = "Incorrect data."
+            data['success'] = False
+
+        return HttpResponse(json.dumps(data), mimetype="application/json")
+
+    def is_valid(self, request):
+
+        if 'quote-name' not in request.POST \
+            or 'quote-email' not in request.POST \
+            or 'quote-phone' not in request.POST \
+            or 'quote-text' not in request.POST:
+            return False
+
+        if len(request.POST['quote-text']) <= 0:
+            return False
+
+        from django.core.validators import validate_email
+        from django.core.exceptions import ValidationError
+        try:
+            validate_email(request.POST['quote-email'])
+        except ValidationError:
+            return False
+
+        return True
 
 
 class QuoteLoadView(OptionsSessionMixin, View):
