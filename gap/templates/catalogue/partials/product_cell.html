@@ -4,23 +4,27 @@
 {% load staticfiles %}
 {% load i18n %}
 
-<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 product_wrap">
+<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 product_wrap hidden-xs">
     <article class="product">
         <a href="{{ product.get_absolute_url }}" class="product-avatar">
-            <span class="info" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-            <img src="{% static 'local/images/info.png' %}" />
+            <span class="info" data-container="body" data-toggle="popover" data-placement="left"
+                  data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+            <img src="{% static 'local/images/info.png' %}"/>
             </span>
             {% block product_image %}
-                    {% with image=product.primary_image %}
-                        {% if not image.is_missing %}
-                            <a href="{{ product.get_absolute_url }}"><img src="/media/{{ image.original }}" alt="">{{ product.get_title|truncatewords:4 }}</a>
-                        {% else %}
-                            <img alt="" src="{% static 'local/images/product-img.jpg' %}"/>
-                        {% endif %}   
-                    {% endwith %}
-                {% endblock %}
+                {% with image=product.primary_image %}
+                    {% if not image.is_missing %}
+                        <a href="{{ product.get_absolute_url }}"><img src="/media/{{ image.original }}"
+                                                                      alt="">{{ product.get_title|truncatewords:4 }}</a>
+                    {% else %}
+                        <img alt="" src="{% static 'local/images/product-img.jpg' %}"/>
+                    {% endif %}
+                {% endwith %}
+            {% endblock %}
         </a>
         <a href="{{ product.get_absolute_url }}" class="product-name">{{ product.get_title|truncatewords:4 }}</a>
-        <span class="info pull-right" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img src="{% static 'local/images/infoblue.png' %}" /></span>
+        <span class="info pull-right" data-container="body" data-toggle="popover" data-placement="left"
+              data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><img
+                src="{% static 'local/images/infoblue.png' %}"/></span>
     </article>
 </div>
