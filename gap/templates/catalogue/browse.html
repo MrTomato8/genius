@@ -7,55 +7,59 @@
 {% load active_category %}
 
 {% block title %}
-  {{ summary }} | {{ block.super }}
+    {{ summary }} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
-  <div class="set-size-grid">
-    <a href="{% url promotions:home %}">{% trans "Home" %}</a>
-    <span class="divider">/</span>
-    {% if not category %}
-      <h1>{% trans "All products" %}</h1>
-    {% else %}
-      {% for category in category.get_ancestors|slice:":-1" %}
-        <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+    <div class="set-size-grid">
+        <a href="{% url promotions:home %}">{% trans "Home" %}</a>
         <span class="divider">/</span>
-      {% endfor %}
-      <h1>{{ category.name }}</h1>
-    {% endif %}
-  </div>
+        {% if not category %}
+            <h1>{% trans "All products" %}</h1>
+        {% else %}
+            {% for category in category.get_ancestors|slice:":-1" %}
+                <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                <span class="divider">/</span>
+            {% endfor %}
+            <h1>{{ category.name }}</h1>
+        {% endif %}
+    </div>
 {% endblock breadcrumbs %}
 
 {% block column_left %}
-  <div class="sidebar-left hidden-sm hidden-xs">
-    {% if categories %}
-      {% with category as main_category %}
-        {% for category in categories %}
-          <div class="panel panel-primary">
-            <a class="panel-heading" data-toggle="collapse"
-               href="#panel-category-{{ category.0.pk }}">{{ category.0.name }}</a>
-            {% if category.1 %}
-              <div class="panel-body panel-collapse collapse in" id="panel-category-{{ category.0.pk }}">
-                <ul class="list-unstyled">
-                  {% for subcategory in category.1 %}
-                    <li><a href="{{ subcategory.0.get_absolute_url }}">{{ subcategory.0.name }}</a></li>
-                  {% endfor %}
-                </ul>
-              </div>
-            {% endif %}
-          </div>
-        {% endfor %}
-      {% endwith %}
-    {% endif %}
-  </div>
+    <div class="sidebar-left hidden-sm hidden-xs">
+        {% if categories %}
+            {% with category as main_category %}
+                {% for category in categories %}
+                    <div class="panel panel-primary">
+                        <a class="panel-heading" data-toggle="collapse"
+                           href="#panel-category-{{ category.0.pk }}">{{ category.0.name }}</a>
+                        {% if category.1 %}
+                            <div class="panel-body panel-collapse collapse in" id="panel-category-{{ category.0.pk }}">
+                                <ul class="list-unstyled">
+                                    {% for subcategory in category.1 %}
+                                        <li><a href="{{ subcategory.0.get_absolute_url }}">{{ subcategory.0.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block content %}
-  <div class="row products-list">
-    {% if products.count %}
-      {% for product in products %}
-        {% include 'catalogue/partials/product_cell.html' %}
-      {% endfor %}
-    {% endif %}
-  </div>
+    <div class="row products-list">
+        {% if products.count %}
+            {% for product in products %}
+                {% include 'catalogue/partials/product_cell.html' %}
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="show-more-button visible-phone">
+        <button id="show_more" class="btn btn-primary btn-block">Show more</button>
+    </div>
 {% endblock content %}
