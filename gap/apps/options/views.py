@@ -65,7 +65,7 @@ class OptionPickerMixin(object):
         self.kwargs =  kwargs
         self.request = request
         self.GET=self.get_querydict()
-        self.get_choices()
+        self.get_choices(request)
 
         return super(OptionPickerMixin,self).dispatch(request,*args,**kwargs)
 
