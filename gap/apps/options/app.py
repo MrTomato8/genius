@@ -17,6 +17,7 @@ class BaseOptionsApplication(Application):
     quote_load_view = views.QuoteLoadView
     quote_email_view = views.QuoteEmailView
     quote_print_view = views.QuotePrintView
+    quote_bespoke_view = views.QuoteBespokeView
     line_edit_view = views.LineEditView
 
     def get_urls(self):
@@ -36,6 +37,8 @@ class BaseOptionsApplication(Application):
                     self.quote_email_view.as_view(), name='quote-email'),
                 url(r'^quote/print/$',
                     self.quote_print_view.as_view(), name='quote-print'),
+                url(r'^quote/bespoke/$',
+                    self.quote_bespoke_view.as_view(), name='quote-bespoke'),
                 url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
                     self.upload_view.as_view(), name='upload'),
                 url(r'^upload/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/delete/(?P<file_id>\d+)$',
