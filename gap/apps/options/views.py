@@ -5,6 +5,7 @@ import cStringIO as StringIO
 import ho.pisa as pisa
 from cgi import escape
 
+from django.conf import settings
 from django.views.generic import View, TemplateView
 from django.db import models
 from django.core.urlresolvers import reverse, Resolver404
@@ -555,6 +556,69 @@ class QuotePrintView(View):
             return response
 
         return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+
+
+class QuoteBespokeView(View):
+
+    def post(self, request, *args, **kwargs):
+
+        data = {}
+
+        if self.is_valid(request):
+
+            post_data = {
+                'name': request.POST['quote-name'],
+                'email': request.POST['quote-email'],
+                'phone': request.POST['quote-phone'],
+                'text': request.POST['quote-text']
+            }
+
+            c = Context(post_data)
+
+            subject = render_to_string(
+                'options/emails/commtype_bespoke_quote_subject.txt', c)
+            text_content = render_to_string(
+                'options/emails/commtype_bespoke_quote_body.txt', c)
+            html_content = render_to_string(
+                'options/emails/commtype_bespoke_quote_body.html', c)
+
+            email = EmailMultiAlternatives(
+                subject, text_content, to=[settings.ADMINS[0][1]])
+            email.attach_alternative(html_content, "text/html")
+
+            try:
+                email.send()
+            except SMTPException:
+                data['message'] = "Error occured during e-mail sending."
+                data['success'] = False
+            else:
+                data['message'] = "Thank you for your enquiry. We'll contact you soon."
+                data['success'] = True
+        else:
+            data['message'] = "Incorrect data."
+            data['success'] = False
+
+        return HttpResponse(json.dumps(data), mimetype="application/json")
+
+    def is_valid(self, request):
+
+        if 'quote-name' not in request.POST \
+            or 'quote-email' not in request.POST \
+            or 'quote-phone' not in request.POST \
+            or 'quote-text' not in request.POST:
+            return False
+
+        if len(request.POST['quote-text']) <= 0:
+            return False
+
+        from django.core.validators import validate_email
+        from django.core.exceptions import ValidationError
+        try:
+            validate_email(request.POST['quote-email'])
+        except ValidationError:
+            return False
+
+        return True
 
 
 class QuoteLoadView(OptionsSessionMixin, View):
