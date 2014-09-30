@@ -13,9 +13,9 @@ def rel(*x):
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-
+# This should be valid e-mail address if admin wants to receive e-mails from customers
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Administrator', 'admin_test@example.com'),
 )
 
 MANAGERS = ADMINS
