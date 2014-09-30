@@ -95,13 +95,22 @@ class Quote(models.Model):
 
         return calc.total_price(User.objects.get(id=user_id))
 
+    # def is_valid(self):
+    #     calc = OptionsCalculator(self.product)
+    #     prices = calc.calculate_costs(
+    #         list(self.choices.all()), self.quantity, json.loads(self.choice_data))
+    #     try:
+    #         prices.get_price_incl_tax(self.quantity, 1, self.user)
+    #     except PriceNotAvailable:
+    #         return False
+
     @staticmethod
     def get_basket_lines(user_id):
         try:
             basket = Basket.objects.get(owner_id=user_id)
         except Basket.DoesNotExist:
             return False
-        return basket.all_lines()
+        return basket.all_lines()  # TODO: with is_dead?
 
     @classmethod
     def quote_exists(cls, user_id, lines):
