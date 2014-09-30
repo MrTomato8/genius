@@ -41,5 +41,52 @@ PPS.quotebuilder = {
                 $('#modal-login').modal('toggle');
             });
         });
+
+        $('#bespoke_quote').on('click', function(e) {
+            e.preventDefault();
+            $('#modal-bespoke').modal('toggle');
+        });
+
+        $('#bespoke_send').on('click', function(e) {
+            e.preventDefault();
+            $('#bespoke_form').submit();
+        });
+
+        $("#bespoke_form").validate({
+            rules: {
+                'quote-name': "required",
+                'quote-email': {
+                    required: true,
+                    email: true
+                },
+                'quote-phone': "required",
+                'quote-text': "required",
+            },
+            messages: {
+                'quote-name': "Please enter your name",
+                'quote-email': "Please enter a valid email address",
+                'quote-phone': "Please enter your phone",
+                'quote-text': "Please enter text"
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+
+        $("body").on("submit", "#bespoke_form", function(e){
+            e.preventDefault();
+
+            var form = $(e.target);
+            $.ajax({
+                url: form.attr("action"),
+                type: 'POST',
+                data: form.serialize(),
+                dataType : 'json',
+            })
+            .always(function(response){
+                $('#modal-bespoke').modal('toggle');
+                alert(response.message);
+            });
+        });
     }
 };
