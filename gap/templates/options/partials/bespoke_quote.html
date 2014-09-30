@@ -1,0 +1,54 @@
+<div class="modal fade" id="modal-bespoke">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center">Bespoke Quote</h4>
+            </div>
+            <div class="modal-body text-center">
+                <form action="/options/quote/bespoke/" id="bespoke_form" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    {% csrf_token %}
+
+                    <div class="form-group first-group">
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="quote-name"
+                                id="quote_bespoke_name"
+                                {% if user.first_name or user.last_name %}
+                                    value="{{ user.first_name }} {{ user.last_name }}"
+                                {% else %}
+                                    value=""
+                                {% endif %}
+                                placeholder="Name"
+                                />
+                        </div>
+                    </div>
+
+                    <div class="form-group first-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="quote-email" id="quote_bespoke_email" placeholder="Email" value="{{ user.email }}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group first-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control"name="quote-phone" id="quote_bespoke_phone" placeholder="Phone Number" />
+                        </div>
+                    </div>
+
+                    <div class="form-group first-group">
+                        <div class="input-group">
+                            <textarea class="form-control" name="quote-text" id="quote_bespoke_text" placeholder="What are you interested in?" /></textarea>
+                        </div>
+                    </div>
+
+                    <span>All fields are required</span>
+
+                    <button id="bespoke_submit" type="submit" class="btn btn-primary btn-block v-margin">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
