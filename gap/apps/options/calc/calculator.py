@@ -173,14 +173,13 @@ class BaseOptionsCalculator(object):
             return False
 
         price = self.unit_price_without_discount(user)
-
         return price*(100-discount)/Decimal(100)
-        
+
     def price_per_unit(self,user):
         total_price=self.total_price(user)
         if not total_price: return False
         return total_price/self.quantity
-        
+
     def min_price(self,user):
         if self.is_tpl(user):
             return self.price.min_tpl_price

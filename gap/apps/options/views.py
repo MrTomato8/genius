@@ -1,7 +1,10 @@
 from decimal import Decimal
+
 from django.views.generic import View,TemplateView
 from django.db import models
 from django.core.urlresolvers import reverse,Resolver404
+from django.conf import settings
+
 from apps.options.models import OptionPickerGroup, ArtworkItem, OptionChoice
 from apps.options import utils
 from apps.options.forms import picker_form_factory
@@ -165,6 +168,8 @@ class QuantityCalcMixin(OptionPickerMixin):
     DATA = {}
     template_name=''
     quantity_template_name=''
+    def get_tax(self,value):
+        return value*settings.TAX
 
     def get_querydict(self):
         GET = self.request.GET.copy()
@@ -354,7 +359,8 @@ class QuoteView(QuantityView, TemplateView):
             +'&'+ self.DATA.urlencode()
         ctx['valid']=calculator.check_quantity()
         ctx['price']=calculator.total_price(self.request.user)
-        ctx['total_price']=calculator.total_price(self.request.user)
+        ctx['tax']=self.get_tax(ctx['price'])
+        ctx['total_price']=ctx['price']+ctx['tax']
         ctx['unit_price']= calculator.price_per_unit(self.request.user)
         ctx['quantity']=self.get_quantity()
         return ctx
@@ -370,7 +376,9 @@ class QuoteView(QuantityView, TemplateView):
             action+="?"
             action+=self.request.GET.urlencode()
             ctx={}
-            ctx['total_price']=calculator.total_price(self.request.user)
+            ctx['price']=calculator.total_price(self.request.user)
+            ctx['tax']=self.get_tax(ctx['price'])
+            ctx['total_price']=ctx['price']+ctx['tax']
             ctx['unit_price']= calculator.price_per_unit(self.request.user)
             ctx['quantity']=self.get_quantity()
             ctx['valid']=calculator.check_quantity()
