@@ -80,7 +80,7 @@ class Line(AbstractLine):
     def get_taxes(self):
         return settings.TAX
     _unit_price_excl_tax=None
-    
+
     @property
     def unit_price_excl_tax(self):
         if self._unit_price_excl_tax: return self._unit_price_excl_tax
@@ -88,11 +88,11 @@ class Line(AbstractLine):
         calculator = self.get_calculator()
         price = calculator.price_per_unit(self.basket.owner)
         discount = calculator.get_discount()
-        self.discount(discount,self.quantity)
-
+        #self.discount(discount,self.quantity)
+        #self.consume(self.quantity)
         self._unit_price_excl_tax=price
         return price
-        
+
 
     def get_muliline_price_excl_tax(self):
         calc=self.get_calculator()
@@ -105,19 +105,9 @@ class Line(AbstractLine):
         return self.get_muliline_price_excl_tax()+self.get_muliline_price_tax()
 
     @property
-    def line_price_excl_tax(self):
-        """Return line price excluding tax"""
-        return self.quantity * self.unit_price_excl_tax+self.get_muliline_price_excl_tax()
-
-    @property
     def line_tax(self):
         """Return line tax"""
         return self.quantity * self.unit_tax + self.get_muliline_price_tax()
-
-    @property
-    def line_price_incl_tax(self):
-        """Return line price including tax"""
-        return self.quantity * self.unit_price_incl_tax+self.get_muliline_price_incl_tax()
 
     @property
     def unit_tax(self):
