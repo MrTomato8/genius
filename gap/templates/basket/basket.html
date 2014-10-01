@@ -6,27 +6,24 @@
 {% load i18n %}
 
 {% block page_title %}
-<section id="page-title-no-border">
-<h1 class="page-header">
-{% trans "Basket" %}
-</h1>
-</section>
+    <section id="page-title-no-border">
+        <h1>{% trans "Basket" %}</h1>
+    </section>
 {% endblock %}
 
 {# Hide mini-basket so we don't have two baskets to keep in sync #}
 {% block mini_basket %}{% endblock %}
-{%block alert_messages %}
-{% endblock %}
+
 {% block headertext %}
-{% trans "Basket" %}
+    {% trans "Basket" %}
 {% endblock %}
 
 {% block content %}
-<div id="basket-content">
-    {# Use a partial template so that AJAX can be used to re-render basket #}
-    {% include 'basket/partials/basket_content.html' %}
-</div>
 
+    <div id="basket-content">
+        {# Use a partial template so that AJAX can be used to re-render basket #}
+        {% include 'basket/partials/basket_content.html' %}
+    </div>
 
 {% endblock content %}
 

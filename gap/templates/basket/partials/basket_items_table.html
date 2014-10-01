@@ -2,120 +2,163 @@
 {% load currency_filters %}
 {% load thumbnail %}
 {% load simple_math %}
+{% load widget_tweaks %}
 {% load static %}
 
-<form action="." method="post" class="basket_summary" id="basket_formset">{% csrf_token %}
+<form action="." method="post" class="basket_summary" id="basket_formset">
+    {% csrf_token %}
     {{ formset.management_form }}
-    <table id="basket-table" class="table">
-        <thead class="basket_table-header" >
-                {% block basket_form_headers %}
+    <div class="table-responsive">
+        <table id="basket-table" class="table basket-table">
+            <thead class="basket_table-header">
+            {% block basket_form_headers %}
                 <tr>
-                            <th class="span3">{% trans "Quantity/Size" %}</th>
-                            <th class="span4">{% trans "Specification" %}</th>
-                            <th class="span2">{% trans "Price exc. VAT" %}</th>
-                            <th class="span1">{% trans "VAT" %}</th>
-                            <th class="span2">{% trans "Price inc. VAT" %}</th>
-                            <th class="span2"></th>
-                    </tr>
-                    {% endblock %}
+                    <th>{% trans "Specification" %}</th>
+                    <th>{% trans "Quantity/Size" %}</th>
+                    <th>{% trans "Price exc. VAT" %}</th>
+                    <th>{% trans "VAT" %}</th>
+                    <th>{% trans "Price inc. VAT" %}</th>
+                    <th>&nbsp;</th>
+                </tr>
+            {% endblock %}
             </thead>
 
-        <tbody>
-                {% for form in formset %}
-                    {% with form.instance.product as product%}
+            <tbody>
+            {% for form in formset %}
+                {% with form.instance.product as product %}
                     <tr>
-                        {{ form.id }}
-                        <td class="">
-                            {% with stockrecord=form.instance.stockrecord_source option=form.instance.OPTIONS_CALCULATOR product=form.instance.PRODUCT_STOCKRECORD   %}
-                            {{ form.quantity }}
-                            {% endwith %}
-                            <button class="btn btn-small pull-right" type="submit">{% trans "Update" %}</button>
+                        <td>
+                            {{ form.id }}
                             {% with image=product.primary_image %}
                                 {% thumbnail image.original "200x200" upscale=False as thumb %}
                                     <img class="thumbnail" src="/media/{{ thumb.name }}" alt="{{ product.get_title }}">
                                 {% endthumbnail %}
-
+                            {% endwith %}
+                            <a href="{{ form.instance.product.get_absolute_url }}">{{ form.instance.product.get_title }}</a>
+                            <ul>
+                                {% with  form.instance.attributes.all as attributes %}
+                                    {% for attribute in attributes %}
+                                        {% if attribute.option.name == 'items_per_pack' %}
+                                        {% else %}
+                                            <li>{{ attribute.option.name }}: {{ attribute.value }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                            </ul>
+                        </td>
+                        <td class="">
+                            <div style="width: 50%; display:inline-block;">
+                                {% with stockrecord=form.instance.stockrecord_source option=form.instance.OPTIONS_CALCULATOR product=form.instance.PRODUCT_STOCKRECORD %}
+                                    {{ form.quantity|add_class:"form-control" }}
+                                {% endwith %}
+                            </div>
+                            <button class="btn btn-basket-update" type="submit">
+                                <i class="fa fa-refresh fa-lg"></i>
+                            </button>
+                        </td>
+                        <td>
+                            {{ form.instance.line_price_excl_tax|currency }}
+                        </td>
+                        <td>
+                            {% with form.instance.line_tax as vat %}
+                                {% if not vat or vat == 0 %}
+                                    n/d
+                                {% else %}
+                                    {{ vat|currency }}
+                                {% endif %}
                             {% endwith %}
                         </td>
                         <td>
-                                <a href="{{ form.instance.product.get_absolute_url }}"><b>{{ form.instance.product.get_title }}</b></a>
-                                <ul>
-                                {% with  form.instance.attributes.all as attributes %}
-                                        {% for attribute in attributes %}
-                                                {% if attribute.option.name == 'items_per_pack' %}
-                                                {% else %}
-                                                <li>{{ attribute.option.name }}: {{attribute.value}}</li>
-                                                {% endif %}
-                                        {% endfor %}
-                                {% endwith %}
-                                </ul>
-                        </td>
-                        <td>
-                                {{ form.instance.line_price_excl_tax|currency }}
-                        </td>
-                        <td>
-                                {% with form.instance.line_tax as vat %}
-                                        {% if not vat or vat == 0 %}
-                                                n/d
-                                        {% else %}
-                                                {{vat|currency}}
-                                        {% endif %}
-                                {% endwith %}
-                        </td>
-                        <td>
-                                {{ form.instance.line_price_incl_tax|currency }}
+                            {{ form.instance.line_price_incl_tax|currency }}
                         </td>
                         <td class="centered">
-                                {% if product.prices.count > 0 %}
-                              <a class="btn btn-small span1" href="{% url options:pick pk=product.pk product_slug=product.slug %}" class="button button-green">Duplicate</a>
-                                {% endif %}
-                                <a class="js-remove-item" href="{% url basket:items-remove form.instance.pk %}?next={{ request.get_full_path|urlencode }}"><img src="{% static "local/images/delete.png" %}"></a>
+                            {% if product.prices.count > 0 %}
+                                <div style="display: inline-block">
+                                    <a class="btn btn-link"
+                                       href="{% url options:pick pk=product.pk product_slug=product.slug %}"><i
+                                            class="fa fa-copy fa-lg"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div style="display: inline-block">
+                                <a class="btn btn-link js-remove-item"
+                                   href="{% url basket:items-remove form.instance.pk %}?next={{ request.get_full_path|urlencode }}">
+                                    <i class="fa fa-times-circle fa-lg"></i>
+                                </a>
+
                                 <div style="display:none" hidden="true" aria-hidden="true">
-                        {{ form.save_for_later }}
-                        {{ form.DELETE }}
-                </div>
+                                    {{ form.save_for_later }}
+                                    {{ form.DELETE }}
+                                </div>
+                            </div>
+
+                            <div style="display: inline-block">
+                                <a href="#" class="btn btn-link">
+                                    <i class="fa fa-minus-circle fa-green fa-lg" style="color: forestgreen;"></i>
+                                </a>
+                            </div>
                         </td>
-                </tr>
-                <tr>
+                    </tr>
+                    <tr>
                         <td class="collspan" colspan="6"></td>
-                </tr>
+                    </tr>
                 {% endwith %}
-                {% endfor %}
+            {% endfor %}
 
-        {% for line in basket.dead_lines %}
-          <tr class="table-row-variant danger">
-            <td>{{ line.quantity }}</td>
-            <td>
-              <a href="{{ line.product.get_absolute_url }}"><b>{{ line.product.get_title }}</b></a>
-              <ul>
-              {% with  line.attributes.all as attributes %}
-                {% for attribute in attributes %}
-                  {% if attribute.option.name == 'items_per_pack' %}
-                  {% else %}
-                    <li>{{ attribute.option.name }}: {{attribute.value}}</li>
-                  {% endif %}
-                {% endfor %}
-              {% endwith %}
-              </ul>
-            </td>
-            <td>{{ line.unit_price_excl_tax }}</td>
-            <td>
-              {% with line.unit_tax|multiply:line.quantity as vat %}
-                {% if not vat or vat == 0 %}
-                        n/d
-                {% else %}
-                        {{vat|currency}}
-                {% endif %}
-              {% endwith %}
-            </td>
-            <td>{{ line.unit_price_incl_tax|multiply:line.quantity|currency }}</td>
-            <td>
-              <a class="js-remove-item" href="{% url basket:items-remove line.pk %}?next={{ request.get_full_path|urlencode }}"><img src="{% static "local/images/delete.png" %}"></a>
-              <a class="js-toggle-item-on" href="{% url basket:items-toggle-live line.pk %}?next={{ request.get_full_path|urlencode }}"><img src="{% static "local/images/notlive.png" %}" alt="|" /></a>
-            </td>
-          </tr>
-        {% endfor %}
+            {% for line in basket.dead_lines %}
+                <tr class="table-row-deadline">
+                    <td>
+                        <a href="{{ line.product.get_absolute_url }}">{{ line.product.get_title }}</a>
+                        <ul>
+                            {% with  line.attributes.all as attributes %}
+                                {% for attribute in attributes %}
+                                    {% if attribute.option.name == 'items_per_pack' %}
+                                    {% else %}
+                                        <li>{{ attribute.option.name }}: {{ attribute.value }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
+                        </ul>
+                    </td>
+                    <td>{{ line.quantity }}</td>
+                    <td>{{ line.unit_price_excl_tax }}</td>
+                    <td>
+                        {% with line.unit_tax|multiply:line.quantity as vat %}
+                            {% if not vat or vat == 0 %}
+                                n/d
+                            {% else %}
+                                {{ vat|currency }}
+                            {% endif %}
+                        {% endwith %}
+                    </td>
+                    <td>{{ line.unit_price_incl_tax|multiply:line.quantity|currency }}</td>
+                    <td>
+                        {% if product.prices.count > 0 %}
+                            <div style="display: inline-block">
+                                <a class="btn btn-link"
+                                   href="{% url options:pick pk=product.pk product_slug=product.slug %}"><i
+                                        class="fa fa-copy fa-lg"></i>
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div style="display: inline-block">
+                            <a class="btn btn-link js-remove-item"
+                               href="{% url basket:items-remove line.pk %}?next={{ request.get_full_path|urlencode }}">
+                                <i class="fa fa-times-circle fa-lg"></i>
+                            </a>
+                        </div>
 
-        </tbody>
-    </table>
+                        <div style="display: inline-block">
+                            <a href="{% url basket:items-toggle-live line.pk %}?next={{ request.get_full_path|urlencode }}"
+                               class="btn btn-link js-toggle-item-on">
+                                <i class="fa fa-minus-circle fa-rotate-90 fa-lg"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
 </form>
