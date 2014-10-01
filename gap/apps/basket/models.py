@@ -41,9 +41,6 @@ class Line(AbstractLine):
     def number_of_files(self):
         return self.attachments.all().count()
 
-    def save(self,*args,**kwargs):
-        super(Line,self).save(*args,**kwargs)
-
     def get_option_choices(self):
         return self.choices.all()
 
