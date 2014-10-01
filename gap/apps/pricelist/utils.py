@@ -89,15 +89,20 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
             report.skip('product', 'not found', original_row)
             continue
         data['product'] = product
+        
+        try:
+            options_cost = Decimal(row.pop('options_cost', 0))
+        except:
+            options_cost = Decimal(0)
 
         try:
-            data['tpl_price'] = Decimal(row.pop('tpl_price', None))
+            data['tpl_price'] = Decimal(row.pop('tpl_price', None))+options_cost
         except:
             report.skip('tpl_price', 'bad value', original_row)
             continue
 
         try:
-            data['rpl_price'] = Decimal(row.pop('rpl_price', None))
+            data['rpl_price'] = Decimal(row.pop('rpl_price', None))+options_cost
         except:
             report.skip('rpl_price', 'bad value', original_row)
             continue
@@ -124,10 +129,6 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
             quantity_discount = False
             pass
 
-        try:
-            options_cost = Decimal(row.pop('options_cost', 0))
-        except:
-            options_cost = Decimal(0)
 
         try:
             data['min_area'] = Decimal(row.pop('min_area', None))
