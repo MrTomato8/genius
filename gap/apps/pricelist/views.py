@@ -21,11 +21,14 @@ def import_pricelist(request):
     if request.method == 'POST':
         form = PricelistUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            report = import_csv(
-                request.FILES['csvfile'],
-                form.cleaned_data['create_options'],
-                form.cleaned_data['create_choices'],
-                form.cleaned_data['chirurgical'])
+            try:
+                report = import_csv(
+                    request.FILES['csvfile'],
+                    form.cleaned_data['create_options'],
+                    form.cleaned_data['create_choices'],
+                    form.cleaned_data['chirurgical'])
+            except:
+                pass
             filename=request.FILES['csvfile'].name
             try:
                 CSV.objects.create(
