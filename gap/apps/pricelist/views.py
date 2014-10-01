@@ -27,9 +27,12 @@ def import_pricelist(request):
                 form.cleaned_data['create_choices'],
                 form.cleaned_data['chirurgical'])
             filename=request.FILES['csvfile'].name
-            CSV.objects.create(
-                name=filename,
-                csv_file=request.FILES['csvfile'])
+            try:
+                CSV.objects.create(
+                    name=filename,
+                    csv_file=request.FILES['csvfile'])
+            except:
+                pass
             return render(request, 'pricelist/importerrors.html',
                               {'report': report})
     else:
