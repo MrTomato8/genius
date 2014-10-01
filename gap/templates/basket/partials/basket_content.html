@@ -1,73 +1,93 @@
 {% load i18n %}
 {% load currency_filters %}
+{% load widget_tweaks %}
 
 
 {% if basket_warnings %}
     <h5>{% trans "Important messages about items in your basket" %}</h5>
-        {% for warning in basket_warnings %}
+    {% for warning in basket_warnings %}
         <div class="alert">{{ warning }}</div>
-        {% endfor %}
+    {% endfor %}
 {% endif %}
 
 {% if upsell_messages %}
-<div class="well">
+    <div class="well">
         <h2>{% trans "You could be missing out on offers!" %}</h2>
         {% for upsell in upsell_messages %}
-    {% blocktrans with message=upsell.message url=upsell.offer.get_absolute_url offer_name=upsell.offer.name %}
-        <div class="warning">{{ message }} to qualify for the <a href="{{ url }}">{{ offer_name }}</a> special offer</div>
-    {% endblocktrans %}
+            {% blocktrans with message=upsell.message url=upsell.offer.get_absolute_url offer_name=upsell.offer.name %}
+                <div class="warning">{{ message }} to qualify for the <a href="{{ url }}">{{ offer_name }}</a> special
+                    offer
+                </div>
+            {% endblocktrans %}
         {% endfor %}
-</div>
+    </div>
 {% endif %}
 
 {% if not basket.is_empty %}
 
-      {% include "basket/partials/basket_items_table.html" %}
+    {% include "basket/partials/basket_items_table.html" %}
 
-        {% include 'basket/partials/basket_totals.html' with editable=1 %}
-        <div class="row" id="basket-order">
-                <h4>Proceed with order</h4>
-                <div class="alert alert-error">{% trans 'Please check these are correct before proceeding. Changes to order specifications may incur an additional charge and delay your order.'%}</div>
-      <a href="{% url paypal-redirect %}"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;"></a>
-      <a href="{% url checkout:index %}" class="pull-right btn ">Proceed to checkout</a>
+    {% include 'basket/partials/basket_totals.html' with editable=1 %}
+    <div class="row">
+        <div class="col-md-6" style="margin-bottom: 20px;">
+            <div id="voucher-id">
+                <form action="{% url basket:vouchers-add %}" method="post" class="form-horizontal">
+                    <div class="form-group">
+                        {% csrf_token %}
+                        {% for field in voucher_form %}
+                            <div class="col-md-6">
+                                {{ field|add_class:"form-control"|attr:"placeholder:Enter a voucher code" }}
+                            </div>
+                        {% endfor %}
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary">{% trans "Add voucher" %}</button>
+                            <a href="#" id="voucher_form_cancel" class="btn btn-link">{% trans "cancel" %}</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div id="voucher-id">
-<form action="{% url basket:vouchers-add %}" method="post" class="form-horizontal">
-        {% csrf_token %}
-        {% for field in voucher_form %}
-        <div class="span2">{%trans 'Enter a voucher code:' %}</div>
-        <div class="span3">{{ field}}</div>
-        {% endfor %}
-        <div class="span2">
-                <button type="submit" class="btn">{% trans "Add voucher" %}</button>
+    </div>
+
+
+    <div id="basket-order">
+        <h4 class="basket-small-header">Proceed with order</h4>
+
+        <div style="margin-bottom: 20px;">
+            {% trans 'Please check these are correct before proceeding. Changes to order specifications may incur an additional charge and delay your order.' %}
         </div>
-        <div class="span2">
-                <a href="#" id="voucher_form_cancel" class="btn btn-info">{% trans "cancel" %}</a>
+
+{#        <a href="{% url paypal-redirect %}">#}
+{#            <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;"></a>#}
+        <div class="pull-right">
+            <a href="{% url checkout:index %}" class="btn btn-primary">Proceed to checkout</a>
         </div>
-</form>
-</div>
+    </div>
 
 
     {% block formactions %}
-        <div class="clearfix" >
-            <a href="/" class="btn btn-full">{% trans "Continue Shopping" %}</a>
+        <div class="pull-left">
+            <a href="/" class="btn btn-link btn-full">
+                <i class="fa fa-angle-left fa-lg"></i>&nbsp;{% trans "Continue Shopping" %}
+            </a>
         </div>
-        <br />
     {% endblock formactions %}
 
 {% else %}
-  {% if basket.dead_lines|length %}
-    {% include "basket/partials/basket_items_table.html" %}
-  {% else %}
-    {% block emptybasket %}
-    <p>{% trans "Your basket is empty." %}</p>
-    <p><a href="/" class="btn btn-primary">{% trans "Continue shopping" %}</a></p>
-    {% endblock %}
-  {% endif %}
+    {% if basket.dead_lines|length %}
+        {% include "basket/partials/basket_items_table.html" %}
+    {% else %}
+        {% block emptybasket %}
+            <p>{% trans "Your basket is empty." %}</p>
+            <p>
+                <a href="/" class="btn btn-link">&lt; {% trans "Continue shopping" %}</a>
+            </p>
+        {% endblock %}
+    {% endif %}
 {% endif %}
 
 <script type="text/javascript">
-  $(function() {
-    PPS.basket.init();
-  });
+    $(function () {
+        PPS.basket.init();
+    });
 </script>

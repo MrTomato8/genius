@@ -2,36 +2,44 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block extrastyles %}
-{{ block.super }}
-
-<link rel="stylesheet" type="text/css" href="{% static "local/css/bootstrap.css" %}" />
-{% endblock %}
-
 {% block payment_details %}
-    <div class="page-header">
-        <h1>Enter payment details</h1>
+    <div class="row" style="min-height: 250px;">
+        <div class="col-md-6">
+            <div class="page-header">
+                <h4>Order option</h4>
+            </div>
+            <p class="text-muted lead">
+                Any order options
+            </p>
+        </div>
+        <div class="col-md-6">
+            <div class="page-header">
+                <h4>Payment option</h4>
+            </div>
+
+            {% block payment_details_content %}
+                <div class="form-actions">
+                    <a href="{% url paypal-redirect %}"><img
+                            src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left"
+                            style="margin-right:7px;"></a>
+                </div>
+            {% endblock %}
+        </div>
     </div>
 
-    {% block payment_details_content %}
-    <h3>Pay via Paypal</h3>
-    <div class="form-actions">
-      <a href="{% url paypal-redirect %}"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;"></a>
-    </div>
-
-    <!--
-    <h3>Pay with a bankcard</h3>
-    <form action="{% url checkout:preview %}" class="form-horizontal" method="post">
-        <div class="well well-info">
-            {% csrf_token %}
-            {% include 'partials/form_fields.html' with form=bankcard_form %}
-            <div class="alert alert-warning">
-                <h4>{% trans "Demo site help" %}</h4>
-                <p>{% trans "You can use a magic card number of 1000010000000007 together with an CVV number." %}</p>
+    <div class="row">
+        <div class="col-md-6">
+            <a href="#" class="btn btn-link">
+                <i class="fa fa-angle-left fa-lg"></i>&nbsp;{% trans "Back" %}
+            </a>
+        </div>
+        <div class="col-md-6">
+            <div class="pull-right">
+                <a href="#" class="btn btn-primary">
+                    <i class="fa fa-angle-left fa-lg"></i>&nbsp;{% trans "Next" %}
+                </a>
             </div>
         </div>
-        <button type="submit" class="pull-right btn btn-large btn-primary">{% trans "Continue" %}</button>
-    </form>
-    -->
-    {% endblock %}
+    </div>
+
 {% endblock payment_details %}
