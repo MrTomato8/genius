@@ -36,6 +36,7 @@ def import_pricelist(request):
                     csv_file=request.FILES['csvfile'])
             except:
                 pass
+            raise Exception
             return render(request, 'pricelist/importerrors.html',
                               {'report': report})
     else:
