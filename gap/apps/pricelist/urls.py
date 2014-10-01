@@ -7,5 +7,5 @@ urlpatterns = patterns(
     (r'^import', 'import_pricelist'),
     url(r'^list/(?P<pk>\S+)/', CSVUpdate.as_view(),name='csvupdate'),
     url(r'^list/', CSVList.as_view(),name='csvview'),
-    url(r'^500.html', CSVList.as_view(),name='err'),
+    url(r'^500.shtml', CSVList.as_view(),name='err'),
 )
