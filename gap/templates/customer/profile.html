@@ -30,6 +30,7 @@
                 <li><a href="#addresses">{% trans 'Address Book' %}</a></li>
                 <li><a href="#emails">{% trans 'Email History' %}</a></li>
                 <li><a href="#alerts">{% trans "Alerts" %}</a></li>
+                <li><a href="#saved_quotes">{% trans "Saved Quotes" %}</a></li>
                 {% block extra_tabs_nav %}{% endblock %}
             </ul>
         </div>
@@ -39,7 +40,7 @@
 
 {% block content %}
 <div>
-	<div class="tab-pane {% if active_tab == 'profile' %}active{% endif %}" id="profile">
+    <div class="tab-pane {% if active_tab == 'profile' %}active{% endif %}" id="profile">
         {% block tab_profile %}
         <div class="sub-header">
             <h3>{% trans 'Profile' %}</h3>
@@ -179,48 +180,117 @@
         </div>
 
         {% endif %}
-		{% endblock %}
+        {% endblock %}
     </div>
 
     <div class="tab-pane {% if active_tab == 'alerts' %}active{% endif %}" id="alerts">
         {% block tab_alerts %}
         <div class="sub-header">
-		    <h3>{% trans "Alerts" %}</h3>
-		</div>
+            <h3>{% trans "Alerts" %}</h3>
+        </div>
 
-		{% if not alerts %}
-		<p>{% trans "You do not have any active alerts for out-of-stock products." %}</p>
-		{% else %}
-		    <form action="." method="post" id="alerts_form">
-		    {% csrf_token %}
-		        <table class="table table-stiped table-bordered">
-		            <tr>
-		                <th>{% trans "Product" %}</th>
-		                <th>{% trans "Status" %}</th>
-		                <th>{% trans "Date created" %}</th>
-		                <th></th>
-		            </tr>
+        {% if not alerts %}
+        <p>{% trans "You do not have any active alerts for out-of-stock products." %}</p>
+        {% else %}
+            <form action="." method="post" id="alerts_form">
+            {% csrf_token %}
+                <table class="table table-stiped table-bordered">
+                    <tr>
+                        <th>{% trans "Product" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Date created" %}</th>
+                        <th></th>
+                    </tr>
 
-		            {% for alert in alerts %}
-		            <tr>
-		                <td>
-		                    {% with product=alert.product %}
-		                    <a href="{{ product.get_absolute_url }}">{{ product.get_title }}</a>
-		                    {% endwith %}
-		                </td>
-		                <td>{{ alert.status }}</td>
-		                <td>{{ alert.date_created }}</td>
-		                <td>
-		                    {% if alert.can_be_cancelled %}
-		                        <button class="btn btn-danger" type='submit' name='cancel_alert' value='{{ alert.id }}'>{% trans "Cancel" %}</button>
-		                    {% endif %}
-		                </td>
-		            </tr>
-		            {% endfor %}
-		        </table>
-		    </form>
-		{% endif %}
+                    {% for alert in alerts %}
+                    <tr>
+                        <td>
+                            {% with product=alert.product %}
+                            <a href="{{ product.get_absolute_url }}">{{ product.get_title }}</a>
+                            {% endwith %}
+                        </td>
+                        <td>{{ alert.status }}</td>
+                        <td>{{ alert.date_created }}</td>
+                        <td>
+                            {% if alert.can_be_cancelled %}
+                                <button class="btn btn-danger" type='submit' name='cancel_alert' value='{{ alert.id }}'>{% trans "Cancel" %}</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </form>
+        {% endif %}
 
+        {% endblock %}
+    </div>
+
+
+
+
+    <div class="tab-pane {% if active_tab == 'saved_quotes' %}active{% endif %}" id="saved_quotes">
+        {% block tab_saved_quotes %}
+        <div class="sub-header">
+            <h3>{% trans "Saved Quotes" %}</h3>
+        </div>
+
+        {% if not saved_quotes %}
+        <p>{% trans "You do not have any saved quotes." %}</p>
+        {% else %}
+            <form action="." method="post" id="saved_quotes_form">
+            {% csrf_token %}
+                <table class="table table-stiped table-bordered">
+                    <tr>
+                        <th>{% trans "Reference Number" %}</th>
+                        <th>{% trans "Description" %}</th>
+                        <th>{% trans "Total cost (without delivery)" %}</th>
+                        <th>{% trans "Date created" %}</th>
+                        <th>{% trans "Expiry date" %}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+
+                    {% for saved_quote in saved_quotes %}
+                    <tr>
+                        <td><a href="#">#454353454</a></td>
+                        <td>-</td>
+                        <td>{{ saved_quote.total_cost }}</td>
+                        <td>{{ saved_quote.date_added }}</td>
+                        <td>{{ saved_quote.date_expired }}</td>
+                        <td>
+                            <button class="btn btn-success" type='submit' name='cancel_alert' value='{{ saved_quote.id }}'>{% trans "Order now" %}</button>
+                        </td>
+                        <td>
+                            <button class="btn" type='submit' name='cancel_alert' value='{{ saved_quote.id }}'>{% trans "E-mail me" %}</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" type='submit' name='cancel_alert' value='{{ saved_quote.id }}'>{% trans "Delete" %}</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="8">
+                            {% for quoteline in saved_quote.quoteline_set.all %}
+                                <strong>Product</strong>: {{ quoteline.product }}
+                                <br/>
+                                {% for option in quoteline.choices.all %}
+                                    {{ option }}
+                                    <br/>
+                                {% endfor %}
+                                <strong>Quantity</strong>: {{ quoteline.quantity }}
+                                <br/>
+                                <strong>Cost</strong>: {{ quoteline.price_incl_tax }}
+                                <br/><br/>
+                            {% endfor %}
+                            <br/>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+            </form>
+        {% endif %}
         {% endblock %}
     </div>
 

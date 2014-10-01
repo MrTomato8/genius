@@ -1,0 +1,28 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans with name=site.name %}
+New Quote Enquiry
+
+{% endblocktrans %}
+
+	From: {{ name }}
+
+	Email: {{ email }}
+
+	Phone Number: {{ phone }}
+
+	Text: {{ text }}
+
+{% endautoescape %}
+
+
+
+
+
+
+
+
+
+
+
+
