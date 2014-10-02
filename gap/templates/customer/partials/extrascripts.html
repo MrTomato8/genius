@@ -1,0 +1,6 @@
+{% load staticfiles %}
+{% load compress %}
+
+{% compress js %}
+    <script src="{% static 'local/js/accounts.js' %}" type="text/javascript" charset="utf-8"></script>
+{% endcompress %}
