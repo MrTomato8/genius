@@ -16,7 +16,7 @@ framework.
 import os
 import sys
 
-path = '/home/geniusautoparts/public_html/gap'
+path = '/home/skillfullabs.com/public_html/gap'
 if path not in sys.path:
     sys.path.append(path)
 
