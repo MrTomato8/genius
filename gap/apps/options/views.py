@@ -623,3 +623,11 @@ class QuoteBespokeView(View):
 
 class QuoteLoadView(OptionsSessionMixin, View):
     pass
+
+
+class QuoteEmailPreviewView(View):
+    def get(self, request, *args, **kwargs):
+        quote, is_new = Quote.get_or_create(request.user.id)
+        c = Context({'quote': quote})
+        t = get_template('quotes/quote_email.html')
+        return HttpResponse(t.render(c))

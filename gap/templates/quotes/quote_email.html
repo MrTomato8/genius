@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+    {% autoescape off %}
+
+        {% blocktrans with name=site.name %}
+            <h1>Email Quote</h1>
+            <p class="text-muted">Below is an email copy of your quote.</p>
+        {% endblocktrans %}
+
+        <table class="table table-remove-border table-remove-padding">
+            <thead>
+            <tr class="table-small-header">
+                <th>Reference Number</th>
+                <th>Description</th>
+                <th>Total cost (without delivery)</th>
+                <th>Date created</th>
+                <th>Date expired</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>#{{ quote.reference_number }}</td>
+                <td></td>
+                <td>£{{ total_cost }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-remove-border table-background">
+            <thead>
+            <tr class="table-small-header">
+                <th width="30%">Product</th>
+                <th width="40%">Options</th>
+                <th width="20%">Quantity</th>
+                <th width="10%">Cost</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for quoteline in quote.quoteline_set.all %}
+                <tr>
+                    <td>{{ quoteline.product }}</td>
+                    <td>
+                        <ul class="list-unstyled">
+                            {% for option in quoteline.choices.all %}
+                                <li>{{ option }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ quoteline.quantity }}</td>
+                    <td>{{ quoteline.price_incl_tax }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <p>{% trans "Thanks for using our site!" %}</p>
+        <p>{% blocktrans with name=site.name %}The Prizmatic team{% endblocktrans %}</p>
+
+    {% endautoescape %}
+
+{% endblock %}

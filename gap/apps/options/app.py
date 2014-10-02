@@ -16,6 +16,7 @@ class BaseOptionsApplication(Application):
     quote_save_view = views.QuoteSaveView
     quote_load_view = views.QuoteLoadView
     quote_email_view = views.QuoteEmailView
+    quote_email_preview_view = views.QuoteEmailPreviewView
     quote_print_view = views.QuotePrintView
     quote_bespoke_view = views.QuoteBespokeView
     line_edit_view = views.LineEditView
@@ -35,6 +36,8 @@ class BaseOptionsApplication(Application):
                     self.quote_save_view.as_view(), name='quote-save'),
                 url(r'^quote/send/$',
                     self.quote_email_view.as_view(), name='quote-email'),
+                url(r'^quote/preview/$',
+                    self.quote_email_preview_view.as_view(), name='quote-preview'),
                 url(r'^quote/print/$',
                     self.quote_print_view.as_view(), name='quote-print'),
                 url(r'^quote/bespoke/$',
