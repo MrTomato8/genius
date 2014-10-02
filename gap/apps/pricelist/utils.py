@@ -89,20 +89,19 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
             report.skip('product', 'not found', original_row)
             continue
         data['product'] = product
-        
-        try:
-            options_cost = Decimal(row.pop('options_cost', 0))
-        except:
-            options_cost = Decimal(0)
 
         try:
-            data['tpl_price'] = Decimal(row.pop('tpl_price', None))+options_cost
+            data["option_cost"] = Decimal(row.pop('options_cost', 0))
+        except:
+            data["option_cost"] = Decimal(0)
+
+        try:
+            data['tpl_price'] = Decimal(row.pop('tpl_price', None))
         except:
             report.skip('tpl_price', 'bad value', original_row)
             continue
-
         try:
-            data['rpl_price'] = Decimal(row.pop('rpl_price', None))+options_cost
+            data['rpl_price'] = Decimal(row.pop('rpl_price', None))
         except:
             report.skip('rpl_price', 'bad value', original_row)
             continue
@@ -219,14 +218,16 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
             continue
 
         try:
-            product.stockrecord
-        except ObjectDoesNotExist:
-            partner = Partner.objects.all()[0]
-
-            sku = crc32(product.get_title())
-            StockRecord.objects.create(
-                product = product, partner = partner, partner_sku = sku
-                )
+            try:
+                product.stockrecord
+            except ObjectDoesNotExist:
+                partner = Partner.objects.all()[0]
+                sku = product.get_title()
+                StockRecord.objects.get_or_create(
+                    product = product, partner = partner, partner_sku = sku
+                    )
+        except:
+            pass
 
         #quantity-discount
         price = Price.objects.create(**data)

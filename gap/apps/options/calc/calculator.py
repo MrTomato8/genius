@@ -206,12 +206,12 @@ class BaseOptionsCalculator(object):
     def price_per_unit(self,user):
         total_price=self._total_price(user)
         if not total_price: return False
-        return round(total_price/self.quantity,2)
+        return Decimal(str(round(total_price/self.quantity,2)))
 
     def total_price(self,user):
         total_price=self._total_price(user)
         if not total_price: return False
-        return round(total_price,2)
+        return Decimal(str(round(total_price,2)))
 
 
 class OptionsCalculator(BaseOptionsCalculator):
