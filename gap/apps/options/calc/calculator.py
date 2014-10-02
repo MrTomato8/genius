@@ -177,17 +177,14 @@ class BaseOptionsCalculator(object):
         price += self.price.option_cost
         return price
 
-    def price_per_unit(self,user):
-        total_price=self.total_price(user)
-        if not total_price: return False
-        return total_price/self.quantity
+
 
     def min_price(self,user):
         if self.is_tpl(user):
             return self.price.min_tpl_price
         return self.price.min_rpl_price
 
-    def total_price(self,user):
+    def _total_price(self,user):
         '''
             total price with discount
         '''
@@ -206,7 +203,15 @@ class BaseOptionsCalculator(object):
             return min_price
         return total_price
 
+    def price_per_unit(self,user):
+        total_price=self._total_price(user)
+        if not total_price: return False
+        return round(total_price/self.quantity,2)
 
+    def total_price(self,user):
+        total_price=self._total_price(user)
+        if not total_price: return False
+        return round(total_price,2)
 
 
 class OptionsCalculator(BaseOptionsCalculator):
