@@ -110,6 +110,11 @@ class Price(models.Model):
         OptionChoice, related_name='prices', blank=True,
         verbose_name=u'Option Choices', db_index= True)
 
+    option_cost = models.DecimalField(
+        max_digits=5, decimal_places=3, validators=[MinValueValidator(0)],
+        verbose_name='cost of the option',
+        default=0)
+
     objects=PricelistManager()
 
     def __unicode__(self):
