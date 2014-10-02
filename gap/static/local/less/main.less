@@ -283,6 +283,11 @@ div[class*="sidebar-"] .panel-heading:before {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 300px;
+
+  @media (min-width: @screen-sm-min) {
+    max-width: 250px;
+  }
 
   @media (min-width: @screen-md-min) {
     max-width: 100px;
