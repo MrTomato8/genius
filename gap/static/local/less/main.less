@@ -32,6 +32,7 @@
 body {
   position: relative;
 }
+
 a, .btn {
   outline: none !important;
 }
@@ -190,6 +191,7 @@ div[class*="sidebar-"] .panel-heading:before {
       position: fixed;
       top: 20px;
     }
+
     &.affix-bottom {
       position: absolute;
       top: auto;
@@ -282,10 +284,18 @@ div[class*="sidebar-"] .panel-heading:before {
 }
 
 #quote-builder .td-link-edit {
-  max-width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media (min-width: @screen-md-min) {
+    max-width: 100px;
+  }
+
+  @media (min-width: @screen-lg) {
+    max-width: 200px;
+  }
+
 }
 
 #quote-builder .checkout img {
