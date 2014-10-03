@@ -626,7 +626,7 @@ class QuoteBespokeView(View):
         return True
 
 
-class QuoteDeleteView(View):
+class QuoteRemoveView(View):
 
     def get(self, request, *args, **kwargs):
         try:
