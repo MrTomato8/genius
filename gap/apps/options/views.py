@@ -644,6 +644,8 @@ class QuoteLoadView(OptionsSessionMixin, View):
 
 class QuoteOrderView(View):
 
+    add_signal = basket_addition
+
     def get(self, request, *args, **kwargs):
 
         basket = request.basket
@@ -672,6 +674,8 @@ class QuoteOrderView(View):
                     width=quoteline.width,
                     attachments=attachments
                 )
+
+                self.add_signal.send(sender=self, product=quoteline.product, user=user)
 
             quote.delete()
 
