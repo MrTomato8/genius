@@ -642,6 +642,40 @@ class QuoteLoadView(OptionsSessionMixin, View):
     pass
 
 
+class QuoteOrderView(View):
+    def get(self, request, *args, **kwargs):
+
+        # basket = request.basket
+
+        # if not request.basket.pk:
+        #     basket.save()
+
+        # quote = Quote.objects.get(pk=kwargs['pk'])
+
+        # user = request.user
+        # # quantity = self.get_quantity()
+        # # choices = self.choices
+        # # width = self.DATA['width']
+        # # height = self.DATA['height']
+        # # attachments = []
+        # # if user.is_authenticated():
+        # #     for file in ArtworkItem.objects.filter(user=user):
+        # #         if file.available:
+        # #             attachments.append(file)
+
+        # basket.add_product(
+        #     product=self.get_product(),
+        #     quantity=quantity,
+        #     choices=choices,
+        #     height=height,
+        #     width=width,
+        #     attachments=attachments)
+
+        # self.add_signal.send(sender=self, product=self.product, user=user)
+
+        return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))
+
+
 class QuoteEmailPreviewView(View):
     def get(self, request, *args, **kwargs):
         quote, is_new = Quote.get_or_create(request.user.id)
