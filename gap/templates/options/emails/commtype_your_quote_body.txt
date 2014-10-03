@@ -11,7 +11,7 @@ Below is an email copy of your quote.
 
 	Quote expiry date: {{ quote.date_expired }}
 
-	Total Cost: £{{ total_cost }}
+	Total Cost: £{{ quote.total_price }}
 
 	VAT and delivery not included.
 

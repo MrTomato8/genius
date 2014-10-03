@@ -239,53 +239,71 @@
         {% else %}
             <form action="." method="post" id="saved_quotes_form">
             {% csrf_token %}
-                <table class="table table-stiped table-bordered">
-                    <tr>
+                <table class="table table-stiped" id="saved_quotes">
+                    <tr class="quote-header">
                         <th>{% trans "Reference Number" %}</th>
                         <th>{% trans "Description" %}</th>
-                        <th>{% trans "Total cost (without delivery)" %}</th>
-                        <th>{% trans "Date created" %}</th>
-                        <th>{% trans "Expiry date" %}</th>
+                        <th>{% trans "Total cost<br/>(without delivery)" %}</th>
+                        <th class="quote-column-narrow">{% trans "Date created" %}</th>
+                        <th class="quote-column-narrow">{% trans "Expiry date" %}</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
                     </tr>
 
                     {% for saved_quote in saved_quotes %}
-                    <tr>
-                        <td><a href="#">#454353454</a></td>
-                        <td>-</td>
-                        <td>{{ saved_quote.total_cost }}</td>
-                        <td>{{ saved_quote.date_added }}</td>
-                        <td>{{ saved_quote.date_expired }}</td>
-                        <td>
-                            <button class="btn btn-success" type='submit' name='cancel_alert' value='{{ saved_quote.id }}'>{% trans "Order now" %}</button>
+                    <tr class="quote-quote" id="{{ saved_quote.id }}_row">
+                        <td><a class="quote-ref-number" href="javascript:void(0);">#{{ saved_quote.reference_number }}</a></td>
+                        <td></td>
+                        <td class="quote-column-narrow">{{ saved_quote.total_price|floatformat:2 }}</td>
+                        <td class="quote-column-narrow">{{ saved_quote.date_added }}</td>
+                        <td class="quote-column-narrow">{{ saved_quote.date_expired }}</td>
+                        <td class="quote-column-email">
+                            <a data-id="{{ saved_quote.id }}" href="javascript:void(0);" class="quote-product-email"></a>
                         </td>
-                        <td>
-                            <button class="btn" type='submit' name='cancel_alert' value='{{ saved_quote.id }}'>{% trans "E-mail me" %}</button>
+                        <td class="quote-column-delete">
+                            <a href="/options/quote/{{ saved_quote.id }}/remove/" class="quote-product-delete"></a>
                         </td>
-                        <td>
-                            <button class="btn btn-danger" type='submit' name='cancel_alert' value='{{ saved_quote.id }}'>{% trans "Delete" %}</button>
+                        <td class="quote-column-order">
+                            <a class="btn btn-primary btn-wide" href="/options/quote/{{ saved_quote.id }}/order/">{% trans "Order now" %}</a>
+                        </td>
+                        <td class="quote-column-toggle">
+                            <a href="javascript:void(0);" class="quote-product-toggle quote-product-toggle-down"></a>
                         </td>
                     </tr>
 
-                    <tr>
-                        <td colspan="8">
-                            {% for quoteline in saved_quote.quoteline_set.all %}
-                                <strong>Product</strong>: {{ quoteline.product }}
-                                <br/>
-                                {% for option in quoteline.choices.all %}
-                                    {{ option }}
-                                    <br/>
-                                {% endfor %}
-                                <strong>Quantity</strong>: {{ quoteline.quantity }}
-                                <br/>
-                                <strong>Cost</strong>: {{ quoteline.price_incl_tax }}
-                                <br/><br/>
-                            {% endfor %}
-                            <br/>
-                        </td>
+                    <tr class="quote-product quote-product-header hidden" id="{{ saved_quote.id }}_header">
+                        <td colspan="2"><strong>Product</strong></td>
+                        <td colspan="5"><strong>Options</strong></td>
+                        <td><strong>Quantity</strong></td>
+                        <td><strong>Cost</strong></td>
                     </tr>
+
+                    {% for quoteline in saved_quote.quoteline_set.all %}
+                        {% if forloop.last %}
+                            <tr class="quote-product quote-product-line quote-product-last hidden {{ saved_quote.id }}_product">
+                        {% else %}
+                            <tr class="quote-product quote-product-line hidden {{ saved_quote.id }}_product">
+                        {% endif %}
+                                <td colspan="2">
+                                    {{ quoteline.product }}
+                                </td>
+                                <td colspan="5">
+                                    {% for option in quoteline.choices.all %}
+                                        {{ option }}
+                                        <br/>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {{ quoteline.quantity }}
+                                </td>
+                                <td>
+                                    {{ quoteline.price_incl_tax }}
+                                </td>
+                            </tr>
+                    {% endfor %}
+
                     {% endfor %}
 
                 </table>
@@ -297,10 +315,20 @@
     {% block extra_tabs %}
     {% endblock %}
 
+    <script type="text/javascript">
+      $(function() {
+        PPS.accounts.init();
+      });
+    </script>
 </div>
 <!--End of tab-content -->
 
 {% endblock content %}
+
+{% block extrascripts %}
+    {% include "customer/partials/extrascripts.html" %}
+    {{ block.super }}
+{% endblock %}
 
 {% block onbodyload %}
 oscar.account.init();
