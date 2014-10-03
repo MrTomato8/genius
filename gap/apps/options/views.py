@@ -643,35 +643,37 @@ class QuoteLoadView(OptionsSessionMixin, View):
 
 
 class QuoteOrderView(View):
+
     def get(self, request, *args, **kwargs):
 
-        # basket = request.basket
+        basket = request.basket
+        if not request.basket.pk:
+            basket.save()
 
-        # if not request.basket.pk:
-        #     basket.save()
+        try:
+            quote = Quote.objects.get(pk=kwargs['pk'])
+        except Quote.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Product not found in basket')
+        else:
+            for quoteline in quote.quoteline_set.all():
 
-        # quote = Quote.objects.get(pk=kwargs['pk'])
+                user = request.user
+                attachments = []
+                if user.is_authenticated():
+                    for file in ArtworkItem.objects.filter(user=user):
+                        if file.available:
+                            attachments.append(file)
 
-        # user = request.user
-        # # quantity = self.get_quantity()
-        # # choices = self.choices
-        # # width = self.DATA['width']
-        # # height = self.DATA['height']
-        # # attachments = []
-        # # if user.is_authenticated():
-        # #     for file in ArtworkItem.objects.filter(user=user):
-        # #         if file.available:
-        # #             attachments.append(file)
+                basket.add_product(
+                    product=quoteline.product,
+                    quantity=quoteline.quantity,
+                    choices=quoteline.choices.all(),
+                    height=quoteline.height,
+                    width=quoteline.width,
+                    attachments=attachments
+                )
 
-        # basket.add_product(
-        #     product=self.get_product(),
-        #     quantity=quantity,
-        #     choices=choices,
-        #     height=height,
-        #     width=width,
-        #     attachments=attachments)
-
-        # self.add_signal.send(sender=self, product=self.product, user=user)
+            quote.delete()
 
         return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))
 
