@@ -260,7 +260,7 @@
                         <td class="quote-column-narrow">{{ saved_quote.date_added }}</td>
                         <td class="quote-column-narrow">{{ saved_quote.date_expired }}</td>
                         <td class="quote-column-email">
-                            <a href="/" class="quote-product-email"></a>
+                            <a data-id="{{ saved_quote.id }}" href="javascript:void(0);" class="quote-product-email"></a>
                         </td>
                         <td class="quote-column-delete">
                             <a href="/options/quote/{{ saved_quote.id }}/delete/" class="quote-product-delete"></a>

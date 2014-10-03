@@ -11,5 +11,21 @@ PPS.accounts = {
             if (!confirm('Remove quote?'))
                 return false;
         });
+
+        $('.quote-product-email').on('click', function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/options/quote/send/',
+                dataType : 'json',
+                data: {'quote_id': $(this).attr('data-id')}
+            })
+            .done(function(response){
+                alert(response.message);
+            })
+            .fail(function(response){
+                $('#modal-login').modal('toggle');
+            });
+        });
     }
 };

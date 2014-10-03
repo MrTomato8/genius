@@ -468,7 +468,12 @@ class QuoteEmailView(View):
     def get(self, request, *args, **kwargs):
 
         data = {}
-        quote, is_new = Quote.get_or_create(request.user.id)
+        if 'quote_id' in request.GET:
+            quote = Quote.objects.get(id=request.GET['quote_id'])
+            is_new = False
+        else:
+            quote, is_new = Quote.get_or_create(request.user.id)
+
         if quote:
             c = Context({'quote': quote})
 
@@ -619,6 +624,18 @@ class QuoteBespokeView(View):
             return False
 
         return True
+
+
+class QuoteDeleteView(View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            quote = Quote.objects.get(pk=kwargs['pk'])
+            quote.delete()
+        except Quote.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Product not found in basket')
+
+        return HttpResponseRedirect(reverse('customer:summary'))
 
 
 class QuoteLoadView(OptionsSessionMixin, View):
