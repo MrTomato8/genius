@@ -84,7 +84,7 @@ class Line(AbstractLine):
 
         calculator = self.get_calculator()
         price = calculator.price_per_unit(self.basket.owner)
-        discount = calculator.get_discount()
+        #discount = calculator.get_discount()
         #self.discount(discount,self.quantity)
         #self.consume(self.quantity)
         self._unit_price_excl_tax=price
@@ -111,7 +111,7 @@ class Line(AbstractLine):
         """Return tax of a unit"""
         if not self._charge_tax:
             return Decimal('0.00')
-        return self.unit_price_excl_tax*self.get_taxes()
+        return Decimal(str(round(self.unit_price_excl_tax*self.get_taxes(),2)))
 
     @property
     def unit_price_incl_tax(self):
