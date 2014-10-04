@@ -20,4 +20,4 @@ def get_tax_percent():
     try:
         return settings.TAX
     except IndexError:
-        return Decimal('0.000')
+        return Decimal('0.00')

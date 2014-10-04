@@ -13,7 +13,7 @@ class DefaultWrapper(wrappers.DefaultWrapper):
         super(DefaultWrapper, self).__init__(**kwargs)
 
     def get_tax(self, price):
-        return (price * self.tax_percent).quantize(TWOPLACES, ROUND_UP)
+        return D(str(round(price * self.tax_percent),2))
 
     def calculate_tax(self, stockrecord):
         price_excl_tax = stockrecord.price_excl_tax
