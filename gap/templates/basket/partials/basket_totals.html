@@ -4,8 +4,8 @@
 <div id="basket_totals">
     <div class="row">
         <div class="col-md-6">
-            <h4 class="basket-small-header">{% trans "Basket" %}</h4>
-            <table class="table basket-table basket-table-remove-border">
+            <h4 class="table-small-header">{% trans "Basket" %}</h4>
+            <table class="table basket-table table-remove-border">
                 <tbody>
                 {% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}
                     {% if offer_discounts or voucher_discounts %}
@@ -72,11 +72,11 @@
             </table>
         </div>
         <div class="col-md-6">
-            <h4 class="basket-small-header">{% trans "Shipping" %}</h4>
+            <h4 class="table-small-header">{% trans "Shipping" %}</h4>
             {% if shipping_methods|length > 1 and editable %}
                 <small>{% trans "Alternative shipping methods can be chosen during checkout" %}</small>
             {% endif %}
-            <table class="table basket-table basket-table-remove-border">
+            <table class="table basket-table table-remove-border">
                 <tbody>
                 {% if not shipping_method.is_discounted %}
                     <tr>

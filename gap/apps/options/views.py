@@ -468,7 +468,12 @@ class QuoteEmailView(View):
     def get(self, request, *args, **kwargs):
 
         data = {}
-        quote, is_new = Quote.get_or_create(request.user.id)
+        if 'quote_id' in request.GET:
+            quote = Quote.objects.get(id=request.GET['quote_id'])
+            is_new = False
+        else:
+            quote, is_new = Quote.get_or_create(request.user.id)
+
         if quote:
             c = Context({'quote': quote})
 
@@ -621,5 +626,59 @@ class QuoteBespokeView(View):
         return True
 
 
+class QuoteRemoveView(View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            quote = Quote.objects.get(pk=kwargs['pk'])
+            quote.delete()
+        except Quote.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Product not found in basket')
+
+        return HttpResponseRedirect(reverse('customer:summary'))
+
+
 class QuoteLoadView(OptionsSessionMixin, View):
     pass
+
+
+class QuoteOrderView(View):
+    def get(self, request, *args, **kwargs):
+
+        # basket = request.basket
+
+        # if not request.basket.pk:
+        #     basket.save()
+
+        # quote = Quote.objects.get(pk=kwargs['pk'])
+
+        # user = request.user
+        # # quantity = self.get_quantity()
+        # # choices = self.choices
+        # # width = self.DATA['width']
+        # # height = self.DATA['height']
+        # # attachments = []
+        # # if user.is_authenticated():
+        # #     for file in ArtworkItem.objects.filter(user=user):
+        # #         if file.available:
+        # #             attachments.append(file)
+
+        # basket.add_product(
+        #     product=self.get_product(),
+        #     quantity=quantity,
+        #     choices=choices,
+        #     height=height,
+        #     width=width,
+        #     attachments=attachments)
+
+        # self.add_signal.send(sender=self, product=self.product, user=user)
+
+        return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))
+
+
+class QuoteEmailPreviewView(View):
+    def get(self, request, *args, **kwargs):
+        quote, is_new = Quote.get_or_create(request.user.id)
+        c = Context({'quote': quote})
+        t = get_template('quotes/quote_email.html')
+        return HttpResponse(t.render(c))

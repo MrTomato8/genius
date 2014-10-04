@@ -191,7 +191,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'# change in local settings for use or test emails
 # EMAIL_FILE_PATH = '/tmp/app-messages' # change this to a proper location
 
 HAYSTACK_CONNECTIONS = {
