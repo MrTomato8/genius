@@ -99,65 +99,64 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="collspan" colspan="6"></td>
-                    </tr>
                 {% endwith %}
             {% endfor %}
 
-            {% for line in basket.dead_lines %}
-                <tr class="table-row-deadline">
-                    <td>
-                        <a href="{{ line.product.get_absolute_url }}">{{ line.product.get_title }}</a>
-                        <ul>
-                            {% with  line.attributes.all as attributes %}
-                                {% for attribute in attributes %}
-                                    {% if attribute.option.name == 'items_per_pack' %}
-                                    {% else %}
-                                        <li>{{ attribute.option.name }}: {{ attribute.value }}</li>
-                                    {% endif %}
-                                {% endfor %}
+            {% if basket.dead_lines %}
+                <tr>
+                    <td class="collspan" colspan="6"></td>
+                </tr>
+
+                {% for line in basket.dead_lines %}
+                    <tr class="table-row-deadline">
+                        <td>
+                            <a href="{{ line.product.get_absolute_url }}">{{ line.product.get_title }}</a>
+                            <ul>
+                                {% with  line.attributes.all as attributes %}
+                                    {% for attribute in attributes %}
+                                        {% if attribute.option.name == 'items_per_pack' %}
+                                        {% else %}
+                                            <li>{{ attribute.option.name }}: {{ attribute.value }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                            </ul>
+                        </td>
+                        <td>{{ line.quantity }}</td>
+                        <td>{{ line.unit_price_excl_tax }}</td>
+                        <td>
+                            {% with line.unit_tax|multiply:line.quantity as vat %}
+                                {% if not vat or vat == 0 %}
+                                    n/d
+                                {% else %}
+                                    {{ vat|currency }}
+                                {% endif %}
                             {% endwith %}
-                        </ul>
-                    </td>
-                    <td>{{ line.quantity }}</td>
-                    <td>{{ line.unit_price_excl_tax }}</td>
-                    <td>
-                        {% with line.unit_tax|multiply:line.quantity as vat %}
-                            {% if not vat or vat == 0 %}
-                                n/d
-                            {% else %}
-                                {{ vat|currency }}
+                        </td>
+                        <td>{{ line.unit_price_incl_tax|multiply:line.quantity|currency }}</td>
+                        <td>
+                            {% if product.prices.count > 0 %}
+                                <div style="display: inline-block">
+                                    <a class="btn btn-link" href="{% url options:pick pk=product.pk product_slug=product.slug %}">
+                                        <i class="fa fa-copy fa-lg"></i>
+                                    </a>
+                                </div>
                             {% endif %}
-                        {% endwith %}
-                    </td>
-                    <td>{{ line.unit_price_incl_tax|multiply:line.quantity|currency }}</td>
-                    <td>
-                        {% if product.prices.count > 0 %}
                             <div style="display: inline-block">
-                                <a class="btn btn-link"
-                                   href="{% url options:pick pk=product.pk product_slug=product.slug %}"><i
-                                        class="fa fa-copy fa-lg"></i>
+                                <a class="btn btn-link js-remove-item" href="{% url basket:items-remove line.pk %}?next={{ request.get_full_path|urlencode }}">
+                                    <i class="fa fa-times-circle fa-lg"></i>
                                 </a>
                             </div>
-                        {% endif %}
-                        <div style="display: inline-block">
-                            <a class="btn btn-link js-remove-item"
-                               href="{% url basket:items-remove line.pk %}?next={{ request.get_full_path|urlencode }}">
-                                <i class="fa fa-times-circle fa-lg"></i>
-                            </a>
-                        </div>
 
-                        <div style="display: inline-block">
-                            <a href="{% url basket:items-toggle-live line.pk %}?next={{ request.get_full_path|urlencode }}"
-                               class="btn btn-link js-toggle-item-on">
-                                <i class="fa fa-minus-circle fa-rotate-90 fa-lg"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-
+                            <div style="display: inline-block">
+                                <a href="{% url basket:items-toggle-live line.pk %}?next={{ request.get_full_path|urlencode }}" class="btn btn-link js-toggle-item-on">
+                                    <i class="fa fa-minus-circle fa-rotate-90 fa-lg"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
             </tbody>
         </table>
     </div>
