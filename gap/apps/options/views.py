@@ -373,7 +373,7 @@ class QuoteView(QuantityView, TemplateView):
         ctx['valid']=calculator.check_quantity()
         ctx['price']=calculator.total_price(self.request.user)
         ctx['tax']=self.get_tax(ctx['price'])
-        ctx['total_price']=ctx['price']+ctx['tax']
+        ctx['total_price']=Decimal(str(round(ctx['price']+ctx['tax'],2)))
         ctx['unit_price']= calculator.price_per_unit(self.request.user)
         ctx['quantity']=self.get_quantity()
         return ctx

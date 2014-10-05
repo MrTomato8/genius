@@ -1,4 +1,4 @@
-from decimal import Decimal as D, ROUND_UP
+from decimal import Decimal as D
 from oscar.apps.partner import wrappers
 
 TWOPLACES = D(10) ** -2
@@ -13,7 +13,7 @@ class DefaultWrapper(wrappers.DefaultWrapper):
         super(DefaultWrapper, self).__init__(**kwargs)
 
     def get_tax(self, price):
-        return (price * self.tax_percent).quantize(TWOPLACES, ROUND_UP)
+        return (price * self.tax_percent).quantize(TWOPLACES)
 
     def calculate_tax(self, stockrecord):
         price_excl_tax = stockrecord.price_excl_tax
