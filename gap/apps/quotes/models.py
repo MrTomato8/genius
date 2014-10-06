@@ -78,6 +78,7 @@ class Quote(models.Model):
 
                 quoteline.choices.add(*option_choices)
 
+            quote.caption = cls.get_caption(lines)
             quote.total_price = total_price
             quote.save()
             is_new = True
@@ -96,14 +97,19 @@ class Quote(models.Model):
         return calc.total_price(User.objects.get(id=user_id))
 
     # TODO
-    def is_valid(self):
-        calc = OptionsCalculator(self.product)
-        prices = calc.calculate_costs(
-            list(self.choices.all()), self.quantity, json.loads(self.choice_data))
-        try:
-            prices.get_price_incl_tax(self.quantity, 1, self.user)
-        except PriceNotAvailable:
-            return False
+    # def is_valid(self):
+    #     calc = OptionsCalculator(self.product)
+    #     prices = calc.calculate_costs(
+    #         list(self.choices.all()), self.quantity, json.loads(self.choice_data))
+    #     try:
+    #         prices.get_price_incl_tax(self.quantity, 1, self.user)
+    #     except PriceNotAvailable:
+    #         return False
+
+    @classmethod
+    def get_caption(cls, lines):
+        caption = ''  # TODO
+        return caption
 
     @staticmethod
     def get_basket_lines(user_id):
@@ -111,13 +117,21 @@ class Quote(models.Model):
             basket = Basket.objects.get(owner_id=user_id)
         except Basket.DoesNotExist:
             return False
-        return basket.all_lines()  # TODO: with is_dead?
+        return basket.all_lines()
 
     @classmethod
     def quote_exists(cls, user_id, lines):
         """
             Check if the quote with the same basket line data
             is already saved.
+
+            This is necessary because when user uses
+            Print Quote, Save Quote,Email Quote buttons
+            he needs to operate on the same quote all the time.
+            Print Quote and Email Quote save quote internally
+            before printing or sending it.
+            If user sends quote first and then decides that he wants a PDF
+            - the same quote is retrieved to be rendered as a PDF file
         """
 
         if lines:

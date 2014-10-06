@@ -255,7 +255,7 @@
                     {% for saved_quote in saved_quotes %}
                     <tr class="quote-quote" id="{{ saved_quote.id }}_row">
                         <td><a class="quote-ref-number" href="javascript:void(0);">#{{ saved_quote.reference_number }}</a></td>
-                        <td></td>
+                        <td>{{ saved_quote.caption }}</td>
                         <td class="quote-column-narrow">{{ saved_quote.total_price|currency }}</td>
                         <td class="quote-column-narrow">{{ saved_quote.date_added }}</td>
                         <td class="quote-column-narrow">{{ saved_quote.date_expired }}</td>
