@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% load i18n %}
+{% load currency_filters %}
 
 {% block content %}
 
@@ -53,7 +54,7 @@
                         </ul>
                     </td>
                     <td>{{ quoteline.quantity }}</td>
-                    <td>{{ quoteline.price_incl_tax }}</td>
+                    <td>{{ quoteline.price|currency }}</td>
                 </tr>
             {% endfor %}
             </tbody>
