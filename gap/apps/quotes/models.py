@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db import transaction
 
-from apps.options.calc import OptionsCalculator
+from apps.options.calc import OptionsCalculator, PriceNotAvailable
 from apps.options.models import OptionChoice
 from apps.basket.models import Basket
 
@@ -34,9 +34,10 @@ class Quote(models.Model):
 
     @classmethod
     @transaction.commit_on_success
-    def get_or_create(cls, user_id):
+    def get_or_create_from_basket(cls, user_id):
         """
             Takes current basket content and saves all information as a quote
+            or returns existing saved quote with this content
         """
         lines = cls.get_basket_lines(user_id)
         quote_id = cls.quote_exists(user_id, lines)
@@ -62,10 +63,11 @@ class Quote(models.Model):
                     quote=quote,
                     product=line.product,
                     quantity=line.quantity,
-                    price_excl_tax=0,
-                    price_incl_tax=price,
-                    width=0,
-                    height=0,
+                    price_excl_tax=line.unit_price_excl_tax,
+                    price_incl_tax=line.unit_price_incl_tax,
+                    price=price,
+                    width=line.width,
+                    height=line.height,
                     is_dead=line.is_dead
                 )
                 quoteline.save(force_insert=True)
@@ -90,19 +92,18 @@ class Quote(models.Model):
             'width': line.width,
             'height': line.height
         }
-
         calc = OptionsCalculator(line.product, line.choices.all(), data)
-
         return calc.total_price(User.objects.get(id=user_id))
 
-    # def is_valid(self):
-    #     calc = OptionsCalculator(self.product)
-    #     prices = calc.calculate_costs(
-    #         list(self.choices.all()), self.quantity, json.loads(self.choice_data))
-    #     try:
-    #         prices.get_price_incl_tax(self.quantity, 1, self.user)
-    #     except PriceNotAvailable:
-    #         return False
+    # TODO
+    def is_valid(self):
+        calc = OptionsCalculator(self.product)
+        prices = calc.calculate_costs(
+            list(self.choices.all()), self.quantity, json.loads(self.choice_data))
+        try:
+            prices.get_price_incl_tax(self.quantity, 1, self.user)
+        except PriceNotAvailable:
+            return False
 
     @staticmethod
     def get_basket_lines(user_id):
@@ -172,6 +173,7 @@ class QuoteLine(models.Model):
 
     price_excl_tax = models.DecimalField(decimal_places=2, max_digits=12, null=True)
     price_incl_tax = models.DecimalField(decimal_places=2, max_digits=12, null=True)
+    price = models.DecimalField(decimal_places=2, max_digits=12, null=True)
 
     width = models.PositiveIntegerField(default=0)
     height = models.PositiveIntegerField(default=0)

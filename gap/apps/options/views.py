@@ -472,7 +472,7 @@ class QuoteEmailView(View):
             quote = Quote.objects.get(id=request.GET['quote_id'])
             is_new = False
         else:
-            quote, is_new = Quote.get_or_create(request.user.id)
+            quote, is_new = Quote.get_or_create_from_basket(request.user.id)
 
         if quote:
             c = Context({'quote': quote})
@@ -509,7 +509,7 @@ class QuoteSaveView(View):
     def get(self, request, *args, **kwargs):
         data = {}
 
-        quote, is_new = Quote.get_or_create(request.user.id)
+        quote, is_new = Quote.get_or_create_from_basket(request.user.id)
 
         if quote:
             if is_new:
@@ -529,7 +529,7 @@ class QuotePrintView(View):
 
     def get(self, request, *args, **kwargs):
 
-        quote, is_new = Quote.get_or_create(request.user.id)
+        quote, is_new = Quote.get_or_create_from_basket(request.user.id)
         if quote:
             return self.render_to_pdf('quotes/quote_pdf.html', {
                 'pagesize': 'A4',
@@ -684,7 +684,7 @@ class QuoteOrderView(View):
 
 class QuoteEmailPreviewView(View):
     def get(self, request, *args, **kwargs):
-        quote, is_new = Quote.get_or_create(request.user.id)
+        quote, is_new = Quote.get_or_create_from_basket(request.user.id)
         c = Context({'quote': quote})
         t = get_template('quotes/quote_email.html')
         return HttpResponse(t.render(c))
