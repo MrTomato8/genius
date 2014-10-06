@@ -256,7 +256,7 @@
                     <tr class="quote-quote" id="{{ saved_quote.id }}_row">
                         <td><a class="quote-ref-number" href="javascript:void(0);">#{{ saved_quote.reference_number }}</a></td>
                         <td></td>
-                        <td class="quote-column-narrow">{{ saved_quote.total_price|floatformat:2 }}</td>
+                        <td class="quote-column-narrow">{{ saved_quote.total_price|currency }}</td>
                         <td class="quote-column-narrow">{{ saved_quote.date_added }}</td>
                         <td class="quote-column-narrow">{{ saved_quote.date_expired }}</td>
                         <td class="quote-column-email">
@@ -299,7 +299,7 @@
                                     {{ quoteline.quantity }}
                                 </td>
                                 <td>
-                                    {{ quoteline.price_incl_tax }}
+                                    {{ quoteline.price|currency }}
                                 </td>
                             </tr>
                     {% endfor %}

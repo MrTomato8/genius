@@ -472,7 +472,7 @@ class QuoteEmailView(View):
             quote = Quote.objects.get(id=request.GET['quote_id'])
             is_new = False
         else:
-            quote, is_new = Quote.get_or_create(request.user.id)
+            quote, is_new = Quote.get_or_create_from_basket(request.user.id)
 
         if quote:
             c = Context({'quote': quote})
@@ -509,7 +509,7 @@ class QuoteSaveView(View):
     def get(self, request, *args, **kwargs):
         data = {}
 
-        quote, is_new = Quote.get_or_create(request.user.id)
+        quote, is_new = Quote.get_or_create_from_basket(request.user.id)
 
         if quote:
             if is_new:
@@ -529,7 +529,7 @@ class QuotePrintView(View):
 
     def get(self, request, *args, **kwargs):
 
-        quote, is_new = Quote.get_or_create(request.user.id)
+        quote, is_new = Quote.get_or_create_from_basket(request.user.id)
         if quote:
             return self.render_to_pdf('quotes/quote_pdf.html', {
                 'pagesize': 'A4',
@@ -643,42 +643,48 @@ class QuoteLoadView(OptionsSessionMixin, View):
 
 
 class QuoteOrderView(View):
+
+    add_signal = basket_addition
+
     def get(self, request, *args, **kwargs):
 
-        # basket = request.basket
+        basket = request.basket
+        if not request.basket.pk:
+            basket.save()
 
-        # if not request.basket.pk:
-        #     basket.save()
+        try:
+            quote = Quote.objects.get(pk=kwargs['pk'])
+        except Quote.DoesNotExist:
+            messages.add_message(request, messages.ERROR, 'Product not found in basket')
+        else:
+            for quoteline in quote.quoteline_set.all():
 
-        # quote = Quote.objects.get(pk=kwargs['pk'])
+                user = request.user
+                attachments = []
+                if user.is_authenticated():
+                    for file in ArtworkItem.objects.filter(user=user):
+                        if file.available:
+                            attachments.append(file)
 
-        # user = request.user
-        # # quantity = self.get_quantity()
-        # # choices = self.choices
-        # # width = self.DATA['width']
-        # # height = self.DATA['height']
-        # # attachments = []
-        # # if user.is_authenticated():
-        # #     for file in ArtworkItem.objects.filter(user=user):
-        # #         if file.available:
-        # #             attachments.append(file)
+                basket.add_product(
+                    product=quoteline.product,
+                    quantity=quoteline.quantity,
+                    choices=quoteline.choices.all(),
+                    height=quoteline.height,
+                    width=quoteline.width,
+                    attachments=attachments
+                )
 
-        # basket.add_product(
-        #     product=self.get_product(),
-        #     quantity=quantity,
-        #     choices=choices,
-        #     height=height,
-        #     width=width,
-        #     attachments=attachments)
+                self.add_signal.send(sender=self, product=quoteline.product, user=user)
 
-        # self.add_signal.send(sender=self, product=self.product, user=user)
+            quote.delete()
 
         return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))
 
 
 class QuoteEmailPreviewView(View):
     def get(self, request, *args, **kwargs):
-        quote, is_new = Quote.get_or_create(request.user.id)
+        quote, is_new = Quote.get_or_create_from_basket(request.user.id)
         c = Context({'quote': quote})
         t = get_template('quotes/quote_email.html')
         return HttpResponse(t.render(c))

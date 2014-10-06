@@ -1,5 +1,6 @@
 {% load i18n %}
 {% autoescape off %}
+{% load currency_filters %}
 {% blocktrans with name=site.name %}
 Email Quote
 
@@ -28,7 +29,8 @@ Below is an email copy of your quote.
 		{% endfor %}
 		Quantity: {{ quoteline.quantity }}
 
-		Cost: {{ quoteline.price_incl_tax }}
+		Cost: {{ quoteline.price|currency }}
+
 
 	{% endfor %}
 
