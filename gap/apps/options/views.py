@@ -263,6 +263,12 @@ class QuantityCalcMixin(OptionPickerMixin):
 
     def get_discounts(self):
         self.get_price()
+        if self.get_calculator().custom:
+            prices= self.price.discounts.all()
+            for price in prices:
+                price.pk=None
+                price.quantity=price.quantity*10
+            return prices
         return self.price.discounts.all()
 
 class LineMixin(QuantityCalcMixin):
