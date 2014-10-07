@@ -479,7 +479,7 @@ class QuoteEmailView(View):
             quote = Quote.objects.get(id=request.GET['quote_id'])
             is_new = False
         else:
-            quote, is_new = Quote.get_or_create_from_basket(request.user.id)
+            quote, is_new = Quote.get_or_create_from_basket(request.user, request.basket)
 
         if quote:
             c = Context({'quote': quote})
@@ -516,7 +516,7 @@ class QuoteSaveView(View):
     def get(self, request, *args, **kwargs):
         data = {}
 
-        quote, is_new = Quote.get_or_create_from_basket(request.user.id)
+        quote, is_new = Quote.get_or_create_from_basket(request.user, request.basket)
 
         if quote:
             if is_new:
@@ -536,7 +536,7 @@ class QuotePrintView(View):
 
     def get(self, request, *args, **kwargs):
 
-        quote, is_new = Quote.get_or_create_from_basket(request.user.id)
+        quote, is_new = Quote.get_or_create_from_basket(request.user, request.basket)
         if quote:
             return self.render_to_pdf('quotes/quote_pdf.html', {
                 'pagesize': 'A4',
@@ -679,19 +679,21 @@ class QuoteOrderView(View):
                     choices=quoteline.choices.all(),
                     height=quoteline.height,
                     width=quoteline.width,
-                    attachments=attachments
+                    attachments=attachments,
+                    price_excl_tax=quoteline.price_excl_tax,
+                    price_incl_tax=quoteline.price_incl_tax
                 )
 
                 self.add_signal.send(sender=self, product=quoteline.product, user=user)
 
-            quote.delete()
+            # quote.delete()
 
         return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))
 
 
 class QuoteEmailPreviewView(View):
     def get(self, request, *args, **kwargs):
-        quote, is_new = Quote.get_or_create_from_basket(request.user.id)
+        quote, is_new = Quote.get_or_create_from_basket(request.user, request.basket)
         c = Context({'quote': quote})
         t = get_template('quotes/quote_email.html')
         return HttpResponse(t.render(c))

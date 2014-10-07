@@ -1,25 +1,26 @@
-from django.db import models
+import simplejson as json
+from decimal import Decimal
+import cPickle as pickle
+import hashlib
 
+from django.db import models
+from django.conf import settings
+from django.utils.translation import ugettext as _
+
+from oscar.templatetags.currency_filters import currency
 from oscar.apps.basket.abstract_models import (
     AbstractBasket, AbstractLine, AbstractLineAttribute)
 
 from apps.options.models import OptionChoice, ArtworkItem
 from apps.options.calc import OptionsCalculator, PriceNotAvailable
-import simplejson as json
-from decimal import Decimal
-from oscar.templatetags.currency_filters import currency
-from django.utils.translation import ugettext as _
 from apps.options import utils
-from django.conf import settings
 from apps.globals.models import get_tax_percent
 from apps.partner.wrappers import DefaultWrapper
-import uuid
-from django.conf import settings
 from apps.basket.exceptions import ItemsRequiredException
 from .managers import LineManager
 
-
 Option = models.get_model('catalogue', 'Option')
+
 
 class Line(AbstractLine):
     objects = LineManager()
@@ -140,7 +141,7 @@ class LineAttachment(models.Model):
 class Basket(AbstractBasket):
     def add_product(
             self, product, quantity=1, choices=None,
-        width=0, height=0, attachments = None):
+        width=0, height=0, attachments = None, price_incl_tax = None, price_excl_tax = None):
 
         if attachments is None: attachments= []
         if choices is None:options = []
@@ -151,9 +152,7 @@ class Basket(AbstractBasket):
 
         # Determine price to store (if one exists).  It is only stored for
         # audit and sometimes caching.
-        price_excl_tax, price_incl_tax = None, None
-
-
+        # price_excl_tax, price_incl_tax = None, None
 
         line, created = self.lines.get_or_create(
             line_reference=line_ref,
@@ -169,8 +168,8 @@ class Basket(AbstractBasket):
             line.quantity += quantity
             line.save()
 
-        line.price_excl_tax = line.unit_price_excl_tax
-        line.price_incl_tax = line.unit_price_incl_tax
+        # line.price_excl_tax = line.unit_price_excl_tax
+        # line.price_incl_tax = line.unit_price_incl_tax
         line.save()
         self.reset_offer_applications()
 
@@ -210,5 +209,17 @@ class Basket(AbstractBasket):
             return getattr(self, 'apply_total_tax')
         else:
             return super(Basket, self)._get_total(property)
+
+    def get_hash(self):
+        if self.num_lines == 0:
+            return False
+
+        lines = Line.objects.filter(basket_id=self.id, is_dead=0).prefetch_related('choices')
+
+        dump = pickle.dumps(lines)
+        h = hashlib.md5()
+        h.update(dump)
+        return h.hexdigest()
+
 
 from oscar.apps.basket.models import *
