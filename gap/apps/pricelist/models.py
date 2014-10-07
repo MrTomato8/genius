@@ -138,7 +138,7 @@ class Price(models.Model):
         return self.option_choices.all()
 
 class Discount(models.Model):
-    quantity=models.IntegerField()
+    quantity=models.DecimalField(max_digits=6, decimal_places=2)
     discount=models.DecimalField(max_digits=4, decimal_places=2)
     price = models.ForeignKey(Price, related_name="discounts",db_index=True)
     class Meta:

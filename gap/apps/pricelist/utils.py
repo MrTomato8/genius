@@ -243,7 +243,10 @@ def import_csv(csvfile, create_options=True, create_choices=True, chirurgical=Tr
                     except:
                         discount = Decimal(0)
                     quantity=Decimal(quantity)*items_per_pack
-                    Discount.objects.create(price=price,discount=discount,quantity =quantity )
+                    d=Discount.objects.create(price=price,discount=discount,quantity=quantity)
+                    if data['min_area'] or data['min_length']:
+                        d.quantity=quantity
+                        d.save()
                 except:
                     pass
 

@@ -267,7 +267,7 @@ class QuantityCalcMixin(OptionPickerMixin):
             prices= self.price.discounts.all()
             for price in prices:
                 price.pk=None
-                price.quantity=price.quantity*10
+                price.quantity=int(price.quantity*10)
             return prices
         return self.price.discounts.all()
 
