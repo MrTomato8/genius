@@ -21,6 +21,6 @@ class DefaultWrapper(wrappers.DefaultWrapper):
 
     def get_total_price_incl_tax(self, price_excl_tax):
         tax = self.get_tax(price_excl_tax)
-        price_excl_tax = price_excl_tax + tax
-        return price_excl_tax
+        price_incl_tax = price_excl_tax + tax
+        return price_incl_tax
 
