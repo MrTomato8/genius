@@ -176,10 +176,4 @@ class QuoteLine(models.Model):
     is_dead = models.BooleanField(blank=True, default=False)
 
 
-class QuoteLineAttachment(models.Model):
-    pass
-
-
-class QuoteLineAttribute(models.Model):
-    pass
 
