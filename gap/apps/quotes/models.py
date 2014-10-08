@@ -7,8 +7,10 @@ from django.core.validators import MinValueValidator
 from django.db import transaction
 
 from apps.options.calc import OptionsCalculator, PriceNotAvailable
-from apps.options.models import OptionChoice
+from apps.options.models import OptionChoice, ArtworkItem
 from apps.basket.models import Basket
+from apps.globals.models import get_tax_percent
+from apps.partner.wrappers import DefaultWrapper
 
 Product = models.get_model('catalogue', 'Product')
 
@@ -22,6 +24,7 @@ class Quote(models.Model):
                                     validators=[MinValueValidator(0)],
                                     verbose_name='Total quote price',
                                     default=0)
+    hash_code = models.CharField(max_length=35, default='', blank=False)
     date_added = models.DateTimeField(auto_now_add=True)
     date_expired = models.DateTimeField(default=datetime.datetime.now()
                                         + datetime.timedelta(days=30))
@@ -30,17 +33,19 @@ class Quote(models.Model):
         return '{0} by {1}'.format(self.caption, self.user)
 
     class Meta:
+        unique_together = ('user', 'hash_code')
         ordering = ['-date_added']
 
     @classmethod
     @transaction.commit_on_success
-    def get_or_create_from_basket(cls, user_id):
+    def get_or_create_from_basket(cls, user, basket):
         """
             Takes current basket content and saves all information as a quote
             or returns existing saved quote with this content
         """
-        lines = cls.get_basket_lines(user_id)
-        quote_id = cls.quote_exists(user_id, lines)
+        lines = basket.all_lines()
+        basket_hash = basket.get_hash()
+        quote_id = cls.quote_exists(user.id, basket_hash)
 
         if quote_id:
             is_new = False
@@ -50,13 +55,13 @@ class Quote(models.Model):
                 quote = False
         else:
             quote = cls()
-            quote.user_id = user_id
+            quote.user_id = user.id
             quote.save()
 
             total_price = 0
             for line in lines:
 
-                price = cls.get_price(line, user_id)
+                price = cls.get_price(line, user.id)
                 total_price += price
 
                 quoteline = QuoteLine(
@@ -65,7 +70,7 @@ class Quote(models.Model):
                     quantity=line.quantity,
                     price_excl_tax=line.unit_price_excl_tax,
                     price_incl_tax=line.unit_price_incl_tax,
-                    price=price,
+                    price=cls.get_price_incl_tax(price),
                     width=line.width,
                     height=line.height,
                     is_dead=line.is_dead
@@ -78,7 +83,9 @@ class Quote(models.Model):
 
                 quoteline.choices.add(*option_choices)
 
-            quote.total_price = total_price
+            quote.hash_code = basket_hash
+            quote.caption = cls.get_caption(lines)
+            quote.total_price = cls.get_price_incl_tax(total_price)
             quote.save()
             is_new = True
 
@@ -95,59 +102,47 @@ class Quote(models.Model):
         calc = OptionsCalculator(line.product, line.choices.all(), data)
         return calc.total_price(User.objects.get(id=user_id))
 
-    # TODO
-    def is_valid(self):
-        calc = OptionsCalculator(self.product)
-        prices = calc.calculate_costs(
-            list(self.choices.all()), self.quantity, json.loads(self.choice_data))
-        try:
-            prices.get_price_incl_tax(self.quantity, 1, self.user)
-        except PriceNotAvailable:
-            return False
-
     @staticmethod
-    def get_basket_lines(user_id):
-        try:
-            basket = Basket.objects.get(owner_id=user_id)
-        except Basket.DoesNotExist:
-            return False
-        return basket.all_lines()  # TODO: with is_dead?
+    def get_price_incl_tax(price):
+        wr = DefaultWrapper(get_tax_percent())
+        return wr.get_total_price_incl_tax(price)
+
+    # TODO
+    # def is_valid(self):
+    #     calc = OptionsCalculator(self.product)
+    #     prices = calc.calculate_costs(
+    #         list(self.choices.all()), self.quantity, json.loads(self.choice_data))
+    #     try:
+    #         prices.get_price_incl_tax(self.quantity, 1, self.user)
+    #     except PriceNotAvailable:
+    #         return False
 
     @classmethod
-    def quote_exists(cls, user_id, lines):
+    def get_caption(cls, lines):
+        caption = ''  # TODO
+        return caption
+
+    @classmethod
+    def quote_exists(cls, user_id, basket_hash):
         """
             Check if the quote with the same basket line data
             is already saved.
+
+            This is necessary because when user uses
+            'Print Quote', 'Save Quote', 'Email Quote' buttons
+            he needs to operate on the same quote all the time.
+            'Print Quote' and 'Email Quote' save quote internally
+            before printing or sending it.
+            If user sends quote first and then decides that he wants a PDF
+            - the same quote is retrieved to be rendered as a PDF file
         """
-
-        if lines:
-
-            line_choices = []
-            for line in lines:
-                line_choices.append(dict(
-                    (choice.option.id, choice.id) for choice in line.choices.all()))
-
-            existing_quote_id = False
-
-            for quote in Quote.objects.filter(user_id=user_id):
-
-                if len(lines) != quote.quoteline_set.count():
-                    continue
-                else:
-                    quote_choices = []
-                    for quoteline in quote.quoteline_set.all():
-                        quote_choices.append(dict(
-                            (choice.option.id, choice.id) for choice in quoteline.choices.all()))
-
-                    for line_choice in line_choices:
-                        if not line_choice in quote_choices:
-                            break
-                        existing_quote_id = quote.id
-
-                    if existing_quote_id:
-                        break
-
-            return existing_quote_id
+        if basket_hash:
+            try:
+                quote = Quote.objects.get(hash_code=basket_hash, user_id=user_id)
+            except Quote.DoesNotExist:
+                pass
+            else:
+                return quote.id
 
         return False
 
@@ -179,3 +174,6 @@ class QuoteLine(models.Model):
     height = models.PositiveIntegerField(default=0)
 
     is_dead = models.BooleanField(blank=True, default=False)
+
+
+

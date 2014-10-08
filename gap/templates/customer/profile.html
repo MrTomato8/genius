@@ -255,7 +255,7 @@
                     {% for saved_quote in saved_quotes %}
                     <tr class="quote-quote" id="{{ saved_quote.id }}_row">
                         <td><a class="quote-ref-number" href="javascript:void(0);">#{{ saved_quote.reference_number }}</a></td>
-                        <td></td>
+                        <td>{{ saved_quote.caption }}</td>
                         <td class="quote-column-narrow">{{ saved_quote.total_price|currency }}</td>
                         <td class="quote-column-narrow">{{ saved_quote.date_added }}</td>
                         <td class="quote-column-narrow">{{ saved_quote.date_expired }}</td>
@@ -274,10 +274,10 @@
                     </tr>
 
                     <tr class="quote-product quote-product-header hidden" id="{{ saved_quote.id }}_header">
-                        <td colspan="2"><strong>Product</strong></td>
-                        <td colspan="5"><strong>Options</strong></td>
-                        <td><strong>Quantity</strong></td>
-                        <td><strong>Cost</strong></td>
+                        <td><strong>Product</strong></td>
+                        <td colspan="4"><strong>Options</strong></td>
+                        <td colspan="2"><strong>Quantity</strong></td>
+                        <td colspan="2"><strong>Cost</strong></td>
                     </tr>
 
                     {% for quoteline in saved_quote.quoteline_set.all %}
@@ -286,19 +286,19 @@
                         {% else %}
                             <tr class="quote-product quote-product-line hidden {{ saved_quote.id }}_product">
                         {% endif %}
-                                <td colspan="2">
+                                <td>
                                     {{ quoteline.product }}
                                 </td>
-                                <td colspan="5">
+                                <td colspan="4">
                                     {% for option in quoteline.choices.all %}
                                         {{ option }}
                                         <br/>
                                     {% endfor %}
                                 </td>
-                                <td>
+                                <td colspan="2">
                                     {{ quoteline.quantity }}
                                 </td>
-                                <td>
+                                <td colspan="2">
                                     {{ quoteline.price|currency }}
                                 </td>
                             </tr>
