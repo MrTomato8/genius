@@ -686,7 +686,7 @@ class QuoteOrderView(View):
 
                 self.add_signal.send(sender=self, product=quoteline.product, user=user)
 
-            # quote.delete()
+            quote.delete()
 
         return HttpResponseRedirect(request.REQUEST.get('next', reverse('basket:summary')))
 
