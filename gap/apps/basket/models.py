@@ -1,22 +1,19 @@
-import simplejson as json
 from decimal import Decimal
 import cPickle as pickle
 import hashlib
+import zlib
 
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext as _
 
-from oscar.templatetags.currency_filters import currency
 from oscar.apps.basket.abstract_models import (
     AbstractBasket, AbstractLine, AbstractLineAttribute)
 
 from apps.options.models import OptionChoice, ArtworkItem
-from apps.options.calc import OptionsCalculator, PriceNotAvailable
-from apps.options import utils
+from apps.options.calc import OptionsCalculator
 from apps.globals.models import get_tax_percent
 from apps.partner.wrappers import DefaultWrapper
-from apps.basket.exceptions import ItemsRequiredException
 from .managers import LineManager
 
 Option = models.get_model('catalogue', 'Option')
@@ -26,14 +23,16 @@ class Line(AbstractLine):
     objects = LineManager()
 
     #width and height for custom size, in mm
-    width=models.PositiveIntegerField(default=0)
-    height=models.PositiveIntegerField(default=0)
+    width = models.PositiveIntegerField(default=0)
+    height = models.PositiveIntegerField(default=0)
 
     #choices store all the data in price
     choices = models.ManyToManyField(OptionChoice, related_name='lines+')
 
     #By Vlad usefull to do something with quotebuilder
     is_dead = models.BooleanField(blank=True, default=False)
+
+    custom_price = models.BooleanField(blank=True, default=False)
 
     calculator_data = {}
     calculator = None
@@ -56,16 +55,17 @@ class Line(AbstractLine):
         return data
 
     def get_calculator(self):
-        if self.calculator: return self.calculator
-        calculator=OptionsCalculator(
+        if self.calculator:
+            return self.calculator
+        calculator = OptionsCalculator(
             self.product,
             self.get_option_choices(),
             self.get_data())
-        self.calculator= calculator
+        self.calculator = calculator
         return calculator
 
     def _get_unit_price_from_pricelist(self):
-       return self.unit_price_excl_tax()
+        return self.unit_price_excl_tax()
 
     def get_warning(self):
         return
@@ -77,47 +77,51 @@ class Line(AbstractLine):
 
     def get_taxes(self):
         return settings.TAX
-    _unit_price_excl_tax=None
+
+    _unit_price_excl_tax = None
 
     @property
     def unit_price_excl_tax(self):
-        if self._unit_price_excl_tax: return self._unit_price_excl_tax
+        if self._unit_price_excl_tax:
+            return self._unit_price_excl_tax
 
-        calculator = self.get_calculator()
-        price = calculator.price_per_unit(self.basket.owner)
-        #discount = calculator.get_discount()
-        #self.discount(discount,self.quantity)
-        #self.consume(self.quantity)
-        self._unit_price_excl_tax=price
+        if self.custom_price:
+            price = self.price_excl_tax
+        else:
+            calculator = self.get_calculator()
+            price = calculator.price_per_unit(self.basket.owner)
+            #discount = calculator.get_discount()
+            #self.discount(discount,self.quantity)
+            #self.consume(self.quantity)
+
+        self._unit_price_excl_tax = price
         return price
-
-
-    def get_muliline_price_excl_tax(self):
-        calc=self.get_calculator()
-        return calc.multifile_price()
-
-    def get_muliline_price_tax(self):
-        return self.get_muliline_price_excl_tax()*self.get_taxes()
-
-    def get_muliline_price_incl_tax(self):
-        return self.get_muliline_price_excl_tax()+self.get_muliline_price_tax()
-
-    @property
-    def line_tax(self):
-        """Return line tax"""
-        return self.quantity * self.unit_tax + self.get_muliline_price_tax()
 
     @property
     def unit_tax(self):
         """Return tax of a unit"""
         if not self._charge_tax:
             return Decimal('0.00')
-        return Decimal(str(round(self.unit_price_excl_tax*self.get_taxes(),2)))
+        return Decimal(str(round(self.unit_price_excl_tax * self.get_taxes(),2)))
 
     @property
     def unit_price_incl_tax(self):
-         return self.unit_price_excl_tax+self.unit_tax
+        return self.unit_price_excl_tax + self.unit_tax
 
+    @property
+    def line_tax(self):
+        """Return line tax"""
+        return self.quantity * self.unit_tax + self.get_multiline_price_tax()
+
+    def get_multiline_price_excl_tax(self):
+        calc = self.get_calculator()
+        return calc.multifile_price()
+
+    def get_multiline_price_tax(self):
+        return self.get_multiline_price_excl_tax() * self.get_taxes()
+
+    def get_multiline_price_incl_tax(self):
+        return self.get_multiline_price_excl_tax() + self.get_multiline_price_tax()
 
 
 class LineAttribute(AbstractLineAttribute):
@@ -139,20 +143,25 @@ class LineAttachment(models.Model):
 
 
 class Basket(AbstractBasket):
-    def add_product(
-            self, product, quantity=1, choices=None,
-        width=0, height=0, attachments = None, price_incl_tax = None, price_excl_tax = None):
 
-        if attachments is None: attachments= []
-        if choices is None:options = []
+    def add_product(self, product, quantity=1, choices=None, width=0, height=0,
+                attachments = None, price_incl_tax = None, price_excl_tax = None):
+
+        if attachments is None:
+            attachments = []
+        if choices is None:
+            choices = []
 
         # Line reference is used to distinguish between variations of the same
         # product (eg T-shirts with different personalisations)
-        line_ref = self._create_line_reference(product, choices)
+        line_ref = self._create_line_reference(product, choices, price_excl_tax)
 
-        # Determine price to store (if one exists).  It is only stored for
+        # Determine price to store (if one exists). It is stored for
         # audit and sometimes caching.
-        # price_excl_tax, price_incl_tax = None, None
+
+        # This price is also used as a base price for all calculations
+        # when saved quote products are added to the basket
+        # (custom_price flag should be True in this case)
 
         line, created = self.lines.get_or_create(
             line_reference=line_ref,
@@ -160,19 +169,21 @@ class Basket(AbstractBasket):
             defaults={
                 'quantity': quantity,
                 'price_excl_tax': price_excl_tax,
-                'price_incl_tax': price_incl_tax})
+                'price_incl_tax': price_incl_tax
+            },
+            custom_price=(price_excl_tax is not None)
+        )
         for option in choices:
-                line.choices.add(option)
+            line.choices.add(option)
 
         if not created:
             line.quantity += quantity
             line.save()
 
-        # line.price_excl_tax = line.unit_price_excl_tax
-        # line.price_incl_tax = line.unit_price_incl_tax
+        line.price_excl_tax = line.unit_price_excl_tax
+        line.price_incl_tax = line.unit_price_incl_tax
         line.save()
         self.reset_offer_applications()
-
 
     def all_lines(self):
         return super(Basket, self).all_lines().exclude(is_dead=True)
@@ -220,6 +231,16 @@ class Basket(AbstractBasket):
         h = hashlib.md5()
         h.update(dump)
         return h.hexdigest()
+
+    def _create_line_reference(self, item, options, price_excl_tax=None):
+        """
+        Returns a reference string for a line based on the item,
+        its options and custom price it its used.
+        """
+        if price_excl_tax is not None:
+            return "%d_%s" % (item.id, zlib.crc32(str(options) + str(price_excl_tax)))
+        else:
+            return super(Basket, self)._create_line_reference(item, options)
 
 
 from oscar.apps.basket.models import *
