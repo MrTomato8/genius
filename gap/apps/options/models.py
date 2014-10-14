@@ -81,6 +81,7 @@ class OptionPicker(models.Model):
         'Position', default=0, db_index=True)
     widget = models.CharField('Widget', max_length=10, choices=WIDGET_CHOICES,
                               default=THUMBNAIL)
+    description = models.TextField('Description', null=True, blank=True)
 
     def __unicode__(self):
         return '{0}. {1} as {2} in {3}'.format(

@@ -23,6 +23,28 @@ var oscar = (function(o, $) {
         init: function() {
             // Run initialisation that should take place on every page of the dashboard.
 
+            var defaults = {
+                'tinyConfig': {
+                    // General options
+                    mode : "textareas",
+
+                    skin : "o2k7",
+                    skin_variant : "black",
+                    plugins : "autolink,lists,pagebreak,style,directionality",
+
+                    // Theme options
+                    theme : "advanced",
+                    theme_advanced_buttons1 : "formatselect,|,bold,italic,strikethrough,|,numlist,bullist,outdent,indent,|,code,|,link,unlink,|,image",
+                    theme_advanced_toolbar_location : "top",
+                    theme_advanced_toolbar_align : "left",
+                    theme_advanced_statusbar_location : "none",
+
+                    // Example content CSS (should be your site CSS)
+                    content_css : "/static/local/css/content.css",
+                }
+            };
+            o.dashboard.options = $.extend(true, defaults, options);
+
             // Use datepicker for all inputs that have 'date' or 'datetime' in the name
             if ($.datepicker) {
                 o.dashboard.datepickerOptions.dateFormat = o.dashboard.dateFormat;
@@ -37,7 +59,8 @@ var oscar = (function(o, $) {
             var options = {
                 "html": true
             };
-            $('form.wysiwyg textarea, textarea.wysiwyg').wysihtml5(options);
+
+            tinyMCE.init(o.dashboard.options.tinyConfig);
 
             $('.scroll-pane').jScrollPane();
 
@@ -51,13 +74,13 @@ var oscar = (function(o, $) {
                 }
                 return false;
             });
-            
+
             //Adds error icon if there are errors in the product update form
             $('[data-behaviour="affix-nav-errors"] .tab-pane').each(function(){
               var productErrorListener = $(this).find('[class*="error"]').closest('.tab-pane').attr('id');
               $('[data-spy="affix"] a[href="#' + productErrorListener + '"]').append('<i class="icon-info-sign pull-right"></i>');
             });
-            
+
             //Adds type/search for select fields
             $('.form-stacked select').css('width', '95%');
             $('.form-inline select').css('width', '300px');

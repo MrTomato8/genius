@@ -164,6 +164,7 @@ INSTALLED_APPS = [
     'apps.globals',
     'apps.adminx',
     'django_markdown',
+    'apps.flatpages',
 #    'django_extensions',
 #    'debug_toolbar',
 ]
@@ -337,6 +338,10 @@ TRADE_GROUP_NAME = 'Trade'
 MAX_SAVED_QUOTES = 15
 OPTION_ITEMSPERPACK = 'items_per_pack'
 MULTIFILE_PRICE_PER_ADDITIONAL_FILE = 2
+TINYMCE_PATH = [
+            STATIC_URL + 'grappelli/tinymce/jscripts/tiny_mce/tiny_mce.js',
+            STATIC_URL + 'grappelli/tinymce_setup/tinymce_setup.js',
+        ]
 
 # TODO: Modify this
 OSCAR_MISSING_IMAGE_URL = STATIC_URL + 'options/img/missing-choice-thumbnail.png'
