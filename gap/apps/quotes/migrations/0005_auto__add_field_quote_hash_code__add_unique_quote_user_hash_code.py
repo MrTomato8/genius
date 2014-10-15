@@ -13,9 +13,17 @@ class Migration(SchemaMigration):
                       self.gf('django.db.models.fields.CharField')(default='', max_length=35),
                       keep_default=False)
 
+        if not db.dry_run:
+            import random, string, hashlib
+            for quote in orm.Quote.objects.all():
+                hash_code = "".join([random.choice(string.letters) for i in range(20)])
+                h = hashlib.md5()
+                h.update(hash_code)
+                quote.hash_code = h.hexdigest()
+                quote.save()
+
         # Adding unique constraint on 'Quote', fields ['user', 'hash_code']
         db.create_unique('quotes_quote', ['user_id', 'hash_code'])
-
 
     def backwards(self, orm):
         # Removing unique constraint on 'Quote', fields ['user', 'hash_code']
